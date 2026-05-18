@@ -52,6 +52,24 @@ export default function LessonsPage() {
                 <p className="mt-1 text-sm text-ink-muted leading-relaxed line-clamp-3">
                   {lesson.summary[locale]}
                 </p>
+
+                <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                  {lesson.video && (
+                    <Badge title="Video lesson included">
+                      <span>🎥</span>
+                      <span>Video</span>
+                    </Badge>
+                  )}
+                  <Badge title="At-home experiment included">
+                    <span>🧪</span>
+                    <span>Experiment</span>
+                  </Badge>
+                  <Badge title={`${lesson.quiz.length} quick-check question${lesson.quiz.length === 1 ? "" : "s"}`}>
+                    <span>✏️</span>
+                    <span>{lesson.quiz.length} quiz</span>
+                  </Badge>
+                </div>
+
                 <div className="mt-3 text-xs text-ink-subtle">
                   {tr("lessons.code")}:{" "}
                   <code className="text-ink-muted bg-surface-2 px-1.5 py-0.5 rounded">
@@ -64,6 +82,17 @@ export default function LessonsPage() {
         })}
       </ul>
     </div>
+  );
+}
+
+function Badge({ children, title }: { children: React.ReactNode; title?: string }) {
+  return (
+    <span
+      title={title}
+      className="inline-flex items-center gap-1 rounded-full border border-line bg-surface-2 px-2 py-0.5 text-[11px] font-medium text-ink-muted"
+    >
+      {children}
+    </span>
   );
 }
 

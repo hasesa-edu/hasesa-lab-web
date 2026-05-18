@@ -14,14 +14,31 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+const TITLE = "Personal AI Tutor — quality education for Ethiopian high schools";
+const DESCRIPTION =
+  "An AI tutor built for deep understanding, not just exam answers. MoE-aligned lessons in English, Amharic, and Afaan Oromo, each with an at-home experiment. Demo covers Grade 11 Math, Physics, Chemistry, and Biology.";
+
 export const metadata: Metadata = {
-  title: "Personal AI Tutor — quality education for Ethiopian high schools",
-  description:
-    "An AI tutor built for deep understanding, not just exam answers. MoE-aligned lessons in English, Amharic, and Afaan Oromo, each with an at-home experiment. Demo covers Grade 11 Math, Physics, Chemistry, and Biology.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://personalaitutor.app"),
+  title: TITLE,
+  description: DESCRIPTION,
   manifest: "/manifest.json",
   icons: {
     icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
     apple: [{ url: "/icon.svg", type: "image/svg+xml" }],
+  },
+  openGraph: {
+    type: "website",
+    siteName: "Personal AI Tutor",
+    title: TITLE,
+    description: DESCRIPTION,
+    locale: "en_US",
+    alternateLocale: ["am_ET", "om_ET"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
   },
 };
 
