@@ -40,6 +40,115 @@ export const t: Dict = {
   "hero.cta.chat": { en: "Try the AI tutor", am: "AI አስተማሪውን ይሞክሩ", om: "Barsiisaa AI yaali" },
   "hero.cta.signup": { en: "Get started", am: "ይጀምሩ", om: "Eegali" },
   "hero.cta.dashboard": { en: "Go to my dashboard", am: "ወደ ዳሽቦርዴ ይሂዱ", om: "Gara daashboordii kootti dhaqi" },
+  "hero.pilot": {
+    en: "Free during pilot",
+    am: "በሙከራ ወቅት ነጻ",
+    om: "Yeroo yaaliitti bilisaa",
+  },
+
+  // How it works
+  "how.title": { en: "How it works", am: "እንዴት እንደሚሰራ", om: "Akkamiin akka hojjetu" },
+  "how.sub": {
+    en: "Four steps from sign-up to scoring higher on your EUEE.",
+    am: "ከመመዝገብ እስከ EUEE ውጤትዎን እስከ ማሻሻል አራት ደረጃዎች።",
+    om: "Galmaa'uu irraa hanga qabxii EUEE foyyeessuutti tarkaanfii afur.",
+  },
+  "how.s1.title": { en: "Create an account", am: "መለያ ይፍጠሩ", om: "Akaawuntii uumi" },
+  "how.s1.body": {
+    en: "Pick your subjects. A short diagnostic places you at the right level.",
+    am: "ትምህርቶችዎን ይምረጡ። አጭር ምርመራ ትክክለኛ ደረጃ ላይ ያስቀምጥዎታል።",
+    om: "Kutaalee filadhu. Qorannoon gabaabaan sadarkaa sirrii irra si kaa'a.",
+  },
+  "how.s2.title": { en: "Study lessons", am: "ትምህርቶችን ያጥኑ", om: "Barnoota qayyabadhu" },
+  "how.s2.body": {
+    en: "MoE-aligned, EUEE-weighted lessons in English, Amharic, or Afaan Oromo.",
+    am: "ከMoE የተጣጣሙ፣ ለEUEE የተመዘኑ ትምህርቶች በሦስቱም ቋንቋዎች።",
+    om: "Barnoota MoE waliin walsimataa, EUEE irratti madaalame.",
+  },
+  "how.s3.title": { en: "Ask the AI tutor", am: "AI አስተማሪውን ይጠይቁ", om: "Barsiisaa AI gaafadhu" },
+  "how.s3.body": {
+    en: "Stuck on a problem? Get a step-by-step explanation grounded in your lesson.",
+    am: "ችግር አጋጥሞዎታል? ከትምህርቱ ጋር የተያያዘ ደረጃ-በ-ደረጃ ማብራሪያ ያግኙ።",
+    om: "Rakkoo qabdaa? Ibsa tarkaanfii-tarkaanfiin barnoota kee irratti hundaa'e argadhu.",
+  },
+  "how.s4.title": { en: "Track your mastery", am: "ችሎታዎን ይከታተሉ", om: "Ogummaa kee hordofi" },
+  "how.s4.body": {
+    en: "See per-topic progress and take EUEE-style mock tests to spot weak areas.",
+    am: "በርዕስ ሂደትዎን ይመልከቱና ደካማ ቦታዎችን ለማግኘት EUEE-ዓይነት ሞክ ፈተናዎችን ይውሰዱ።",
+    om: "Adeemsa mata-dureen ilaali; bakka dadhabaa argachuuf qormaata moocii EUEE fudhadhu.",
+  },
+
+  // Audience split
+  "aud.students.title": { en: "For students", am: "ለተማሪዎች", om: "Barattootaaf" },
+  "aud.students.b1": { en: "A patient tutor available 24/7, in your language.", am: "በቋንቋዎ 24/7 ትዕግስተኛ አስተማሪ።", om: "Barsiisaa obsaa 24/7, afaan keetiin." },
+  "aud.students.b2": { en: "Personal mastery dashboard — know exactly what to study next.", am: "የግል ችሎታ ዳሽቦርድ — ቀጥሎ ምን ማጥናት እንዳለብዎ ይወቁ።", om: "Daashboordii ogummaa dhuunfaa — itti aansee maal akka qayyabattu beeki." },
+  "aud.students.b3": { en: "EUEE mock tests with per-topic breakdown.", am: "EUEE ሞክ ፈተናዎች በርዕስ ትንተና።", om: "Qormaata moocii EUEE mata-dureen qoodame." },
+  "aud.teachers.title": { en: "For teachers", am: "ለመምህራን", om: "Barsiisotaaf" },
+  "aud.teachers.b1": { en: "Create a class with one code — no rosters to upload.", am: "በአንድ ኮድ ክፍል ይፍጠሩ — ምንም ዝርዝር ማቅረብ አያስፈልግም።", om: "Koodii tokkoon kilaasii uumi — galmee qopheessuu hin barbaachisu." },
+  "aud.teachers.b2": { en: "See class-level mastery without exposing individual data.", am: "የግል መረጃ ሳያጋልጡ የክፍል ደረጃ ችሎታን ይመልከቱ።", om: "Odeeffannoo dhuunfaa saaxiluu malee ogummaa sadarkaa kilaasii ilaali." },
+  "aud.teachers.b3": { en: "Spot weak topics across your class at a glance.", am: "በክፍልዎ ውስጥ ያሉ ደካማ ርዕሶችን በፍጥነት ይለዩ።", om: "Mata-duree dadhabaa kilaasii kee keessatti yeruma argi." },
+
+  // Why us
+  "why.title": { en: "Why Personal AI Tutor", am: "ለምን Personal AI Tutor", om: "Maaliif Personal AI Tutor" },
+  "why.sub": {
+    en: "Built specifically for the Ethiopian classroom — not a generic chatbot.",
+    am: "ለኢትዮጵያ ክፍል በተለይ የተሰራ — ተራ ቻትቦት አይደለም።",
+    om: "Kilaasii Itoophiyaatiif addaan kan qophaa'e — chatbot waliigalaa miti.",
+  },
+  "why.b1.title": { en: "Real conversation, not just quizzes", am: "እውነተኛ ውይይት፣ ፈተና ብቻ አይደለም", om: "Marii dhugaa, qormaata qofa miti" },
+  "why.b1.body": {
+    en: "Ask follow-up questions, get worked examples, learn at your own pace.",
+    am: "ተከታይ ጥያቄዎችን ይጠይቁ፣ የተሰሩ ምሳሌዎችን ያግኙ።",
+    om: "Gaaffii itti aanu gaafadhu, fakkeenya hojjetame argadhu.",
+  },
+  "why.b2.title": { en: "Three languages, equal quality", am: "ሦስት ቋንቋዎች በእኩል ጥራት", om: "Afaan sadii, qulqullina walfakkaata" },
+  "why.b2.body": {
+    en: "English, Amharic, and Afaan Oromo — switch any time, no second-class translations.",
+    am: "እንግሊዝኛ፣ አማርኛ፣ ኦሮምኛ — በማንኛውም ጊዜ ይቀይሩ።",
+    om: "Ingiliffa, Amaariffaa, Afaan Oromoo — yeroo barbaadde jijjiiri.",
+  },
+  "why.b3.title": { en: "MoE-aligned, EUEE-focused", am: "ከMoE የተጣጣመ፣ EUEE-ተኮር", om: "MoE waliin walsimataa, EUEE-irratti xiyyeeffate" },
+  "why.b3.body": {
+    en: "Every lesson tagged to a syllabus code and weighted by EUEE exam blueprint.",
+    am: "እያንዳንዱ ትምህርት ከሥርዓተ ትምህርት ኮድ ጋር የተሰየመና በEUEE ዕቅድ የተመዘነ።",
+    om: "Barnoonni hundi koodii sirna barnootaatti hidhamee EUEE'n madaalama.",
+  },
+  "why.b4.title": { en: "Works on slow networks", am: "በዝግታ ኢንተርኔት ይሰራል", om: "Interneetii suuta deemu irratti hojjeta" },
+  "why.b4.body": {
+    en: "Installable as an app, with lessons cached for offline study.",
+    am: "እንደ መተግበሪያ ይጫናል፤ ትምህርቶች ለመስመር-ላይ-ውጭ ጥናት ይቀመጣሉ።",
+    om: "Akka aappiitti caqasama; barnoonni qayyabannaa offline-tiif kuufamu.",
+  },
+
+  // Dewey quote
+  "dewey.eyebrow": {
+    en: "Built on a simple idea",
+    am: "በቀላል ሐሳብ ላይ የተመሰረተ",
+    om: "Yaada salphaa irratti ijaarame",
+  },
+  "dewey.quote": {
+    en: "The child's own instincts and powers furnish the material and give the starting point for all education.",
+    am: "የልጁ የራሱ ስሜቶችና ችሎታዎች ለሁሉም ትምህርት ቁሳቁስን ያቀርባሉ፣ መነሻ ነጥብንም ይሰጣሉ።",
+    om: "Miirri fi humni mucaa mataa isaa barnoota hundaaf maatii fi ka'umsa kenna.",
+  },
+  "dewey.attribution": {
+    en: "— John Dewey, My Pedagogic Creed (1897)",
+    am: "— ጆን ዲዊ፣ የእኔ ትምህርታዊ መርህ (1897)",
+    om: "— John Dewey, My Pedagogic Creed (1897)",
+  },
+  "dewey.gloss": {
+    en: "Personal AI Tutor is built on Dewey's idea: every learner starts somewhere different — so every lesson, quiz, and conversation adapts to where they are.",
+    am: "Personal AI Tutor በዲዊ ሐሳብ ላይ የተመሰረተ ነው፦ እያንዳንዱ ተማሪ ከተለያየ ቦታ ይጀምራል — እያንዳንዱ ትምህርት፣ ፈተናና ውይይት ለእሱ ቦታ ይስማማል።",
+    om: "Personal AI Tutor yaada Dewey irratti ijaarameera፦ barataan hundi bakka adda addaa irraa eegala — barnoonni, qormaanni, fi mariin hundi bakka inni jiruun walsimu.",
+  },
+
+  // CTA strip
+  "cta.title": { en: "Ready to start learning?", am: "ለመማር ዝግጁ ነዎት?", om: "Baruuf qophaa'aa?" },
+  "cta.sub": {
+    en: "Create a free pilot account in under a minute. No SMS required.",
+    am: "በደቂቃ ውስጥ የነጻ ሙከራ መለያ ይፍጠሩ። SMS አያስፈልግም።",
+    om: "Daqiiqaa tokko keessatti akaawuntii yaalii bilisaa uumi. SMS hin barbaachisu.",
+  },
 
   "feature.aligned.title": { en: "MoE & EUEE aligned", am: "ከMoE እና EUEE ጋር የተጣጣመ", om: "MoE fi EUEE waliin walsimataa" },
   "feature.aligned.body": { en: "Every lesson tagged to a syllabus code and exam-blueprint topic.", am: "እያንዳንዱ ትምህርት ከሥርዓተ ትምህርት ኮድ ጋር የተሰየመ።", om: "Barnoonni hundi koodii sirna barnootaatti hidhameera." },
