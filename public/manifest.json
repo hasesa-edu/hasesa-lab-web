@@ -1,12 +1,12 @@
 {
   "name": "Personal AI Tutor",
   "short_name": "AI Tutor",
-  "description": "Grade 11 AI tutor for Ethiopian students — MoE syllabus and EUEE-aligned.",
+  "description": "AI tutor for Ethiopian high school students — MoE syllabus and EUEE-aligned.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#fafaf9",
-  "theme_color": "#0f766e",
+  "background_color": "#0a0e0d",
+  "theme_color": "#0d9488",
   "orientation": "portrait",
   "lang": "en",
   "icons": [
