@@ -3,42 +3,75 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import { getLesson } from "@/lib/lessons";
+import { getLesson, SUBJECTS } from "@/lib/lessons";
 import { useLocale } from "@/components/LocaleProvider";
+import { useUser } from "@/components/UserProvider";
+import { bumpMastery } from "@/lib/store";
+
+type QItem = { q: string; choices: string[]; answerIndex: number; explanation: string };
 
 export default function LessonDetail() {
   const params = useParams<{ id: string }>();
   const lesson = getLesson(params.id);
   const { locale, tr } = useLocale();
+  const { user, refresh } = useUser();
+
+  const [aiQuestions, setAiQuestions] = useState<QItem[]>([]);
+  const [generating, setGenerating] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
 
   if (!lesson) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-10">
         <p className="text-stone-600">Lesson not found.</p>
-        <Link href="/lessons" className="text-brand mt-3 inline-block">
-          {tr("lessons.back")}
-        </Link>
+        <Link href="/lessons" className="text-brand mt-3 inline-block">{tr("lessons.back")}</Link>
       </div>
     );
   }
 
+  const subject = SUBJECTS.find((s) => s.id === lesson.subject)!;
+  const primaryTopic = lesson.eueeTopics[0];
+
+  function onAnswer(correct: boolean) {
+    if (!user) return;
+    bumpMastery(lesson!.subject, primaryTopic, correct ? 6 : -3);
+    refresh();
+  }
+
+  async function generateMore() {
+    setGenerating(true);
+    setAiError(null);
+    try {
+      const res = await fetch("/api/quiz", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ lessonId: lesson!.id, count: 3 }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.questions?.length) {
+        throw new Error(data.error || "no questions");
+      }
+      setAiQuestions((cur) => [...cur, ...data.questions]);
+    } catch (e: any) {
+      setAiError(e?.message || "Could not generate questions");
+    } finally {
+      setGenerating(false);
+    }
+  }
+
   return (
     <article className="max-w-3xl mx-auto px-4 py-10">
-      <Link href="/lessons" className="text-sm text-brand hover:underline">
-        {tr("lessons.back")}
-      </Link>
+      <Link href="/lessons" className="text-sm text-brand hover:underline">{tr("lessons.back")}</Link>
 
       <header className="mt-3">
         <p className="text-xs uppercase tracking-wider text-brand font-medium">
-          {lesson.unit[locale]} · {lesson.moeCode}
+          {subject.emoji} {subject.label[locale]} · {lesson.unit[locale]} · {lesson.moeCode}
         </p>
         <h1 className="mt-1 text-3xl font-bold text-stone-900">{lesson.title[locale]}</h1>
         <p className="mt-2 text-stone-600 leading-relaxed">{lesson.summary[locale]}</p>
         <div className="mt-2 flex flex-wrap gap-1.5 text-xs">
           {lesson.eueeTopics.map((topic) => (
-            <span key={topic} className="px-2 py-0.5 bg-sun/15 text-amber-800 rounded">
-              {topic}
-            </span>
+            <span key={topic} className="px-2 py-0.5 bg-sun/15 text-amber-800 rounded">{topic}</span>
           ))}
         </div>
       </header>
@@ -53,22 +86,44 @@ export default function LessonDetail() {
       </div>
 
       <section className="mt-8 rounded-lg border border-brand/20 bg-brand/5 p-5">
-        <h3 className="font-semibold text-brand-dark">Worked example</h3>
+        <h3 className="font-semibold text-brand-dark">{tr("quiz.workedEx")}</h3>
         <p className="mt-2 text-stone-800">
-          <strong>Problem.</strong> {lesson.workedExample.problem}
+          <strong>{tr("quiz.problem")}</strong> {lesson.workedExample.problem}
         </p>
         <p className="mt-2 text-stone-800">
-          <strong>Solution.</strong> {renderWithCode(lesson.workedExample.solution)}
+          <strong>{tr("quiz.solution")}</strong> {renderWithCode(lesson.workedExample.solution)}
         </p>
       </section>
 
       <section className="mt-8">
-        <h3 className="font-semibold text-stone-900">Quick check</h3>
+        <h3 className="font-semibold text-stone-900">{tr("quiz.check")}</h3>
         <ul className="mt-3 space-y-5">
           {lesson.quiz.map((q, i) => (
-            <QuizItem key={i} question={q} index={i} />
+            <QuizItem key={i} question={q} index={i} onAnswer={onAnswer} tr={tr} />
           ))}
         </ul>
+      </section>
+
+      <section className="mt-8">
+        <div className="flex items-center justify-between">
+          <h3 className="font-semibold text-stone-900">{tr("quiz.generated")}</h3>
+          <button
+            onClick={generateMore}
+            disabled={generating}
+            className="text-sm px-3 py-1.5 rounded border border-brand/30 hover:border-brand text-brand-dark disabled:opacity-50"
+          >
+            {generating ? tr("quiz.generating") : `+ ${tr("quiz.generate")}`}
+          </button>
+        </div>
+        {aiError && <div className="mt-3 text-sm text-red-700">{aiError}</div>}
+        <ul className="mt-3 space-y-5">
+          {aiQuestions.map((q, i) => (
+            <QuizItem key={i} question={q} index={lesson.quiz.length + i} onAnswer={onAnswer} tr={tr} aiGenerated />
+          ))}
+        </ul>
+        {aiQuestions.length === 0 && !generating && (
+          <p className="mt-3 text-sm text-stone-500">No AI-generated questions yet. Click the button above to make some.</p>
+        )}
       </section>
 
       <div className="mt-10 border-t border-stone-200 pt-6">
@@ -86,16 +141,32 @@ export default function LessonDetail() {
 function QuizItem({
   question,
   index,
+  onAnswer,
+  tr,
+  aiGenerated,
 }: {
-  question: { q: string; choices: string[]; answerIndex: number; explanation: string };
+  question: QItem;
   index: number;
+  onAnswer?: (correct: boolean) => void;
+  tr: (k: any) => string;
+  aiGenerated?: boolean;
 }) {
   const [picked, setPicked] = useState<number | null>(null);
+  function pick(i: number) {
+    if (picked !== null) return;
+    setPicked(i);
+    onAnswer?.(i === question.answerIndex);
+  }
   return (
     <li className="rounded-lg border border-stone-200 bg-white p-4">
-      <p className="font-medium text-stone-900">
-        {index + 1}. {question.q}
-      </p>
+      <div className="flex items-baseline justify-between gap-3">
+        <p className="font-medium text-stone-900">
+          {index + 1}. {question.q}
+        </p>
+        {aiGenerated && (
+          <span className="text-[10px] uppercase tracking-wider text-stone-400 shrink-0">AI</span>
+        )}
+      </div>
       <div className="mt-3 grid gap-2">
         {question.choices.map((c, i) => {
           const isPicked = picked === i;
@@ -107,7 +178,7 @@ function QuizItem({
           return (
             <button
               key={i}
-              onClick={() => setPicked(i)}
+              onClick={() => pick(i)}
               className={`text-left text-sm px-3 py-2 rounded border transition ${cls}`}
               disabled={picked !== null}
             >
@@ -119,7 +190,7 @@ function QuizItem({
       {picked !== null && (
         <p className="mt-3 text-sm text-stone-700">
           <span className={picked === question.answerIndex ? "text-emerald-700" : "text-red-700"}>
-            {picked === question.answerIndex ? "Correct." : "Not quite."}
+            {picked === question.answerIndex ? tr("quiz.correct") : tr("quiz.incorrect")}
           </span>{" "}
           {question.explanation}
         </p>
