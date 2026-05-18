@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
-import { joinClass } from "@/lib/store";
+import { apiJoinClass } from "@/lib/api";
 
 export default function JoinPage() {
   const { tr } = useLocale();
@@ -14,22 +14,26 @@ export default function JoinPage() {
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [joined, setJoined] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     if (ready && !user) router.push("/login");
   }, [ready, user, router]);
 
-  function onJoin(e: React.FormEvent) {
+  async function onJoin(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     if (!user) return;
-    const cls = joinClass(code.trim(), user.id);
-    if (!cls) {
-      setError(tr("student.joinErr"));
-      return;
+    setBusy(true);
+    try {
+      const cls = await apiJoinClass(code.trim());
+      setJoined(cls.name);
+      await refresh();
+    } catch (e: any) {
+      setError(e?.message || tr("student.joinErr"));
+    } finally {
+      setBusy(false);
     }
-    setJoined(cls.name);
-    refresh();
   }
 
   if (!ready || !user) {
@@ -57,10 +61,10 @@ export default function JoinPage() {
         )}
         <button
           type="submit"
-          disabled={!code.trim()}
+          disabled={!code.trim() || busy}
           className="w-full px-4 py-2.5 bg-brand text-white rounded-md hover:bg-brand-dark disabled:opacity-40 font-medium"
         >
-          {tr("student.join")}
+          {busy ? "…" : tr("student.join")}
         </button>
       </form>
 

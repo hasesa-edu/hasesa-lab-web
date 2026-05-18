@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
 import {
@@ -11,23 +11,34 @@ import {
   getLesson,
   type Subject,
 } from "@/lib/lessons";
+import { apiGetMastery } from "@/lib/api";
 
 export default function DashboardPage() {
   const { tr, locale } = useLocale();
   const { user, ready } = useUser();
   const router = useRouter();
+  const [mastery, setMastery] = useState<Record<string, Record<string, number>>>({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (ready && !user) router.push("/login");
     if (ready && user && user.role === "teacher") router.push("/teacher");
   }, [ready, user, router]);
 
+  useEffect(() => {
+    if (user) {
+      apiGetMastery()
+        .then(setMastery)
+        .finally(() => setLoading(false));
+    }
+  }, [user]);
+
   const recommendations = useMemo(() => {
     if (!user) return [];
     const scored: { lessonId: string; topic: string; subject: Subject; mastery: number; weight: number; priority: number }[] = [];
     for (const subject of user.subjects) {
       for (const t of allTopicsForSubject(subject)) {
-        const m = user.mastery[subject]?.[t.topic] ?? 50;
+        const m = mastery[subject]?.[t.topic] ?? 50;
         const priority = (100 - m) * t.weight;
         scored.push({ lessonId: t.lessonId, topic: t.topic, subject, mastery: m, weight: t.weight, priority });
       }
@@ -42,7 +53,7 @@ export default function DashboardPage() {
       if (out.length >= 3) break;
     }
     return out;
-  }, [user]);
+  }, [user, mastery]);
 
   if (!ready || !user) {
     return <div className="max-w-3xl mx-auto px-4 py-10 text-stone-500">{tr("common.loading")}</div>;
@@ -51,51 +62,51 @@ export default function DashboardPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
       <h1 className="text-3xl font-bold text-stone-900">
-        {tr("dash.greeting")}, {user.username} 👋
+        {tr("dash.greeting")}, {user.displayName} 👋
       </h1>
       <p className="text-stone-600 mt-1 text-sm">{tr("dash.title")}</p>
 
-      {/* Recommendations */}
       <section className="mt-8">
         <h2 className="font-semibold text-stone-900">{tr("dash.recommended")}</h2>
         <p className="text-xs text-stone-500 mt-0.5">{tr("dash.recommendedWhy")}</p>
         <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {recommendations.map((r) => {
-            const lesson = getLesson(r.lessonId)!;
-            const subject = SUBJECTS.find((s) => s.id === r.subject)!;
-            return (
-              <Link
-                key={r.lessonId}
-                href={`/lessons/${r.lessonId}`}
-                className="block rounded-lg border border-brand/30 bg-white p-4 hover:border-brand transition"
-              >
-                <div className="text-xs text-brand font-medium uppercase">
-                  {subject.emoji} {subject.label[locale]}
-                </div>
-                <div className="font-semibold text-stone-900 mt-1 text-sm">{lesson.title[locale]}</div>
-                <div className="text-xs text-stone-500 mt-2">
-                  {r.topic} · {tr("dash.mastery").toLowerCase()}: {r.mastery}/100
-                </div>
-              </Link>
-            );
-          })}
-          {recommendations.length === 0 && (
-            <p className="text-sm text-stone-500">{tr("dash.noActivity")}</p>
+          {loading ? (
+            <p className="text-sm text-stone-500 col-span-3">{tr("common.loading")}</p>
+          ) : recommendations.length === 0 ? (
+            <p className="text-sm text-stone-500 col-span-3">{tr("dash.noActivity")}</p>
+          ) : (
+            recommendations.map((r) => {
+              const lesson = getLesson(r.lessonId)!;
+              const subject = SUBJECTS.find((s) => s.id === r.subject)!;
+              return (
+                <Link
+                  key={r.lessonId}
+                  href={`/lessons/${r.lessonId}`}
+                  className="block rounded-lg border border-brand/30 bg-white p-4 hover:border-brand transition"
+                >
+                  <div className="text-xs text-brand font-medium uppercase">
+                    {subject.emoji} {subject.label[locale]}
+                  </div>
+                  <div className="font-semibold text-stone-900 mt-1 text-sm">{lesson.title[locale]}</div>
+                  <div className="text-xs text-stone-500 mt-2">
+                    {r.topic} · {tr("dash.mastery").toLowerCase()}: {r.mastery}/100
+                  </div>
+                </Link>
+              );
+            })
           )}
         </div>
       </section>
 
-      {/* Mastery by subject */}
       <section className="mt-10">
         <h2 className="font-semibold text-stone-900">{tr("dash.mastery")}</h2>
         <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
           {user.subjects.map((s) => (
-            <MasterySubjectCard key={s} subject={s} user={user} locale={locale} tr={tr} />
+            <MasterySubjectCard key={s} subject={s} mastery={mastery} locale={locale} tr={tr} />
           ))}
         </div>
       </section>
 
-      {/* Mock tests */}
       <section className="mt-10">
         <h2 className="font-semibold text-stone-900">{tr("dash.takeMock")}</h2>
         <div className="mt-3 flex flex-wrap gap-2">
@@ -120,21 +131,19 @@ export default function DashboardPage() {
 
 function MasterySubjectCard({
   subject,
-  user,
+  mastery,
   locale,
   tr,
 }: {
   subject: Subject;
-  user: { mastery: Record<Subject, Record<string, number>> };
+  mastery: Record<string, Record<string, number>>;
   locale: "en" | "am" | "om";
   tr: (k: any) => string;
 }) {
   const meta = SUBJECTS.find((s) => s.id === subject)!;
   const topics = allTopicsForSubject(subject);
   const avg = topics.length
-    ? Math.round(
-        topics.reduce((acc, t) => acc + (user.mastery[subject]?.[t.topic] ?? 50), 0) / topics.length
-      )
+    ? Math.round(topics.reduce((acc, t) => acc + (mastery[subject]?.[t.topic] ?? 50), 0) / topics.length)
     : 0;
   return (
     <div className="rounded-lg border border-stone-200 bg-white p-4">
@@ -146,7 +155,7 @@ function MasterySubjectCard({
       </div>
       <ul className="mt-3 space-y-2">
         {topics.map((t) => {
-          const m = user.mastery[subject]?.[t.topic] ?? 50;
+          const m = mastery[subject]?.[t.topic] ?? 50;
           return (
             <li key={t.topic}>
               <div className="flex justify-between text-xs text-stone-600">

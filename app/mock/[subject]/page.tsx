@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
 import { SUBJECTS, lessonsBySubject, type Subject } from "@/lib/lessons";
-import { bumpMastery } from "@/lib/store";
+import { apiBumpMastery } from "@/lib/api";
 
 type MockQ = { q: string; choices: string[]; answerIndex: number; explanation: string; topic: string };
 
@@ -16,7 +16,7 @@ export default function MockTestPage() {
   const subjectMeta = SUBJECTS.find((s) => s.id === subject);
 
   const { tr, locale } = useLocale();
-  const { user, refresh, ready } = useUser();
+  const { user, ready } = useUser();
   const router = useRouter();
 
   useEffect(() => {
@@ -38,12 +38,8 @@ export default function MockTestPage() {
   const [cur, setCur] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
 
-  if (!subjectMeta) {
-    return <div className="max-w-2xl mx-auto px-4 py-10">Subject not found.</div>;
-  }
-  if (!ready || !user) {
-    return <div className="max-w-2xl mx-auto px-4 py-10 text-stone-500">{tr("common.loading")}</div>;
-  }
+  if (!subjectMeta) return <div className="max-w-2xl mx-auto px-4 py-10">Subject not found.</div>;
+  if (!ready || !user) return <div className="max-w-2xl mx-auto px-4 py-10 text-stone-500">{tr("common.loading")}</div>;
 
   if (phase === "intro") {
     return (
@@ -65,11 +61,10 @@ export default function MockTestPage() {
 
   if (phase === "running") {
     const q = questions[cur];
-    function submit(i: number) {
+    async function submit(i: number) {
       const newAnswers = [...answers, i];
       setAnswers(newAnswers);
-      bumpMastery(subject, q.topic, i === q.answerIndex ? 6 : -3);
-      refresh();
+      apiBumpMastery(subject, q.topic, i === q.answerIndex ? 6 : -3).catch(() => {});
       if (cur + 1 < questions.length) {
         setCur(cur + 1);
       } else {
@@ -79,12 +74,8 @@ export default function MockTestPage() {
     return (
       <div className="max-w-2xl mx-auto px-4 py-10">
         <div className="flex items-center justify-between text-sm text-stone-500">
-          <span>
-            {subjectMeta.emoji} {subjectMeta.label[locale]}
-          </span>
-          <span>
-            {tr("mock.question")} {cur + 1} {tr("mock.of")} {questions.length}
-          </span>
+          <span>{subjectMeta.emoji} {subjectMeta.label[locale]}</span>
+          <span>{tr("mock.question")} {cur + 1} {tr("mock.of")} {questions.length}</span>
         </div>
         <div className="mt-3 h-1.5 bg-stone-100 rounded">
           <div className="h-full bg-brand rounded transition-all" style={{ width: `${((cur + 1) / questions.length) * 100}%` }} />
@@ -108,7 +99,6 @@ export default function MockTestPage() {
     );
   }
 
-  // done
   const correct = questions.filter((q, i) => answers[i] === q.answerIndex).length;
   const byTopic = new Map<string, { right: number; total: number }>();
   for (const [i, q] of questions.entries()) {
@@ -124,10 +114,7 @@ export default function MockTestPage() {
         {tr("mock.score")}: {correct} / {questions.length}
       </h1>
       <div className="mt-3 h-3 bg-stone-100 rounded">
-        <div
-          className="h-full bg-emerald-500 rounded"
-          style={{ width: `${(correct / questions.length) * 100}%` }}
-        />
+        <div className="h-full bg-emerald-500 rounded" style={{ width: `${(correct / questions.length) * 100}%` }} />
       </div>
 
       <h2 className="mt-8 font-semibold text-stone-900">By topic</h2>

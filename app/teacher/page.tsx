@@ -5,38 +5,54 @@ import { useEffect, useState } from "react";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
 import { SUBJECTS, type Subject } from "@/lib/lessons";
-import { aggregateMastery, classesForTeacher, createClass, type ClassRoom } from "@/lib/store";
+import { apiCreateClass, apiListClasses, type TeacherClass } from "@/lib/api";
 
 export default function TeacherPage() {
   const { tr, locale } = useLocale();
-  const { user, refresh, ready } = useUser();
+  const { user, ready } = useUser();
   const router = useRouter();
 
-  const [classes, setClasses] = useState<ClassRoom[]>([]);
+  const [classes, setClasses] = useState<TeacherClass[]>([]);
   const [name, setName] = useState("");
   const [activeCode, setActiveCode] = useState<string | undefined>();
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (ready && !user) router.push("/login");
     if (ready && user && user.role !== "teacher") router.push("/dashboard");
   }, [ready, user, router]);
 
-  useEffect(() => {
-    if (user?.role === "teacher") {
-      const list = classesForTeacher(user.id);
+  async function loadClasses() {
+    try {
+      const list = await apiListClasses();
       setClasses(list);
-      if (list.length && !activeCode) setActiveCode(list[0].code);
+      if (list.length && (!activeCode || !list.find((c) => c.code === activeCode))) {
+        setActiveCode(list[0].code);
+      }
+    } catch (e: any) {
+      setError(e?.message || "Failed to load");
     }
-  }, [user, activeCode]);
+  }
 
-  function handleCreate(e: React.FormEvent) {
+  useEffect(() => {
+    if (user?.role === "teacher") loadClasses();
+  }, [user]);
+
+  async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
     if (!user || !name.trim()) return;
-    const cls = createClass(name.trim(), user.id);
-    setClasses(classesForTeacher(user.id));
-    setActiveCode(cls.code);
-    setName("");
-    refresh();
+    setBusy(true);
+    try {
+      const cls = await apiCreateClass(name.trim());
+      setName("");
+      setActiveCode(cls.code);
+      await loadClasses();
+    } catch (e: any) {
+      setError(e?.message || "Failed");
+    } finally {
+      setBusy(false);
+    }
   }
 
   if (!ready || !user || user.role !== "teacher") {
@@ -62,11 +78,12 @@ export default function TeacherPage() {
             />
             <button
               type="submit"
-              disabled={!name.trim()}
+              disabled={!name.trim() || busy}
               className="mt-3 w-full px-3 py-2 bg-brand text-white rounded-md hover:bg-brand-dark disabled:opacity-40 text-sm"
             >
-              {tr("teacher.create")}
+              {busy ? "…" : tr("teacher.create")}
             </button>
+            {error && <p className="mt-2 text-xs text-red-700">{error}</p>}
           </form>
 
           <h3 className="mt-6 text-sm font-medium text-stone-500 uppercase tracking-wider">
@@ -88,9 +105,7 @@ export default function TeacherPage() {
                     }
                   >
                     <div className="font-medium text-stone-900">{c.name}</div>
-                    <div className="text-xs text-stone-500">
-                      {c.code} · {c.mockStudents.length + c.joinedUserIds.length} {tr("teacher.students")}
-                    </div>
+                    <div className="text-xs text-stone-500">{c.code} · {c.memberCount} {tr("teacher.students")}</div>
                   </button>
                 </li>
               ))}
@@ -112,15 +127,20 @@ export default function TeacherPage() {
   );
 }
 
-function ClassDetail({ cls, tr, locale }: { cls: ClassRoom; tr: (k: any) => string; locale: "en" | "am" | "om" }) {
-  const total = cls.mockStudents.length + cls.joinedUserIds.length;
+function ClassDetail({ cls, tr, locale }: { cls: TeacherClass; tr: (k: any) => string; locale: "en" | "am" | "om" }) {
   return (
     <div>
       <div className="rounded-lg border border-brand/20 bg-brand/5 p-4">
         <div className="text-xs text-brand-dark uppercase tracking-wider font-medium">{tr("teacher.share")}</div>
         <div className="mt-1 text-3xl font-mono font-bold text-brand-dark tracking-widest">{cls.code}</div>
-        <div className="mt-1 text-xs text-stone-600">{total} {tr("teacher.students")}</div>
+        <div className="mt-1 text-xs text-stone-600">{cls.memberCount} {tr("teacher.students")}</div>
       </div>
+
+      {cls.memberCount === 0 && (
+        <div className="mt-4 text-sm text-stone-600 bg-stone-50 border border-stone-200 px-3 py-2 rounded">
+          {tr("teacher.noStudents")}
+        </div>
+      )}
 
       <div className="mt-6 space-y-6">
         {SUBJECTS.map((s) => (
@@ -137,13 +157,13 @@ function SubjectAggregate({
   tr,
   locale,
 }: {
-  cls: ClassRoom;
+  cls: TeacherClass;
   subject: Subject;
   tr: (k: any) => string;
   locale: "en" | "am" | "om";
 }) {
   const meta = SUBJECTS.find((s) => s.id === subject)!;
-  const rows = aggregateMastery(cls, subject);
+  const rows = cls.aggregate.filter((a) => a.subject === subject);
   const overall = rows.length ? Math.round(rows.reduce((a, b) => a + b.avg, 0) / rows.length) : 0;
   const weak = rows.slice().sort((a, b) => a.avg - b.avg).slice(0, 3);
 
