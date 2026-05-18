@@ -38,20 +38,20 @@ export default function MockTestPage() {
   const [cur, setCur] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
 
-  if (!subjectMeta) return <div className="max-w-2xl mx-auto px-4 py-10">Subject not found.</div>;
-  if (!ready || !user) return <div className="max-w-2xl mx-auto px-4 py-10 text-stone-500">{tr("common.loading")}</div>;
+  if (!subjectMeta) return <div className="max-w-2xl mx-auto px-4 py-10 text-ink-muted">Subject not found.</div>;
+  if (!ready || !user) return <div className="max-w-2xl mx-auto px-4 py-10 text-ink-subtle">{tr("common.loading")}</div>;
 
   if (phase === "intro") {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-10">
-        <h1 className="text-2xl font-bold text-stone-900">
+      <div className="max-w-2xl mx-auto px-4 py-12">
+        <h1 className="text-3xl font-bold tracking-tight text-ink">
           {tr("mock.title")} · {subjectMeta.emoji} {subjectMeta.label[locale]}
         </h1>
-        <p className="mt-2 text-stone-600">{tr("mock.intro")}</p>
-        <p className="mt-1 text-sm text-stone-500">{questions.length} questions</p>
+        <p className="mt-2 text-ink-muted">{tr("mock.intro")}</p>
+        <p className="mt-1 text-sm text-ink-subtle">{questions.length} questions</p>
         <button
           onClick={() => setPhase("running")}
-          className="mt-6 px-5 py-2.5 bg-brand text-white rounded-md hover:bg-brand-dark font-medium"
+          className="mt-6 px-5 py-2.5 bg-brand text-brand-on rounded-lg hover:bg-brand-hover font-medium shadow-soft transition"
         >
           {tr("mock.start")} →
         </button>
@@ -72,23 +72,23 @@ export default function MockTestPage() {
       }
     }
     return (
-      <div className="max-w-2xl mx-auto px-4 py-10">
-        <div className="flex items-center justify-between text-sm text-stone-500">
+      <div className="max-w-2xl mx-auto px-4 py-12">
+        <div className="flex items-center justify-between text-sm text-ink-muted">
           <span>{subjectMeta.emoji} {subjectMeta.label[locale]}</span>
-          <span>{tr("mock.question")} {cur + 1} {tr("mock.of")} {questions.length}</span>
+          <span className="tabular-nums">{tr("mock.question")} {cur + 1} {tr("mock.of")} {questions.length}</span>
         </div>
-        <div className="mt-3 h-1.5 bg-stone-100 rounded">
+        <div className="mt-3 h-1.5 bg-surface-2 rounded overflow-hidden">
           <div className="h-full bg-brand rounded transition-all" style={{ width: `${((cur + 1) / questions.length) * 100}%` }} />
         </div>
-        <div className="mt-6 rounded-lg border border-stone-200 bg-white p-5">
-          <p className="text-xs text-brand font-medium uppercase">{q.topic}</p>
-          <p className="mt-2 font-medium text-stone-900">{q.q}</p>
+        <div className="mt-6 rounded-xl border border-line bg-surface p-5 shadow-soft">
+          <p className="text-xs text-brand font-semibold uppercase tracking-wide">{q.topic}</p>
+          <p className="mt-2 font-medium text-ink">{q.q}</p>
           <div className="mt-4 grid gap-2">
             {q.choices.map((c, i) => (
               <button
                 key={i}
                 onClick={() => submit(i)}
-                className="text-left text-sm px-3 py-2.5 rounded border border-stone-200 hover:border-brand"
+                className="text-left text-sm px-3.5 py-2.5 rounded-lg border border-line bg-surface text-ink hover:border-brand/60 hover:bg-brand-soft/30 transition"
               >
                 {c}
               </button>
@@ -109,49 +109,60 @@ export default function MockTestPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold text-stone-900">
+    <div className="max-w-2xl mx-auto px-4 py-12">
+      <h1 className="text-3xl font-bold tracking-tight text-ink tabular-nums">
         {tr("mock.score")}: {correct} / {questions.length}
       </h1>
-      <div className="mt-3 h-3 bg-stone-100 rounded">
+      <div className="mt-3 h-3 bg-surface-2 rounded overflow-hidden">
         <div className="h-full bg-emerald-500 rounded" style={{ width: `${(correct / questions.length) * 100}%` }} />
       </div>
 
-      <h2 className="mt-8 font-semibold text-stone-900">By topic</h2>
+      <h2 className="mt-10 font-semibold text-ink text-lg tracking-tight">By topic</h2>
       <ul className="mt-3 space-y-2">
         {Array.from(byTopic.entries()).map(([topic, stat]) => (
           <li key={topic} className="flex justify-between text-sm">
-            <span className="text-stone-700">{topic}</span>
-            <span className="text-stone-500">{stat.right} / {stat.total}</span>
+            <span className="text-ink">{topic}</span>
+            <span className="text-ink-muted tabular-nums">{stat.right} / {stat.total}</span>
           </li>
         ))}
       </ul>
 
-      <h2 className="mt-8 font-semibold text-stone-900">{tr("mock.review")}</h2>
+      <h2 className="mt-10 font-semibold text-ink text-lg tracking-tight">{tr("mock.review")}</h2>
       <ul className="mt-3 space-y-3">
         {questions.map((q, i) => {
           const wasRight = answers[i] === q.answerIndex;
           return (
-            <li key={i} className="rounded border border-stone-200 bg-white p-3 text-sm">
-              <p className="font-medium text-stone-900">{i + 1}. {q.q}</p>
-              <p className="mt-1 text-stone-600">
-                Your answer: <span className={wasRight ? "text-emerald-700" : "text-red-700"}>{q.choices[answers[i]]}</span>
-                {!wasRight && <> · Correct: <span className="text-emerald-700">{q.choices[q.answerIndex]}</span></>}
+            <li key={i} className="rounded-xl border border-line bg-surface p-4 text-sm shadow-soft">
+              <p className="font-medium text-ink">{i + 1}. {q.q}</p>
+              <p className="mt-1 text-ink-muted">
+                Your answer:{" "}
+                <span className={wasRight ? "text-emerald-700 dark:text-emerald-400 font-medium" : "text-red-700 dark:text-red-400 font-medium"}>
+                  {q.choices[answers[i]]}
+                </span>
+                {!wasRight && (
+                  <>
+                    {" · Correct: "}
+                    <span className="text-emerald-700 dark:text-emerald-400 font-medium">{q.choices[q.answerIndex]}</span>
+                  </>
+                )}
               </p>
-              <p className="mt-1 text-xs text-stone-500">{q.explanation}</p>
+              <p className="mt-1 text-xs text-ink-subtle">{q.explanation}</p>
             </li>
           );
         })}
       </ul>
 
-      <div className="mt-8 flex gap-3">
+      <div className="mt-10 flex gap-3">
         <button
           onClick={() => { setPhase("intro"); setCur(0); setAnswers([]); }}
-          className="px-4 py-2 bg-brand text-white rounded-md hover:bg-brand-dark text-sm"
+          className="px-4 py-2 bg-brand text-brand-on rounded-lg hover:bg-brand-hover text-sm font-medium shadow-soft transition"
         >
           {tr("mock.again")}
         </button>
-        <Link href="/dashboard" className="px-4 py-2 border border-stone-300 rounded-md text-sm hover:border-brand">
+        <Link
+          href="/dashboard"
+          className="px-4 py-2 border border-line bg-surface rounded-lg text-sm hover:border-brand/60 text-ink transition"
+        >
           {tr("nav.dashboard")}
         </Link>
       </div>

@@ -33,11 +33,11 @@ export function PWARegister() {
   if (!installEvent || dismissed) return null;
 
   return (
-    <div className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-4 sm:bottom-4 sm:max-w-sm z-30 bg-white border border-brand/30 rounded-lg shadow-lg p-3 flex items-start gap-3">
+    <div className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-4 sm:bottom-4 sm:max-w-sm z-30 bg-surface border border-brand/30 rounded-xl shadow-pop p-3 flex items-start gap-3">
       <div className="text-2xl">📱</div>
       <div className="flex-1">
-        <div className="font-medium text-sm text-stone-900">Install Personal AI Tutor</div>
-        <div className="text-xs text-stone-600 mt-0.5">
+        <div className="font-medium text-sm text-ink">Install Personal AI Tutor</div>
+        <div className="text-xs text-ink-muted mt-0.5">
           Add to your home screen for faster, offline-capable access.
         </div>
         <div className="mt-2 flex gap-2">
@@ -46,7 +46,7 @@ export function PWARegister() {
               await installEvent.prompt();
               setInstallEvent(null);
             }}
-            className="text-xs px-3 py-1 rounded bg-brand text-white hover:bg-brand-dark"
+            className="text-xs px-3 py-1 rounded-lg bg-brand text-brand-on hover:bg-brand-hover font-medium"
           >
             Install
           </button>
@@ -55,7 +55,7 @@ export function PWARegister() {
               localStorage.setItem("pwa-install-dismissed", "1");
               setDismissed(true);
             }}
-            className="text-xs px-3 py-1 rounded text-stone-600 hover:text-stone-900"
+            className="text-xs px-3 py-1 rounded-lg text-ink-muted hover:text-ink"
           >
             Not now
           </button>

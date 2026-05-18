@@ -56,41 +56,41 @@ export default function TeacherPage() {
   }
 
   if (!ready || !user || user.role !== "teacher") {
-    return <div className="max-w-3xl mx-auto px-4 py-10 text-stone-500">{tr("common.loading")}</div>;
+    return <div className="max-w-3xl mx-auto px-4 py-10 text-ink-subtle">{tr("common.loading")}</div>;
   }
 
   const active = classes.find((c) => c.code === activeCode);
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold text-stone-900">{tr("teacher.title")}</h1>
-      <p className="text-stone-600 mt-1 text-sm max-w-2xl">{tr("teacher.subtitle")}</p>
+    <div className="max-w-5xl mx-auto px-4 py-12">
+      <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-ink">{tr("teacher.title")}</h1>
+      <p className="text-ink-muted mt-1.5 text-sm max-w-2xl">{tr("teacher.subtitle")}</p>
 
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
         <aside className="md:col-span-1">
-          <form onSubmit={handleCreate} className="rounded-lg border border-stone-200 bg-white p-4">
-            <h2 className="font-semibold text-stone-900">{tr("teacher.createClass")}</h2>
+          <form onSubmit={handleCreate} className="rounded-xl border border-line bg-surface p-4 shadow-soft">
+            <h2 className="font-semibold text-ink tracking-tight">{tr("teacher.createClass")}</h2>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={tr("teacher.className")}
-              className="mt-3 w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:border-brand bg-white text-sm"
+              className="mt-3 w-full px-3.5 py-2 border border-line rounded-lg focus:outline-none focus:border-brand bg-canvas text-ink text-sm"
             />
             <button
               type="submit"
               disabled={!name.trim() || busy}
-              className="mt-3 w-full px-3 py-2 bg-brand text-white rounded-md hover:bg-brand-dark disabled:opacity-40 text-sm"
+              className="mt-3 w-full px-3 py-2 bg-brand text-brand-on rounded-lg hover:bg-brand-hover disabled:opacity-40 text-sm font-medium shadow-soft transition"
             >
               {busy ? "…" : tr("teacher.create")}
             </button>
-            {error && <p className="mt-2 text-xs text-red-700">{error}</p>}
+            {error && <p className="mt-2 text-xs text-red-700 dark:text-red-300">{error}</p>}
           </form>
 
-          <h3 className="mt-6 text-sm font-medium text-stone-500 uppercase tracking-wider">
+          <h3 className="mt-6 text-xs font-semibold text-ink-subtle uppercase tracking-wider">
             {tr("teacher.title")}
           </h3>
           {classes.length === 0 ? (
-            <p className="mt-2 text-sm text-stone-500">{tr("teacher.noClasses")}</p>
+            <p className="mt-2 text-sm text-ink-subtle">{tr("teacher.noClasses")}</p>
           ) : (
             <ul className="mt-2 space-y-1">
               {classes.map((c) => (
@@ -98,14 +98,14 @@ export default function TeacherPage() {
                   <button
                     onClick={() => setActiveCode(c.code)}
                     className={
-                      "w-full text-left px-3 py-2 rounded text-sm border " +
+                      "w-full text-left px-3 py-2 rounded-lg text-sm border transition " +
                       (c.code === activeCode
-                        ? "border-brand bg-brand/5"
-                        : "border-stone-200 hover:border-brand")
+                        ? "border-brand bg-brand-soft/40"
+                        : "border-line bg-surface hover:border-brand/60")
                     }
                   >
-                    <div className="font-medium text-stone-900">{c.name}</div>
-                    <div className="text-xs text-stone-500">{c.code} · {c.memberCount} {tr("teacher.students")}</div>
+                    <div className="font-medium text-ink">{c.name}</div>
+                    <div className="text-xs text-ink-subtle">{c.code} · {c.memberCount} {tr("teacher.students")}</div>
                   </button>
                 </li>
               ))}
@@ -115,7 +115,7 @@ export default function TeacherPage() {
 
         <section className="md:col-span-2">
           {!active ? (
-            <div className="rounded-lg border border-dashed border-stone-300 bg-white p-10 text-center text-stone-500">
+            <div className="rounded-xl border border-dashed border-line-strong bg-surface p-10 text-center text-ink-subtle">
               {tr("teacher.noClasses")}
             </div>
           ) : (
@@ -130,14 +130,18 @@ export default function TeacherPage() {
 function ClassDetail({ cls, tr, locale }: { cls: TeacherClass; tr: (k: any) => string; locale: "en" | "am" | "om" }) {
   return (
     <div>
-      <div className="rounded-lg border border-brand/20 bg-brand/5 p-4">
-        <div className="text-xs text-brand-dark uppercase tracking-wider font-medium">{tr("teacher.share")}</div>
-        <div className="mt-1 text-3xl font-mono font-bold text-brand-dark tracking-widest">{cls.code}</div>
-        <div className="mt-1 text-xs text-stone-600">{cls.memberCount} {tr("teacher.students")}</div>
+      <div className="rounded-xl border border-brand/25 bg-brand-soft/40 p-5">
+        <div className="text-xs text-brand-hover dark:text-brand uppercase tracking-wider font-semibold">
+          {tr("teacher.share")}
+        </div>
+        <div className="mt-1 text-3xl font-mono font-bold text-brand-hover dark:text-brand tracking-widest">
+          {cls.code}
+        </div>
+        <div className="mt-1 text-xs text-ink-muted">{cls.memberCount} {tr("teacher.students")}</div>
       </div>
 
       {cls.memberCount === 0 && (
-        <div className="mt-4 text-sm text-stone-600 bg-stone-50 border border-stone-200 px-3 py-2 rounded">
+        <div className="mt-4 text-sm text-ink-muted bg-surface-2 border border-line px-3 py-2 rounded-lg">
           {tr("teacher.noStudents")}
         </div>
       )}
@@ -168,21 +172,23 @@ function SubjectAggregate({
   const weak = rows.slice().sort((a, b) => a.avg - b.avg).slice(0, 3);
 
   return (
-    <div className="rounded-lg border border-stone-200 bg-white p-4">
+    <div className="rounded-xl border border-line bg-surface p-4 shadow-soft">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-stone-900">
+        <h3 className="font-semibold text-ink">
           {meta.emoji} {meta.label[locale]}
         </h3>
-        <span className="text-sm text-stone-600">{tr("teacher.aggregateMastery")}: {overall}/100</span>
+        <span className="text-sm text-ink-muted tabular-nums">
+          {tr("teacher.aggregateMastery")}: {overall}/100
+        </span>
       </div>
       <ul className="mt-3 space-y-2">
         {rows.map((r) => (
           <li key={r.topic}>
-            <div className="flex justify-between text-xs text-stone-600">
+            <div className="flex justify-between text-xs text-ink-muted">
               <span>{r.topic}</span>
-              <span>{r.avg}</span>
+              <span className="tabular-nums">{r.avg}</span>
             </div>
-            <div className="mt-0.5 h-1.5 bg-stone-100 rounded overflow-hidden">
+            <div className="mt-1 h-1.5 bg-surface-2 rounded overflow-hidden">
               <div
                 className={
                   "h-full " +
@@ -194,7 +200,7 @@ function SubjectAggregate({
           </li>
         ))}
       </ul>
-      <div className="mt-3 text-xs text-stone-500">
+      <div className="mt-3 text-xs text-ink-subtle">
         {tr("teacher.weakest")}: {weak.map((w) => w.topic).join(" · ")}
       </div>
     </div>

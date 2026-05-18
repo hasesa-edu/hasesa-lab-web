@@ -7,6 +7,8 @@ import { LOCALES } from "@/lib/i18n";
 import { useLocale } from "./LocaleProvider";
 import { useUser } from "./UserProvider";
 import { apiSignout } from "@/lib/api";
+import { Logo } from "./Logo";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Nav() {
   const { locale, setLocale, tr } = useLocale();
@@ -21,34 +23,37 @@ export function Nav() {
     router.push("/");
   }
 
+  const navLink =
+    "text-ink-muted hover:text-brand transition-colors text-sm font-medium";
+
   return (
-    <header className="border-b border-black/5 bg-white/90 backdrop-blur sticky top-0 z-20">
-      <div className="max-w-5xl mx-auto px-4 py-3 flex items-center gap-3 sm:gap-4 flex-wrap">
-        <Link href="/" className="font-semibold text-brand-dark text-lg">
-          Personal <span className="text-sun">·</span> AI Tutor
-        </Link>
-        <nav className="flex items-center gap-3 sm:gap-4 text-sm">
-          <Link href="/" className="hover:text-brand">{tr("nav.home")}</Link>
-          <Link href="/lessons" className="hover:text-brand">{tr("nav.lessons")}</Link>
-          <Link href="/chat" className="hover:text-brand">{tr("nav.tutor")}</Link>
+    <header className="sticky top-0 z-20 border-b border-line/80 bg-canvas/80 backdrop-blur-md supports-[backdrop-filter]:bg-canvas/70">
+      <div className="max-w-5xl mx-auto px-4 py-3 flex items-center gap-4 sm:gap-6 flex-wrap">
+        <Logo />
+
+        <nav className="flex items-center gap-4 sm:gap-5">
+          <Link href="/" className={navLink}>{tr("nav.home")}</Link>
+          <Link href="/lessons" className={navLink}>{tr("nav.lessons")}</Link>
+          <Link href="/chat" className={navLink}>{tr("nav.tutor")}</Link>
           {user && user.role === "student" && (
-            <Link href="/dashboard" className="hover:text-brand">{tr("nav.dashboard")}</Link>
+            <Link href="/dashboard" className={navLink}>{tr("nav.dashboard")}</Link>
           )}
           {user && user.role === "teacher" && (
-            <Link href="/teacher" className="hover:text-brand">{tr("nav.teacher")}</Link>
+            <Link href="/teacher" className={navLink}>{tr("nav.teacher")}</Link>
           )}
         </nav>
+
         <div className="ml-auto flex items-center gap-2">
-          <div className="hidden sm:flex items-center gap-1 text-xs">
+          <div className="hidden sm:flex items-center rounded-full border border-line bg-surface p-0.5 text-xs">
             {LOCALES.map((l) => (
               <button
                 key={l.code}
                 onClick={() => setLocale(l.code)}
                 className={
-                  "px-2 py-1 rounded border transition " +
+                  "px-2.5 py-1 rounded-full transition font-medium " +
                   (locale === l.code
-                    ? "bg-brand text-white border-brand"
-                    : "bg-white text-stone-600 border-stone-200 hover:border-brand")
+                    ? "bg-brand text-brand-on shadow-soft"
+                    : "text-ink-muted hover:text-ink")
                 }
                 aria-pressed={locale === l.code}
                 aria-label={l.label}
@@ -57,34 +62,40 @@ export function Nav() {
               </button>
             ))}
           </div>
+
+          <ThemeToggle />
+
           {user ? (
             <div className="relative">
               <button
                 onClick={() => setMenuOpen((o) => !o)}
-                className="flex items-center gap-2 px-2.5 py-1.5 rounded border border-stone-200 hover:border-brand text-sm"
+                className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full border border-line bg-surface hover:border-brand/60 text-sm transition"
               >
-                <span className="w-6 h-6 rounded-full bg-brand text-white text-xs font-bold flex items-center justify-center">
+                <span className="w-7 h-7 rounded-full bg-brand text-brand-on text-xs font-bold flex items-center justify-center">
                   {user.displayName.slice(0, 1).toUpperCase()}
                 </span>
-                <span className="hidden sm:inline">{user.displayName}</span>
+                <span className="hidden sm:inline text-ink">{user.displayName}</span>
               </button>
               {menuOpen && (
-                <div className="absolute right-0 mt-1 bg-white border border-stone-200 rounded shadow-lg py-1 text-sm min-w-[180px]">
-                  <div className="px-3 py-1.5 text-xs text-stone-500 border-b border-stone-100">
-                    {user.email} · {user.role === "teacher" ? tr("auth.role.teacher") : tr("auth.role.student")}
+                <div className="absolute right-0 mt-2 bg-surface border border-line rounded-lg shadow-pop py-1 text-sm min-w-[200px] overflow-hidden">
+                  <div className="px-3 py-2 text-xs text-ink-subtle border-b border-line">
+                    <div className="text-ink-muted truncate">{user.email}</div>
+                    <div className="mt-0.5">
+                      {user.role === "teacher" ? tr("auth.role.teacher") : tr("auth.role.student")}
+                    </div>
                   </div>
                   {user.role === "student" && (
                     <Link
                       href="/join"
                       onClick={() => setMenuOpen(false)}
-                      className="block px-3 py-1.5 hover:bg-stone-50"
+                      className="block px-3 py-2 hover:bg-surface-2 text-ink"
                     >
                       {tr("student.joinClass")}
                     </Link>
                   )}
                   <button
                     onClick={handleSignOut}
-                    className="block w-full text-left px-3 py-1.5 hover:bg-stone-50 text-red-700"
+                    className="block w-full text-left px-3 py-2 hover:bg-surface-2 text-red-600 dark:text-red-400"
                   >
                     {tr("nav.signout")}
                   </button>
@@ -93,25 +104,32 @@ export function Nav() {
             </div>
           ) : (
             <>
-              <Link href="/login" className="text-sm px-3 py-1.5 rounded border border-stone-200 hover:border-brand">
+              <Link
+                href="/login"
+                className="text-sm px-3 py-1.5 rounded-md text-ink-muted hover:text-ink transition"
+              >
                 {tr("nav.signin")}
               </Link>
-              <Link href="/signup" className="text-sm px-3 py-1.5 rounded bg-brand text-white hover:bg-brand-dark">
+              <Link
+                href="/signup"
+                className="text-sm px-3.5 py-1.5 rounded-md bg-brand text-brand-on hover:bg-brand-hover font-medium shadow-soft transition"
+              >
                 {tr("nav.signup")}
               </Link>
             </>
           )}
         </div>
-        <div className="sm:hidden flex items-center gap-1 text-xs basis-full">
+
+        <div className="sm:hidden flex items-center rounded-full border border-line bg-surface p-0.5 text-xs basis-full">
           {LOCALES.map((l) => (
             <button
               key={l.code}
               onClick={() => setLocale(l.code)}
               className={
-                "px-2 py-1 rounded border transition " +
+                "flex-1 px-2 py-1 rounded-full transition font-medium " +
                 (locale === l.code
-                  ? "bg-brand text-white border-brand"
-                  : "bg-white text-stone-600 border-stone-200")
+                  ? "bg-brand text-brand-on"
+                  : "text-ink-muted")
               }
             >
               {l.native}

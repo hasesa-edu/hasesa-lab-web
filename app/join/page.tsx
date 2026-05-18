@@ -37,51 +37,60 @@ export default function JoinPage() {
   }
 
   if (!ready || !user) {
-    return <div className="max-w-md mx-auto px-4 py-10 text-stone-500">{tr("common.loading")}</div>;
+    return <div className="max-w-md mx-auto px-4 py-10 text-ink-subtle">{tr("common.loading")}</div>;
   }
 
   return (
-    <div className="max-w-md mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold text-stone-900">{tr("student.joinClass")}</h1>
-      <p className="text-sm text-stone-600 mt-2">{tr("student.joinCode")}</p>
+    <div className="max-w-md mx-auto px-4 py-14">
+      <div className="rounded-2xl border border-line bg-surface p-7 shadow-card">
+        <h1 className="text-2xl font-bold tracking-tight text-ink">{tr("student.joinClass")}</h1>
+        <p className="text-sm text-ink-muted mt-2">{tr("student.joinCode")}</p>
 
-      <form onSubmit={onJoin} className="mt-6 space-y-3">
-        <input
-          value={code}
-          onChange={(e) => setCode(e.target.value.toUpperCase())}
-          placeholder="ABC123"
-          maxLength={8}
-          className="w-full px-3 py-2.5 border border-stone-300 rounded-md focus:outline-none focus:border-brand bg-white text-center tracking-widest font-mono uppercase"
-        />
-        {error && <div className="text-sm text-red-700">{error}</div>}
-        {joined && (
-          <div className="text-sm text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-2 rounded">
-            ✓ Joined {joined}
+        <form onSubmit={onJoin} className="mt-6 space-y-3">
+          <input
+            value={code}
+            onChange={(e) => setCode(e.target.value.toUpperCase())}
+            placeholder="ABC123"
+            maxLength={8}
+            className="w-full px-3 py-3 border border-line rounded-lg focus:outline-none focus:border-brand bg-canvas text-center tracking-widest font-mono uppercase text-ink text-lg"
+          />
+          {error && <div className="text-sm text-red-700 dark:text-red-300">{error}</div>}
+          {joined && (
+            <div className="text-sm text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 px-3 py-2 rounded-lg">
+              ✓ Joined {joined}
+            </div>
+          )}
+          <button
+            type="submit"
+            disabled={!code.trim() || busy}
+            className="w-full px-4 py-2.5 bg-brand text-brand-on rounded-lg hover:bg-brand-hover disabled:opacity-40 font-medium shadow-soft transition"
+          >
+            {busy ? "…" : tr("student.join")}
+          </button>
+        </form>
+
+        {user.joinedClasses.length > 0 && (
+          <div className="mt-8">
+            <h2 className="text-xs font-semibold text-ink-subtle uppercase tracking-wider">
+              {tr("student.joined")}
+            </h2>
+            <ul className="mt-2 space-y-1 text-sm">
+              {user.joinedClasses.map((c) => (
+                <li
+                  key={c}
+                  className="px-3 py-2 rounded-lg border border-line bg-canvas font-mono text-ink-muted"
+                >
+                  {c}
+                </li>
+              ))}
+            </ul>
           </div>
         )}
-        <button
-          type="submit"
-          disabled={!code.trim() || busy}
-          className="w-full px-4 py-2.5 bg-brand text-white rounded-md hover:bg-brand-dark disabled:opacity-40 font-medium"
-        >
-          {busy ? "…" : tr("student.join")}
-        </button>
-      </form>
 
-      {user.joinedClasses.length > 0 && (
-        <div className="mt-8">
-          <h2 className="text-sm font-medium text-stone-500 uppercase tracking-wider">{tr("student.joined")}</h2>
-          <ul className="mt-2 space-y-1 text-sm">
-            {user.joinedClasses.map((c) => (
-              <li key={c} className="px-3 py-2 rounded border border-stone-200 bg-white font-mono text-stone-700">
-                {c}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      <Link href="/dashboard" className="mt-6 inline-block text-sm text-brand">← {tr("nav.dashboard")}</Link>
+        <Link href="/dashboard" className="mt-6 inline-block text-sm text-brand hover:underline">
+          ← {tr("nav.dashboard")}
+        </Link>
+      </div>
     </div>
   );
 }

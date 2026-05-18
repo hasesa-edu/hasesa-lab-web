@@ -56,24 +56,24 @@ export default function DashboardPage() {
   }, [user, mastery]);
 
   if (!ready || !user) {
-    return <div className="max-w-3xl mx-auto px-4 py-10 text-stone-500">{tr("common.loading")}</div>;
+    return <div className="max-w-3xl mx-auto px-4 py-10 text-ink-subtle">{tr("common.loading")}</div>;
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold text-stone-900">
+    <div className="max-w-4xl mx-auto px-4 py-12">
+      <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-ink">
         {tr("dash.greeting")}, {user.displayName} 👋
       </h1>
-      <p className="text-stone-600 mt-1 text-sm">{tr("dash.title")}</p>
+      <p className="text-ink-muted mt-1.5 text-sm">{tr("dash.title")}</p>
 
-      <section className="mt-8">
-        <h2 className="font-semibold text-stone-900">{tr("dash.recommended")}</h2>
-        <p className="text-xs text-stone-500 mt-0.5">{tr("dash.recommendedWhy")}</p>
-        <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <section className="mt-10">
+        <h2 className="font-semibold text-ink text-lg tracking-tight">{tr("dash.recommended")}</h2>
+        <p className="text-xs text-ink-subtle mt-0.5">{tr("dash.recommendedWhy")}</p>
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
           {loading ? (
-            <p className="text-sm text-stone-500 col-span-3">{tr("common.loading")}</p>
+            <p className="text-sm text-ink-subtle col-span-3">{tr("common.loading")}</p>
           ) : recommendations.length === 0 ? (
-            <p className="text-sm text-stone-500 col-span-3">{tr("dash.noActivity")}</p>
+            <p className="text-sm text-ink-subtle col-span-3">{tr("dash.noActivity")}</p>
           ) : (
             recommendations.map((r) => {
               const lesson = getLesson(r.lessonId)!;
@@ -82,13 +82,13 @@ export default function DashboardPage() {
                 <Link
                   key={r.lessonId}
                   href={`/lessons/${r.lessonId}`}
-                  className="block rounded-lg border border-brand/30 bg-white p-4 hover:border-brand transition"
+                  className="block rounded-xl border border-brand/30 bg-surface p-4 hover:border-brand hover:shadow-card transition shadow-soft"
                 >
-                  <div className="text-xs text-brand font-medium uppercase">
+                  <div className="text-xs text-brand font-semibold uppercase tracking-wide">
                     {subject.emoji} {subject.label[locale]}
                   </div>
-                  <div className="font-semibold text-stone-900 mt-1 text-sm">{lesson.title[locale]}</div>
-                  <div className="text-xs text-stone-500 mt-2">
+                  <div className="font-semibold text-ink mt-1 text-sm">{lesson.title[locale]}</div>
+                  <div className="text-xs text-ink-subtle mt-2">
                     {r.topic} · {tr("dash.mastery").toLowerCase()}: {r.mastery}/100
                   </div>
                 </Link>
@@ -98,25 +98,25 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      <section className="mt-10">
-        <h2 className="font-semibold text-stone-900">{tr("dash.mastery")}</h2>
-        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <section className="mt-12">
+        <h2 className="font-semibold text-ink text-lg tracking-tight">{tr("dash.mastery")}</h2>
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
           {user.subjects.map((s) => (
             <MasterySubjectCard key={s} subject={s} mastery={mastery} locale={locale} tr={tr} />
           ))}
         </div>
       </section>
 
-      <section className="mt-10">
-        <h2 className="font-semibold text-stone-900">{tr("dash.takeMock")}</h2>
-        <div className="mt-3 flex flex-wrap gap-2">
+      <section className="mt-12">
+        <h2 className="font-semibold text-ink text-lg tracking-tight">{tr("dash.takeMock")}</h2>
+        <div className="mt-4 flex flex-wrap gap-2">
           {user.subjects.map((s) => {
             const subject = SUBJECTS.find((x) => x.id === s)!;
             return (
               <Link
                 key={s}
                 href={`/mock/${s}`}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded border border-stone-300 hover:border-brand bg-white"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm rounded-lg border border-line hover:border-brand/60 bg-surface text-ink hover:text-brand transition font-medium"
               >
                 <span>{subject.emoji}</span>
                 {subject.label[locale]}
@@ -146,23 +146,23 @@ function MasterySubjectCard({
     ? Math.round(topics.reduce((acc, t) => acc + (mastery[subject]?.[t.topic] ?? 50), 0) / topics.length)
     : 0;
   return (
-    <div className="rounded-lg border border-stone-200 bg-white p-4">
+    <div className="rounded-xl border border-line bg-surface p-4 shadow-soft">
       <div className="flex items-center justify-between">
-        <h3 className="font-medium text-stone-900">
+        <h3 className="font-medium text-ink">
           {meta.emoji} {meta.label[locale]}
         </h3>
-        <span className="text-sm text-stone-600">{avg}/100</span>
+        <span className="text-sm text-ink-muted tabular-nums">{avg}/100</span>
       </div>
       <ul className="mt-3 space-y-2">
         {topics.map((t) => {
           const m = mastery[subject]?.[t.topic] ?? 50;
           return (
             <li key={t.topic}>
-              <div className="flex justify-between text-xs text-stone-600">
+              <div className="flex justify-between text-xs text-ink-muted">
                 <span>{t.topic}</span>
-                <span>{m}</span>
+                <span className="tabular-nums">{m}</span>
               </div>
-              <div className="mt-0.5 h-1.5 bg-stone-100 rounded overflow-hidden">
+              <div className="mt-1 h-1.5 bg-surface-2 rounded overflow-hidden">
                 <div
                   className={
                     "h-full transition-all " +
