@@ -30,18 +30,19 @@ export function subjectMeta(id: Subject) {
   return SUBJECTS.find((s) => s.id === id)!;
 }
 
-export type AtHomeExperiment = {
-  title: Translated;
-  materials: Translated[];
-  steps: Translated[];
-  observe: Translated;
-};
-
 export type LessonVideo = {
   /** YouTube video ID (the 11-char string after `?v=`) */
   youtubeId: string;
   /** Credit for the channel/creator that made the video */
   credit: string;
+};
+
+export type AtHomeExperiment = {
+  title: Translated;
+  materials: Translated[];
+  steps: Translated[];
+  observe: Translated;
+  video?: LessonVideo;
 };
 
 export type Lesson = {
@@ -94,6 +95,7 @@ export const LESSONS: Lesson[] = [
         am: "የራስዎን የእግር ጉዞ ፍጥነት ይለኩ",
         om: "Saffisa deemsa kee mataa keetii safari",
       },
+      video: { youtubeId: "EGqpLug-sDk", credit: "FuseSchool" },
       materials: [
         { en: "A flat 10-metre path (yard, hallway, or schoolyard)", am: "ጠፍጣፋ 10 ሜትር መንገድ (ግቢ ወይም አዳራሽ)", om: "Karaa diriiraa meetira 10 (oobdii ykn galma)" },
         { en: "A phone with a timer or a wristwatch", am: "የሰዓት ቆጣሪ ያለው ስልክ ወይም ሰዓት", om: "Bilbila yeroo lakkaa'u qabu ykn saatii" },
@@ -139,6 +141,7 @@ export const LESSONS: Lesson[] = [
         am: "ሳንቲምና ካርድ — የራሳችሁን ኢነርሺያ ይመልከቱ",
         om: "Saantimaa fi kaardii — iinarshiyaa ofii keetiin ilaali",
       },
+      video: { youtubeId: "pS60Dv3uzf4", credit: "Make Science Fun" },
       materials: [
         { en: "A small coin (1 Birr or any coin)", am: "ትንሽ ሳንቲም (1 ብር ወይም ሌላ)", om: "Saantima xiqqaa (1 Birr ykn kan biraa)" },
         { en: "A stiff card (playing card, ID card, or thick paper)", am: "ጠንካራ ካርድ (የመጫወቻ ካርድ ወይም ወፍራም ወረቀት)", om: "Kaardii jabaa (kaardii taphaa ykn waraqaa furdaa)" },
@@ -184,6 +187,7 @@ export const LESSONS: Lesson[] = [
         am: "የጋሊልዮ ውድድር፦ ድንጋይ ከወረቀት ጋር",
         om: "Dorgommii Galileo: dhagaa fi waraqaa",
       },
+      video: { youtubeId: "E43-CfukEgs", credit: "BBC / Brian Cox" },
       materials: [
         { en: "A small stone or coin", am: "ትንሽ ድንጋይ ወይም ሳንቲም", om: "Dhagaa ykn saantima xiqqaa" },
         { en: "Two sheets of paper of equal size", am: "እኩል መጠን ያላቸው ሁለት ወረቀቶች", om: "Waraqaa lama kan hammi isaanii wal-qixa" },
@@ -227,6 +231,7 @@ export const LESSONS: Lesson[] = [
         am: "ፔንዱለም፦ ሃይል ቦታ ሲቀያየር ይመልከቱ",
         om: "Pendulum: anniisaan iddoo akka jijjiiratu ilaali",
       },
+      video: { youtubeId: "dPyzEeBVQO0", credit: "Mr. D'Antuono" },
       materials: [
         { en: "A string about 50 cm long", am: "50 ሴሜ የሆነ ገመድ", om: "Funyoo gar 50 cm" },
         { en: "A small heavy object (key, washer, or small stone)", am: "ትንሽ ከባድ ነገር (ቁልፍ ወይም ድንጋይ)", om: "Wanta xiqqaa ulfaataa (furtuu ykn dhagaa)" },
@@ -273,6 +278,7 @@ export const LESSONS: Lesson[] = [
         am: "በእጅዎ የወረወሩትን ፓራቦላ ይከታተሉ",
         om: "Paraboolaa harka keetiin darbatte hordofi",
       },
+      video: { youtubeId: "HB4ws7RoA3M", credit: "NSF / Science of NFL" },
       materials: [
         { en: "A small ball or pebble", am: "ትንሽ ኳስ ወይም ጠጠር", om: "Kubbaa ykn dhagaa xiqqaa" },
         { en: "An outdoor wall or clear space", am: "የውጭ ግድግዳ ወይም ክፍት ቦታ", om: "Dallaa alaa ykn bakka bal'aa" },
@@ -319,6 +325,7 @@ export const LESSONS: Lesson[] = [
         am: "የዛፍን ቁመት በጥላው ብቻ ይለኩ",
         om: "Hojjaa muka gaaddidduu isaa qofaan safari",
       },
+      video: { youtubeId: "8-Vv-fAsuaY", credit: "Tim Pelton" },
       materials: [
         { en: "A straight stick exactly 1 metre long (or any known length)", am: "በትክክል 1 ሜትር የሆነ ቀጥ ያለ በትር", om: "Ulee qajeelaa meetira tokko (ykn dheerina beekamuu)" },
         { en: "A sunny day with clear shadows", am: "ጥላ የሚያሳይ ፀሐያማ ቀን", om: "Guyyaa aduu kan gaaddidduu calaqqisu" },
@@ -365,6 +372,7 @@ export const LESSONS: Lesson[] = [
         am: "ወረቀት አጥፉና የጂኦሜትሪክ ቅደም ተከተል ይታይ",
         om: "Waraqaa marachiisii tartiiba jiyoomeetirikii ilaali",
       },
+      video: { youtubeId: "6EQeh2aK81Q", credit: "MythBusters" },
       materials: [
         { en: "One large sheet of paper (A4 or larger)", am: "አንድ ትልቅ ወረቀት", om: "Waraqaa guddaa tokko" },
         { en: "A ruler (optional)", am: "ሙለትታ (አማራጭ)", om: "Rooyaalii (filannoo)" },
@@ -410,6 +418,7 @@ export const LESSONS: Lesson[] = [
         am: "የአቮጋድሮ ቁጥር ምን ያህል ግዙፍ እንደሆነ በሩዝ ይሰማዎ",
         om: "Lakkoofsa Avogadro hammam guddaa akka ta'e ruuziin dhandhami",
       },
+      video: { youtubeId: "TEl4jeETVmg", credit: "TED-Ed" },
       materials: [
         { en: "A handful of uncooked rice", am: "የተወሰነ ጥሬ ሩዝ", om: "Ruuzii hin afoofamne harka guutuu" },
         { en: "A kitchen scale or measuring spoon", am: "የወጥ ቤት ሚዛን ወይም ማንኪያ", om: "Madaala mana keessaa ykn fal'aana safaraa" },
@@ -455,6 +464,7 @@ export const LESSONS: Lesson[] = [
         am: "ከቀይ ጎመን የራስዎን pH አመልካች ይስሩ",
         om: "Raafuu diimaa irraa agarsiisaa pH ofii kee tolfadhu",
       },
+      video: { youtubeId: "PKUwxQI0wIo", credit: "Royal Institution" },
       materials: [
         { en: "Half a head of red cabbage (or 1 beetroot)", am: "ግማሽ ቀይ ጎመን (ወይም 1 ቀይ ሥር)", om: "Walakkaa raafuu diimaa (ykn buura diimaa tokko)" },
         { en: "Hot water and a pot", am: "ሙቅ ውሃና ድስት", om: "Bishaan ho'aa fi xuwwee" },
@@ -503,6 +513,7 @@ export const LESSONS: Lesson[] = [
         am: "ያለ ማይክሮስኮፕ የተክል ሕዋሶችን ይመልከቱ (የሽንኩርት ቆዳ)",
         om: "Maaykiroskooppii malee seelii biqiltuu ilaali (qola shunkurtii)",
       },
+      video: { youtubeId: "Xc5HPAzXbZw", credit: "Microbehunter" },
       materials: [
         { en: "1 fresh onion", am: "1 ትኩስ ሽንኩርት", om: "Shunkurtii haaraa 1" },
         { en: "A sharp knife (ask an adult to help)", am: "ስለታም ቢላዋ (ትልቅ ሰው ይርዳ)", om: "Hadhaa qaramaa (nama guddaa gargaarsiisi)" },
@@ -549,6 +560,7 @@ export const LESSONS: Lesson[] = [
         am: "ከአንድ ዘር ተክል ሲያድግ ይመልከቱ",
         om: "Sanyii tokko irraa biqiltuun akka guddatu ilaali",
       },
+      video: { youtubeId: "w77zPAtVTuI", credit: "GPhase" },
       materials: [
         { en: "5–6 bean or chickpea seeds (any dried beans from the kitchen)", am: "5–6 የቦሎቄ ወይም የሽምብራ ዘሮች", om: "Sanyii baaqilaa ykn shumbiraa 5–6" },
         { en: "A small dish or plate", am: "ትንሽ ሳህን", om: "Saanii xiqqaa" },

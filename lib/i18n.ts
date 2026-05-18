@@ -299,6 +299,7 @@ export const t: Dict = {
   // Lesson video
   "video.label": { en: "Watch the lesson", am: "ትምህርቱን ይመልከቱ", om: "Barnoota daawwadhu" },
   "video.credit": { en: "Video by", am: "ቪዲዮ በ", om: "Vidiyoo kan" },
+  "exp.video": { en: "Watch the demo", am: "ሙከራውን ይመልከቱ", om: "Shaakala daawwadhu" },
 
   // Lesson detail TOC
   "toc.video": { en: "Video", am: "ቪዲዮ", om: "Vidiyoo" },
