@@ -23,10 +23,8 @@ export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   manifest: "/manifest.json",
-  icons: {
-    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
-    apple: [{ url: "/icon.svg", type: "image/svg+xml" }],
-  },
+  // Favicon is generated automatically from app/icon.svg (Next file convention),
+  // which appends a content-hash to the URL so browsers don't serve a stale icon.
   openGraph: {
     type: "website",
     siteName: "Personal AI Tutor",
