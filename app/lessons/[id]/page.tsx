@@ -82,6 +82,30 @@ export default function LessonDetail() {
         </div>
       </header>
 
+      {lesson.video && (
+        <section className="mt-8">
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <p className="text-xs uppercase tracking-[0.16em] font-semibold text-brand">
+              {tr("video.label")}
+            </p>
+            <p className="text-xs text-ink-subtle">
+              {tr("video.credit")} {lesson.video.credit}
+            </p>
+          </div>
+          <div className="relative overflow-hidden rounded-2xl border border-line bg-canvas shadow-card aspect-video">
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${lesson.video.youtubeId}?rel=0&modestbranding=1`}
+              title={lesson.title[locale]}
+              loading="lazy"
+              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
+              className="absolute inset-0 h-full w-full"
+            />
+          </div>
+        </section>
+      )}
+
       <div className="prose-edu mt-8">
         {lesson.sections.map((section) => (
           <section key={section.heading.en}>

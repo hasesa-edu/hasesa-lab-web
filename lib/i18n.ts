@@ -277,6 +277,10 @@ export const t: Dict = {
   "mock.again": { en: "Try another mock", am: "ሌላ ሞክ ይሞክሩ", om: "Moocii biraa yaali" },
   "mock.review": { en: "Review answers", am: "መልሶችን ይከልሱ", om: "Deebii ilaali" },
 
+  // Lesson video
+  "video.label": { en: "Watch the lesson", am: "ትምህርቱን ይመልከቱ", om: "Barnoota daawwadhu" },
+  "video.credit": { en: "Video by", am: "ቪዲዮ በ", om: "Vidiyoo kan" },
+
   // At-home experiment
   "exp.label": { en: "At-home experiment", am: "በቤት የሚሰራ ሙከራ", om: "Shaakala mana keessatti" },
   "exp.materials": { en: "You'll need", am: "የሚያስፈልጉ", om: "Wantoota barbaachisan" },
