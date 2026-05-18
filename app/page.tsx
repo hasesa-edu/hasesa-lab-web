@@ -2,9 +2,12 @@
 
 import Link from "next/link";
 import { useLocale } from "@/components/LocaleProvider";
+import { useUser } from "@/components/UserProvider";
 
 export default function Home() {
   const { tr } = useLocale();
+  const { user, ready } = useUser();
+
   return (
     <div className="max-w-5xl mx-auto px-4">
       <section className="py-14 sm:py-20">
@@ -14,13 +17,26 @@ export default function Home() {
         <h1 className="mt-3 text-3xl sm:text-5xl font-bold leading-tight text-stone-900">
           {tr("hero.title")}
         </h1>
-        <p className="mt-4 text-lg text-stone-600 max-w-2xl leading-relaxed">
-          {tr("hero.sub")}
-        </p>
+        <p className="mt-4 text-lg text-stone-600 max-w-2xl leading-relaxed">{tr("hero.sub")}</p>
         <div className="mt-7 flex flex-wrap gap-3">
+          {ready && user ? (
+            <Link
+              href={user.role === "teacher" ? "/teacher" : "/dashboard"}
+              className="inline-flex items-center px-5 py-2.5 bg-brand text-white rounded-md hover:bg-brand-dark font-medium"
+            >
+              {tr("hero.cta.dashboard")} →
+            </Link>
+          ) : (
+            <Link
+              href="/signup"
+              className="inline-flex items-center px-5 py-2.5 bg-brand text-white rounded-md hover:bg-brand-dark font-medium"
+            >
+              {tr("hero.cta.signup")}
+            </Link>
+          )}
           <Link
             href="/lessons"
-            className="inline-flex items-center px-5 py-2.5 bg-brand text-white rounded-md hover:bg-brand-dark font-medium"
+            className="inline-flex items-center px-5 py-2.5 bg-white text-brand border border-brand/30 rounded-md hover:border-brand font-medium"
           >
             {tr("hero.cta.lessons")}
           </Link>

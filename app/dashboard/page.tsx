@@ -1,0 +1,171 @@
+"use client";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo } from "react";
+import { useLocale } from "@/components/LocaleProvider";
+import { useUser } from "@/components/UserProvider";
+import {
+  SUBJECTS,
+  allTopicsForSubject,
+  getLesson,
+  type Subject,
+} from "@/lib/lessons";
+
+export default function DashboardPage() {
+  const { tr, locale } = useLocale();
+  const { user, ready } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (ready && !user) router.push("/login");
+    if (ready && user && user.role === "teacher") router.push("/teacher");
+  }, [ready, user, router]);
+
+  const recommendations = useMemo(() => {
+    if (!user) return [];
+    const scored: { lessonId: string; topic: string; subject: Subject; mastery: number; weight: number; priority: number }[] = [];
+    for (const subject of user.subjects) {
+      for (const t of allTopicsForSubject(subject)) {
+        const m = user.mastery[subject]?.[t.topic] ?? 50;
+        const priority = (100 - m) * t.weight;
+        scored.push({ lessonId: t.lessonId, topic: t.topic, subject, mastery: m, weight: t.weight, priority });
+      }
+    }
+    scored.sort((a, b) => b.priority - a.priority);
+    const seen = new Set<string>();
+    const out: typeof scored = [];
+    for (const s of scored) {
+      if (seen.has(s.lessonId)) continue;
+      seen.add(s.lessonId);
+      out.push(s);
+      if (out.length >= 3) break;
+    }
+    return out;
+  }, [user]);
+
+  if (!ready || !user) {
+    return <div className="max-w-3xl mx-auto px-4 py-10 text-stone-500">{tr("common.loading")}</div>;
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-10">
+      <h1 className="text-3xl font-bold text-stone-900">
+        {tr("dash.greeting")}, {user.username} 👋
+      </h1>
+      <p className="text-stone-600 mt-1 text-sm">{tr("dash.title")}</p>
+
+      {/* Recommendations */}
+      <section className="mt-8">
+        <h2 className="font-semibold text-stone-900">{tr("dash.recommended")}</h2>
+        <p className="text-xs text-stone-500 mt-0.5">{tr("dash.recommendedWhy")}</p>
+        <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {recommendations.map((r) => {
+            const lesson = getLesson(r.lessonId)!;
+            const subject = SUBJECTS.find((s) => s.id === r.subject)!;
+            return (
+              <Link
+                key={r.lessonId}
+                href={`/lessons/${r.lessonId}`}
+                className="block rounded-lg border border-brand/30 bg-white p-4 hover:border-brand transition"
+              >
+                <div className="text-xs text-brand font-medium uppercase">
+                  {subject.emoji} {subject.label[locale]}
+                </div>
+                <div className="font-semibold text-stone-900 mt-1 text-sm">{lesson.title[locale]}</div>
+                <div className="text-xs text-stone-500 mt-2">
+                  {r.topic} · {tr("dash.mastery").toLowerCase()}: {r.mastery}/100
+                </div>
+              </Link>
+            );
+          })}
+          {recommendations.length === 0 && (
+            <p className="text-sm text-stone-500">{tr("dash.noActivity")}</p>
+          )}
+        </div>
+      </section>
+
+      {/* Mastery by subject */}
+      <section className="mt-10">
+        <h2 className="font-semibold text-stone-900">{tr("dash.mastery")}</h2>
+        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {user.subjects.map((s) => (
+            <MasterySubjectCard key={s} subject={s} user={user} locale={locale} tr={tr} />
+          ))}
+        </div>
+      </section>
+
+      {/* Mock tests */}
+      <section className="mt-10">
+        <h2 className="font-semibold text-stone-900">{tr("dash.takeMock")}</h2>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {user.subjects.map((s) => {
+            const subject = SUBJECTS.find((x) => x.id === s)!;
+            return (
+              <Link
+                key={s}
+                href={`/mock/${s}`}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded border border-stone-300 hover:border-brand bg-white"
+              >
+                <span>{subject.emoji}</span>
+                {subject.label[locale]}
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function MasterySubjectCard({
+  subject,
+  user,
+  locale,
+  tr,
+}: {
+  subject: Subject;
+  user: { mastery: Record<Subject, Record<string, number>> };
+  locale: "en" | "am" | "om";
+  tr: (k: any) => string;
+}) {
+  const meta = SUBJECTS.find((s) => s.id === subject)!;
+  const topics = allTopicsForSubject(subject);
+  const avg = topics.length
+    ? Math.round(
+        topics.reduce((acc, t) => acc + (user.mastery[subject]?.[t.topic] ?? 50), 0) / topics.length
+      )
+    : 0;
+  return (
+    <div className="rounded-lg border border-stone-200 bg-white p-4">
+      <div className="flex items-center justify-between">
+        <h3 className="font-medium text-stone-900">
+          {meta.emoji} {meta.label[locale]}
+        </h3>
+        <span className="text-sm text-stone-600">{avg}/100</span>
+      </div>
+      <ul className="mt-3 space-y-2">
+        {topics.map((t) => {
+          const m = user.mastery[subject]?.[t.topic] ?? 50;
+          return (
+            <li key={t.topic}>
+              <div className="flex justify-between text-xs text-stone-600">
+                <span>{t.topic}</span>
+                <span>{m}</span>
+              </div>
+              <div className="mt-0.5 h-1.5 bg-stone-100 rounded overflow-hidden">
+                <div
+                  className={
+                    "h-full transition-all " +
+                    (m >= 70 ? "bg-emerald-500" : m >= 40 ? "bg-amber-500" : "bg-red-500")
+                  }
+                  style={{ width: `${m}%` }}
+                />
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
