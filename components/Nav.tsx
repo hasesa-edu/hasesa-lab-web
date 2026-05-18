@@ -25,7 +25,7 @@ export function Nav() {
     <header className="border-b border-black/5 bg-white/90 backdrop-blur sticky top-0 z-20">
       <div className="max-w-5xl mx-auto px-4 py-3 flex items-center gap-3 sm:gap-4 flex-wrap">
         <Link href="/" className="font-semibold text-brand-dark text-lg">
-          AI-Edu <span className="text-sun">·</span> Ethiopia
+          Personal <span className="text-sun">·</span> AI Tutor
         </Link>
         <nav className="flex items-center gap-3 sm:gap-4 text-sm">
           <Link href="/" className="hover:text-brand">{tr("nav.home")}</Link>

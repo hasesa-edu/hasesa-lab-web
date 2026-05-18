@@ -177,7 +177,7 @@ export const t: Dict = {
   "common.signinCTA": { en: "Sign in", am: "ግባ", om: "Seeni" },
 
   "footer.demo": {
-    en: "Demo · not the production product · based on REQUIREMENTS.md v0.2",
+    en: "Demo · not the production product",
     am: "ማሳያ · የምርት እትም አይደለም",
     om: "Agarsiisa · oomisha dhugaa miti",
   },

@@ -1,6 +1,6 @@
-# AI-Edu Ethiopia — Demo
+# Personal AI Tutor — Demo
 
-An AI tutor demo for Grade 11 Ethiopian students. Built from `REQUIREMENTS.md` v0.2.
+An AI tutor demo for Grade 11 Ethiopian students.
 
 This is a **demo shell** of the MVP — most screens described in the requirements exist with working interactions, but content is sample-only and there is no real backend.
 
