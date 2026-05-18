@@ -30,7 +30,8 @@ export default function JoinPage() {
       setJoined(cls.name);
       await refresh();
     } catch (e: any) {
-      setError(e?.message || tr("student.joinErr"));
+      console.error("join class failed:", e);
+      setError(tr("student.joinErr"));
     } finally {
       setBusy(false);
     }
@@ -52,6 +53,13 @@ export default function JoinPage() {
             onChange={(e) => setCode(e.target.value.toUpperCase())}
             placeholder="ABC123"
             maxLength={8}
+            autoFocus
+            required
+            autoCapitalize="characters"
+            autoCorrect="off"
+            spellCheck={false}
+            inputMode="text"
+            aria-label={tr("student.joinCode")}
             className="w-full px-3 py-3 border border-line rounded-lg focus:outline-none focus:border-brand bg-canvas text-center tracking-widest font-mono uppercase text-ink text-lg"
           />
           {error && <div className="text-sm text-red-700 dark:text-red-300">{error}</div>}

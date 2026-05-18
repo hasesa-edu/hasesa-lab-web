@@ -3,6 +3,9 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 import { useLocale } from "@/components/LocaleProvider";
 import { getLesson } from "@/lib/lessons";
 
@@ -28,10 +31,15 @@ const SUGGESTIONS: { en: string; am: string; om: string }[] = [
 
 export default function ChatPage() {
   return (
-    <Suspense fallback={<div className="max-w-3xl mx-auto px-4 py-10 text-ink-subtle">Loading…</div>}>
+    <Suspense fallback={<ChatLoading />}>
       <ChatInner />
     </Suspense>
   );
+}
+
+function ChatLoading() {
+  const { tr } = useLocale();
+  return <div className="max-w-3xl mx-auto px-4 py-10 text-ink-subtle">{tr("common.loading")}</div>;
 }
 
 function ChatInner() {
@@ -44,15 +52,40 @@ function ChatInner() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showNewPill, setShowNewPill] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
+  const stickRef = useRef(true);
 
   useEffect(() => {
+    function onScroll() {
+      const fromBottom = document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
+      stickRef.current = fromBottom < 120;
+      if (stickRef.current) setShowNewPill(false);
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (messages.length === 0) return;
+    if (stickRef.current) {
+      endRef.current?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      setShowNewPill(true);
+    }
+  }, [messages]);
+
+  function jumpToBottom() {
+    stickRef.current = true;
+    setShowNewPill(false);
     endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, busy]);
+  }
 
   async function send(text: string) {
     if (!text.trim() || busy) return;
     setError(null);
+    stickRef.current = true;
+    setShowNewPill(false);
     const newMessages: Msg[] = [...messages, { role: "user", content: text }];
     setMessages(newMessages);
     setInput("");
@@ -102,8 +135,8 @@ function ChatInner() {
         {lesson && (
           <div className="mt-4 inline-flex items-center gap-2 text-xs bg-brand-soft text-brand-hover dark:text-brand px-3 py-1.5 rounded-full border border-brand/20">
             <span>📖</span>
-            <span>Grounded in: {lesson.title[locale]}</span>
-            <Link href={`/lessons/${lesson.id}`} className="underline ml-1">view</Link>
+            <span>{tr("chat.grounded")}: {lesson.title[locale]}</span>
+            <Link href={`/lessons/${lesson.id}`} className="underline ml-1">{tr("chat.viewLesson")}</Link>
           </div>
         )}
       </header>
@@ -127,18 +160,36 @@ function ChatInner() {
           </div>
         ) : (
           <ul className="space-y-4">
-            {messages.map((m, i) => (
-              <li
-                key={i}
-                className={
-                  m.role === "user"
-                    ? "ml-auto max-w-[85%] bg-brand text-brand-on px-4 py-2.5 rounded-2xl rounded-br-md shadow-soft"
-                    : "mr-auto max-w-[90%] bg-surface border border-line px-4 py-3 rounded-2xl rounded-bl-md text-ink whitespace-pre-wrap shadow-soft"
-                }
-              >
-                {m.content || (busy && i === messages.length - 1 ? <span className="text-ink-subtle">{tr("chat.thinking")}</span> : null)}
-              </li>
-            ))}
+            {messages.map((m, i) => {
+              const isUser = m.role === "user";
+              const isLast = i === messages.length - 1;
+              return (
+                <li
+                  key={i}
+                  className={
+                    isUser
+                      ? "ml-auto max-w-[85%] bg-brand text-brand-on px-4 py-2.5 rounded-2xl rounded-br-md shadow-soft whitespace-pre-wrap"
+                      : "mr-auto max-w-[90%] bg-surface border border-line px-4 py-3 rounded-2xl rounded-bl-md text-ink shadow-soft"
+                  }
+                >
+                  {isUser ? (
+                    m.content
+                  ) : m.content ? (
+                    <div className="chat-prose text-ink">
+                      <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                        {m.content}
+                      </ReactMarkdown>
+                    </div>
+                  ) : busy && isLast ? (
+                    <span className="inline-flex items-center" aria-label={tr("chat.thinking")}>
+                      <span className="chat-typing-dot" />
+                      <span className="chat-typing-dot" />
+                      <span className="chat-typing-dot" />
+                    </span>
+                  ) : null}
+                </li>
+              );
+            })}
           </ul>
         )}
         <div ref={endRef} />
@@ -148,6 +199,18 @@ function ChatInner() {
         <div className="mt-4 text-sm text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 px-3 py-2 rounded-lg">
           {error}
         </div>
+      )}
+
+      {showNewPill && (
+        <button
+          type="button"
+          onClick={jumpToBottom}
+          className="fixed left-1/2 -translate-x-1/2 bottom-24 z-30 px-3.5 py-1.5 rounded-full bg-brand text-brand-on shadow-pop text-xs font-medium hover:bg-brand-hover transition flex items-center gap-1.5"
+          aria-label={tr("chat.newMessage")}
+        >
+          <span aria-hidden>↓</span>
+          <span>{tr("chat.newMessage")}</span>
+        </button>
       )}
 
       <form
