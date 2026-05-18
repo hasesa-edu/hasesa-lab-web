@@ -134,7 +134,7 @@ function ClassDetail({ cls, tr, locale }: { cls: TeacherClass; tr: (k: any) => s
         <div className="text-xs text-brand-hover dark:text-brand uppercase tracking-wider font-semibold">
           {tr("teacher.share")}
         </div>
-        <div className="mt-1 text-3xl font-mono font-bold text-brand-hover dark:text-brand tracking-widest">
+        <div className="mt-1 text-2xl sm:text-3xl font-mono font-bold text-brand-hover dark:text-brand tracking-widest break-all">
           {cls.code}
         </div>
         <div className="mt-1 text-xs text-ink-muted">{cls.memberCount} {tr("teacher.students")}</div>
