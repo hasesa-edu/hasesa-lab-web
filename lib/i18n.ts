@@ -22,19 +22,19 @@ export const t: Dict = {
 
   // Hero
   "hero.tag": {
-    en: "For Ethiopian high schools · EUEE-aligned",
-    am: "ለኢትዮጵያ ሁለተኛ ደረጃ ትምህርት ቤቶች · ከEUEE ጋር የተጣጣመ",
-    om: "Manneen barumsaa sadarkaa lammaffaa Itoophiyaaf · EUEE waliin walsimataa",
+    en: "Quality education for Ethiopian high schools",
+    am: "ለኢትዮጵያ ሁለተኛ ደረጃ ትምህርት ቤቶች ጥራት ያለው ትምህርት",
+    om: "Barnoota qulqullina qabu manneen barumsaa sadarkaa lammaffaa Itoophiyaaf",
   },
   "hero.title": {
-    en: "Your AI tutor for Ethiopian high school.",
-    am: "ለኢትዮጵያ ሁለተኛ ደረጃ ትምህርት የእርስዎ የAI አስተማሪ።",
-    om: "Barsiisaa AI keessan kan sadarkaa lammaffaa Itoophiyaa.",
+    en: "Learn deeply. Not just for the exam.",
+    am: "በጥልቀት ይማሩ። ለፈተና ብቻ አይደለም።",
+    om: "Gadi-fageenyaan baradhu. Qormaata qofaaf miti.",
   },
   "hero.sub": {
-    en: "Built for Ethiopian high school students — mapped to the MoE syllabus and the EUEE blueprint, in English, Amharic and Afaan Oromo. This demo starts with Grade 11 Math, Physics, Chemistry and Biology.",
-    am: "ለኢትዮጵያ ሁለተኛ ደረጃ ተማሪዎች የተዘጋጀ — ከትምህርት ሚኒስቴር ሥርዓተ ትምህርትና ከEUEE ዕቅድ ጋር የተጣጣመ። ይህ ማሳያ ከ11ኛ ክፍል ሒሳብ፣ ፊዚክስ፣ ኬሚስትሪና ባዮሎጂ ይጀምራል።",
-    om: "Barattoota sadarkaa lammaffaa Itoophiyaatiif kan qophaa'e — sirna barnootaa MoE fi karoora EUEE waliin walsimataa. Agarsiisni kun Heerregaa, Fiiziksii, Keemistirii fi Baayooloojii Kutaa 11 irraa eegala.",
+    en: "Built for real understanding — trilingual lessons, an AI tutor that explains step by step, and an at-home experiment in every lesson that turns theory into something you can touch. This demo starts with Grade 11 Math, Physics, Chemistry and Biology.",
+    am: "ለእውነተኛ ግንዛቤ የተዘጋጀ — ሦስት ቋንቋ ትምህርቶች፣ ደረጃ-በ-ደረጃ የሚያስረዳ AI አስተማሪ፣ እንዲሁም በእያንዳንዱ ትምህርት በቤት የሚሰራ ሙከራ። ይህ ማሳያ ከ11ኛ ክፍል ሒሳብ፣ ፊዚክስ፣ ኬሚስትሪና ባዮሎጂ ይጀምራል።",
+    om: "Hubannoo dhugaatiif kan qophaa'e — barnoota afaan sadiin, barsiisaa AI tarkaanfii-tarkaanfiin ibsu, fi barnoota tokkoo tokkoo keessatti shaakala mana keessatti hojjetamu. Agarsiisni kun Heerregaa, Fiiziksii, Keemistirii fi Baayooloojii Kutaa 11 irraa eegala.",
   },
   "hero.cta.lessons": { en: "Browse lessons", am: "ትምህርቶችን ይመልከቱ", om: "Barnoota ilaali" },
   "hero.cta.chat": { en: "Try the AI tutor", am: "AI አስተማሪውን ይሞክሩ", om: "Barsiisaa AI yaali" },
@@ -49,9 +49,9 @@ export const t: Dict = {
   // How it works
   "how.title": { en: "How it works", am: "እንዴት እንደሚሰራ", om: "Akkamiin akka hojjetu" },
   "how.sub": {
-    en: "Four steps from sign-up to scoring higher on your EUEE.",
-    am: "ከመመዝገብ እስከ EUEE ውጤትዎን እስከ ማሻሻል አራት ደረጃዎች።",
-    om: "Galmaa'uu irraa hanga qabxii EUEE foyyeessuutti tarkaanfii afur.",
+    en: "Four steps from sign-up to mastering a subject — and confidently sitting the EUEE when the time comes.",
+    am: "ከመመዝገብ እስከ አንድ ትምህርት ሙሉ በሙሉ ማወቅ — እና ጊዜው ሲደርስ EUEE ን በራስ መተማመን እስከ መውሰድ አራት ደረጃዎች።",
+    om: "Galmaa'uu irraa hanga kutaa tokko gadi-fageenyaan beekuutti — fi yeroon yoo ga'e EUEE amantummaadhaan fudhachuutti tarkaanfii afur.",
   },
   "how.s1.title": { en: "Create an account", am: "መለያ ይፍጠሩ", om: "Akaawuntii uumi" },
   "how.s1.body": {
@@ -59,30 +59,30 @@ export const t: Dict = {
     am: "ትምህርቶችዎን ይምረጡ። አጭር ምርመራ ትክክለኛ ደረጃ ላይ ያስቀምጥዎታል።",
     om: "Kutaalee filadhu. Qorannoon gabaabaan sadarkaa sirrii irra si kaa'a.",
   },
-  "how.s2.title": { en: "Study lessons", am: "ትምህርቶችን ያጥኑ", om: "Barnoota qayyabadhu" },
+  "how.s2.title": { en: "Read & do", am: "ይማሩ እና ይስሩ", om: "Baradhuu fi hojjedhu" },
   "how.s2.body": {
-    en: "MoE-aligned, EUEE-weighted lessons in English, Amharic, or Afaan Oromo.",
-    am: "ከMoE የተጣጣሙ፣ ለEUEE የተመዘኑ ትምህርቶች በሦስቱም ቋንቋዎች።",
-    om: "Barnoota MoE waliin walsimataa, EUEE irratti madaalame.",
+    en: "MoE-aligned lessons in your language, each with a worked example and an at-home experiment.",
+    am: "በቋንቋዎ ከMoE ሥርዓተ ትምህርት ጋር የተጣጣሙ ትምህርቶች፣ እያንዳንዱ የተሰራ ምሳሌና በቤት የሚሰራ ሙከራ አለው።",
+    om: "Barnoota MoE waliin walsimataa afaan keessaniin, hundi fakkeenya hojjetame fi shaakala mana keessatti qabu.",
   },
   "how.s3.title": { en: "Ask the AI tutor", am: "AI አስተማሪውን ይጠይቁ", om: "Barsiisaa AI gaafadhu" },
   "how.s3.body": {
-    en: "Stuck on a problem? Get a step-by-step explanation grounded in your lesson.",
-    am: "ችግር አጋጥሞዎታል? ከትምህርቱ ጋር የተያያዘ ደረጃ-በ-ደረጃ ማብራሪያ ያግኙ።",
-    om: "Rakkoo qabdaa? Ibsa tarkaanfii-tarkaanfiin barnoota kee irratti hundaa'e argadhu.",
+    en: "Stuck on a concept? Get a patient, step-by-step explanation grounded in your lesson.",
+    am: "ሀሳብ ካልገባዎ? ከትምህርቱ ጋር የተያያዘ ትዕግስተኛ፣ ደረጃ-በ-ደረጃ ማብራሪያ ያግኙ።",
+    om: "Yaadni isin hin galchine? Ibsa obsaa, tarkaanfii-tarkaanfiin barnoota kee irratti hundaa'e argadhu.",
   },
   "how.s4.title": { en: "Track your mastery", am: "ችሎታዎን ይከታተሉ", om: "Ogummaa kee hordofi" },
   "how.s4.body": {
-    en: "See per-topic progress and take EUEE-style mock tests to spot weak areas.",
-    am: "በርዕስ ሂደትዎን ይመልከቱና ደካማ ቦታዎችን ለማግኘት EUEE-ዓይነት ሞክ ፈተናዎችን ይውሰዱ።",
-    om: "Adeemsa mata-dureen ilaali; bakka dadhabaa argachuuf qormaata moocii EUEE fudhadhu.",
+    en: "See per-topic progress and take practice exams to find — and close — your weak areas.",
+    am: "በርዕስ ሂደትዎን ይመልከቱና ደካማ ቦታዎችን ለማግኘት የልምምድ ፈተናዎችን ይውሰዱ።",
+    om: "Adeemsa mata-dureen ilaali; bakka dadhabaa argachuu fi cuufuuf qormaata shaakalaa fudhadhu.",
   },
 
   // Audience split
   "aud.students.title": { en: "For students", am: "ለተማሪዎች", om: "Barattootaaf" },
   "aud.students.b1": { en: "A patient tutor available 24/7, in your language.", am: "በቋንቋዎ 24/7 ትዕግስተኛ አስተማሪ።", om: "Barsiisaa obsaa 24/7, afaan keetiin." },
   "aud.students.b2": { en: "Personal mastery dashboard — know exactly what to study next.", am: "የግል ችሎታ ዳሽቦርድ — ቀጥሎ ምን ማጥናት እንዳለብዎ ይወቁ።", om: "Daashboordii ogummaa dhuunfaa — itti aansee maal akka qayyabattu beeki." },
-  "aud.students.b3": { en: "EUEE mock tests with per-topic breakdown.", am: "EUEE ሞክ ፈተናዎች በርዕስ ትንተና።", om: "Qormaata moocii EUEE mata-dureen qoodame." },
+  "aud.students.b3": { en: "Practice exams with a per-topic breakdown — so you study what you actually need.", am: "የልምምድ ፈተናዎች በርዕስ ትንተና።", om: "Qormaata shaakalaa mata-dureen qoodame — wanta dhugumatti barbaaddu qayyabachuuf." },
   "aud.teachers.title": { en: "For teachers", am: "ለመምህራን", om: "Barsiisotaaf" },
   "aud.teachers.b1": { en: "Create a class with one code — no rosters to upload.", am: "በአንድ ኮድ ክፍል ይፍጠሩ — ምንም ዝርዝር ማቅረብ አያስፈልግም።", om: "Koodii tokkoon kilaasii uumi — galmee qopheessuu hin barbaachisu." },
   "aud.teachers.b2": { en: "See class-level mastery without exposing individual data.", am: "የግል መረጃ ሳያጋልጡ የክፍል ደረጃ ችሎታን ይመልከቱ።", om: "Odeeffannoo dhuunfaa saaxiluu malee ogummaa sadarkaa kilaasii ilaali." },
@@ -91,9 +91,9 @@ export const t: Dict = {
   // Why us
   "why.title": { en: "Why Personal AI Tutor", am: "ለምን Personal AI Tutor", om: "Maaliif Personal AI Tutor" },
   "why.sub": {
-    en: "Built specifically for the Ethiopian classroom — not a generic chatbot.",
-    am: "ለኢትዮጵያ ክፍል በተለይ የተሰራ — ተራ ቻትቦት አይደለም።",
-    om: "Kilaasii Itoophiyaatiif addaan kan qophaa'e — chatbot waliigalaa miti.",
+    en: "Built for Ethiopian classrooms — focused on real understanding, not just exam answers.",
+    am: "ለኢትዮጵያ ክፍሎች የተሰራ — ለፈተና መልሶች ብቻ ሳይሆን ለእውነተኛ ግንዛቤ ያተኮረ።",
+    om: "Kilaasota Itoophiyaatiif kan qophaa'e — hubannoo dhugaa irratti, deebii qormaata qofa irratti utuu hin ta'in.",
   },
   "why.b1.title": { en: "Real conversation, not just quizzes", am: "እውነተኛ ውይይት፣ ፈተና ብቻ አይደለም", om: "Marii dhugaa, qormaata qofa miti" },
   "why.b1.body": {
@@ -107,17 +107,45 @@ export const t: Dict = {
     am: "እንግሊዝኛ፣ አማርኛ፣ ኦሮምኛ — በማንኛውም ጊዜ ይቀይሩ።",
     om: "Ingiliffa, Amaariffaa, Afaan Oromoo — yeroo barbaadde jijjiiri.",
   },
-  "why.b3.title": { en: "MoE-aligned, EUEE-focused", am: "ከMoE የተጣጣመ፣ EUEE-ተኮር", om: "MoE waliin walsimataa, EUEE-irratti xiyyeeffate" },
+  "why.b3.title": { en: "Learning by doing, every lesson", am: "በመስራት መማር፣ በእያንዳንዱ ትምህርት", om: "Hojii hojjechuun barachuu, barnoota hunda" },
   "why.b3.body": {
-    en: "Every lesson tagged to a syllabus code and weighted by EUEE exam blueprint.",
-    am: "እያንዳንዱ ትምህርት ከሥርዓተ ትምህርት ኮድ ጋር የተሰየመና በEUEE ዕቅድ የተመዘነ።",
-    om: "Barnoonni hundi koodii sirna barnootaatti hidhamee EUEE'n madaalama.",
+    en: "Each lesson includes an at-home experiment — physics with a coin, chemistry with red cabbage, biology with onion skin. Theory you can touch.",
+    am: "እያንዳንዱ ትምህርት በቤት የሚሰራ ሙከራ አለው — በሳንቲም ፊዚክስ፣ በቀይ ጎመን ኬሚስትሪ፣ በሽንኩርት ቆዳ ባዮሎጂ።",
+    om: "Barnoonni hundi shaakala mana keessatti qaba — saantimaan fiiziksii, raafuu diimaadhaan keemistirii, qola shunkurtiidhaan baayooloojii.",
   },
   "why.b4.title": { en: "Works on slow networks", am: "በዝግታ ኢንተርኔት ይሰራል", om: "Interneetii suuta deemu irratti hojjeta" },
   "why.b4.body": {
     en: "Installable as an app, with lessons cached for offline study.",
     am: "እንደ መተግበሪያ ይጫናል፤ ትምህርቶች ለመስመር-ላይ-ውጭ ጥናት ይቀመጣሉ።",
     om: "Akka aappiitti caqasama; barnoonni qayyabannaa offline-tiif kuufamu.",
+  },
+
+  // Learn by doing
+  "lbd.eyebrow": { en: "Learn by doing", am: "በመስራት ይማሩ", om: "Hojiidhaan baradhu" },
+  "lbd.title": {
+    en: "Every lesson comes with a real experiment you can run at home.",
+    am: "እያንዳንዱ ትምህርት በቤት የሚሰሩት እውነተኛ ሙከራ ይዟል።",
+    om: "Barnoonni tokkoon tokkoon shaakala dhugaa mana keessatti hojjettu wajjin dhufa.",
+  },
+  "lbd.sub": {
+    en: "No fancy lab gear. A coin and a card teach inertia. A stick and a shadow measure a tree. Red cabbage juice becomes a pH meter. Onion skin shows you real plant cells without a microscope.",
+    am: "ምንም ውድ የላብ መሳሪያ አያስፈልግም። ሳንቲምና ካርድ ኢነርሺያን ያስተምራሉ። ቀይ ጎመን ጭማቂ የpH መለኪያ ይሆናል። የሽንኩርት ቆዳ ያለ ማይክሮስኮፕ የተክል ሕዋሶችን ያሳያል።",
+    om: "Meeshaa laaboraatoorii gatii guddaa hin barbaachisu. Saantimaa fi kaardiin iinarshiyaa barsiisu. Cuunfaan raafuu diimaa madaala pH ta'a. Qolli shunkurtii maaykiroskooppii malee seelii biqiltuu si argisiisa.",
+  },
+  "lbd.example.title": {
+    en: "Sample experiment — Newton's first law",
+    am: "ናሙና ሙከራ — የኒውተን የመጀመሪያ ህግ",
+    om: "Fakkeenya shaakalaa — Seera jalqabaa Niwutan",
+  },
+  "lbd.example.line1": {
+    en: "Place a coin on a stiff card balanced over a cup. Flick the card sideways.",
+    am: "በኩባያ ላይ በተደገፈ ጠንካራ ካርድ ላይ ሳንቲም ያስቀምጡ። ካርዱን በፍጥነት ጎን አድርገው ይምቱ።",
+    om: "Saantima kaardii jabaa kuppii gubbaa irra jiru irra kaa'i. Kaardii dafqaan cinaatti dhiibi.",
+  },
+  "lbd.example.line2": {
+    en: "Why does the coin drop straight into the cup instead of flying with the card?",
+    am: "ሳንቲሙ ከካርዱ ጋር ከሚበር ይልቅ ቀጥ ብሎ ወደ ኩባያው የሚወድቀው ለምንድነው?",
+    om: "Maaliif saantimni kaardii waliin balali'uu mannaa kallattiin gara kuppiitti kufa?",
   },
 
   // Dewey quote
@@ -248,6 +276,12 @@ export const t: Dict = {
   "mock.score": { en: "Your score", am: "ውጤትዎ", om: "Qabxiin kee" },
   "mock.again": { en: "Try another mock", am: "ሌላ ሞክ ይሞክሩ", om: "Moocii biraa yaali" },
   "mock.review": { en: "Review answers", am: "መልሶችን ይከልሱ", om: "Deebii ilaali" },
+
+  // At-home experiment
+  "exp.label": { en: "At-home experiment", am: "በቤት የሚሰራ ሙከራ", om: "Shaakala mana keessatti" },
+  "exp.materials": { en: "You'll need", am: "የሚያስፈልጉ", om: "Wantoota barbaachisan" },
+  "exp.steps": { en: "Try it", am: "ይሞክሩት", om: "Yaali" },
+  "exp.observe": { en: "What you'll observe", am: "የምትመለከቱት", om: "Waan argitu" },
 
   // Quiz / lesson interaction
   "quiz.check": { en: "Quick check", am: "ፈጣን ምልከታ", om: "Sakatta'a saffisaa" },
