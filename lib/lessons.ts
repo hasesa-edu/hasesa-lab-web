@@ -45,6 +45,13 @@ export type AtHomeExperiment = {
   video?: LessonVideo;
 };
 
+/**
+ * A short story (~100 words) connecting the lesson to real Ethiopian life.
+ * `en` is required; `am` / `om` are filled in by translators — until then the
+ * renderer falls back to `en`.
+ */
+export type StoryTranslated = { en: string; am?: string; om?: string };
+
 export type Lesson = {
   id: string;
   subject: Subject;
@@ -56,6 +63,7 @@ export type Lesson = {
   title: Translated;
   summary: Translated;
   video?: LessonVideo;
+  whyItMatters?: StoryTranslated;
   sections: { heading: Translated; body: string }[];
   workedExample: { problem: string; solution: string };
   atHomeExperiment: AtHomeExperiment;
@@ -83,6 +91,9 @@ export const LESSONS: Lesson[] = [
       om: "Iddoo, jijjiirama iddoo, saffisa fi dabalata saffisaa wantoota aksiisii tokko irratti sochoo'aniif.",
     },
     video: { youtubeId: "w2mbvtpQKrM", credit: "Khan Academy" },
+    whyItMatters: {
+      en: "A minibus driver on Bole Road has to brake before a pedestrian crossing — but how far ahead? At 50 km/h, the bus needs about 35 metres to stop safely. Engineers at the Ethiopian Roads Authority calculate that with exactly the formulas in this lesson: v = Δx/Δt, then a = Δv/Δt for the brakes. The same math sets bus schedules, marks safe overtaking zones, and decides how tall speed bumps need to be. Every time you see \"50 km/h\" on a road sign or wonder why a Bajaj suddenly slows, you're watching kinematics in action.",
+    },
     sections: [
       { heading: { en: "Position vs. displacement", am: "ቦታ እና የቦታ ለውጥ", om: "Iddoo fi jijjiirama iddoo" }, body: "Position is *where* an object is on a chosen axis — a coordinate `x`. Displacement is the *change* in position, `Δx = x_final − x_initial`. Distance is the total path length, which can be larger than the magnitude of displacement if the object turns around." },
       { heading: { en: "Velocity vs. speed", am: "ፍጥነት እና ፍጥነት መጠን", om: "Saffisa fi balaqqee saffisaa" }, body: "Average velocity `v_avg = Δx / Δt` is a vector — it has direction. Average speed is the total distance divided by time and is always non-negative. Instantaneous velocity is the limit of `Δx / Δt` as `Δt → 0`." },
@@ -129,6 +140,9 @@ export const LESSONS: Lesson[] = [
     title: { en: "Newton's three laws of motion", am: "የኒውተን ሦስት የእንቅስቃሴ ሕጎች", om: "Seerota sochii sadan Niwutan" },
     summary: { en: "The rules that govern how forces change motion. Foundational for every Mechanics question — and for understanding how anything in the world moves.", am: "ኃይሎች እንቅስቃሴን እንዴት እንደሚቀይሩ የሚገዙ ሕጎች።", om: "Seerota humnoonni akkaataa sochiin akka jijjiiraman bulchan." },
     video: { youtubeId: "kKKM8Y-u7ds", credit: "CrashCourse" },
+    whyItMatters: {
+      en: "When a Bajaj brakes hard and your body lurches forward, that's Newton's first law — inertia, your body wanting to keep moving. When an Ethiopian Airlines 787 taxis down Bole's runway, the pilots use F = ma to calculate the engine thrust needed to lift 250 tonnes of plane and passengers into the sky. When you kick a football at the Mekele Stadium, your foot pushes the ball and the ball pushes back on your foot equally — the third law, which is why your toes can hurt. The same three rules describe everything from a falling raindrop to a satellite in orbit above Ethiopia tonight.",
+    },
     sections: [
       { heading: { en: "First law (inertia)", am: "የመጀመሪያ ሕግ", om: "Seera jalqabaa" }, body: "An object at rest stays at rest, and an object in motion stays in motion at constant velocity, unless acted on by a net external force. The tendency to resist changes is called *inertia*, and it scales with mass." },
       { heading: { en: "Second law (F = ma)", am: "ሁለተኛ ሕግ", om: "Seera lammaffaa" }, body: "The net force on an object equals its mass times its acceleration: `F_net = m · a`. Force is a vector — direction matters. Units: 1 newton (N) = 1 kg · m/s²." },
@@ -175,6 +189,9 @@ export const LESSONS: Lesson[] = [
     title: { en: "Free fall and gravity near Earth", am: "ነፃ ውድቀትና በምድር አጠገብ ስበት", om: "Kufaatii bilisaa fi humna harkisa Lafaa bira" },
     summary: { en: "Objects in free fall near Earth's surface accelerate downward at about 9.8 m/s² regardless of mass.", am: "በምድር ገጽ አጠገብ በነፃ ውድቀት ላይ ያሉ ነገሮች በ9.8 m/s² ወደ ታች ይፋጠናሉ።", om: "Wantoonni kufaatii bilisaa Lafaa bira jiran gara gadiitti 9.8 m/s² dabalata saffisaa qabu." },
     video: { youtubeId: "oYEgdZ3iEKA", credit: "NASA / Apollo 15 archive" },
+    whyItMatters: {
+      en: "Galileo proved 400 years ago that a feather and a hammer fall at the same rate when air is removed. Apollo 15 astronauts famously dropped both together on the moon — they hit the dust at the same instant. Why does this matter on Earth? When engineers design the spillway of the Grand Renaissance Dam, they calculate falling water and debris using g = 9.8 m/s². When helicopter pilots near the rock-hewn churches of Lalibela plan emergency descents, they use free-fall math. Even your mobile phone's drop-test rating depends on how fast it accelerates from your hand to the floor — exactly the equations in this lesson.",
+    },
     sections: [
       { heading: { en: "g, the acceleration of gravity", am: "g, የስበት ማፋጠን", om: "g, dabalata saffisaa harkisa lafaa" }, body: "Near Earth's surface, `g ≈ 9.8 m/s²` (often rounded to 10 in classwork). It points toward Earth's center. In a vacuum, a feather and a hammer fall side by side because `g` doesn't depend on mass." },
       { heading: { en: "Kinematic equations for free fall", am: "ለነፃ ውድቀት ኪነማቲክ ቀመሮች", om: "Wal-qixxata Kinematiks kufaatii bilisaaf" }, body: "Taking downward as positive: `v = v₀ + g·t`, `y = v₀·t + ½·g·t²`, `v² = v₀² + 2·g·y`." },
@@ -219,6 +236,9 @@ export const LESSONS: Lesson[] = [
     title: { en: "Work, energy, and conservation", am: "ሥራ፣ ኃይልና ጥበቃ", om: "Hojii, anniisaa fi eegumsa" },
     summary: { en: "How forces transfer energy, and why total mechanical energy is conserved when only gravity acts.", am: "ኃይሎች ሃይል እንዴት እንደሚያስተላልፉና ስበት ብቻ ሲሰራ አጠቃላይ ሜካኒካል ሃይል ለምን እንደሚጠበቅ።", om: "Akkaataa humnoonni anniisaa akka dabarsanii fi maaliif anniisaan mekaanikaa eegamu." },
     video: { youtubeId: "TLUZnCvuGBk", credit: "Khan Academy" },
+    whyItMatters: {
+      en: "The Grand Ethiopian Renaissance Dam is a giant energy-conversion machine. Water held in the reservoir has potential energy (PE = mgh) — the higher the lake, the more energy stored. When the water falls through turbines, PE becomes kinetic energy, which a generator converts into electricity that lights homes in Bahir Dar and Addis Ababa. Energy isn't created — it's converted. The same principle is why pedaling a Bajaj uphill feels exhausting (chemical → PE) and coasting down feels effortless (PE → KE). Every Ethiopian hydropower station — Gilgel Gibe, Tekeze, GERD — is gravity doing physics on water.",
+    },
     sections: [
       { heading: { en: "Work done by a force", am: "በኃይል የተሰራ ሥራ", om: "Hojii humna tokkoon hojjetame" }, body: "Work `W = F · d · cos(θ)`, where θ is the angle between force and displacement. Push at 90° to motion and you do *zero* work. Units: 1 joule (J) = 1 N · m." },
       { heading: { en: "Kinetic and potential energy", am: "ኪነቲክና ሰብአዊ ሃይል", om: "Anniisaa kineetikii fi potensh." }, body: "`KE = ½·m·v²` is the energy of motion. Gravitational `PE = m·g·h` is the stored energy of height (relative to a chosen reference)." },
@@ -266,6 +286,9 @@ export const LESSONS: Lesson[] = [
     title: { en: "Quadratic equations and the discriminant", am: "ኳድራቲክ እኩልታዎችና ዲስክሪሚናንት", om: "Wal-qixxata kuwaadiraatikii fi diskirminaantii" },
     summary: { en: "Solve ax² + bx + c = 0 using factoring, completing the square, and the quadratic formula. Use the discriminant to predict the number of real roots.", am: "ax² + bx + c = 0 ን በፋክተር መውጣት፣ ካሬ ማጠናቀቅና ኳድራቲክ ቀመር መፍታት።", om: "ax² + bx + c = 0 faaktariin, kuwaadiraatii guutuu gochuun, fi foormulaa kuwaadiraatikiin furuu." },
     video: { youtubeId: "JBSDQLZtjFo", credit: "Khan Academy" },
+    whyItMatters: {
+      en: "When an Ethiopian Coffee FC striker shoots toward the goal, the ball traces a parabola — a quadratic in flight. When farmers along the Awash design irrigation channels, the cross-section is shaped as a parabola for maximum flow. A satellite dish on a Mekele rooftop is a 3D parabola because parabolas focus signals perfectly onto a single point. Even the discriminant b² − 4ac matters in real life: it tells bridge designers whether a suspension cable will sag too much, and tells solar-cooker makers whether the sun's heat will actually focus. Quadratics aren't abstract — they describe almost everything that curves.",
+    },
     sections: [
       { heading: { en: "The general form", am: "አጠቃላይ ቅርጽ", om: "Bifa waliigalaa" }, body: "Any quadratic is `a·x² + b·x + c = 0` with `a ≠ 0`. Solutions are called *roots* and represent where the parabola `y = a·x² + b·x + c` crosses the x-axis." },
       { heading: { en: "The quadratic formula", am: "የኳድራቲክ ቀመር", om: "Foormulaa kuwaadiraatikii" }, body: "`x = (-b ± √(b² − 4ac)) / (2a)`. Memorize this — it works for every quadratic. The two signs give the two roots." },
@@ -313,6 +336,9 @@ export const LESSONS: Lesson[] = [
     title: { en: "Trigonometric ratios and the unit circle", am: "ትሪጎኖሜትሪክ ሬሾዎችና ዩኒት ክብ", om: "Reeshoolee trigonomeetirikii fi geengoo yuuniitii" },
     summary: { en: "sin, cos, tan from a right triangle, extended to all angles via the unit circle. Foundation for every wave, oscillation, and rotation problem.", am: "sin, cos, tan ከትክክለኛ ሦስት ጎን ሦስት ማዕዘን፣ ወደ ሁሉም ማዕዘናት በዩኒት ክብ የተራዘመ።", om: "sin, cos, tan rog-sadee mirgaa irraa, geengoo yuuniitiitiin gara cufaatti dheereffame." },
     video: { youtubeId: "1m9p9iubMLU", credit: "Khan Academy" },
+    whyItMatters: {
+      en: "How tall are the Aksum stelae — the giant carved stones that have stood for 1,700 years? Ancient Aksumite engineers used the same shadow-and-stick trick you'll do in this lesson's experiment. Today, every Ethio Telecom tower is sited using trigonometry to calculate line-of-sight over Ethiopia's hilly terrain. When Ethiopian Airlines pilots land at Bole, the runway glideslope is a 3° angle calculated with tangent. Surveyors planning roads through the Simien Mountains, builders measuring roof pitches in Addis, even farmers laying out coffee-drying yards in Sidamo to catch the most sun — all use sin, cos, and tan. Trig is the math of measuring things you can't reach.",
+    },
     sections: [
       { heading: { en: "SOH-CAH-TOA", am: "SOH-CAH-TOA", om: "SOH-CAH-TOA" }, body: "In a right triangle with angle θ:\n- `sin(θ) = opposite / hypotenuse`\n- `cos(θ) = adjacent / hypotenuse`\n- `tan(θ) = opposite / adjacent = sin(θ) / cos(θ)`" },
       { heading: { en: "The unit circle", am: "ዩኒት ክብ", om: "Geengoo yuuniitii" }, body: "A point on a circle of radius 1 at angle θ from the positive x-axis is `(cos(θ), sin(θ))`. This extends sin and cos to *any* angle, including negative and > 90°. tan(θ) = sin(θ)/cos(θ) is undefined when cos(θ) = 0 (i.e. 90°, 270°)." },
@@ -360,6 +386,9 @@ export const LESSONS: Lesson[] = [
     title: { en: "Arithmetic and geometric sequences", am: "የቁጥርና የጂኦሜትሪክ ቅደም ተከተሎች", om: "Tartiiba lakkoofsaa fi jiyoomeetirikii" },
     summary: { en: "Patterns where each term differs from the last by a constant amount (arithmetic) or constant ratio (geometric).", am: "እያንዳንዱ ቃል ከመጨረሻው በቋሚ መጠን ወይም ሬሾ የሚለይ ቅርጾች።", om: "Calaqqee tokkoon tokkoon jechi yeroo darbe irraa hammaan ykn reeshoo wal-fakkaataadhaan adda ba'u." },
     video: { youtubeId: "pXo0bG4iAyg", credit: "Khan Academy" },
+    whyItMatters: {
+      en: "When a single COVID-19 case in Addis became 100, then 10,000 in weeks — that was geometric growth (each person infecting roughly two others). When Ethio Telecom rolls out 4G to one new town a month, that's arithmetic growth: steady, linear. Your CBE savings account pays compound interest — geometric. The population of Addis Ababa doubles every ~25 years — geometric. Even the old story of one grain of teff on the first square of an injera, two on the next, four on the next: by square 30 you'd need more teff than all of Ethiopia grows in a year. Knowing the difference helps you spot exponential dangers (debt, disease) and exponential opportunities (savings, learning) early.",
+    },
     sections: [
       { heading: { en: "Arithmetic sequences", am: "የቁጥር ቅደም ተከተል", om: "Tartiiba lakkoofsaa" }, body: "Each term adds a fixed *common difference* d. nth term: `a_n = a_1 + (n−1)·d`. Sum of first n terms: `S_n = n/2 · (a_1 + a_n) = n/2 · (2a_1 + (n−1)d)`." },
       { heading: { en: "Geometric sequences", am: "የጂኦሜትሪክ ቅደም ተከተል", om: "Tartiiba jiyoomeetirikii" }, body: "Each term multiplies by a fixed *common ratio* r. nth term: `a_n = a_1 · r^(n−1)`. Sum of first n terms (r ≠ 1): `S_n = a_1 · (1 − r^n) / (1 − r)`." },
@@ -406,6 +435,9 @@ export const LESSONS: Lesson[] = [
     title: { en: "The mole and molar mass", am: "ሞልና ሞላር ብዛት", om: "Mool fi ulfaatina moolaarii" },
     summary: { en: "The mole bridges the world of atoms with the world of grams you can weigh in lab. Master it and most chemistry calculations become arithmetic.", am: "ሞል የአቶሞችን ዓለም ከላብ የምትመዝነው ግራም ጋር ያገናኛል።", om: "Moolichi addunyaa atoomotaa fi addunyaa giraamii laaboraatoriitti madaaltu walitti hidha." },
     video: { youtubeId: "wI56mHUDJgQ", credit: "Tyler DeWitt" },
+    whyItMatters: {
+      en: "When a chemist at an Ethiopian winery measures sulfur dioxide to preserve wine, they need exactly the right number of molecules — too many would poison drinkers, too few and the wine spoils. Pharmacists across Ethiopia dose paracetamol the same way: 500 mg is precisely 1.65 × 10²¹ molecules. Bakers measuring baking soda for injera dough are doing mole math without knowing it — the recipe was tuned by trial and error to get the right ratio of CO₂ molecules to dough. The mole is the bridge between the visible world (grams of teff, drops of medicine) and the invisible world of atoms. Without it, modern chemistry, medicine, and food science would not exist.",
+    },
     sections: [
       { heading: { en: "What is a mole?", am: "ሞል ምንድነው?", om: "Mooliin maali?" }, body: "1 mole = 6.022 × 10²³ particles (Avogadro's number `N_A`). It's just a *counting* unit — like 'dozen' = 12, but vastly bigger because atoms are vastly smaller than eggs." },
       { heading: { en: "Molar mass", am: "ሞላር ብዛት", om: "Ulfaatina moolaarii" }, body: "The molar mass of a substance (g/mol) is numerically equal to the sum of atomic masses on the periodic table. Water H₂O: 2·(1) + 16 = 18 g/mol. So 1 mole of water weighs 18 g." },
@@ -452,6 +484,9 @@ export const LESSONS: Lesson[] = [
     title: { en: "Acids, bases, and the pH scale", am: "አሲዶች፣ ቤዞችና የpH ሚዛን", om: "Asiidii, Beezii fi madaala pH" },
     summary: { en: "What makes something acidic or basic, how to measure it on the pH scale, and the simple math that connects pH to hydrogen ion concentration.", am: "አንድ ነገር አሲድ ወይም ቤዝ የሚያደርገው ምን እንደሆነ።", om: "Wantni tokko maaliif asiidii ykn beezii akka ta'u." },
     video: { youtubeId: "pY4RkElyvU8", credit: "Tyler DeWitt" },
+    whyItMatters: {
+      en: "Why does injera have its distinctive sour taste? Wild yeast and lactic-acid bacteria lower the dough's pH from about 7 to 4 over two or three days of fermentation. The acid kills harmful bacteria — which is why injera keeps for days without refrigeration. Farmers in the Oromia highlands check soil pH because teff grows best between 5.5 and 7.5; volcanic-ash zones can be too acidic, the Afar salt flats too basic, and yields collapse outside that range. Doctors monitor blood pH (must stay between 7.35 and 7.45 — outside that range is a medical emergency). Soap factories, tanneries, even the bitterness of strong bunna — all controlled by pH.",
+    },
     sections: [
       { heading: { en: "Brønsted–Lowry definition", am: "የብሮንስቴድ-ሎውሪ ትርጓሜ", om: "Hiika Brønsted–Lowry" }, body: "An *acid* donates a proton (H⁺). A *base* accepts a proton. HCl in water donates H⁺ to water: HCl + H₂O → H₃O⁺ + Cl⁻. Water acts as the base here." },
       { heading: { en: "The pH scale", am: "የpH ሚዛን", om: "Madaala pH" }, body: "`pH = −log₁₀[H⁺]`, where [H⁺] is the molar concentration of hydrogen ions. Pure water at 25°C has [H⁺] = 10⁻⁷ M, so pH = 7 (neutral). pH < 7 = acidic, pH > 7 = basic. Each pH unit is a factor of 10 in [H⁺]." },
@@ -501,6 +536,9 @@ export const LESSONS: Lesson[] = [
     title: { en: "Cell structure and organelles", am: "የሕዋስ መዋቅርና ኦርጋኔሎች", om: "Caasaa seelii fi orgaaneelota" },
     summary: { en: "The basic unit of life and the specialized parts inside it that keep the cell alive and working.", am: "የሕይወት መሠረታዊ ክፍልና ህዋስን በህይወት የሚያቆዩ ልዩ ክፍሎች።", om: "Yuunitii bu'uura jireenyaa fi qaamota addaa seelii lubbuun jiraachisan." },
     video: { youtubeId: "8IlzKri08kk", credit: "Amoeba Sisters" },
+    whyItMatters: {
+      en: "Every bite of kitfo is muscle cells from a cow. Every cup of bunna comes from coffee plant cells. Injera ferments because of yeast cells dividing. Even the eye reading this sentence is built from about 100 million light-sensing cells, each containing hundreds of mitochondria converting last night's shiro into ATP energy. When doctors at Black Lion Hospital diagnose cancer, they look at cells under a microscope — cancer is just cells with broken control systems. Vaccines work by training your immune cells to recognize invaders. Ethiopian medical research at the Armauer Hansen Institute and Addis Ababa University all starts with understanding what's inside a single cell.",
+    },
     sections: [
       { heading: { en: "Prokaryotic vs eukaryotic cells", am: "ፕሮካርዮቲክና ኢውካርዮቲክ", om: "Pirookaariyootik fi Iyukaariyootik" }, body: "Prokaryotes (bacteria, archaea) have no membrane-bound nucleus — DNA floats free in the cytoplasm. Eukaryotes (plants, animals, fungi, protists) have a true nucleus and many membrane-bound organelles." },
       { heading: { en: "Key organelles to know", am: "ቁልፍ ኦርጋኔሎች", om: "Orgaaneelota ijoo" }, body: "- *Nucleus*: stores DNA, controls gene expression.\n- *Mitochondria*: produce ATP via aerobic respiration — the cell's 'power plant'.\n- *Ribosomes*: build proteins from mRNA. Found free or on rough ER.\n- *Endoplasmic reticulum (ER)*: rough ER makes proteins; smooth ER makes lipids.\n- *Golgi apparatus*: modifies, sorts, and packages proteins for shipping.\n- *Chloroplasts* (plants only): site of photosynthesis." },
@@ -548,6 +586,9 @@ export const LESSONS: Lesson[] = [
     title: { en: "Mitosis vs meiosis", am: "ሚቶሲስና ሜዮሲስ", om: "Mitoosis fi Meeyoosis" },
     summary: { en: "Two ways cells divide: mitosis for growth and repair (identical daughters), meiosis for sex cells (genetically varied, half the chromosomes).", am: "ሕዋሶች የሚከፈሉባቸው ሁለት መንገዶች።", om: "Karaa lama seelonni ittiin qoqqoodaman." },
     video: { youtubeId: "zrKdz93WlVk", credit: "Amoeba Sisters" },
+    whyItMatters: {
+      en: "A teff farmer in the Oromia highlands plants one seed and a year later harvests thousands more. Every cell of every teff plant came from mitosis — the original embryo cell dividing again and again, each daughter cell an exact copy. But the new seeds inside those grains came from meiosis: the parent plant mixed its genes to make offspring that aren't identical. That's why some teff varieties resist drought while others give higher yields — and why breeders at the Debre Zeit Agricultural Research Center can select for the best. The same biology is why your siblings look different from you (meiosis in your parents), but a cut on your hand heals into identical skin cells (mitosis in your body).",
+    },
     sections: [
       { heading: { en: "Mitosis: one becomes two identical cells", am: "ሚቶሲስ", om: "Mitoosis" }, body: "Mitosis produces two genetically identical *diploid* daughter cells (2n → 2n). Phases: prophase, metaphase, anaphase, telophase, then cytokinesis. Used for growth, tissue repair, and asexual reproduction." },
       { heading: { en: "Meiosis: one becomes four genetically varied cells", am: "ሜዮሲስ", om: "Meeyoosis" }, body: "Meiosis produces four genetically distinct *haploid* gametes (2n → n). Two divisions in a row: meiosis I separates homologous chromosomes; meiosis II separates sister chromatids (like mitosis)." },

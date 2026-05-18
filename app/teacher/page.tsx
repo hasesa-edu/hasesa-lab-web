@@ -31,7 +31,8 @@ export default function TeacherPage() {
         setActiveCode(list[0].code);
       }
     } catch (e: any) {
-      setError(e?.message || "Failed to load");
+      console.error("load classes failed:", e);
+      setError(tr("teacher.err.load"));
     }
   }
 
@@ -49,7 +50,8 @@ export default function TeacherPage() {
       setActiveCode(cls.code);
       await loadClasses();
     } catch (e: any) {
-      setError(e?.message || "Failed");
+      console.error("create class failed:", e);
+      setError(tr("teacher.err.create"));
     } finally {
       setBusy(false);
     }
@@ -74,6 +76,9 @@ export default function TeacherPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={tr("teacher.className")}
+              required
+              autoFocus={classes.length === 0}
+              aria-label={tr("teacher.className")}
               className="mt-3 w-full px-3.5 py-2 border border-line rounded-lg focus:outline-none focus:border-brand bg-canvas text-ink text-sm"
             />
             <button
@@ -87,7 +92,7 @@ export default function TeacherPage() {
           </form>
 
           <h3 className="mt-6 text-xs font-semibold text-ink-subtle uppercase tracking-wider">
-            {tr("teacher.title")}
+            {tr("teacher.yourClasses")}
           </h3>
           {classes.length === 0 ? (
             <p className="mt-2 text-sm text-ink-subtle">{tr("teacher.noClasses")}</p>

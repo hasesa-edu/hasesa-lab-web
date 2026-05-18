@@ -49,7 +49,8 @@ export default function SignupPage() {
       await refresh();
       router.push(role === "teacher" ? "/teacher" : "/onboarding");
     } catch (e: any) {
-      setError(e?.message || "Sign-up failed");
+      console.error("signup failed:", e);
+      setError(e?.message === "username-taken" ? tr("auth.err.takenUsername") : tr("auth.err.signup"));
     } finally {
       setBusy(false);
     }
@@ -83,10 +84,10 @@ export default function SignupPage() {
             </div>
           </div>
 
-          <Field label="Email" type="email" value={email} onChange={setEmail} autoComplete="email" />
-          <Field label="Display name (optional)" value={displayName} onChange={setDisplayName} autoComplete="nickname" />
-          <Field label={tr("auth.password")} value={password} onChange={setPassword} type="password" autoComplete="new-password" />
-          <p className="text-xs text-ink-subtle -mt-2">Minimum 6 characters.</p>
+          <Field label={tr("auth.email")} type="email" value={email} onChange={setEmail} autoComplete="email" autoFocus required />
+          <Field label={tr("auth.displayName")} value={displayName} onChange={setDisplayName} autoComplete="nickname" />
+          <Field label={tr("auth.password")} value={password} onChange={setPassword} type="password" autoComplete="new-password" required minLength={6} />
+          <p className="text-xs text-ink-subtle -mt-2">{tr("auth.passwordRule")}</p>
 
           {role === "student" && (
             <div>
@@ -130,7 +131,7 @@ export default function SignupPage() {
 
           {under18 && (
             <div className="text-xs text-amber-900 dark:text-amber-200 bg-sun-soft border border-amber-200 dark:border-amber-900/50 px-3 py-2 rounded-lg">
-              We collect only your email, language, and learning progress. Demo notice — a production version would meet Ethiopia's data protection guidelines.
+              {tr("auth.under18.notice")}
             </div>
           )}
 
@@ -157,13 +158,16 @@ export default function SignupPage() {
 }
 
 function Field({
-  label, value, onChange, type = "text", autoComplete,
+  label, value, onChange, type = "text", autoComplete, autoFocus, required, minLength,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   type?: string;
   autoComplete?: string;
+  autoFocus?: boolean;
+  required?: boolean;
+  minLength?: number;
 }) {
   return (
     <div>
@@ -173,6 +177,9 @@ function Field({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         autoComplete={autoComplete}
+        autoFocus={autoFocus}
+        required={required}
+        minLength={minLength}
         className="mt-1.5 w-full px-3.5 py-2.5 border border-line rounded-lg focus:outline-none focus:border-brand bg-canvas text-ink"
       />
     </div>

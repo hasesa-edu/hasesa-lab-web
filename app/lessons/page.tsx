@@ -55,18 +55,18 @@ export default function LessonsPage() {
 
                 <div className="mt-3 flex flex-wrap items-center gap-1.5">
                   {lesson.video && (
-                    <Badge title="Video lesson included">
+                    <Badge title={tr("lessons.badge.videoTitle")}>
                       <span>🎥</span>
-                      <span>Video</span>
+                      <span>{tr("lessons.badge.video")}</span>
                     </Badge>
                   )}
-                  <Badge title="At-home experiment included">
+                  <Badge title={tr("lessons.badge.experimentTitle")}>
                     <span>🧪</span>
-                    <span>Experiment</span>
+                    <span>{tr("lessons.badge.experiment")}</span>
                   </Badge>
-                  <Badge title={`${lesson.quiz.length} quick-check question${lesson.quiz.length === 1 ? "" : "s"}`}>
+                  <Badge title={`${lesson.quiz.length} ${tr("lessons.badge.quizTitle")}`}>
                     <span>✏️</span>
-                    <span>{lesson.quiz.length} quiz</span>
+                    <span>{lesson.quiz.length} {tr("lessons.badge.quiz")}</span>
                   </Badge>
                 </div>
 

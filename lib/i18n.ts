@@ -219,24 +219,37 @@ export const t: Dict = {
   "lessons.start": { en: "Open lesson", am: "ትምህርቱን ይክፈቱ", om: "Barnoota bani" },
   "lessons.back": { en: "← All lessons", am: "← ሁሉም ትምህርቶች", om: "← Barnoota hunda" },
   "lessons.askAbout": { en: "Ask the AI tutor about this lesson", am: "AI አስተማሪውን ስለዚህ ትምህርት ይጠይቁ", om: "Waa'ee barnoota kanaa barsiisaa AI gaafadhu" },
+  "lessons.notFound": { en: "Lesson not found.", am: "ትምህርቱ አልተገኘም።", om: "Barnootichi hin argamne." },
+  "lessons.badge.video": { en: "Video", am: "ቪዲዮ", om: "Vidiyoo" },
+  "lessons.badge.videoTitle": { en: "Video lesson included", am: "የቪዲዮ ትምህርት ይዟል", om: "Barnoota vidiyoo qaba" },
+  "lessons.badge.experiment": { en: "Experiment", am: "ሙከራ", om: "Shaakala" },
+  "lessons.badge.experimentTitle": { en: "At-home experiment included", am: "በቤት የሚሰራ ሙከራ ይዟል", om: "Shaakala mana keessatti hojjetamu qaba" },
+  "lessons.badge.quiz": { en: "quiz", am: "ፈተና", om: "qormaata" },
+  "lessons.badge.quizTitle": { en: "quick-check questions", am: "ፈጣን ፈተና ጥያቄዎች", om: "gaaffilee sakatta'a saffisaa" },
 
   // Chat
   "chat.title": { en: "AI Tutor", am: "AI አስተማሪ", om: "Barsiisaa AI" },
-  "chat.subtitle": { en: "Ask anything about Grade 11 Math, Physics, Chemistry, or Biology.", am: "ስለ 11ኛ ክፍል ሒሳብ፣ ፊዚክስ፣ ኬሚስትሪ ወይም ባዮሎጂ ይጠይቁ።", om: "Waa'ee Kutaa 11 saayinsii gaafadhaa." },
+  "chat.subtitle": { en: "Ask anything about Grade 11 Math, Physics, Chemistry, or Biology.", am: "ስለ 11ኛ ክፍል ሒሳብ፣ ፊዚክስ፣ ኬሚስትሪ ወይም ባዮሎጂ ማንኛውንም ይጠይቁ።", om: "Waa'ee Heerregaa, Fiiziksii, Keemistirii ykn Baayooloojii Kutaa 11 waan barbaadde gaafadhu." },
   "chat.placeholder": { en: "e.g. Explain Newton's second law with an example", am: "ለምሳሌ፡ የኒውተንን ሁለተኛ ህግ በምሳሌ ያስረዱኝ", om: "fkn. Seera lammaffaa Niwutan fakkeenyaan ibsi" },
   "chat.send": { en: "Send", am: "ላክ", om: "Ergi" },
   "chat.thinking": { en: "Thinking…", am: "በማሰብ ላይ…", om: "Yaaduu jira…" },
   "chat.empty.title": { en: "How can I help you study?", am: "በትምህርትዎ እንዴት ልርዳዎት?", om: "Akkamiin si gargaaru?" },
   "chat.empty.body": { en: "Try one of the suggestions below, or type your own question.", am: "ከታች ካሉት ጥቆማዎች አንዱን ይሞክሩ።", om: "Yaada gadii keessaa tokko yaali." },
-  "chat.disclaimer": { en: "Demo build. AI can make mistakes — always check against your lesson.", am: "የማሳያ እትም። AI ስህተት ሊሰራ ይችላል።", om: "Hojjettoo agarsiisaa. AI dogoggora hojjechuu danda'a." },
-  "chat.error": { en: "Couldn't reach the AI service. Try again.", am: "የAI አገልግሎቱን መድረስ አልተቻለም።", om: "Tajaajila AI argachuu hin dandeenye." },
+  "chat.disclaimer": { en: "Demo build. AI can make mistakes — always check against your lesson.", am: "የማሳያ እትም። AI ስህተት ሊሰራ ይችላል — ሁልጊዜ ከትምህርትዎ ጋር ያረጋግጡ።", om: "Hojjettoo agarsiisaa. AI dogoggora hojjechuu danda'a — yeroo hunda barnoota kee waliin mirkaneessi." },
+  "chat.error": { en: "Couldn't reach the AI service. Try again.", am: "የAI አገልግሎቱን መድረስ አልተቻለም። እንደገና ይሞክሩ።", om: "Tajaajila AI argachuu hin dandeenye. Irra deebi'ii yaali." },
+  "chat.grounded": { en: "Grounded in", am: "በዚህ ላይ የተመሰረተ", om: "Kana irratti hundaa'e" },
+  "chat.viewLesson": { en: "view", am: "ይመልከቱ", om: "ilaali" },
+  "chat.newMessage": { en: "New message", am: "አዲስ መልዕክት", om: "Ergaa haaraa" },
 
   // Auth
   "auth.signin.title": { en: "Sign in", am: "ግባ", om: "Seeni" },
   "auth.signup.title": { en: "Create your account", am: "መለያዎን ይፍጠሩ", om: "Akaawuntii kee uumi" },
   "auth.signup.tagline": { en: "Free to get started. No SMS required.", am: "ለመጀመር ነጻ። SMS አያስፈልግም።", om: "Eegaluuf bilisaa. SMS hin barbaachisu." },
   "auth.username": { en: "Username", am: "የተጠቃሚ ስም", om: "Maqaa fayyadamtuu" },
+  "auth.email": { en: "Email", am: "ኢሜይል", om: "Imeelii" },
+  "auth.displayName": { en: "Display name (optional)", am: "የሚታይ ስም (አማራጭ)", om: "Maqaa mul'atu (filannoo)" },
   "auth.password": { en: "Password", am: "የይለፍ ቃል", om: "Jecha icciitii" },
+  "auth.passwordRule": { en: "Minimum 6 characters.", am: "ቢያንስ 6 ቁምፊ።", om: "Ugguu xinnaa qubee 6." },
   "auth.role": { en: "I am a…", am: "እኔ…", om: "Ani…" },
   "auth.role.student": { en: "Student", am: "ተማሪ", om: "Barataa" },
   "auth.role.teacher": { en: "Teacher", am: "መምህር", om: "Barsiisaa" },
@@ -244,14 +257,20 @@ export const t: Dict = {
   "auth.school": { en: "School (optional)", am: "ትምህርት ቤት", om: "Mana barumsaa" },
   "auth.under18": {
     en: "I am under 18. (We'll show a simplified privacy notice.)",
-    am: "ዕድሜዬ ከ18 በታች ነው።",
-    om: "Umuriin koo waggaa 18 gadi dha.",
+    am: "ዕድሜዬ ከ18 በታች ነው። (ቀለል ያለ የግላዊነት ማስታወቂያ እናሳያለን።)",
+    om: "Umuriin koo waggaa 18 gadi dha. (Beeksisa iccitii salphaa siif agarsiisna.)",
+  },
+  "auth.under18.notice": {
+    en: "We collect only your email, language, and learning progress. Demo notice — a production version would meet Ethiopia's data protection guidelines.",
+    am: "የምንሰበስበው ኢሜይልዎን፣ ቋንቋዎንና የመማር ሂደትዎን ብቻ ነው። የማሳያ ማስታወቂያ — የምርት እትም የኢትዮጵያን የመረጃ ጥበቃ መመሪያዎች ያሟላል።",
+    om: "Kan walitti qabnu imeelii kee, afaan kee, fi adeemsa barnoota kee qofa. Beeksisa agarsiisaa — gosti hojiitti dhihaate qajeelfama eegumsa odeeffannoo Itoophiyaa ni guuta.",
   },
   "auth.privacy": {
     en: "Demo accounts are stored only in your browser (localStorage). No real password hashing or server storage in this demo — do not use a real password.",
-    am: "የማሳያ መለያዎች በአሳሽዎ ብቻ ይከማቻሉ።",
-    om: "Akaawuntiin agarsiisaa kun kuufamuu kan danda'u sakatta'aa kee qofa irratti dha.",
+    am: "የማሳያ መለያዎች በአሳሽዎ ብቻ (localStorage) ይከማቻሉ። በዚህ ማሳያ ምንም እውነተኛ የይለፍ ቃል ምስጠራ ወይም የሰርቨር ማከማቻ የለም — እውነተኛ የይለፍ ቃል አይጠቀሙ።",
+    om: "Akaawuntiin agarsiisaa kun sakatta'aa kee qofa irratti (localStorage) kuufama. Agarsiisa kana keessatti icciitiin jecha icciitii dhugaa ykn kuusaa seervarii hin jiru — jecha icciitii dhugaa hin fayyadamin.",
   },
+  "auth.err.signup": { en: "Sign-up failed. Try again.", am: "ምዝገባ አልተሳካም። እንደገና ይሞክሩ።", om: "Galmeen hin milkoofne. Irra deebi'ii yaali." },
   "auth.signin.cta": { en: "Sign in", am: "ግባ", om: "Seeni" },
   "auth.signup.cta": { en: "Create account", am: "መለያ ይፍጠሩ", om: "Akaawuntii uumi" },
   "auth.signin.alt": { en: "Already have an account?", am: "ቀድሞ መለያ አለዎት?", om: "Akaawuntii qabdaa?" },
@@ -267,13 +286,13 @@ export const t: Dict = {
   "onboard.diag.title": { en: "Quick diagnostic", am: "ፈጣን ምርመራ", om: "Qorannoo dafqaa" },
   "onboard.diag.intro": {
     en: "Two short questions per subject. Don't worry about getting them right — this just tells us where to start you.",
-    am: "በአንድ ትምህርት ሁለት አጭር ጥያቄዎች።",
-    om: "Kutaa tokkoof gaaffii lama gabaabaa.",
+    am: "በአንድ ትምህርት ሁለት አጭር ጥያቄዎች። ስለመመለስ አይጨነቁ — ይህ ከየት እንደምንጀምር ብቻ ያሳየናል።",
+    om: "Kutaa tokkoof gaaffii lama gabaabaa. Sirritti deebisuun yaaddoo hin ta'in — kun bakka eegalu nuuf ni argisiisa.",
   },
   "onboard.diag.skip": { en: "Skip", am: "አሳልፍ", om: "Darbi" },
   "onboard.finish": { en: "Finish onboarding", am: "መግቢያን ጨርስ", om: "Galmee xumuri" },
   "onboard.done.title": { en: "All set!", am: "ሁሉም ተዘጋጅቷል!", om: "Hunduu qophaa'eera!" },
-  "onboard.done.body": { en: "Your dashboard is ready. Pick a recommended lesson to begin.", am: "ዳሽቦርድዎ ዝግጁ ነው።", om: "Daashboordiin keessan qophaa'eera." },
+  "onboard.done.body": { en: "Your dashboard is ready. Pick a recommended lesson to begin.", am: "ዳሽቦርድዎ ዝግጁ ነው። ለመጀመር የተመከረ ትምህርት ይምረጡ።", om: "Daashboordiin kee qophaa'eera. Eegaluuf barnoota yaadame filadhu." },
 
   // Dashboard
   "dash.title": { en: "My progress", am: "የእኔ ሂደት", om: "Adeemsa koo" },
@@ -283,7 +302,12 @@ export const t: Dict = {
   "dash.mastery": { en: "Mastery by topic", am: "በርዕስ የተካኑ", om: "Ogummaa mata-dureen" },
   "dash.weak": { en: "Weakest topics", am: "ደካማ ርዕሶች", om: "Mata-duree dadhabaa" },
   "dash.takeMock": { en: "Take a practice exam", am: "የልምምድ ፈተና ይውሰዱ", om: "Qormaata shaakalaa fudhadhu" },
-  "dash.noActivity": { en: "No activity yet. Start a lesson!", am: "እስካሁን ምንም እንቅስቃሴ የለም።", om: "Hojiin hin jiru." },
+  "dash.noActivity": { en: "No activity yet. Start a lesson!", am: "እስካሁን ምንም እንቅስቃሴ የለም። ትምህርት ይጀምሩ!", om: "Hojiin hin jiru. Barnoota tokko eegali!" },
+  "dash.recommendedWhyNew": {
+    en: "Start here — based on the subjects you picked.",
+    am: "ከዚህ ይጀምሩ — በመረጡአቸው ትምህርቶች መሰረት።",
+    om: "Asii eegali — kutaalee filattee irratti hundaa'e.",
+  },
 
   // Mock test
   "mock.title": { en: "Practice exam", am: "የልምምድ ፈተና", om: "Qormaata shaakalaa" },
@@ -292,16 +316,31 @@ export const t: Dict = {
   "mock.question": { en: "Question", am: "ጥያቄ", om: "Gaaffii" },
   "mock.of": { en: "of", am: "ከ", om: "kan" },
   "mock.submit": { en: "Submit", am: "አስገባ", om: "Galchi" },
+  "mock.next": { en: "Next", am: "ቀጣይ", om: "Itti aanu" },
   "mock.score": { en: "Your score", am: "ውጤትዎ", om: "Qabxiin kee" },
   "mock.again": { en: "Try another", am: "ሌላ ይሞክሩ", om: "Kan biraa yaali" },
   "mock.review": { en: "Review answers", am: "መልሶችን ይከልሱ", om: "Deebii ilaali" },
+  "mock.questions": { en: "questions", am: "ጥያቄዎች", om: "gaaffilee" },
+  "mock.byTopic": { en: "By topic", am: "በርዕስ", om: "Mata-dureen" },
+  "mock.yourAnswer": { en: "Your answer", am: "የእርስዎ መልስ", om: "Deebii kee" },
+  "mock.correctAnswer": { en: "Correct", am: "ትክክለኛ", om: "Sirrii" },
+  "mock.subjectNotFound": { en: "Subject not found.", am: "ትምህርቱ አልተገኘም።", om: "Kutaan hin argamne." },
 
   // Lesson video
   "video.label": { en: "Watch the lesson", am: "ትምህርቱን ይመልከቱ", om: "Barnoota daawwadhu" },
   "video.credit": { en: "Video by", am: "ቪዲዮ በ", om: "Vidiyoo kan" },
   "exp.video": { en: "Watch the demo", am: "ሙከራውን ይመልከቱ", om: "Shaakala daawwadhu" },
 
+  // Why this matters
+  "why.label": { en: "Why this matters", am: "ይህ ለምን አስፈላጊ ነው", om: "Maaliif kun barbaachisaa dha" },
+  "why.untranslated": {
+    en: "",
+    am: "(በእንግሊዝኛ — ትርጉም በቅርቡ)",
+    om: "(Afaan Ingiliffaan — hiikkaan dhihootti)",
+  },
+
   // Lesson detail TOC
+  "toc.why": { en: "Why", am: "ለምን", om: "Maaliif" },
   "toc.video": { en: "Video", am: "ቪዲዮ", om: "Vidiyoo" },
   "toc.lesson": { en: "Lesson", am: "ትምህርት", om: "Barnoota" },
   "toc.worked": { en: "Example", am: "ምሳሌ", om: "Fakkeenya" },
@@ -325,10 +364,28 @@ export const t: Dict = {
   "quiz.generated": { en: "AI-generated practice", am: "AI የፈጠራቸው ልምምድ", om: "Shaakala AI uume" },
   "quiz.correct": { en: "Correct.", am: "ትክክል።", om: "Sirrii dha." },
   "quiz.incorrect": { en: "Not quite.", am: "ትክክል አይደለም።", om: "Sirrii miti." },
+  "quiz.tryAgain": { en: "Try again", am: "እንደገና ይሞክሩ", om: "Irra deebi'ii yaali" },
+  "quiz.noneYet": {
+    en: "No AI-generated questions yet. Click the button above to make some.",
+    am: "ገና በAI የተፈጠሩ ጥያቄዎች የሉም። ለመፍጠር ከላይ ያለውን አዝራር ይጫኑ።",
+    om: "Hanga ammaatti gaaffii AI uume hin jiru. Uumuuf bantii armaan olii cuqaasi.",
+  },
+  "quiz.genError": {
+    en: "Couldn't generate questions. Try again.",
+    am: "ጥያቄዎችን መፍጠር አልተቻለም። እንደገና ይሞክሩ።",
+    om: "Gaaffilee uumuun hin danda'amne. Irra deebi'ii yaali.",
+  },
 
   // Teacher
   "teacher.title": { en: "Teacher dashboard", am: "የመምህር ዳሽቦርድ", om: "Daashboordii barsiisaa" },
-  "teacher.subtitle": { en: "Create a class code, see aggregate progress. No individual student data — only class-level mastery.", am: "የክፍል ኮድ ይፍጠሩ።", om: "Koodii kilaasii uumi." },
+  "teacher.subtitle": {
+    en: "Create a class code, see aggregate progress. No individual student data — only class-level mastery.",
+    am: "የክፍል ኮድ ይፍጠሩ፣ የተጠቃለለ ሂደትን ይመልከቱ። ምንም የግል ተማሪ መረጃ የለም — የክፍል ደረጃ ችሎታ ብቻ።",
+    om: "Koodii kilaasii uumi, adeemsa walitti qabame ilaali. Odeeffannoo dhuunfaa barataa hin jiru — ogummaa sadarkaa kilaasii qofa.",
+  },
+  "teacher.yourClasses": { en: "Your classes", am: "ክፍሎችዎ", om: "Kilaasota kee" },
+  "teacher.err.load": { en: "Couldn't load your classes.", am: "ክፍሎችዎን መጫን አልተቻለም።", om: "Kilaasota kee fe'uun hin danda'amne." },
+  "teacher.err.create": { en: "Couldn't create the class.", am: "ክፍሉን መፍጠር አልተቻለም።", om: "Kilaasii uumuun hin danda'amne." },
   "teacher.createClass": { en: "Create a class", am: "ክፍል ይፍጠሩ", om: "Kilaasii uumi" },
   "teacher.className": { en: "Class name", am: "የክፍል ስም", om: "Maqaa kilaasii" },
   "teacher.create": { en: "Create", am: "ይፍጠሩ", om: "Uumi" },
@@ -336,8 +393,8 @@ export const t: Dict = {
   "teacher.students": { en: "students", am: "ተማሪዎች", om: "barattoota" },
   "teacher.aggregateMastery": { en: "Class average mastery", am: "የክፍል አማካይ ችሎታ", om: "Giddu-galeessa ogummaa kilaasii" },
   "teacher.weakest": { en: "Weakest topics for this class", am: "የክፍሉ ደካማ ርዕሶች", om: "Mata-duree dadhabaa kilaasii kanaa" },
-  "teacher.noClasses": { en: "No classes yet. Create one to get started.", am: "ገና ምንም ክፍል የለም።", om: "Kilaasiin hin jiru." },
-  "teacher.noStudents": { en: "No students have joined yet. Share the code above.", am: "ገና ምንም ተማሪ አልገባም።", om: "Barattoonni hin galmoofne." },
+  "teacher.noClasses": { en: "No classes yet. Create one to get started.", am: "ገና ምንም ክፍል የለም። ለመጀመር አንዱን ይፍጠሩ።", om: "Hanga ammaatti kilaasiin hin jiru. Eegaluuf tokko uumi." },
+  "teacher.noStudents": { en: "No students have joined yet. Share the code above.", am: "ገና ምንም ተማሪ አልገባም። ከላይ ያለውን ኮድ ያጋሩ።", om: "Hanga ammaatti barataan hin galmoofne. Koodii armaan olii qoodi." },
 
   "student.joinClass": { en: "Join a class", am: "ክፍልን ይቀላቀሉ", om: "Kilaasii makami" },
   "student.joinCode": { en: "Enter the class code from your teacher", am: "ከመምህርዎ የክፍል ኮድ ያስገቡ", om: "Koodii kilaasii barsiisaa irraa galchi" },
@@ -350,6 +407,8 @@ export const t: Dict = {
   "common.loading": { en: "Loading…", am: "በመጫን ላይ…", om: "Fe'amaa jira…" },
   "common.signinRequired": { en: "Please sign in to continue.", am: "ለመቀጠል እባክዎ ይግቡ።", om: "Itti fufuuf maaloo seeni." },
   "common.signinCTA": { en: "Sign in", am: "ግባ", om: "Seeni" },
+  "common.tryAgain": { en: "Try again", am: "እንደገና ይሞክሩ", om: "Irra deebi'ii yaali" },
+  "lesson.nextLesson": { en: "Next lesson", am: "ቀጣይ ትምህርት", om: "Barnoota itti aanu" },
 
   "footer.demo": {
     en: "Free during pilot · feedback welcome",
