@@ -22,23 +22,23 @@ export const t: Dict = {
 
   // Hero
   "hero.tag": {
-    en: "Grade 11 · Ethiopia · EUEE-aligned",
-    am: "11ኛ ክፍል · ኢትዮጵያ · ከEUEE ጋር የተጣጣመ",
-    om: "Kutaa 11 · Itoophiyaa · EUEE waliin walsimataa",
+    en: "For Ethiopian high schools · EUEE-aligned",
+    am: "ለኢትዮጵያ ሁለተኛ ደረጃ ትምህርት ቤቶች · ከEUEE ጋር የተጣጣመ",
+    om: "Manneen barumsaa sadarkaa lammaffaa Itoophiyaaf · EUEE waliin walsimataa",
   },
   "hero.title": {
-    en: "Your AI tutor for Grade 11 sciences.",
-    am: "ለ11ኛ ክፍል ሳይንስ ትምህርቶች የእርስዎ የAI አስተማሪ።",
-    om: "Barsiisaa AI keessan kan kutaa 11 saayinsii.",
+    en: "Your AI tutor for Ethiopian high school.",
+    am: "ለኢትዮጵያ ሁለተኛ ደረጃ ትምህርት የእርስዎ የAI አስተማሪ።",
+    om: "Barsiisaa AI keessan kan sadarkaa lammaffaa Itoophiyaa.",
   },
   "hero.sub": {
-    en: "Math, Physics, Chemistry, Biology — mapped to the MoE syllabus and EUEE blueprint. Built for low-bandwidth Android, in English, Amharic and Afaan Oromo.",
-    am: "ሒሳብ፣ ፊዚክስ፣ ኬሚስትሪ፣ ባዮሎጂ — ከትምህርት ሚኒስቴር ሥርዓተ ትምህርትና ከEUEE ዕቅድ ጋር የተጣጣመ።",
-    om: "Heerregaa, Fiiziksii, Keemistirii, Baayooloojii — sirna barnootaa MoE fi karoora EUEE waliin walsimataa.",
+    en: "Built for Ethiopian high school students — mapped to the MoE syllabus and the EUEE blueprint, in English, Amharic and Afaan Oromo. This demo starts with Grade 11 Math, Physics, Chemistry and Biology.",
+    am: "ለኢትዮጵያ ሁለተኛ ደረጃ ተማሪዎች የተዘጋጀ — ከትምህርት ሚኒስቴር ሥርዓተ ትምህርትና ከEUEE ዕቅድ ጋር የተጣጣመ። ይህ ማሳያ ከ11ኛ ክፍል ሒሳብ፣ ፊዚክስ፣ ኬሚስትሪና ባዮሎጂ ይጀምራል።",
+    om: "Barattoota sadarkaa lammaffaa Itoophiyaatiif kan qophaa'e — sirna barnootaa MoE fi karoora EUEE waliin walsimataa. Agarsiisni kun Heerregaa, Fiiziksii, Keemistirii fi Baayooloojii Kutaa 11 irraa eegala.",
   },
   "hero.cta.lessons": { en: "Browse lessons", am: "ትምህርቶችን ይመልከቱ", om: "Barnoota ilaali" },
   "hero.cta.chat": { en: "Try the AI tutor", am: "AI አስተማሪውን ይሞክሩ", om: "Barsiisaa AI yaali" },
-  "hero.cta.signup": { en: "Create a free account", am: "ነጻ መለያ ይፍጠሩ", om: "Akaawuntii bilisaa uumi" },
+  "hero.cta.signup": { en: "Get started", am: "ይጀምሩ", om: "Eegali" },
   "hero.cta.dashboard": { en: "Go to my dashboard", am: "ወደ ዳሽቦርዴ ይሂዱ", om: "Gara daashboordii kootti dhaqi" },
 
   "feature.aligned.title": { en: "MoE & EUEE aligned", am: "ከMoE እና EUEE ጋር የተጣጣመ", om: "MoE fi EUEE waliin walsimataa" },
@@ -78,7 +78,7 @@ export const t: Dict = {
   // Auth
   "auth.signin.title": { en: "Sign in", am: "ግባ", om: "Seeni" },
   "auth.signup.title": { en: "Create your account", am: "መለያዎን ይፍጠሩ", om: "Akaawuntii kee uumi" },
-  "auth.signup.tagline": { en: "Free, forever. No payment, no SMS required.", am: "ሁልጊዜ ነጻ።", om: "Yeroo hunda bilisaa." },
+  "auth.signup.tagline": { en: "Free to get started. No SMS required.", am: "ለመጀመር ነጻ። SMS አያስፈልግም።", om: "Eegaluuf bilisaa. SMS hin barbaachisu." },
   "auth.username": { en: "Username", am: "የተጠቃሚ ስም", om: "Maqaa fayyadamtuu" },
   "auth.password": { en: "Password", am: "የይለፍ ቃል", om: "Jecha icciitii" },
   "auth.role": { en: "I am a…", am: "እኔ…", om: "Ani…" },

@@ -33,43 +33,47 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold text-stone-900">{tr("auth.signin.title")}</h1>
+    <div className="max-w-md mx-auto px-4 py-14">
+      <div className="rounded-2xl border border-line bg-surface p-7 shadow-card">
+        <h1 className="text-2xl font-bold tracking-tight text-ink">{tr("auth.signin.title")}</h1>
 
-      <form onSubmit={onSubmit} className="mt-6 space-y-4">
-        <div>
-          <label className="text-sm font-medium text-stone-700 block">Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            autoComplete="email"
-            className="mt-1 w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:border-brand bg-white"
-          />
-        </div>
-        <div>
-          <label className="text-sm font-medium text-stone-700 block">{tr("auth.password")}</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-            className="mt-1 w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:border-brand bg-white"
-          />
-        </div>
-        {error && <div className="text-sm text-red-700">{error}</div>}
-        <button
-          type="submit"
-          disabled={busy}
-          className="w-full px-4 py-2.5 bg-brand text-white rounded-md hover:bg-brand-dark disabled:opacity-50 font-medium"
-        >
-          {busy ? "…" : tr("auth.signin.cta")}
-        </button>
-        <p className="text-sm text-stone-600 text-center">
-          {tr("auth.signup.alt")}{" "}
-          <Link href="/signup" className="text-brand underline">{tr("auth.signup.cta")}</Link>
-        </p>
-      </form>
+        <form onSubmit={onSubmit} className="mt-6 space-y-4">
+          <div>
+            <label className="text-sm font-medium text-ink block">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+              className="mt-1.5 w-full px-3.5 py-2.5 border border-line rounded-lg focus:outline-none focus:border-brand bg-canvas text-ink"
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-ink block">{tr("auth.password")}</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+              className="mt-1.5 w-full px-3.5 py-2.5 border border-line rounded-lg focus:outline-none focus:border-brand bg-canvas text-ink"
+            />
+          </div>
+          {error && <div className="text-sm text-red-700 dark:text-red-300">{error}</div>}
+          <button
+            type="submit"
+            disabled={busy}
+            className="w-full px-4 py-2.5 bg-brand text-brand-on rounded-lg hover:bg-brand-hover disabled:opacity-50 font-medium shadow-soft transition"
+          >
+            {busy ? "…" : tr("auth.signin.cta")}
+          </button>
+          <p className="text-sm text-ink-muted text-center">
+            {tr("auth.signup.alt")}{" "}
+            <Link href="/signup" className="text-brand hover:underline font-medium">
+              {tr("auth.signup.cta")}
+            </Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }

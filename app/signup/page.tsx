@@ -56,84 +56,102 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold text-stone-900">{tr("auth.signup.title")}</h1>
-      <p className="text-sm text-stone-600 mt-1">{tr("auth.signup.tagline")}</p>
+    <div className="max-w-md mx-auto px-4 py-14">
+      <div className="rounded-2xl border border-line bg-surface p-7 shadow-card">
+        <h1 className="text-2xl font-bold tracking-tight text-ink">{tr("auth.signup.title")}</h1>
+        <p className="text-sm text-ink-muted mt-1.5">{tr("auth.signup.tagline")}</p>
 
-      <form onSubmit={onSubmit} className="mt-6 space-y-4">
-        <div>
-          <label className="text-sm font-medium text-stone-700">{tr("auth.role")}</label>
-          <div className="mt-1 flex gap-2">
-            {(["student", "teacher"] as Role[]).map((r) => (
-              <button
-                type="button"
-                key={r}
-                onClick={() => setRole(r)}
-                className={
-                  "flex-1 px-3 py-2 rounded border text-sm " +
-                  (role === r ? "bg-brand text-white border-brand" : "bg-white border-stone-300")
-                }
-              >
-                {tr(r === "student" ? "auth.role.student" : "auth.role.teacher")}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <Field label="Email" type="email" value={email} onChange={setEmail} autoComplete="email" />
-        <Field label="Display name (optional)" value={displayName} onChange={setDisplayName} autoComplete="nickname" />
-        <Field label={tr("auth.password")} value={password} onChange={setPassword} type="password" autoComplete="new-password" />
-        <p className="text-xs text-stone-500 -mt-2">Minimum 6 characters.</p>
-
-        {role === "student" && (
+        <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <div>
-            <label className="text-sm font-medium text-stone-700">{tr("common.subjects")}</label>
-            <div className="mt-1 grid grid-cols-2 gap-2">
-              {SUBJECTS.map((s) => (
-                <label
-                  key={s.id}
+            <label className="text-sm font-medium text-ink">{tr("auth.role")}</label>
+            <div className="mt-1.5 flex gap-2">
+              {(["student", "teacher"] as Role[]).map((r) => (
+                <button
+                  type="button"
+                  key={r}
+                  onClick={() => setRole(r)}
                   className={
-                    "flex items-center gap-2 px-3 py-2 rounded border cursor-pointer text-sm " +
-                    (subjects.includes(s.id) ? "border-brand bg-brand/5" : "border-stone-300")
+                    "flex-1 px-3 py-2 rounded-lg border text-sm font-medium transition " +
+                    (role === r
+                      ? "bg-brand text-brand-on border-brand shadow-soft"
+                      : "bg-canvas text-ink border-line hover:border-brand/60")
                   }
                 >
-                  <input type="checkbox" checked={subjects.includes(s.id)} onChange={() => toggleSubject(s.id)} />
-                  <span>{s.emoji} {s.label[locale]}</span>
-                </label>
+                  {tr(r === "student" ? "auth.role.student" : "auth.role.teacher")}
+                </button>
               ))}
             </div>
           </div>
-        )}
 
-        <Field label={tr("auth.region")} value={region} onChange={setRegion} />
-        <Field label={tr("auth.school")} value={school} onChange={setSchool} />
+          <Field label="Email" type="email" value={email} onChange={setEmail} autoComplete="email" />
+          <Field label="Display name (optional)" value={displayName} onChange={setDisplayName} autoComplete="nickname" />
+          <Field label={tr("auth.password")} value={password} onChange={setPassword} type="password" autoComplete="new-password" />
+          <p className="text-xs text-ink-subtle -mt-2">Minimum 6 characters.</p>
 
-        <label className="flex items-start gap-2 text-sm text-stone-700">
-          <input type="checkbox" checked={under18} onChange={(e) => setUnder18(e.target.checked)} className="mt-0.5" />
-          <span>{tr("auth.under18")}</span>
-        </label>
+          {role === "student" && (
+            <div>
+              <label className="text-sm font-medium text-ink">{tr("common.subjects")}</label>
+              <div className="mt-1.5 grid grid-cols-2 gap-2">
+                {SUBJECTS.map((s) => (
+                  <label
+                    key={s.id}
+                    className={
+                      "flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer text-sm transition " +
+                      (subjects.includes(s.id)
+                        ? "border-brand bg-brand-soft/40 text-ink"
+                        : "border-line bg-canvas text-ink hover:border-brand/60")
+                    }
+                  >
+                    <input
+                      type="checkbox"
+                      checked={subjects.includes(s.id)}
+                      onChange={() => toggleSubject(s.id)}
+                      className="accent-brand"
+                    />
+                    <span>{s.emoji} {s.label[locale]}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
 
-        {under18 && (
-          <div className="text-xs text-amber-800 bg-amber-50 border border-amber-200 px-3 py-2 rounded">
-            We collect only your email, language, and learning progress. Demo notice — a production version would meet Ethiopia's data protection guidelines.
-          </div>
-        )}
+          <Field label={tr("auth.region")} value={region} onChange={setRegion} />
+          <Field label={tr("auth.school")} value={school} onChange={setSchool} />
 
-        {error && <div className="text-sm text-red-700">{error}</div>}
+          <label className="flex items-start gap-2 text-sm text-ink">
+            <input
+              type="checkbox"
+              checked={under18}
+              onChange={(e) => setUnder18(e.target.checked)}
+              className="mt-0.5 accent-brand"
+            />
+            <span>{tr("auth.under18")}</span>
+          </label>
 
-        <button
-          type="submit"
-          disabled={busy}
-          className="w-full px-4 py-2.5 bg-brand text-white rounded-md hover:bg-brand-dark disabled:opacity-50 font-medium"
-        >
-          {busy ? "…" : tr("auth.signup.cta")}
-        </button>
+          {under18 && (
+            <div className="text-xs text-amber-900 dark:text-amber-200 bg-sun-soft border border-amber-200 dark:border-amber-900/50 px-3 py-2 rounded-lg">
+              We collect only your email, language, and learning progress. Demo notice — a production version would meet Ethiopia's data protection guidelines.
+            </div>
+          )}
 
-        <p className="text-sm text-stone-600 text-center">
-          {tr("auth.signin.alt")}{" "}
-          <Link href="/login" className="text-brand underline">{tr("auth.signin.cta")}</Link>
-        </p>
-      </form>
+          {error && <div className="text-sm text-red-700 dark:text-red-300">{error}</div>}
+
+          <button
+            type="submit"
+            disabled={busy}
+            className="w-full px-4 py-2.5 bg-brand text-brand-on rounded-lg hover:bg-brand-hover disabled:opacity-50 font-medium shadow-soft transition"
+          >
+            {busy ? "…" : tr("auth.signup.cta")}
+          </button>
+
+          <p className="text-sm text-ink-muted text-center">
+            {tr("auth.signin.alt")}{" "}
+            <Link href="/login" className="text-brand hover:underline font-medium">
+              {tr("auth.signin.cta")}
+            </Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }
@@ -149,13 +167,13 @@ function Field({
 }) {
   return (
     <div>
-      <label className="text-sm font-medium text-stone-700 block">{label}</label>
+      <label className="text-sm font-medium text-ink block">{label}</label>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         autoComplete={autoComplete}
-        className="mt-1 w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:border-brand bg-white"
+        className="mt-1.5 w-full px-3.5 py-2.5 border border-line rounded-lg focus:outline-none focus:border-brand bg-canvas text-ink"
       />
     </div>
   );

@@ -63,41 +63,46 @@ export default function OnboardingPage() {
   }
 
   if (!ready || !user) {
-    return <div className="max-w-md mx-auto px-4 py-10 text-stone-500">{tr("common.loading")}</div>;
+    return <div className="max-w-md mx-auto px-4 py-10 text-ink-subtle">{tr("common.loading")}</div>;
   }
 
   if (step === "subjects") {
     return (
-      <div className="max-w-md mx-auto px-4 py-10">
-        <h1 className="text-2xl font-bold text-stone-900">{tr("onboard.welcome")}</h1>
-        <h2 className="mt-6 font-medium text-stone-800">{tr("onboard.pickSubjects")}</h2>
-        <div className="mt-3 grid grid-cols-2 gap-2">
-          {SUBJECTS.map((s) => (
-            <label
-              key={s.id}
-              className={
-                "flex items-center gap-2 px-3 py-2.5 rounded border cursor-pointer text-sm " +
-                (chosen.includes(s.id) ? "border-brand bg-brand/5" : "border-stone-300")
-              }
-            >
-              <input
-                type="checkbox"
-                checked={chosen.includes(s.id)}
-                onChange={() =>
-                  setChosen((c) => (c.includes(s.id) ? c.filter((x) => x !== s.id) : [...c, s.id]))
+      <div className="max-w-md mx-auto px-4 py-14">
+        <div className="rounded-2xl border border-line bg-surface p-7 shadow-card">
+          <h1 className="text-2xl font-bold tracking-tight text-ink">{tr("onboard.welcome")}</h1>
+          <h2 className="mt-6 font-medium text-ink">{tr("onboard.pickSubjects")}</h2>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            {SUBJECTS.map((s) => (
+              <label
+                key={s.id}
+                className={
+                  "flex items-center gap-2 px-3 py-2.5 rounded-lg border cursor-pointer text-sm transition " +
+                  (chosen.includes(s.id)
+                    ? "border-brand bg-brand-soft/40 text-ink"
+                    : "border-line bg-canvas text-ink hover:border-brand/60")
                 }
-              />
-              <span>{s.emoji} {s.label[locale]}</span>
-            </label>
-          ))}
+              >
+                <input
+                  type="checkbox"
+                  checked={chosen.includes(s.id)}
+                  onChange={() =>
+                    setChosen((c) => (c.includes(s.id) ? c.filter((x) => x !== s.id) : [...c, s.id]))
+                  }
+                  className="accent-brand"
+                />
+                <span>{s.emoji} {s.label[locale]}</span>
+              </label>
+            ))}
+          </div>
+          <button
+            onClick={saveSubjects}
+            disabled={chosen.length === 0 || busy}
+            className="mt-6 w-full px-4 py-2.5 bg-brand text-brand-on rounded-lg hover:bg-brand-hover font-medium disabled:opacity-40 shadow-soft transition"
+          >
+            {tr("onboard.continue")}
+          </button>
         </div>
-        <button
-          onClick={saveSubjects}
-          disabled={chosen.length === 0 || busy}
-          className="mt-6 w-full px-4 py-2.5 bg-brand text-white rounded-md hover:bg-brand-dark font-medium disabled:opacity-40"
-        >
-          {tr("onboard.continue")}
-        </button>
       </div>
     );
   }
@@ -105,29 +110,29 @@ export default function OnboardingPage() {
   if (step === "diag") {
     const allAnswered = diagQs.every((q) => answers[q.key] !== undefined);
     return (
-      <div className="max-w-2xl mx-auto px-4 py-10">
-        <h1 className="text-2xl font-bold text-stone-900">{tr("onboard.diag.title")}</h1>
-        <p className="text-sm text-stone-600 mt-2">{tr("onboard.diag.intro")}</p>
+      <div className="max-w-2xl mx-auto px-4 py-12">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink">{tr("onboard.diag.title")}</h1>
+        <p className="text-sm text-ink-muted mt-2">{tr("onboard.diag.intro")}</p>
 
         <ol className="mt-6 space-y-5">
           {diagQs.map((item) => {
             const subject = SUBJECTS.find((s) => s.id === item.subject)!;
             return (
-              <li key={item.key} className="rounded-lg border border-stone-200 bg-white p-4">
-                <div className="text-xs text-brand font-medium uppercase tracking-wide">
+              <li key={item.key} className="rounded-xl border border-line bg-surface p-4 shadow-soft">
+                <div className="text-xs text-brand font-semibold uppercase tracking-wide">
                   {subject.emoji} {subject.label[locale]} · {item.q.topic}
                 </div>
-                <p className="mt-2 font-medium text-stone-900">{item.q.q}</p>
+                <p className="mt-2 font-medium text-ink">{item.q.q}</p>
                 <div className="mt-3 grid gap-2">
                   {item.q.choices.map((c, i) => (
                     <button
                       key={i}
                       onClick={() => setAnswers((a) => ({ ...a, [item.key]: i }))}
                       className={
-                        "text-left text-sm px-3 py-2 rounded border " +
+                        "text-left text-sm px-3 py-2 rounded-lg border transition " +
                         (answers[item.key] === i
-                          ? "border-brand bg-brand/10"
-                          : "border-stone-200 hover:border-brand")
+                          ? "border-brand bg-brand-soft/50 text-ink"
+                          : "border-line text-ink hover:border-brand/60")
                       }
                     >
                       {c}
@@ -143,13 +148,13 @@ export default function OnboardingPage() {
           <button
             onClick={finishDiagnostic}
             disabled={!allAnswered || busy}
-            className="flex-1 px-4 py-2.5 bg-brand text-white rounded-md hover:bg-brand-dark disabled:opacity-40 font-medium"
+            className="flex-1 px-4 py-2.5 bg-brand text-brand-on rounded-lg hover:bg-brand-hover disabled:opacity-40 font-medium shadow-soft transition"
           >
             {busy ? "…" : tr("onboard.finish")}
           </button>
           <button
             onClick={() => setStep("done")}
-            className="px-4 py-2.5 text-stone-600 hover:text-stone-900"
+            className="px-4 py-2.5 text-ink-muted hover:text-ink transition"
           >
             {tr("onboard.diag.skip")}
           </button>
@@ -159,13 +164,13 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto px-4 py-14 text-center">
+    <div className="max-w-md mx-auto px-4 py-16 text-center">
       <div className="text-5xl">🎉</div>
-      <h1 className="mt-3 text-2xl font-bold text-stone-900">{tr("onboard.done.title")}</h1>
-      <p className="mt-2 text-stone-600">{tr("onboard.done.body")}</p>
+      <h1 className="mt-3 text-2xl font-bold tracking-tight text-ink">{tr("onboard.done.title")}</h1>
+      <p className="mt-2 text-ink-muted">{tr("onboard.done.body")}</p>
       <button
         onClick={() => router.push("/dashboard")}
-        className="mt-6 inline-block px-5 py-2.5 bg-brand text-white rounded-md hover:bg-brand-dark font-medium"
+        className="mt-6 inline-block px-5 py-2.5 bg-brand text-brand-on rounded-lg hover:bg-brand-hover font-medium shadow-soft transition"
       >
         {tr("nav.dashboard")} →
       </button>
