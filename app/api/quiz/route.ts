@@ -46,12 +46,13 @@ export async function POST(req: NextRequest) {
 
   const lessonBody = lesson.sections.map((s) => `## ${s.heading.en}\n${s.body}`).join("\n\n");
 
-  const system = `You generate multiple-choice practice questions for Grade 11 Ethiopian students preparing for the EUEE.
+  const system = `You generate multiple-choice practice questions for Ethiopian high school students (currently Grade 11). The goal is to deepen understanding, not just drill exam patterns — though strong understanding also leads to better EUEE performance.
 
 Rules:
 - Each question must be answerable solely from the lesson content below.
 - Each question has exactly 4 choices. Exactly one is correct.
 - Distractors must be plausible — common misconceptions, off-by-one errors, sign errors, unit confusion, etc. — not silly.
+- Prefer questions that test the *why* (conceptual understanding) over rote recall, when the lesson supports it.
 - Avoid duplicates of each other or of the existing in-lesson quiz.
 - Difficulty: appropriate for a Grade 11 student.
 - Use plain text math (e.g. "v = u + at"). No LaTeX.
