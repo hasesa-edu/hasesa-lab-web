@@ -15,9 +15,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Personal AI Tutor — for Ethiopian high schools",
+  title: "Personal AI Tutor — quality education for Ethiopian high schools",
   description:
-    "AI tutor for Ethiopian high school students. MoE syllabus aligned, EUEE-focused. English, Amharic, Afaan Oromo. Demo content covers Grade 11 Math, Physics, Chemistry, and Biology.",
+    "An AI tutor built for deep understanding, not just exam answers. MoE-aligned lessons in English, Amharic, and Afaan Oromo, each with an at-home experiment. Demo covers Grade 11 Math, Physics, Chemistry, and Biology.",
   manifest: "/manifest.json",
   icons: {
     icon: [{ url: "/icon.svg", type: "image/svg+xml" }],

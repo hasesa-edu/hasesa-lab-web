@@ -101,6 +101,62 @@ export default function LessonDetail() {
         </p>
       </section>
 
+      <section className="mt-10 rounded-2xl border border-line bg-surface p-6 shadow-soft">
+        <div className="flex items-center gap-2">
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-sun-soft text-amber-700 dark:text-amber-200 text-lg">
+            🧪
+          </span>
+          <div>
+            <p className="text-xs uppercase tracking-[0.16em] font-semibold text-amber-700 dark:text-amber-300">
+              {tr("exp.label")}
+            </p>
+            <h3 className="text-lg font-semibold tracking-tight text-ink">
+              {lesson.atHomeExperiment.title[locale]}
+            </h3>
+          </div>
+        </div>
+
+        <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <h4 className="text-xs uppercase tracking-wider font-semibold text-ink-subtle">
+              {tr("exp.materials")}
+            </h4>
+            <ul className="mt-2 space-y-1.5 text-sm text-ink-muted">
+              {lesson.atHomeExperiment.materials.map((m, i) => (
+                <li key={i} className="flex gap-2">
+                  <span className="mt-2 h-1 w-1 rounded-full bg-brand shrink-0" />
+                  <span className="leading-relaxed">{m[locale]}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-xs uppercase tracking-wider font-semibold text-ink-subtle">
+              {tr("exp.steps")}
+            </h4>
+            <ol className="mt-2 space-y-2 text-sm text-ink-muted">
+              {lesson.atHomeExperiment.steps.map((s, i) => (
+                <li key={i} className="flex gap-2.5">
+                  <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand-hover dark:text-brand text-[11px] font-bold tabular-nums">
+                    {i + 1}
+                  </span>
+                  <span className="leading-relaxed">{s[locale]}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+
+        <div className="mt-5 rounded-lg border border-line bg-canvas/40 p-4">
+          <h4 className="text-xs uppercase tracking-wider font-semibold text-ink-subtle">
+            {tr("exp.observe")}
+          </h4>
+          <p className="mt-1.5 text-sm text-ink leading-relaxed whitespace-pre-line">
+            {lesson.atHomeExperiment.observe[locale]}
+          </p>
+        </div>
+      </section>
+
       <section className="mt-10">
         <h3 className="font-semibold text-ink text-lg tracking-tight">{tr("quiz.check")}</h3>
         <ul className="mt-3 space-y-5">

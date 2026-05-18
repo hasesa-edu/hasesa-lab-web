@@ -132,6 +132,55 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Learn by doing */}
+      <section className="max-w-5xl mx-auto px-4 pb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+          <div>
+            <p className="text-xs uppercase tracking-[0.18em] font-semibold text-brand">
+              {tr("lbd.eyebrow")}
+            </p>
+            <h2 className="mt-2 text-2xl sm:text-3xl font-bold tracking-tight text-ink leading-tight">
+              {tr("lbd.title")}
+            </h2>
+            <p className="mt-3 text-ink-muted leading-relaxed">{tr("lbd.sub")}</p>
+            <Link
+              href="/lessons"
+              className="mt-5 inline-flex items-center text-sm font-medium text-brand hover:text-brand-hover transition"
+            >
+              {tr("hero.cta.lessons")} →
+            </Link>
+          </div>
+
+          <div className="rounded-2xl border border-line bg-surface shadow-card overflow-hidden">
+            <div className="flex items-center gap-2 px-4 py-2.5 border-b border-line bg-sun-soft/60">
+              <span className="text-base">🧪</span>
+              <span className="text-xs uppercase tracking-[0.16em] font-semibold text-amber-800 dark:text-amber-200">
+                {tr("exp.label")}
+              </span>
+            </div>
+            <div className="p-5 sm:p-6">
+              <h3 className="text-base font-semibold text-ink tracking-tight">
+                {tr("lbd.example.title")}
+              </h3>
+              <ol className="mt-4 space-y-3 text-sm text-ink-muted">
+                <li className="flex gap-2.5">
+                  <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand-hover dark:text-brand text-[11px] font-bold">
+                    1
+                  </span>
+                  <span className="leading-relaxed">{tr("lbd.example.line1")}</span>
+                </li>
+                <li className="flex gap-2.5">
+                  <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand-hover dark:text-brand text-[11px] font-bold">
+                    2
+                  </span>
+                  <span className="leading-relaxed italic">{tr("lbd.example.line2")}</span>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Dewey quote */}
       <section className="max-w-3xl mx-auto px-4 pb-20">
         <figure className="relative rounded-2xl border border-line bg-surface px-6 py-10 sm:px-10 sm:py-14 text-center shadow-soft overflow-hidden">
