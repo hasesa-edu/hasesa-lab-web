@@ -7,7 +7,7 @@ import { Footer } from "@/components/Footer";
 import { PWARegister } from "@/components/PWARegister";
 
 export const metadata: Metadata = {
-  title: "AI-Edu Ethiopia — Grade 11 tutor",
+  title: "Personal AI Tutor — Grade 11 tutor",
   description:
     "AI tutor for Ethiopian Grade 11 students. Math, Physics, Chemistry, Biology — MoE syllabus aligned, EUEE-focused. English, Amharic, Afaan Oromo.",
   manifest: "/manifest.json",

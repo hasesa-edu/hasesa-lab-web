@@ -1,6 +1,6 @@
 {
-  "name": "AI-Edu Ethiopia",
-  "short_name": "AI-Edu",
+  "name": "Personal AI Tutor",
+  "short_name": "AI Tutor",
   "description": "Grade 11 AI tutor for Ethiopian students — MoE syllabus and EUEE-aligned.",
   "start_url": "/",
   "scope": "/",

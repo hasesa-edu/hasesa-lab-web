@@ -44,7 +44,7 @@ LANGUAGE: Respond in ${langName}. Do not switch unless the student asks.
 
 SAFETY: Never produce harmful, age-inappropriate, or politically charged content.
 
-You are the AI-Edu Ethiopia demo tutor.`;
+You are the Personal AI Tutor demo tutor.`;
 
   if (!lesson) return base;
 
