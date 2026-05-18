@@ -6,7 +6,7 @@ import { useState } from "react";
 import { LOCALES } from "@/lib/i18n";
 import { useLocale } from "./LocaleProvider";
 import { useUser } from "./UserProvider";
-import { signOut } from "@/lib/store";
+import { apiSignout } from "@/lib/api";
 
 export function Nav() {
   const { locale, setLocale, tr } = useLocale();
@@ -14,9 +14,9 @@ export function Nav() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  function handleSignOut() {
-    signOut();
-    refresh();
+  async function handleSignOut() {
+    await apiSignout();
+    await refresh();
     setMenuOpen(false);
     router.push("/");
   }
@@ -64,14 +64,14 @@ export function Nav() {
                 className="flex items-center gap-2 px-2.5 py-1.5 rounded border border-stone-200 hover:border-brand text-sm"
               >
                 <span className="w-6 h-6 rounded-full bg-brand text-white text-xs font-bold flex items-center justify-center">
-                  {user.username.slice(0, 1).toUpperCase()}
+                  {user.displayName.slice(0, 1).toUpperCase()}
                 </span>
-                <span className="hidden sm:inline">{user.username}</span>
+                <span className="hidden sm:inline">{user.displayName}</span>
               </button>
               {menuOpen && (
-                <div className="absolute right-0 mt-1 bg-white border border-stone-200 rounded shadow-lg py-1 text-sm min-w-[160px]">
+                <div className="absolute right-0 mt-1 bg-white border border-stone-200 rounded shadow-lg py-1 text-sm min-w-[180px]">
                   <div className="px-3 py-1.5 text-xs text-stone-500 border-b border-stone-100">
-                    {user.role === "teacher" ? tr("auth.role.teacher") : tr("auth.role.student")}
+                    {user.email} · {user.role === "teacher" ? tr("auth.role.teacher") : tr("auth.role.student")}
                   </div>
                   {user.role === "student" && (
                     <Link
@@ -93,16 +93,10 @@ export function Nav() {
             </div>
           ) : (
             <>
-              <Link
-                href="/login"
-                className="text-sm px-3 py-1.5 rounded border border-stone-200 hover:border-brand"
-              >
+              <Link href="/login" className="text-sm px-3 py-1.5 rounded border border-stone-200 hover:border-brand">
                 {tr("nav.signin")}
               </Link>
-              <Link
-                href="/signup"
-                className="text-sm px-3 py-1.5 rounded bg-brand text-white hover:bg-brand-dark"
-              >
+              <Link href="/signup" className="text-sm px-3 py-1.5 rounded bg-brand text-white hover:bg-brand-dark">
                 {tr("nav.signup")}
               </Link>
             </>

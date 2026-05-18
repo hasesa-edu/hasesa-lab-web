@@ -5,16 +5,18 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
-import { createUser } from "@/lib/store";
+import { apiSignup } from "@/lib/api";
 import { SUBJECTS, type Subject } from "@/lib/lessons";
-import type { Role } from "@/lib/store";
+
+type Role = "student" | "teacher";
 
 export default function SignupPage() {
   const { tr, locale } = useLocale();
   const { refresh } = useUser();
   const router = useRouter();
 
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<Role>("student");
   const [region, setRegion] = useState("");
@@ -22,33 +24,34 @@ export default function SignupPage() {
   const [under18, setUnder18] = useState(false);
   const [subjects, setSubjects] = useState<Subject[]>(["math", "physics", "chemistry", "biology"]);
   const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
 
   function toggleSubject(s: Subject) {
     setSubjects((cur) => (cur.includes(s) ? cur.filter((x) => x !== s) : [...cur, s]));
   }
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    const res = createUser({
-      username,
-      password,
-      role,
-      language: locale,
-      region: region || undefined,
-      school: school || undefined,
-      under18,
-      subjects: role === "student" ? subjects : [],
-    });
-    if (!res.ok) {
-      setError(res.reason === "taken" ? tr("auth.err.takenUsername") : tr("auth.err.required"));
-      return;
-    }
-    refresh();
-    if (role === "teacher") {
-      router.push("/teacher");
-    } else {
-      router.push("/onboarding");
+    setBusy(true);
+    try {
+      await apiSignup({
+        email,
+        password,
+        displayName: displayName || email.split("@")[0],
+        role,
+        language: locale,
+        region: region || undefined,
+        school: school || undefined,
+        under18,
+        subjects: role === "student" ? subjects : [],
+      });
+      await refresh();
+      router.push(role === "teacher" ? "/teacher" : "/onboarding");
+    } catch (e: any) {
+      setError(e?.message || "Sign-up failed");
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -77,33 +80,29 @@ export default function SignupPage() {
           </div>
         </div>
 
-        <Field label={tr("auth.username")} value={username} onChange={setUsername} autoComplete="username" />
+        <Field label="Email" type="email" value={email} onChange={setEmail} autoComplete="email" />
+        <Field label="Display name (optional)" value={displayName} onChange={setDisplayName} autoComplete="nickname" />
         <Field label={tr("auth.password")} value={password} onChange={setPassword} type="password" autoComplete="new-password" />
+        <p className="text-xs text-stone-500 -mt-2">Minimum 6 characters.</p>
 
         {role === "student" && (
-          <>
-            <div>
-              <label className="text-sm font-medium text-stone-700">{tr("common.subjects")}</label>
-              <div className="mt-1 grid grid-cols-2 gap-2">
-                {SUBJECTS.map((s) => (
-                  <label
-                    key={s.id}
-                    className={
-                      "flex items-center gap-2 px-3 py-2 rounded border cursor-pointer text-sm " +
-                      (subjects.includes(s.id) ? "border-brand bg-brand/5" : "border-stone-300")
-                    }
-                  >
-                    <input
-                      type="checkbox"
-                      checked={subjects.includes(s.id)}
-                      onChange={() => toggleSubject(s.id)}
-                    />
-                    <span>{s.emoji} {s.label[locale]}</span>
-                  </label>
-                ))}
-              </div>
+          <div>
+            <label className="text-sm font-medium text-stone-700">{tr("common.subjects")}</label>
+            <div className="mt-1 grid grid-cols-2 gap-2">
+              {SUBJECTS.map((s) => (
+                <label
+                  key={s.id}
+                  className={
+                    "flex items-center gap-2 px-3 py-2 rounded border cursor-pointer text-sm " +
+                    (subjects.includes(s.id) ? "border-brand bg-brand/5" : "border-stone-300")
+                  }
+                >
+                  <input type="checkbox" checked={subjects.includes(s.id)} onChange={() => toggleSubject(s.id)} />
+                  <span>{s.emoji} {s.label[locale]}</span>
+                </label>
+              ))}
             </div>
-          </>
+          </div>
         )}
 
         <Field label={tr("auth.region")} value={region} onChange={setRegion} />
@@ -116,22 +115,18 @@ export default function SignupPage() {
 
         {under18 && (
           <div className="text-xs text-amber-800 bg-amber-50 border border-amber-200 px-3 py-2 rounded">
-            We collect only your username, language, and learning progress. We never share data with third parties.
-            (Demo notice — a production version would meet Ethiopia's data protection guidelines.)
+            We collect only your email, language, and learning progress. Demo notice — a production version would meet Ethiopia's data protection guidelines.
           </div>
         )}
-
-        <div className="text-xs text-stone-500 bg-stone-50 border border-stone-200 px-3 py-2 rounded">
-          {tr("auth.privacy")}
-        </div>
 
         {error && <div className="text-sm text-red-700">{error}</div>}
 
         <button
           type="submit"
-          className="w-full px-4 py-2.5 bg-brand text-white rounded-md hover:bg-brand-dark font-medium"
+          disabled={busy}
+          className="w-full px-4 py-2.5 bg-brand text-white rounded-md hover:bg-brand-dark disabled:opacity-50 font-medium"
         >
-          {tr("auth.signup.cta")}
+          {busy ? "…" : tr("auth.signup.cta")}
         </button>
 
         <p className="text-sm text-stone-600 text-center">

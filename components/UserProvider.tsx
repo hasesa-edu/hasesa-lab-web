@@ -1,35 +1,35 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
-import { currentUser, type User } from "@/lib/store";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { apiMe, type UserDTO } from "@/lib/api";
 
 type Ctx = {
-  user: User | undefined;
-  refresh: () => void;
+  user: UserDTO | undefined;
+  refresh: () => Promise<void>;
   ready: boolean;
 };
 
-const UserCtx = createContext<Ctx>({ user: undefined, refresh: () => {}, ready: false });
+const UserCtx = createContext<Ctx>({ user: undefined, refresh: async () => {}, ready: false });
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | undefined>(undefined);
+  const [user, setUser] = useState<UserDTO | undefined>(undefined);
   const [ready, setReady] = useState(false);
 
-  function refresh() {
-    setUser(currentUser());
-  }
+  const refresh = useCallback(async () => {
+    try {
+      const u = await apiMe();
+      setUser(u ?? undefined);
+    } catch {
+      setUser(undefined);
+    }
+  }, []);
 
   useEffect(() => {
-    refresh();
-    setReady(true);
-    const handler = () => refresh();
-    window.addEventListener("ai-edu-store-change", handler);
-    window.addEventListener("storage", handler);
-    return () => {
-      window.removeEventListener("ai-edu-store-change", handler);
-      window.removeEventListener("storage", handler);
-    };
-  }, []);
+    (async () => {
+      await refresh();
+      setReady(true);
+    })();
+  }, [refresh]);
 
   return <UserCtx.Provider value={{ user, refresh, ready }}>{children}</UserCtx.Provider>;
 }
