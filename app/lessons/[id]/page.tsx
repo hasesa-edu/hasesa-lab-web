@@ -142,6 +142,30 @@ export default function LessonDetail() {
           </div>
         </div>
 
+        {lesson.atHomeExperiment.video && (
+          <div className="mt-5">
+            <div className="flex items-center justify-between gap-3 mb-2">
+              <p className="text-xs uppercase tracking-[0.16em] font-semibold text-amber-700 dark:text-amber-300">
+                {tr("exp.video")}
+              </p>
+              <p className="text-xs text-ink-subtle">
+                {tr("video.credit")} {lesson.atHomeExperiment.video.credit}
+              </p>
+            </div>
+            <div className="relative overflow-hidden rounded-xl border border-line bg-canvas shadow-card aspect-video">
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${lesson.atHomeExperiment.video.youtubeId}?rel=0&modestbranding=1`}
+                title={lesson.atHomeExperiment.title[locale]}
+                loading="lazy"
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                referrerPolicy="strict-origin-when-cross-origin"
+                className="absolute inset-0 h-full w-full"
+              />
+            </div>
+          </div>
+        )}
+
         <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
             <h4 className="text-xs uppercase tracking-wider font-semibold text-ink-subtle">
