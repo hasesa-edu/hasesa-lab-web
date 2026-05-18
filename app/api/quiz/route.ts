@@ -1,7 +1,9 @@
 import { NextRequest } from "next/server";
 import { getLesson } from "@/lib/lessons";
+import { getSession } from "@/lib/auth/session";
+import { checkAndIncrement } from "@/lib/usage";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 const SCHEMA_HINT = `{
   "questions": [
@@ -30,6 +32,17 @@ export async function POST(req: NextRequest) {
   const lesson = getLesson(body.lessonId);
   if (!lesson) return Response.json({ error: "Lesson not found" }, { status: 404 });
   const count = Math.min(Math.max(body.count ?? 3, 1), 5);
+
+  const session = await getSession();
+  if (session.userId) {
+    const cap = await checkAndIncrement(session.userId, "quizBatches", 1);
+    if (!cap.ok) {
+      return Response.json(
+        { error: `Monthly AI quiz cap reached (${cap.current}/${cap.cap}). Resets next month.` },
+        { status: 429 }
+      );
+    }
+  }
 
   const lessonBody = lesson.sections.map((s) => `## ${s.heading.en}\n${s.body}`).join("\n\n");
 

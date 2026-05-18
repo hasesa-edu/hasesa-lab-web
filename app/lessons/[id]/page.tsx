@@ -6,7 +6,7 @@ import { useState } from "react";
 import { getLesson, SUBJECTS } from "@/lib/lessons";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
-import { bumpMastery } from "@/lib/store";
+import { apiBumpMastery } from "@/lib/api";
 
 type QItem = { q: string; choices: string[]; answerIndex: number; explanation: string };
 
@@ -14,7 +14,7 @@ export default function LessonDetail() {
   const params = useParams<{ id: string }>();
   const lesson = getLesson(params.id);
   const { locale, tr } = useLocale();
-  const { user, refresh } = useUser();
+  const { user } = useUser();
 
   const [aiQuestions, setAiQuestions] = useState<QItem[]>([]);
   const [generating, setGenerating] = useState(false);
@@ -34,8 +34,7 @@ export default function LessonDetail() {
 
   function onAnswer(correct: boolean) {
     if (!user) return;
-    bumpMastery(lesson!.subject, primaryTopic, correct ? 6 : -3);
-    refresh();
+    apiBumpMastery(lesson!.subject, primaryTopic, correct ? 6 : -3).catch(() => {});
   }
 
   async function generateMore() {

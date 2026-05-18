@@ -1,8 +1,12 @@
 import { NextRequest } from "next/server";
 import { getLesson } from "@/lib/lessons";
 import type { Locale } from "@/lib/i18n";
+import { getSession } from "@/lib/auth/session";
+import { db, schema } from "@/lib/db/client";
+import { eq } from "drizzle-orm";
+import { CAPS, checkAndIncrement, getCurrentUsage } from "@/lib/usage";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -11,6 +15,10 @@ const LANG_NAME: Record<Locale, string> = {
   am: "Amharic (አማርኛ)",
   om: "Afaan Oromo (Afaan Oromoo)",
 };
+
+function uid(): string {
+  return Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+}
 
 function buildSystemPrompt(locale: Locale, lessonId?: string): string {
   const langName = LANG_NAME[locale] ?? "English";
@@ -24,43 +32,39 @@ YOUR SCOPE — strictly these four subjects, Grade 11 level:
 - Chemistry
 - Biology
 
-If a question is outside this scope (entertainment, politics, personal life, harmful content, other school subjects), politely decline in one sentence and steer back to studying. Example: "I can only help with Grade 11 Math, Physics, Chemistry, or Biology — want me to suggest a topic to review?"
+If a question is outside this scope (entertainment, politics, personal life, harmful content, other school subjects), politely decline in one sentence and steer back to studying.
 
 TEACHING STYLE:
-- Be encouraging, clear, and concise. Aim for short paragraphs.
-- For Math and Physics problems, walk through reasoning step by step before giving the final answer. Don't just dump the answer.
-- Use simple language. Define jargon the first time you use it.
-- Where helpful, give a small worked example.
-- Use plain text math (e.g. "v = u + at", "F = m·a"). Avoid LaTeX — many students view on low-end Android.
+- Be encouraging, clear, and concise. Short paragraphs.
+- For Math/Physics problems, walk through reasoning step-by-step before the final answer.
+- Use simple language; define jargon the first time.
+- Use plain-text math (e.g. "v = u + at"). Avoid LaTeX — many students view on low-end Android.
 
-LANGUAGE: Respond in ${langName}. The student's UI is set to this language. Do not switch languages unless they ask you to.
+LANGUAGE: Respond in ${langName}. Do not switch unless the student asks.
 
-SAFETY: Never produce harmful, age-inappropriate, or politically charged content. Refuse and redirect.
+SAFETY: Never produce harmful, age-inappropriate, or politically charged content.
 
-You are a demo build — if asked who made you, say you are the AI-Edu Ethiopia demo tutor.`;
+You are the AI-Edu Ethiopia demo tutor.`;
 
   if (!lesson) return base;
 
-  const lessonBody = lesson.sections
-    .map((s) => `## ${s.heading.en}\n${s.body}`)
-    .join("\n\n");
-
+  const lessonBody = lesson.sections.map((s) => `## ${s.heading.en}\n${s.body}`).join("\n\n");
   return (
     base +
-    `\n\n---\nGROUNDING CONTEXT — the student is currently viewing this lesson. Prefer to ground your answer in this content, and cite it at the end as "(Source: ${lesson.title.en}, ${lesson.moeCode})" when you do.\n\n# ${lesson.title.en}\n${lesson.summary.en}\n\n${lessonBody}\n\n### Worked example in lesson\nProblem: ${lesson.workedExample.problem}\nSolution: ${lesson.workedExample.solution}`
+    `\n\n---\nGROUNDING CONTEXT — the student is currently viewing this lesson. Ground your answer in this content and cite it at the end as "(Source: ${lesson.title.en}, ${lesson.moeCode})".\n\n# ${lesson.title.en}\n${lesson.summary.en}\n\n${lessonBody}\n\n### Worked example\nProblem: ${lesson.workedExample.problem}\nSolution: ${lesson.workedExample.solution}`
   );
 }
 
 export async function POST(req: NextRequest) {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
-    return new Response(
-      JSON.stringify({ error: "GROQ_API_KEY not configured on server." }),
-      { status: 500, headers: { "content-type": "application/json" } }
-    );
+    return new Response(JSON.stringify({ error: "GROQ_API_KEY not configured" }), {
+      status: 500,
+      headers: { "content-type": "application/json" },
+    });
   }
 
-  let body: { messages: Msg[]; locale?: Locale; lessonId?: string };
+  let body: { messages: Msg[]; locale?: Locale; lessonId?: string; conversationId?: string };
   try {
     body = await req.json();
   } catch {
@@ -68,8 +72,46 @@ export async function POST(req: NextRequest) {
   }
 
   const { messages, locale = "en", lessonId } = body;
+  let conversationId = body.conversationId;
   if (!Array.isArray(messages) || messages.length === 0) {
     return new Response(JSON.stringify({ error: "messages required" }), { status: 400 });
+  }
+
+  // Auth: if signed in, persist + enforce caps. Anonymous: just stream, no persistence.
+  const session = await getSession();
+  const userId = session.userId;
+
+  if (userId) {
+    const cap = await checkAndIncrement(userId, "chatTurns", 1);
+    if (!cap.ok) {
+      return new Response(
+        JSON.stringify({
+          error: `Monthly chat turn cap reached (${cap.current}/${cap.cap}). Resets next month.`,
+        }),
+        { status: 429, headers: { "content-type": "application/json" } }
+      );
+    }
+
+    // Ensure conversation exists
+    if (!conversationId) {
+      conversationId = uid();
+      await db.insert(schema.conversations).values({ id: conversationId, userId, lessonId: lessonId ?? null });
+    } else {
+      await db
+        .update(schema.conversations)
+        .set({ updatedAt: new Date() })
+        .where(eq(schema.conversations.id, conversationId));
+    }
+    // Persist user's last message
+    const lastUser = [...messages].reverse().find((m) => m.role === "user");
+    if (lastUser) {
+      await db.insert(schema.messages).values({
+        id: uid(),
+        conversationId,
+        role: "user",
+        content: lastUser.content,
+      });
+    }
   }
 
   const systemPrompt = buildSystemPrompt(locale as Locale, lessonId);
@@ -77,10 +119,7 @@ export async function POST(req: NextRequest) {
 
   const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
-    headers: {
-      "content-type": "application/json",
-      authorization: `Bearer ${apiKey}`,
-    },
+    headers: { "content-type": "application/json", authorization: `Bearer ${apiKey}` },
     body: JSON.stringify({
       model,
       stream: true,
@@ -98,6 +137,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  let acc = "";
   const stream = new ReadableStream({
     async start(controller) {
       const reader = groqRes.body!.getReader();
@@ -116,17 +156,32 @@ export async function POST(req: NextRequest) {
             if (!trimmed.startsWith("data:")) continue;
             const data = trimmed.slice(5).trim();
             if (data === "[DONE]") {
+              if (userId && conversationId && acc) {
+                await db
+                  .insert(schema.messages)
+                  .values({ id: uid(), conversationId, role: "assistant", content: acc })
+                  .catch(() => {});
+              }
               controller.close();
               return;
             }
             try {
               const json = JSON.parse(data);
               const delta = json?.choices?.[0]?.delta?.content;
-              if (delta) controller.enqueue(encoder.encode(delta));
+              if (delta) {
+                acc += delta;
+                controller.enqueue(encoder.encode(delta));
+              }
             } catch {
               // ignore parse errors on partial chunks
             }
           }
+        }
+        if (userId && conversationId && acc) {
+          await db
+            .insert(schema.messages)
+            .values({ id: uid(), conversationId, role: "assistant", content: acc })
+            .catch(() => {});
         }
         controller.close();
       } catch (err) {
@@ -135,10 +190,10 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  return new Response(stream, {
-    headers: {
-      "content-type": "text/plain; charset=utf-8",
-      "cache-control": "no-cache",
-    },
-  });
+  const headers: Record<string, string> = {
+    "content-type": "text/plain; charset=utf-8",
+    "cache-control": "no-cache",
+  };
+  if (conversationId) headers["x-conversation-id"] = conversationId;
+  return new Response(stream, { headers });
 }
