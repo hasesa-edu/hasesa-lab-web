@@ -120,6 +120,34 @@ export const t: Dict = {
     om: "Akka aappiitti caqasama; barnoonni qayyabannaa offline-tiif kuufamu.",
   },
 
+  // Landing — inline chat preview
+  "preview.user": {
+    en: "Explain Newton's second law with a simple example.",
+    am: "የኒውተንን ሁለተኛ ህግ በቀላል ምሳሌ ያስረዱኝ።",
+    om: "Seera lammaffaa Niwutan fakkeenya salphaadhaan ibsi.",
+  },
+  "preview.intro.before": {
+    en: "Newton's second law says",
+    am: "የኒውተን ሁለተኛ ህግ እንዲህ ይላል:",
+    om: "Seerri lammaffaa Niwutan akkana jedha:",
+  },
+  "preview.intro.after": {
+    en: "— the force on an object equals its mass times its acceleration.",
+    am: "— በአንድ ነገር ላይ የሚደረግ ኃይል ከብዛቱና ከማፋጠኑ ብዜት ጋር እኩል ነው።",
+    om: "— humni wanta tokko irra jiru ulfaatina isaa fi dabalata saffisaa isaa walbaayisuu wajjin walqixa.",
+  },
+  "preview.example.label": { en: "Example.", am: "ምሳሌ።", om: "Fakkeenya." },
+  "preview.example.before": {
+    en: "A 2 kg ball pushed with a force of 10 N accelerates at",
+    am: "በ10 N ኃይል የተገፋ 2 kg ኳስ በ",
+    om: "Kubbaan 2 kg humna 10 N tiin dhiibame",
+  },
+  "preview.source": {
+    en: "From: Physics · Newton's laws of motion",
+    am: "ምንጭ: ፊዚክስ · የኒውተን የእንቅስቃሴ ሕጎች",
+    om: "Madda: Fiiziksii · Seerota sochii Niwutan",
+  },
+
   // Learn by doing
   "lbd.eyebrow": { en: "Learn by doing", am: "በመስራት ይማሩ", om: "Hojiidhaan baradhu" },
   "lbd.title": {
@@ -178,21 +206,12 @@ export const t: Dict = {
     om: "Daqiiqaa tokko keessatti akaawuntii yaalii bilisaa uumi. SMS hin barbaachisu.",
   },
 
-  "feature.aligned.title": { en: "MoE & EUEE aligned", am: "ከMoE እና EUEE ጋር የተጣጣመ", om: "MoE fi EUEE waliin walsimataa" },
-  "feature.aligned.body": { en: "Every lesson tagged to a syllabus code and exam-blueprint topic.", am: "እያንዳንዱ ትምህርት ከሥርዓተ ትምህርት ኮድ ጋር የተሰየመ።", om: "Barnoonni hundi koodii sirna barnootaatti hidhameera." },
-  "feature.lang.title": { en: "Three languages", am: "ሦስት ቋንቋዎች", om: "Afaan sadii" },
-  "feature.lang.body": { en: "English, Amharic, Afaan Oromo — switch any time.", am: "እንግሊዝኛ፣ አማርኛ፣ ኦሮምኛ።", om: "Ingiliffa, Amaariffaa, Afaan Oromoo." },
-  "feature.offline.title": { en: "Works on slow networks", am: "በዝግታ ኢንተርኔት ይሰራል", om: "Interneetii suuta deemu irratti hojjeta" },
-  "feature.offline.body": { en: "Installable as a PWA, with offline-capable lesson cache.", am: "እንደ PWA መጫን ይቻላል።", om: "Akka PWA ti hojjeta." },
-  "feature.ai.title": { en: "Grounded AI tutor", am: "በትምህርቶች ላይ የተመሰረተ AI", om: "Barsiisaa AI barnoota irratti hundaa'e" },
-  "feature.ai.body": { en: "Answers cite the lesson they come from, not random web content.", am: "መልሶች ከትምህርቱ ምንጭ ይጠቅሳሉ።", om: "Deebii barnoota irraa dhufan eeru." },
-
   // Lessons
-  "lessons.title": { en: "Grade 11 lessons", am: "የ11ኛ ክፍል ትምህርቶች", om: "Barnoota Kutaa 11" },
+  "lessons.title": { en: "Lessons", am: "ትምህርቶች", om: "Barnoota" },
   "lessons.subtitle": {
-    en: "Sample lessons across Math, Physics, Chemistry, and Biology. Filter by subject below.",
-    am: "በሒሳብ፣ በፊዚክስ፣ በኬሚስትሪና በባዮሎጂ የናሙና ትምህርቶች።",
-    om: "Barnoota fakkeenyaa Heerregaa, Fiiziksii, Keemistirii fi Baayooloojii.",
+    en: "Grade 11 Math, Physics, Chemistry, and Biology — our demo content. Each lesson includes a video, worked example, an at-home experiment, and a quick quiz.",
+    am: "የ11ኛ ክፍል ሒሳብ፣ ፊዚክስ፣ ኬሚስትሪና ባዮሎጂ — የማሳያ ይዘታችን። እያንዳንዱ ትምህርት ቪዲዮ፣ የተሰራ ምሳሌ፣ በቤት የሚሰራ ሙከራና ፈጣን ፈተና ይዟል።",
+    om: "Heerregaa, Fiiziksii, Keemistirii fi Baayooloojii Kutaa 11 — qabiyyee agarsiisaa keenya. Barnoonni hundi vidiyoo, fakkeenya hojjetame, shaakala mana keessatti, fi qormaata gabaabaa qaba.",
   },
   "lessons.all": { en: "All subjects", am: "ሁሉም ትምህርቶች", om: "Kutaalee hunda" },
   "lessons.estimate": { en: "min", am: "ደቂቃ", om: "daq." },
@@ -260,26 +279,34 @@ export const t: Dict = {
   "dash.title": { en: "My progress", am: "የእኔ ሂደት", om: "Adeemsa koo" },
   "dash.greeting": { en: "Hello", am: "ሰላም", om: "Akkam jirta" },
   "dash.recommended": { en: "Recommended for you", am: "ለእርስዎ የተመከሩ", om: "Sidhif yaadaman" },
-  "dash.recommendedWhy": { en: "Based on your weakest topics and EUEE weight.", am: "በደካማ ርዕሶችዎና በEUEE ክብደት መሰረት።", om: "Mata-duree dadhabaa fi ulfaatina EUEE irratti hundaa'e." },
+  "dash.recommendedWhy": { en: "Picked from the topics you've struggled with most.", am: "በጣም ካልተሳካላቸው ርዕሶችዎ የተመረጠ።", om: "Mata-duree baayyee si rakkisan keessaa kan filatame." },
   "dash.mastery": { en: "Mastery by topic", am: "በርዕስ የተካኑ", om: "Ogummaa mata-dureen" },
   "dash.weak": { en: "Weakest topics", am: "ደካማ ርዕሶች", om: "Mata-duree dadhabaa" },
-  "dash.takeMock": { en: "Take a weekly mock test", am: "ሳምንታዊ ሞክ ፈተና ይውሰዱ", om: "Qormaata torban moocii fudhadhu" },
+  "dash.takeMock": { en: "Take a practice exam", am: "የልምምድ ፈተና ይውሰዱ", om: "Qormaata shaakalaa fudhadhu" },
   "dash.noActivity": { en: "No activity yet. Start a lesson!", am: "እስካሁን ምንም እንቅስቃሴ የለም።", om: "Hojiin hin jiru." },
 
   // Mock test
-  "mock.title": { en: "EUEE mock test", am: "EUEE ሞክ ፈተና", om: "Qormaata moocii EUEE" },
-  "mock.intro": { en: "10 mixed-topic questions from this subject. No time limit on the demo.", am: "10 የተደባለቁ ጥያቄዎች።", om: "Gaaffii walmakaa 10." },
-  "mock.start": { en: "Start mock", am: "ሞክ ጀምር", om: "Moocii eegali" },
+  "mock.title": { en: "Practice exam", am: "የልምምድ ፈተና", om: "Qormaata shaakalaa" },
+  "mock.intro": { en: "10 mixed-topic questions from this subject — EUEE-style, but tuned for learning. No time limit on the demo.", am: "ከዚህ ትምህርት 10 የተደባለቁ ጥያቄዎች — የEUEE ዓይነት፣ ለመማር የተዘጋጁ።", om: "Kutaa kana irraa gaaffii walmakaa 10 — bifa EUEE'tiin, garuu barachuuf qophaa'e." },
+  "mock.start": { en: "Start practice", am: "ልምምድ ጀምር", om: "Shaakala eegali" },
   "mock.question": { en: "Question", am: "ጥያቄ", om: "Gaaffii" },
   "mock.of": { en: "of", am: "ከ", om: "kan" },
   "mock.submit": { en: "Submit", am: "አስገባ", om: "Galchi" },
   "mock.score": { en: "Your score", am: "ውጤትዎ", om: "Qabxiin kee" },
-  "mock.again": { en: "Try another mock", am: "ሌላ ሞክ ይሞክሩ", om: "Moocii biraa yaali" },
+  "mock.again": { en: "Try another", am: "ሌላ ይሞክሩ", om: "Kan biraa yaali" },
   "mock.review": { en: "Review answers", am: "መልሶችን ይከልሱ", om: "Deebii ilaali" },
 
   // Lesson video
   "video.label": { en: "Watch the lesson", am: "ትምህርቱን ይመልከቱ", om: "Barnoota daawwadhu" },
   "video.credit": { en: "Video by", am: "ቪዲዮ በ", om: "Vidiyoo kan" },
+
+  // Lesson detail TOC
+  "toc.video": { en: "Video", am: "ቪዲዮ", om: "Vidiyoo" },
+  "toc.lesson": { en: "Lesson", am: "ትምህርት", om: "Barnoota" },
+  "toc.worked": { en: "Example", am: "ምሳሌ", om: "Fakkeenya" },
+  "toc.experiment": { en: "Experiment", am: "ሙከራ", om: "Shaakala" },
+  "toc.quiz": { en: "Quiz", am: "ፈተና", om: "Qormaata" },
+  "toc.ask": { en: "Ask AI", am: "AIን ይጠይቁ", om: "AI gaafadhu" },
 
   // At-home experiment
   "exp.label": { en: "At-home experiment", am: "በቤት የሚሰራ ሙከራ", om: "Shaakala mana keessatti" },
@@ -324,9 +351,9 @@ export const t: Dict = {
   "common.signinCTA": { en: "Sign in", am: "ግባ", om: "Seeni" },
 
   "footer.demo": {
-    en: "Demo · not the production product",
-    am: "ማሳያ · የምርት እትም አይደለም",
-    om: "Agarsiisa · oomisha dhugaa miti",
+    en: "Free during pilot · feedback welcome",
+    am: "በሙከራ ወቅት ነጻ · አስተያየት እንቀበላለን",
+    om: "Yeroo yaaliitti bilisaa · yaada simatama",
   },
 };
 

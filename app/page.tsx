@@ -316,17 +316,14 @@ function ChatPreview({ tr }: { tr: (k: Key) => string }) {
         <span className="ml-3 text-xs text-ink-subtle font-medium">{tr("chat.title")}</span>
       </div>
       <div className="p-5 sm:p-6 space-y-3">
-        <ChatBubble role="user">
-          Explain Newton&apos;s second law with a simple example.
-        </ChatBubble>
+        <ChatBubble role="user">{tr("preview.user")}</ChatBubble>
         <ChatBubble role="assistant">
           <p className="text-sm">
-            Newton&apos;s second law says <strong>F = m·a</strong> — the force on an object equals
-            its mass times its acceleration.
+            {tr("preview.intro.before")} <strong>F = m·a</strong> {tr("preview.intro.after")}
           </p>
           <p className="text-sm mt-2">
-            <span className="font-medium">Example.</span> A 2&nbsp;kg ball pushed with a force of
-            10&nbsp;N accelerates at{" "}
+            <span className="font-medium">{tr("preview.example.label")}</span>{" "}
+            {tr("preview.example.before")}{" "}
             <code className="bg-brand-soft/60 text-brand-hover dark:text-brand px-1.5 py-0.5 rounded">
               a = F/m = 5 m/s²
             </code>
@@ -334,7 +331,7 @@ function ChatPreview({ tr }: { tr: (k: Key) => string }) {
           </p>
           <div className="mt-3 inline-flex items-center gap-1.5 text-[11px] text-ink-subtle">
             <span>📖</span>
-            <span>From: Physics · Newton&apos;s laws of motion</span>
+            <span>{tr("preview.source")}</span>
           </div>
         </ChatBubble>
       </div>
