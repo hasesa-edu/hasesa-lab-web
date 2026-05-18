@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import "katex/dist/katex.min.css";
 import { LocaleProvider } from "@/components/LocaleProvider";
 import { UserProvider } from "@/components/UserProvider";
 import { Nav } from "@/components/Nav";

@@ -37,8 +37,9 @@ export default function MockTestPage() {
   const [phase, setPhase] = useState<"intro" | "running" | "done">("intro");
   const [cur, setCur] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
+  const [selected, setSelected] = useState<number | null>(null);
 
-  if (!subjectMeta) return <div className="max-w-2xl mx-auto px-4 py-10 text-ink-muted">Subject not found.</div>;
+  if (!subjectMeta) return <div className="max-w-2xl mx-auto px-4 py-10 text-ink-muted">{tr("mock.subjectNotFound")}</div>;
   if (!ready || !user) return <div className="max-w-2xl mx-auto px-4 py-10 text-ink-subtle">{tr("common.loading")}</div>;
 
   if (phase === "intro") {
@@ -48,7 +49,7 @@ export default function MockTestPage() {
           {tr("mock.title")} · {subjectMeta.emoji} {subjectMeta.label[locale]}
         </h1>
         <p className="mt-2 text-ink-muted">{tr("mock.intro")}</p>
-        <p className="mt-1 text-sm text-ink-subtle">{questions.length} questions</p>
+        <p className="mt-1 text-sm text-ink-subtle">{questions.length} {tr("mock.questions")}</p>
         <button
           onClick={() => setPhase("running")}
           className="mt-6 px-5 py-2.5 bg-brand text-brand-on rounded-lg hover:bg-brand-hover font-medium shadow-soft transition"
@@ -61,14 +62,17 @@ export default function MockTestPage() {
 
   if (phase === "running") {
     const q = questions[cur];
-    async function submit(i: number) {
-      const newAnswers = [...answers, i];
+    const isLast = cur + 1 >= questions.length;
+    function commit() {
+      if (selected === null) return;
+      const newAnswers = [...answers, selected];
       setAnswers(newAnswers);
-      apiBumpMastery(subject, q.topic, i === q.answerIndex ? 6 : -3).catch(() => {});
-      if (cur + 1 < questions.length) {
-        setCur(cur + 1);
-      } else {
+      apiBumpMastery(subject, q.topic, selected === q.answerIndex ? 6 : -3).catch(() => {});
+      setSelected(null);
+      if (isLast) {
         setPhase("done");
+      } else {
+        setCur(cur + 1);
       }
     }
     return (
@@ -84,15 +88,34 @@ export default function MockTestPage() {
           <p className="text-xs text-brand font-semibold uppercase tracking-wide">{q.topic}</p>
           <p className="mt-2 font-medium text-ink">{q.q}</p>
           <div className="mt-4 grid gap-2">
-            {q.choices.map((c, i) => (
-              <button
-                key={i}
-                onClick={() => submit(i)}
-                className="text-left text-sm px-3.5 py-2.5 rounded-lg border border-line bg-surface text-ink hover:border-brand/60 hover:bg-brand-soft/30 transition"
-              >
-                {c}
-              </button>
-            ))}
+            {q.choices.map((c, i) => {
+              const isSelected = selected === i;
+              return (
+                <button
+                  key={i}
+                  onClick={() => setSelected(i)}
+                  aria-pressed={isSelected}
+                  className={
+                    "text-left text-sm px-3.5 py-2.5 rounded-lg border transition " +
+                    (isSelected
+                      ? "border-brand bg-brand-soft/50 text-ink"
+                      : "border-line bg-surface text-ink hover:border-brand/60 hover:bg-brand-soft/30")
+                  }
+                >
+                  {c}
+                </button>
+              );
+            })}
+          </div>
+          <div className="mt-5 flex justify-end">
+            <button
+              type="button"
+              onClick={commit}
+              disabled={selected === null}
+              className="px-5 py-2 bg-brand text-brand-on rounded-lg hover:bg-brand-hover disabled:opacity-40 disabled:cursor-not-allowed text-sm font-medium shadow-soft transition"
+            >
+              {isLast ? tr("mock.submit") : tr("mock.next") + " →"}
+            </button>
           </div>
         </div>
       </div>
@@ -117,7 +140,7 @@ export default function MockTestPage() {
         <div className="h-full bg-emerald-500 rounded" style={{ width: `${(correct / questions.length) * 100}%` }} />
       </div>
 
-      <h2 className="mt-10 font-semibold text-ink text-lg tracking-tight">By topic</h2>
+      <h2 className="mt-10 font-semibold text-ink text-lg tracking-tight">{tr("mock.byTopic")}</h2>
       <ul className="mt-3 space-y-2">
         {Array.from(byTopic.entries()).map(([topic, stat]) => (
           <li key={topic} className="flex justify-between text-sm">
@@ -135,13 +158,13 @@ export default function MockTestPage() {
             <li key={i} className="rounded-xl border border-line bg-surface p-4 text-sm shadow-soft">
               <p className="font-medium text-ink">{i + 1}. {q.q}</p>
               <p className="mt-1 text-ink-muted">
-                Your answer:{" "}
+                {tr("mock.yourAnswer")}:{" "}
                 <span className={wasRight ? "text-emerald-700 dark:text-emerald-400 font-medium" : "text-red-700 dark:text-red-400 font-medium"}>
                   {q.choices[answers[i]]}
                 </span>
                 {!wasRight && (
                   <>
-                    {" · Correct: "}
+                    {" · " + tr("mock.correctAnswer") + ": "}
                     <span className="text-emerald-700 dark:text-emerald-400 font-medium">{q.choices[q.answerIndex]}</span>
                   </>
                 )}
@@ -154,7 +177,7 @@ export default function MockTestPage() {
 
       <div className="mt-10 flex gap-3">
         <button
-          onClick={() => { setPhase("intro"); setCur(0); setAnswers([]); }}
+          onClick={() => { setPhase("intro"); setCur(0); setAnswers([]); setSelected(null); }}
           className="px-4 py-2 bg-brand text-brand-on rounded-lg hover:bg-brand-hover text-sm font-medium shadow-soft transition"
         >
           {tr("mock.again")}

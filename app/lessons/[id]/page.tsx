@@ -23,7 +23,7 @@ export default function LessonDetail() {
   if (!lesson) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-10">
-        <p className="text-ink-muted">Lesson not found.</p>
+        <p className="text-ink-muted">{tr("lessons.notFound")}</p>
         <Link href="/lessons" className="text-brand mt-3 inline-block">{tr("lessons.back")}</Link>
       </div>
     );
@@ -48,11 +48,12 @@ export default function LessonDetail() {
       });
       const data = await res.json();
       if (!res.ok || !data.questions?.length) {
-        throw new Error(data.error || "no questions");
+        throw new Error("gen-failed");
       }
       setAiQuestions((cur) => [...cur, ...data.questions]);
     } catch (e: any) {
-      setAiError(e?.message || "Could not generate questions");
+      console.error("quiz generation failed:", e);
+      setAiError(tr("quiz.genError"));
     } finally {
       setGenerating(false);
     }
@@ -82,7 +83,26 @@ export default function LessonDetail() {
         </div>
       </header>
 
-      <LessonTOC hasVideo={Boolean(lesson.video)} tr={tr} />
+      <LessonTOC hasVideo={Boolean(lesson.video)} hasWhy={Boolean(lesson.whyItMatters)} tr={tr} />
+
+      {lesson.whyItMatters && (
+        <section id="why" className="mt-8 rounded-2xl border border-brand/25 bg-brand-soft/30 p-5 sm:p-6 scroll-mt-32">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-brand-soft text-brand-hover dark:text-brand text-lg">
+              🌍
+            </span>
+            <p className="text-xs uppercase tracking-[0.16em] font-semibold text-brand-hover dark:text-brand">
+              {tr("why.label")}
+            </p>
+          </div>
+          <p className="mt-3 text-ink leading-relaxed">
+            {lesson.whyItMatters[locale] || lesson.whyItMatters.en}
+          </p>
+          {locale !== "en" && !lesson.whyItMatters[locale] && tr("why.untranslated") && (
+            <p className="mt-2 text-xs text-ink-subtle italic">{tr("why.untranslated")}</p>
+          )}
+        </section>
+      )}
 
       {lesson.video && (
         <section id="video" className="mt-8 scroll-mt-32">
@@ -234,7 +254,7 @@ export default function LessonDetail() {
           ))}
         </ul>
         {aiQuestions.length === 0 && !generating && (
-          <p className="mt-3 text-sm text-ink-subtle">No AI-generated questions yet. Click the button above to make some.</p>
+          <p className="mt-3 text-sm text-ink-subtle">{tr("quiz.noneYet")}</p>
         )}
       </section>
 
@@ -300,25 +320,35 @@ function QuizItem({
         })}
       </div>
       {picked !== null && (
-        <p className="mt-3 text-sm text-ink-muted">
-          <span
-            className={
-              picked === question.answerIndex
-                ? "text-emerald-700 dark:text-emerald-400 font-medium"
-                : "text-red-700 dark:text-red-400 font-medium"
-            }
+        <div className="mt-3 flex items-start justify-between gap-3">
+          <p className="text-sm text-ink-muted flex-1">
+            <span
+              className={
+                picked === question.answerIndex
+                  ? "text-emerald-700 dark:text-emerald-400 font-medium"
+                  : "text-red-700 dark:text-red-400 font-medium"
+              }
+            >
+              {picked === question.answerIndex ? tr("quiz.correct") : tr("quiz.incorrect")}
+            </span>{" "}
+            {question.explanation}
+          </p>
+          <button
+            type="button"
+            onClick={() => setPicked(null)}
+            className="shrink-0 text-xs px-2.5 py-1 rounded-md border border-line bg-surface text-ink-muted hover:text-brand hover:border-brand/60 transition"
           >
-            {picked === question.answerIndex ? tr("quiz.correct") : tr("quiz.incorrect")}
-          </span>{" "}
-          {question.explanation}
-        </p>
+            {tr("quiz.tryAgain")}
+          </button>
+        </div>
       )}
     </li>
   );
 }
 
-function LessonTOC({ hasVideo, tr }: { hasVideo: boolean; tr: (k: any) => string }) {
+function LessonTOC({ hasVideo, hasWhy, tr }: { hasVideo: boolean; hasWhy: boolean; tr: (k: any) => string }) {
   const items: { href: string; icon: string; label: string }[] = [];
+  if (hasWhy) items.push({ href: "#why", icon: "🌍", label: tr("toc.why") });
   if (hasVideo) items.push({ href: "#video", icon: "🎥", label: tr("toc.video") });
   items.push(
     { href: "#lesson", icon: "📖", label: tr("toc.lesson") },
