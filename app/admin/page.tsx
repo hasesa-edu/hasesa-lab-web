@@ -6,7 +6,6 @@ import { AdminSignOutButton } from "./signout-button";
 
 export const dynamic = "force-dynamic";
 
-type CountRow = { count: number };
 type LabelCountRow = { label: string | null; count: number };
 type RecentViewRow = {
   path: string;
@@ -15,45 +14,39 @@ type RecentViewRow = {
   referrer: string | null;
   createdAt: Date;
 };
+type UserStatsRow = { total: number; students: number; teachers: number; d1: number; d7: number; d30: number };
+type ViewStatsRow = { total: number; d1: number; d7: number; d30: number; unique7d: number };
+type EngagementRow = { convos: number; messages: number };
+
+function rows<T>(r: any): T[] {
+  return Array.isArray(r) ? r : r?.rows ?? [];
+}
 
 async function loadStats() {
-  const now = new Date();
-  const d1 = new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000);
-  const d7 = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-  const d30 = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+  const d1 = new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString();
+  const d7 = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const d30 = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
 
-  const [
-    usersTotal,
-    usersStudents,
-    usersTeachers,
-    users1d,
-    users7d,
-    users30d,
-    pvTotal,
-    pv1d,
-    pv7d,
-    pv30d,
-    uniqueVisitors7d,
-    topPaths,
-    topCountries,
-    topReferrers,
-    recentViews,
-    convosTotal,
-    messagesTotal,
-  ] = await Promise.all([
-    db.execute<CountRow>(sql`select count(*)::int as count from users`),
-    db.execute<CountRow>(sql`select count(*)::int as count from users where role = 'student'`),
-    db.execute<CountRow>(sql`select count(*)::int as count from users where role = 'teacher'`),
-    db.execute<CountRow>(sql`select count(*)::int as count from users where created_at >= ${d1.toISOString()}`),
-    db.execute<CountRow>(sql`select count(*)::int as count from users where created_at >= ${d7.toISOString()}`),
-    db.execute<CountRow>(sql`select count(*)::int as count from users where created_at >= ${d30.toISOString()}`),
-    db.execute<CountRow>(sql`select count(*)::int as count from page_views`),
-    db.execute<CountRow>(sql`select count(*)::int as count from page_views where created_at >= ${d1.toISOString()}`),
-    db.execute<CountRow>(sql`select count(*)::int as count from page_views where created_at >= ${d7.toISOString()}`),
-    db.execute<CountRow>(sql`select count(*)::int as count from page_views where created_at >= ${d30.toISOString()}`),
-    db.execute<CountRow>(
-      sql`select count(distinct coalesce(user_id, user_agent))::int as count from page_views where created_at >= ${d7.toISOString()}`
-    ),
+  const [userStats, viewStats, topPaths, topCountries, topReferrers, recentViews, engagement] = await Promise.all([
+    db.execute<UserStatsRow>(sql`
+      select
+        count(*)::int as total,
+        count(*) filter (where role = 'student')::int as students,
+        count(*) filter (where role = 'teacher')::int as teachers,
+        count(*) filter (where created_at >= ${d1})::int as d1,
+        count(*) filter (where created_at >= ${d7})::int as d7,
+        count(*) filter (where created_at >= ${d30})::int as d30
+      from users
+    `),
+    db.execute<ViewStatsRow>(sql`
+      select
+        count(*)::int as total,
+        count(*) filter (where created_at >= ${d1})::int as d1,
+        count(*) filter (where created_at >= ${d7})::int as d7,
+        count(*) filter (where created_at >= ${d30})::int as d30,
+        count(distinct coalesce(user_id, user_agent)) filter (where created_at >= ${d7})::int as unique7d
+      from page_views
+    `),
     db.execute<LabelCountRow>(sql`
       select path as label, count(*)::int as count
       from page_views
@@ -81,31 +74,35 @@ async function loadStats() {
       order by created_at desc
       limit 25
     `),
-    db.execute<CountRow>(sql`select count(*)::int as count from conversations`),
-    db.execute<CountRow>(sql`select count(*)::int as count from messages`),
+    db.execute<EngagementRow>(sql`
+      select
+        (select count(*)::int from conversations) as convos,
+        (select count(*)::int from messages) as messages
+    `),
   ]);
 
-  const rows = <T,>(r: any): T[] => (Array.isArray(r) ? r : r?.rows ?? []);
-  const num = (r: any) => rows<CountRow>(r)[0]?.count ?? 0;
+  const u = rows<UserStatsRow>(userStats)[0] ?? { total: 0, students: 0, teachers: 0, d1: 0, d7: 0, d30: 0 };
+  const v = rows<ViewStatsRow>(viewStats)[0] ?? { total: 0, d1: 0, d7: 0, d30: 0, unique7d: 0 };
+  const e = rows<EngagementRow>(engagement)[0] ?? { convos: 0, messages: 0 };
 
   return {
-    usersTotal: num(usersTotal),
-    usersStudents: num(usersStudents),
-    usersTeachers: num(usersTeachers),
-    users1d: num(users1d),
-    users7d: num(users7d),
-    users30d: num(users30d),
-    pvTotal: num(pvTotal),
-    pv1d: num(pv1d),
-    pv7d: num(pv7d),
-    pv30d: num(pv30d),
-    uniqueVisitors7d: num(uniqueVisitors7d),
+    usersTotal: u.total,
+    usersStudents: u.students,
+    usersTeachers: u.teachers,
+    users1d: u.d1,
+    users7d: u.d7,
+    users30d: u.d30,
+    pvTotal: v.total,
+    pv1d: v.d1,
+    pv7d: v.d7,
+    pv30d: v.d30,
+    uniqueVisitors7d: v.unique7d,
     topPaths: rows<LabelCountRow>(topPaths),
     topCountries: rows<LabelCountRow>(topCountries),
     topReferrers: rows<LabelCountRow>(topReferrers),
     recentViews: rows<RecentViewRow>(recentViews),
-    convosTotal: num(convosTotal),
-    messagesTotal: num(messagesTotal),
+    convosTotal: e.convos,
+    messagesTotal: e.messages,
   };
 }
 
