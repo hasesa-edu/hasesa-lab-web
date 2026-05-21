@@ -3,6 +3,7 @@ import { getIronSession, type SessionOptions } from "iron-session";
 
 export type SessionData = {
   userId?: string;
+  isAdmin?: boolean;
 };
 
 function getPassword(): string {
