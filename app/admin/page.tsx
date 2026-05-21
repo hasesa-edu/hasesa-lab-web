@@ -17,9 +17,30 @@ type RecentViewRow = {
 type UserStatsRow = { total: number; students: number; teachers: number; d1: number; d7: number; d30: number };
 type ViewStatsRow = { total: number; d1: number; d7: number; d30: number; unique7d: number };
 type EngagementRow = { convos: number; messages: number };
+type UserRow = {
+  id: string;
+  email: string;
+  displayName: string;
+  role: "student" | "teacher";
+  language: string;
+  region: string | null;
+  school: string | null;
+  subjects: string[] | null;
+  createdAt: Date;
+};
 
 function rows<T>(r: any): T[] {
   return Array.isArray(r) ? r : r?.rows ?? [];
+}
+
+// The Neon HTTP driver occasionally cold-fails with "fetch failed" — one
+// retry on a fresh connection clears it without affecting the happy path.
+async function withRetry<T>(fn: () => Promise<T>): Promise<T> {
+  try {
+    return await fn();
+  } catch (err) {
+    return await fn();
+  }
 }
 
 async function loadStats() {
@@ -27,7 +48,9 @@ async function loadStats() {
   const d7 = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
   const d30 = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
 
-  const [userStats, viewStats, topPaths, topCountries, topReferrers, recentViews, engagement] = await Promise.all([
+  // Run in two sequential waves so we never have more than ~4 concurrent
+  // HTTP fetches to Neon — bigger fan-outs occasionally fail cold-start.
+  const [userStats, viewStats, engagement, usersList] = await withRetry(() => Promise.all([
     db.execute<UserStatsRow>(sql`
       select
         count(*)::int as total,
@@ -47,6 +70,21 @@ async function loadStats() {
         count(distinct coalesce(user_id, user_agent)) filter (where created_at >= ${d7})::int as unique7d
       from page_views
     `),
+    db.execute<EngagementRow>(sql`
+      select
+        (select count(*)::int from conversations) as convos,
+        (select count(*)::int from messages) as messages
+    `),
+    db.execute<UserRow>(sql`
+      select id, email, display_name as "displayName", role, language,
+             region, school, subjects, created_at as "createdAt"
+      from users
+      order by created_at desc
+      limit 200
+    `),
+  ]));
+
+  const [topPaths, topCountries, topReferrers, recentViews] = await withRetry(() => Promise.all([
     db.execute<LabelCountRow>(sql`
       select path as label, count(*)::int as count
       from page_views
@@ -74,12 +112,7 @@ async function loadStats() {
       order by created_at desc
       limit 25
     `),
-    db.execute<EngagementRow>(sql`
-      select
-        (select count(*)::int from conversations) as convos,
-        (select count(*)::int from messages) as messages
-    `),
-  ]);
+  ]));
 
   const u = rows<UserStatsRow>(userStats)[0] ?? { total: 0, students: 0, teachers: 0, d1: 0, d7: 0, d30: 0 };
   const v = rows<ViewStatsRow>(viewStats)[0] ?? { total: 0, d1: 0, d7: 0, d30: 0, unique7d: 0 };
@@ -103,6 +136,7 @@ async function loadStats() {
     recentViews: rows<RecentViewRow>(recentViews),
     convosTotal: e.convos,
     messagesTotal: e.messages,
+    users: rows<UserRow>(usersList),
   };
 }
 
@@ -167,6 +201,68 @@ export default async function AdminPage() {
           <StatCard label="New in 24h" value={s.users1d} />
           <StatCard label="New in 7d" value={s.users7d} />
           <StatCard label="New in 30d" value={s.users30d} />
+        </div>
+
+        <div className="mt-4 rounded-xl border border-line bg-surface shadow-card overflow-hidden">
+          <div className="px-4 py-3 border-b border-line flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-ink">Registered users</h3>
+            <span className="text-xs text-ink-muted">
+              Showing {s.users.length}
+              {s.usersTotal > s.users.length ? ` of ${s.usersTotal} (most recent 200)` : ""}
+            </span>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-canvas text-xs uppercase tracking-wide text-ink-muted">
+                <tr>
+                  <th className="text-left px-3 py-2">Name</th>
+                  <th className="text-left px-3 py-2">Email</th>
+                  <th className="text-left px-3 py-2">Role</th>
+                  <th className="text-left px-3 py-2">Lang</th>
+                  <th className="text-left px-3 py-2">Region</th>
+                  <th className="text-left px-3 py-2">School</th>
+                  <th className="text-left px-3 py-2">Subjects</th>
+                  <th className="text-left px-3 py-2">Joined</th>
+                </tr>
+              </thead>
+              <tbody>
+                {s.users.length === 0 ? (
+                  <tr>
+                    <td colSpan={8} className="px-3 py-4 text-ink-muted">
+                      No registered users yet.
+                    </td>
+                  </tr>
+                ) : (
+                  s.users.map((u) => (
+                    <tr key={u.id} className="border-t border-line align-top">
+                      <td className="px-3 py-2 text-ink font-medium">{u.displayName}</td>
+                      <td className="px-3 py-2 text-ink">{u.email}</td>
+                      <td className="px-3 py-2">
+                        <span
+                          className={
+                            u.role === "teacher"
+                              ? "inline-block px-2 py-0.5 rounded text-xs bg-brand/15 text-brand"
+                              : "inline-block px-2 py-0.5 rounded text-xs bg-canvas text-ink-muted border border-line"
+                          }
+                        >
+                          {u.role}
+                        </span>
+                      </td>
+                      <td className="px-3 py-2 text-ink-muted uppercase">{u.language}</td>
+                      <td className="px-3 py-2 text-ink">{u.region || "—"}</td>
+                      <td className="px-3 py-2 text-ink">{u.school || "—"}</td>
+                      <td className="px-3 py-2 text-ink-muted">
+                        {(u.subjects ?? []).length ? (u.subjects ?? []).join(", ") : "—"}
+                      </td>
+                      <td className="px-3 py-2 text-ink-muted whitespace-nowrap">
+                        {new Date(u.createdAt).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
