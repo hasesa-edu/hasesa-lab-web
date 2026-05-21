@@ -7,6 +7,7 @@ import { UserProvider } from "@/components/UserProvider";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { PWARegister } from "@/components/PWARegister";
+import { PageViewTracker } from "@/components/PageViewTracker";
 import { ThemeProvider, themeBootstrapScript } from "@/components/ThemeProvider";
 
 const inter = Inter({
@@ -64,6 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <main className="flex-1">{children}</main>
               <Footer />
               <PWARegister />
+              <PageViewTracker />
             </UserProvider>
           </LocaleProvider>
         </ThemeProvider>
