@@ -625,6 +625,71 @@ export const LESSONS: Lesson[] = [
       { q: "How many cells does one round of meiosis produce from one starting cell?", choices: ["1", "2", "4", "8"], answerIndex: 2, explanation: "Meiosis is two divisions in a row, producing 4 haploid daughter cells from one diploid parent." },
     ],
   },
+  {
+    id: "bio-gen-01-dna-structure",
+    subject: "biology",
+    unit: { en: "Genetics", am: "ጄኔቲክስ", om: "Jeneetiksii" },
+    moeCode: "BIO-G11-G1.1",
+    eueeTopics: ["DNA structure", "Nucleotides", "Genetic material"],
+    eueeWeight: 8,
+    estimatedMinutes: 22,
+    title: { en: "DNA: the molecule of life", am: "ዲኤንኤ: የሕይወት ሞለኪውል", om: "DNA: moleekiyuulii jireenyaa" },
+    summary: {
+      en: "The chemical instructions inside every living cell — how DNA is built from four bases, twisted into a double helix, and packaged into chromosomes.",
+      am: "በሁሉም ሕያው ሕዋስ ውስጥ ያለ ኬሚካዊ መመሪያ — ዲኤንኤ ከአራት ቤዞች እንዴት እንደተሠራ፣ ወደ ድርብ ጥምዝ መልክ እንደተጠምዘዘና ወደ ክሮሞሶም እንደተጠቀለለ።",
+      om: "Qajeelfama keemikaa seelii lubbuu qabu hunda keessa jiru — DNA akkamitti bu'uura afuriin akka ijaaramee, akka maramaa lamaa marfamee fi krooomosoomii keessa akka kuufamuu.",
+    },
+    video: { youtubeId: "8m6hHRlKwxY", credit: "Amoeba Sisters" },
+    whyItMatters: {
+      en: "Why does one teff variety thrive in Tigray's dry highlands while another grows best in the Awash valley? The answer is written in DNA. Researchers at the Ethiopian Biodiversity Institute and the EIAR sequence the genomes of Ethiopian crops to find the genes for drought tolerance, iron-rich grains, and disease resistance. Forensic labs at the Federal Police use DNA to identify suspects and bring families closure. Doctors testing for sickle cell disease — common in parts of southern Ethiopia — are reading a single letter change in one gene. And every coffee tree in the Sidamo region carries DNA that researchers can trace back through centuries of farmer selection. DNA isn't abstract: it's the source code of every living thing around you.",
+    },
+    sections: [
+      { heading: { en: "What is DNA made of?", am: "ዲኤንኤ ከምን ተሠራ?", om: "DNA maal irraa hojjetama?" }, body: "DNA stands for *deoxyribonucleic acid*. It is a long chain of small units called *nucleotides*. Every nucleotide has three parts: a sugar (deoxyribose), a phosphate group, and one of four nitrogen bases — *adenine (A)*, *thymine (T)*, *guanine (G)*, or *cytosine (C)*. The order of these bases along the chain is the genetic code." },
+      { heading: { en: "The double helix and base pairing", am: "ድርብ ጥምዝና የቤዝ ጥንዶች", om: "Marama lamaa fi waltaanee bu'uuraa" }, body: "DNA is two strands twisted around each other in a *double helix*, first described by Watson, Crick, and Franklin in 1953. The strands are held together by base pairs: *A always pairs with T*, and *G always pairs with C*. This means one strand is the template for the other — if you know one side, you know the other." },
+      { heading: { en: "Genes, chromosomes, and the genome", am: "ጂን፣ ክሮሞሶም እና ጂኖም", om: "Jiinii, krooomosoomii fi jiinoomii" }, body: "A *gene* is a stretch of DNA that codes for one protein or trait. Genes are packed onto long structures called *chromosomes* inside the nucleus — humans have 46 (23 pairs); teff has 40. The full set of DNA in an organism is its *genome* — about 3 billion base pairs in humans, far more in many plants." },
+    ],
+    workedExample: {
+      problem: "One DNA strand reads 5'–ATGGCTAAG–3'. Write the sequence of the complementary strand.",
+      solution: "Pair A↔T and G↔C, and remember the second strand runs in the opposite direction (3'→5' when read alongside the first). Reading base-by-base: A→T, T→A, G→C, G→C, C→G, T→A, A→T, A→T, G→C. So the complementary strand is 3'–TACCGATTC–5'.",
+    },
+    atHomeExperiment: {
+      title: {
+        en: "Extract real DNA from a strawberry",
+        am: "ከእንጆሪ ውስጥ እውነተኛ ዲኤንኤ ያውጡ",
+        om: "Istiroberii keessaa DNA dhugaa baasi",
+      },
+      video: { youtubeId: "zMw44VDqf2s", credit: "NHGRI (genome.gov)" },
+      materials: [
+        { en: "1 ripe strawberry (or 2–3 small ones)", am: "1 የበሰለ እንጆሪ (ወይም 2–3 ትንንሽ)", om: "Istiroberii bilchaate 1 (ykn 2–3 xixiqqaa)" },
+        { en: "A zip-lock bag or any clean plastic bag", am: "ዚፕ-ሎክ ቦርሳ ወይም ንጹህ ላስቲክ ቦርሳ", om: "Boorsaa zip-lock ykn boorsaa pilaastikii qulqulluu" },
+        { en: "1 teaspoon dish soap", am: "1 የሻይ ማንኪያ የሳህን ሳሙና", om: "Saamunaa saaniidhaa baasaa shaayii 1" },
+        { en: "A pinch of table salt (about ¼ teaspoon)", am: "ትንሽ ጨው (¼ የሻይ ማንኪያ ያህል)", om: "Soogidda xiqqoo (gara ¼ baasaa shaayii)" },
+        { en: "About 100 ml clean water", am: "100 ሚሊ ሊትር ንጹህ ውሃ", om: "Bishaan qulqulluu 100 ml" },
+        { en: "A coffee filter or a clean piece of cloth", am: "የቡና ማጣሪያ ወይም ንጹህ ጨርቅ", om: "Filtara bunaa ykn huccuu qulqulluu" },
+        { en: "A clear cup or small glass", am: "ግልጽ ጽዋ ወይም ትንሽ ብርጭቆ", om: "Kuusaa ifaan mul'atu ykn birxiqqoo xiqqaa" },
+        { en: "Ice-cold rubbing alcohol or araki — kept in the freezer for 30 minutes", am: "በማቀዝቀዣ ለ30 ደቂቃ የቆየ የተበራቹ አልኮል ወይም አረቄ", om: "Alkoolii qorraa ykn araqee — daqiiqaa 30f firijii keessa turfame" },
+        { en: "A toothpick or thin wooden skewer", am: "የጥርስ ማጽጃ እንጨት ወይም ቀጭን እንጨት", om: "Cabbii ilkaanii ykn muka haphii" },
+      ],
+      steps: [
+        { en: "In a cup, gently stir together the water, salt, and dish soap. Don't make foam.", am: "በጽዋ ውስጥ ውሃ፣ ጨውና ሳሙና በቀስታ ይቀላቅሉ — አረፋ እንዳይፈጠር ይጠንቀቁ።", om: "Kuusaa keessatti bishaan, soogidda fi saamunaa suuta walitti makkaa — hoomacha hin uumiin." },
+        { en: "Remove the green leaves from the strawberry, put it in the bag, and seal it. Squish with your fingers for about 2 minutes until it is a smooth pulp.", am: "የእንጆሪውን አረንጓዴ ቅጠል አስወግደው ቦርሳ ውስጥ ያስገቡት፣ ይዝጉት፣ በጣቶችዎ ለ2 ደቂቃ ያህል እስኪለሰልስ ድረስ ያደቅቁት።", om: "Istiroberii baala isaa magariisa irraa kaasi, boorsaa keessa kaa'ii cufi, qubaan daqiiqaa 2 caccabsii akka qabbii ta'utti dhiqi." },
+        { en: "Pour the soap-salt-water mixture into the bag with the pulp. Seal and gently squish to mix for one more minute.", am: "የሳሙና-ጨው-ውሃ ቅልቅሉን ወደ ቦርሳው ውስጥ ጨምሩ፣ ይዝጉና ለ1 ደቂቃ ቀስ ብለው ያቀላቅሉ።", om: "Makaa saamunaa-soogiddaa-bishaanii boorsaa caccaba qabu keessatti naqi, cufiitii daqiiqaa tokkoof suuta walitti makaa." },
+        { en: "Slowly pour the bag's contents through a coffee filter (or cloth) into a clear cup. Wait until you have a clear pink-red juice with no chunks.", am: "የቦርሳውን ይዘት በማጣሪያ ወይም በጨርቅ አጥርተው ወደ ግልጽ ጽዋ ያፍሱ። ግልጽ ጭማቂ እስኪሆን ይጠብቁ።", om: "Wantoota boorsaa keessaa filtara bunaa ykn huccuu keessaan suuta gara kuusaa ifaan mul'atu keessatti dhangalaasi. Hanga jiibaan ifaan diimaa-diimotuu argamutti eeggadhu." },
+        { en: "Tilt the cup. Very slowly pour an equal amount of ice-cold alcohol down the inside of the cup so it forms a separate layer floating on top — do not mix.", am: "ጽዋውን ያዘንብሉ። እኩል መጠን ያለው ቀዝቃዛ አልኮል በቀስታ ከጽዋው ጎን ዳር በማውረድ በላዩ ላይ የተለየ ሽፋን ይፍጠር — አያቀላቅሉት።", om: "Kuusaa gad-gargalchi. Alkoolii qorraa hamma walqixaa ta'e gara cinaa kuusaa irraan suuta naqi — sadarkaa adda ta'e gubbatti uumamuu qaba — hin makin." },
+        { en: "Watch the line where alcohol meets the juice. Within a minute, white stringy cloudy strands will rise into the alcohol layer.", am: "አልኮሉ እና ጭማቂው የሚገናኙበትን መስመር ይመልከቱ። በ1 ደቂቃ ውስጥ ነጭ ክር መሳይ ነገሮች ወደ አልኮሉ ይነሣሉ።", om: "Sarara alkoolii fi jiibaan walgahan ilaali. Daqiiqaa tokko keessatti, kiyyoo adii dhuma akka funyoo gara sadarkaa alkooliitti ol bahu argita." },
+        { en: "Dip in the toothpick and slowly lift the white strands out. That is real DNA.", am: "የጥርስ ማጽጃውን አጥልቀው ነጩን ክር ቀስ ብለው አውጡ — ይህ እውነተኛ ዲኤንኤ ነው።", om: "Cabbii ilkaanii keessa cuuphiitii kiyyoo adii sana suuta ol baasi — kun DNA dhugaadha." },
+      ],
+      observe: {
+        en: "The white stringy substance is real DNA — billions of strawberry DNA molecules tangled together so they're now visible to the eye. Each step did a specific job: the soap broke open the cell membranes and the nuclear envelopes (they're made of fat, and soap dissolves fat); the salt made the DNA strands clump by neutralising their negative charges; and the cold alcohol pulled the DNA out of solution because DNA does not dissolve in alcohol. Strawberries work especially well because they are octoploid — they carry eight copies of every chromosome, so you get a huge amount of DNA per cell. The same technique, scaled up with cleaner reagents, is what researchers at the Ethiopian Biotechnology Institute use to extract DNA from teff, coffee, and cattle for breeding and conservation work.",
+        am: "ነጩ ክር መሳይ ነገር እውነተኛ ዲኤንኤ ነው — በቢሊዮኖች የሚቆጠሩ የእንጆሪ ዲኤንኤ ሞለኪውሎች ተጠምዝዘው አሁን ለዓይን ይታያሉ። ሳሙናው የሕዋስ ሽፋንና የንዩክሊየስ ሽፋን ሰበረ፤ ጨው ዲኤንኤ እንዲሰበሰብ አደረገ፤ ቀዝቃዛው አልኮል ዲኤንኤውን ከውሃ አወጣው። እንጆሪ በተለይ ጥሩ የሚሠራው ስምንት የክሮሞሶም ቅጂ ስለሚይዝ ነው።",
+        om: "Wantoonni kiyyoo adii fakkaatan kun DNA dhugaadha — moleekiyuulota DNA istiroberii biiliyoonaan lakkaa'aman walitti maramanii ammaaf ija namaatti mul'achaa jiru. Saamunichi sibootaa fi haguggii nuukileesii diige (kunneen coomaa irraa hojjetamaniidhaa, saamunni immoo cooma baqsa); soogiddi DNA akka walitti qabaman gargaare; alkoolii qorraan immoo DNA bishaan keessaa baase. Istiroberii adda ta'e — krooomosoomii saddeet-cunqursaa qabu — kanaaf seelii tokkicha keessaa DNA hedduu argita.",
+      },
+    },
+    quiz: [
+      { q: "In DNA, which bases pair with each other?", choices: ["A–G and T–C", "A–T and G–C", "A–C and T–G", "Any base can pair with any base"], answerIndex: 1, explanation: "Adenine always pairs with thymine, and guanine always pairs with cytosine — that's why one strand fully determines the other." },
+      { q: "Which part of a nucleotide actually carries the genetic information?", choices: ["The sugar", "The phosphate", "The nitrogen base", "The whole chromosome"], answerIndex: 2, explanation: "The order of the four nitrogen bases (A, T, G, C) along the strand is the code. The sugar and phosphate form the backbone but are identical in every nucleotide." },
+    ],
+  },
 ];
 
 export function getLesson(id: string): Lesson | undefined {
