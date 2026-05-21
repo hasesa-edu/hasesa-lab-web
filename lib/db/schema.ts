@@ -88,6 +88,26 @@ export const messages = pgTable(
   (t) => [index("messages_conv_idx").on(t.conversationId, t.createdAt), index("messages_created_idx").on(t.createdAt)]
 );
 
+export const pageViews = pgTable(
+  "page_views",
+  {
+    id: text("id").primaryKey(),
+    path: text("path").notNull(),
+    country: text("country"),
+    region: text("region"),
+    city: text("city"),
+    referrer: text("referrer"),
+    userAgent: text("user_agent"),
+    userId: text("user_id"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index("page_views_created_idx").on(t.createdAt),
+    index("page_views_path_idx").on(t.path),
+    index("page_views_country_idx").on(t.country),
+  ]
+);
+
 // Per-user monthly usage counters for NFR-14 cost caps
 export const usage = pgTable(
   "usage",

@@ -1,0 +1,242 @@
+import { redirect } from "next/navigation";
+import { sql } from "drizzle-orm";
+import { getSession } from "@/lib/auth/session";
+import { db, schema } from "@/lib/db/client";
+import { AdminSignOutButton } from "./signout-button";
+
+export const dynamic = "force-dynamic";
+
+type CountRow = { count: number };
+type LabelCountRow = { label: string | null; count: number };
+type RecentViewRow = {
+  path: string;
+  country: string | null;
+  city: string | null;
+  referrer: string | null;
+  createdAt: Date;
+};
+
+async function loadStats() {
+  const now = new Date();
+  const d1 = new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000);
+  const d7 = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const d30 = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+  const [
+    usersTotal,
+    usersStudents,
+    usersTeachers,
+    users1d,
+    users7d,
+    users30d,
+    pvTotal,
+    pv1d,
+    pv7d,
+    pv30d,
+    uniqueVisitors7d,
+    topPaths,
+    topCountries,
+    topReferrers,
+    recentViews,
+    convosTotal,
+    messagesTotal,
+  ] = await Promise.all([
+    db.execute<CountRow>(sql`select count(*)::int as count from users`),
+    db.execute<CountRow>(sql`select count(*)::int as count from users where role = 'student'`),
+    db.execute<CountRow>(sql`select count(*)::int as count from users where role = 'teacher'`),
+    db.execute<CountRow>(sql`select count(*)::int as count from users where created_at >= ${d1.toISOString()}`),
+    db.execute<CountRow>(sql`select count(*)::int as count from users where created_at >= ${d7.toISOString()}`),
+    db.execute<CountRow>(sql`select count(*)::int as count from users where created_at >= ${d30.toISOString()}`),
+    db.execute<CountRow>(sql`select count(*)::int as count from page_views`),
+    db.execute<CountRow>(sql`select count(*)::int as count from page_views where created_at >= ${d1.toISOString()}`),
+    db.execute<CountRow>(sql`select count(*)::int as count from page_views where created_at >= ${d7.toISOString()}`),
+    db.execute<CountRow>(sql`select count(*)::int as count from page_views where created_at >= ${d30.toISOString()}`),
+    db.execute<CountRow>(
+      sql`select count(distinct coalesce(user_id, user_agent))::int as count from page_views where created_at >= ${d7.toISOString()}`
+    ),
+    db.execute<LabelCountRow>(sql`
+      select path as label, count(*)::int as count
+      from page_views
+      group by path
+      order by count desc
+      limit 10
+    `),
+    db.execute<LabelCountRow>(sql`
+      select coalesce(country, 'Unknown') as label, count(*)::int as count
+      from page_views
+      group by country
+      order by count desc
+      limit 10
+    `),
+    db.execute<LabelCountRow>(sql`
+      select coalesce(nullif(referrer, ''), 'Direct / none') as label, count(*)::int as count
+      from page_views
+      group by label
+      order by count desc
+      limit 10
+    `),
+    db.execute<RecentViewRow>(sql`
+      select path, country, city, referrer, created_at as "createdAt"
+      from page_views
+      order by created_at desc
+      limit 25
+    `),
+    db.execute<CountRow>(sql`select count(*)::int as count from conversations`),
+    db.execute<CountRow>(sql`select count(*)::int as count from messages`),
+  ]);
+
+  const rows = <T,>(r: any): T[] => (Array.isArray(r) ? r : r?.rows ?? []);
+  const num = (r: any) => rows<CountRow>(r)[0]?.count ?? 0;
+
+  return {
+    usersTotal: num(usersTotal),
+    usersStudents: num(usersStudents),
+    usersTeachers: num(usersTeachers),
+    users1d: num(users1d),
+    users7d: num(users7d),
+    users30d: num(users30d),
+    pvTotal: num(pvTotal),
+    pv1d: num(pv1d),
+    pv7d: num(pv7d),
+    pv30d: num(pv30d),
+    uniqueVisitors7d: num(uniqueVisitors7d),
+    topPaths: rows<LabelCountRow>(topPaths),
+    topCountries: rows<LabelCountRow>(topCountries),
+    topReferrers: rows<LabelCountRow>(topReferrers),
+    recentViews: rows<RecentViewRow>(recentViews),
+    convosTotal: num(convosTotal),
+    messagesTotal: num(messagesTotal),
+  };
+}
+
+function StatCard({ label, value, sub }: { label: string; value: number | string; sub?: string }) {
+  return (
+    <div className="rounded-xl border border-line bg-surface p-4 shadow-card">
+      <div className="text-xs uppercase tracking-wide text-ink-muted">{label}</div>
+      <div className="mt-1 text-2xl font-bold text-ink tabular-nums">{value}</div>
+      {sub && <div className="mt-0.5 text-xs text-ink-muted">{sub}</div>}
+    </div>
+  );
+}
+
+function TopList({ title, rows }: { title: string; rows: LabelCountRow[] }) {
+  const max = Math.max(1, ...rows.map((r) => r.count));
+  return (
+    <div className="rounded-xl border border-line bg-surface p-4 shadow-card">
+      <h3 className="text-sm font-semibold text-ink">{title}</h3>
+      {rows.length === 0 ? (
+        <p className="mt-2 text-sm text-ink-muted">No data yet.</p>
+      ) : (
+        <ul className="mt-3 space-y-2">
+          {rows.map((r) => (
+            <li key={r.label ?? "—"} className="text-sm">
+              <div className="flex justify-between gap-3">
+                <span className="truncate text-ink" title={r.label ?? ""}>
+                  {r.label ?? "—"}
+                </span>
+                <span className="tabular-nums text-ink-muted">{r.count}</span>
+              </div>
+              <div className="mt-1 h-1.5 rounded bg-canvas">
+                <div className="h-full rounded bg-brand" style={{ width: `${(r.count / max) * 100}%` }} />
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+export default async function AdminPage() {
+  const session = await getSession();
+  if (!session.isAdmin) redirect("/admin/login");
+
+  const s = await loadStats();
+
+  return (
+    <div className="max-w-6xl mx-auto px-4 py-10 space-y-8">
+      <header className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-ink">Admin analytics</h1>
+          <p className="mt-1 text-sm text-ink-muted">User signups, traffic, and content engagement.</p>
+        </div>
+        <AdminSignOutButton />
+      </header>
+
+      <section>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-ink-muted">Users</h2>
+        <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
+          <StatCard label="Total users" value={s.usersTotal} sub={`${s.usersStudents} students · ${s.usersTeachers} teachers`} />
+          <StatCard label="New in 24h" value={s.users1d} />
+          <StatCard label="New in 7d" value={s.users7d} />
+          <StatCard label="New in 30d" value={s.users30d} />
+        </div>
+      </section>
+
+      <section>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-ink-muted">Traffic</h2>
+        <div className="mt-3 grid grid-cols-2 md:grid-cols-5 gap-3">
+          <StatCard label="Page views (all-time)" value={s.pvTotal} />
+          <StatCard label="Views in 24h" value={s.pv1d} />
+          <StatCard label="Views in 7d" value={s.pv7d} />
+          <StatCard label="Views in 30d" value={s.pv30d} />
+          <StatCard label="Unique visitors (7d)" value={s.uniqueVisitors7d} sub="distinct user / user-agent" />
+        </div>
+      </section>
+
+      <section className="grid md:grid-cols-3 gap-4">
+        <TopList title="Top pages" rows={s.topPaths} />
+        <TopList title="Top countries" rows={s.topCountries} />
+        <TopList title="Top referrers" rows={s.topReferrers} />
+      </section>
+
+      <section>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-ink-muted">Engagement</h2>
+        <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
+          <StatCard label="Conversations" value={s.convosTotal} />
+          <StatCard label="Chat messages" value={s.messagesTotal} />
+        </div>
+      </section>
+
+      <section>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-ink-muted">Recent page views</h2>
+        <div className="mt-3 rounded-xl border border-line bg-surface shadow-card overflow-hidden">
+          <table className="w-full text-sm">
+            <thead className="bg-canvas text-xs uppercase tracking-wide text-ink-muted">
+              <tr>
+                <th className="text-left px-3 py-2">When</th>
+                <th className="text-left px-3 py-2">Path</th>
+                <th className="text-left px-3 py-2">Country</th>
+                <th className="text-left px-3 py-2">City</th>
+                <th className="text-left px-3 py-2">Referrer</th>
+              </tr>
+            </thead>
+            <tbody>
+              {s.recentViews.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="px-3 py-4 text-ink-muted">
+                    No page views yet. Traffic will appear here as people visit the site.
+                  </td>
+                </tr>
+              ) : (
+                s.recentViews.map((v, i) => (
+                  <tr key={i} className="border-t border-line">
+                    <td className="px-3 py-2 text-ink-muted whitespace-nowrap">
+                      {new Date(v.createdAt).toLocaleString()}
+                    </td>
+                    <td className="px-3 py-2 text-ink font-mono">{v.path}</td>
+                    <td className="px-3 py-2 text-ink">{v.country ?? "—"}</td>
+                    <td className="px-3 py-2 text-ink">{v.city ?? "—"}</td>
+                    <td className="px-3 py-2 text-ink-muted truncate max-w-[16rem]" title={v.referrer ?? ""}>
+                      {v.referrer || "—"}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  );
+}
