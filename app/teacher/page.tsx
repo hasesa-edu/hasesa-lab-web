@@ -79,7 +79,7 @@ export default function TeacherPage() {
               required
               autoFocus={classes.length === 0}
               aria-label={tr("teacher.className")}
-              className="mt-3 w-full px-3.5 py-2 border border-line rounded-lg focus:outline-none focus:border-brand bg-canvas text-ink text-sm"
+              className="mt-3 w-full px-3.5 py-2 border border-line rounded-lg focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/30 bg-canvas text-ink text-sm"
             />
             <button
               type="submit"

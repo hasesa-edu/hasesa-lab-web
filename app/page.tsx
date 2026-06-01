@@ -31,9 +31,12 @@ export default function Home() {
           muted
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
+          poster="/hero-demo.poster.jpg"
           aria-label={tr("hero.video.alt")}
         >
+          {/* Chrome/Firefox pick the smaller WebM; Safari falls through to MP4. */}
+          <source src="/hero-demo.webm" type="video/webm" />
           <source src="/hero-demo.mp4" type="video/mp4" />
         </video>
         {/* Dark overlay for headline readability */}
