@@ -16,7 +16,16 @@ export function PWARegister() {
   useEffect(() => {
     if (process.env.NODE_ENV !== "production") return;
     if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
-    navigator.serviceWorker.register("/sw.js").catch(() => {});
+    // Defer SW registration until the page has finished its first paint, so it
+    // doesn't compete with hero rendering for the browser's main thread.
+    function register() {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    }
+    if (document.readyState === "complete") {
+      setTimeout(register, 500);
+    } else {
+      window.addEventListener("load", () => setTimeout(register, 500), { once: true });
+    }
   }, []);
 
   useEffect(() => {

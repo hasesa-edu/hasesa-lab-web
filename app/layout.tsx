@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
-import "katex/dist/katex.min.css";
+// KaTeX CSS (~200KB) is loaded only on the page that renders math, /chat.
 import { LocaleProvider } from "@/components/LocaleProvider";
 import { UserProvider } from "@/components/UserProvider";
 import { Nav } from "@/components/Nav";
