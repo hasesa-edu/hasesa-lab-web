@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import { getLesson, SUBJECTS } from "@/lib/lessons";
+import { adjacentLessons, getLesson, SUBJECTS } from "@/lib/lessons";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
 import { apiBumpMastery } from "@/lib/api";
@@ -31,6 +31,7 @@ export default function LessonDetail() {
 
   const subject = SUBJECTS.find((s) => s.id === lesson.subject)!;
   const primaryTopic = lesson.eueeTopics[0];
+  const { prev, next } = adjacentLessons(lesson.id);
 
   function onAnswer(correct: boolean) {
     if (!user) return;
@@ -67,7 +68,7 @@ export default function LessonDetail() {
         <p className="text-xs uppercase tracking-wider text-brand font-semibold">
           {subject.emoji} {subject.label[locale]} · {lesson.unit[locale]} · {lesson.moeCode}
         </p>
-        <h1 className="mt-1.5 text-3xl sm:text-4xl font-bold tracking-tight text-ink leading-tight">
+        <h1 className="mt-1.5 text-4xl sm:text-5xl font-extrabold tracking-tight text-ink leading-tight">
           {lesson.title[locale]}
         </h1>
         <p className="mt-3 text-ink-muted leading-relaxed">{lesson.summary[locale]}</p>
@@ -266,6 +267,44 @@ export default function LessonDetail() {
           {tr("lessons.askAbout")} →
         </Link>
       </div>
+
+      {(prev || next) && (
+        <nav
+          aria-label={tr("lessons.nav.between")}
+          className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-3"
+        >
+          {prev ? (
+            <Link
+              href={`/lessons/${prev.id}`}
+              className="group rounded-xl border border-line bg-surface p-4 hover:border-brand/60 hover:shadow-card transition"
+            >
+              <div className="text-[11px] uppercase tracking-[0.14em] font-semibold text-ink-subtle">
+                ← {tr("lessons.nav.previous")}
+              </div>
+              <div className="mt-1 font-semibold text-ink group-hover:text-brand transition leading-snug">
+                {prev.title[locale]}
+              </div>
+            </Link>
+          ) : (
+            <div className="hidden sm:block" />
+          )}
+          {next ? (
+            <Link
+              href={`/lessons/${next.id}`}
+              className="group rounded-xl border border-line bg-surface p-4 hover:border-brand/60 hover:shadow-card transition sm:text-right"
+            >
+              <div className="text-[11px] uppercase tracking-[0.14em] font-semibold text-ink-subtle">
+                {tr("lessons.nav.next")} →
+              </div>
+              <div className="mt-1 font-semibold text-ink group-hover:text-brand transition leading-snug">
+                {next.title[locale]}
+              </div>
+            </Link>
+          ) : (
+            <div className="hidden sm:block" />
+          )}
+        </nav>
+      )}
     </article>
   );
 }
