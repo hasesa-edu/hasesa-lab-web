@@ -11,18 +11,21 @@ import { getLesson } from "@/lib/lessons";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
-const SUGGESTIONS: { en: string; am: string; om: string }[] = [
+const SUGGESTIONS: { emoji: string; en: string; am: string; om: string }[] = [
   {
+    emoji: "⚛️",
     en: "Explain Newton's second law with a simple example.",
     am: "የኒውተንን ሁለተኛ ህግ በቀላል ምሳሌ ያስረዱኝ።",
     om: "Seera lammaffaa Niwutan fakkeenya salphaadhaan ibsi.",
   },
   {
+    emoji: "🏃",
     en: "What's the difference between speed and velocity?",
     am: "ፍጥነትና ቬሎሲቲ መካከል ያለው ልዩነት ምንድነው?",
     om: "Garaagarummaan saffisaa fi velocity gidduu jiru maali?",
   },
   {
+    emoji: "🧪",
     en: "How do I balance a chemistry equation? Walk me through one.",
     am: "የኬሚስትሪ እኩልታ እንዴት ሚዛናዊ ማድረግ እችላለሁ? በአንዱ ይምሩኝ።",
     om: "Wal-qixxata keemistirii akkamiin wal-qixxeessuun danda'a? Tokko qajeelchaan natti agarsiisi.",
@@ -143,17 +146,23 @@ function ChatInner() {
 
       <div className="mt-6 min-h-[280px]">
         {messages.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-line-strong bg-surface p-6">
-            <p className="font-medium text-ink">{tr("chat.empty.title")}</p>
-            <p className="text-sm text-ink-muted mt-1">{tr("chat.empty.body")}</p>
-            <div className="mt-4 grid gap-2">
+          <div className="rounded-2xl border border-line bg-surface p-6 sm:p-7 shadow-soft">
+            <p className="text-xl sm:text-2xl font-bold tracking-tight text-ink">
+              {tr("chat.empty.title")}
+            </p>
+            <p className="text-sm text-ink-muted mt-1.5">{tr("chat.empty.body")}</p>
+            <div className="mt-5 grid gap-2.5">
               {SUGGESTIONS.map((s, i) => (
                 <button
                   key={i}
                   onClick={() => send(s[locale])}
-                  className="text-left text-sm px-3.5 py-2.5 rounded-lg border border-line bg-surface hover:border-brand/60 hover:bg-brand-soft/40 transition text-ink"
+                  className="group flex items-start gap-3 text-left text-sm px-4 py-3 rounded-xl border border-line bg-surface hover:border-brand/60 hover:bg-brand-soft/30 hover:shadow-soft transition text-ink"
                 >
-                  {s[locale]}
+                  <span className="text-lg leading-none mt-0.5">{s.emoji}</span>
+                  <span className="flex-1 leading-relaxed">{s[locale]}</span>
+                  <span className="text-brand opacity-0 group-hover:opacity-100 transition" aria-hidden>
+                    →
+                  </span>
                 </button>
               ))}
             </div>
@@ -224,7 +233,7 @@ function ChatInner() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder={tr("chat.placeholder")}
-          className="flex-1 px-4 py-2.5 rounded-lg border border-line bg-surface text-ink focus:outline-none focus:border-brand"
+          className="flex-1 px-4 py-2.5 rounded-lg border border-line bg-surface text-ink focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/30"
           disabled={busy}
         />
         <button

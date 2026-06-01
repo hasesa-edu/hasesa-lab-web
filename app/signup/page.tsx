@@ -180,7 +180,7 @@ function Field({
         autoFocus={autoFocus}
         required={required}
         minLength={minLength}
-        className="mt-1.5 w-full px-3.5 py-2.5 border border-line rounded-lg focus:outline-none focus:border-brand bg-canvas text-ink"
+        className="mt-1.5 w-full px-3.5 py-2.5 border border-line rounded-lg focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/30 bg-canvas text-ink"
       />
     </div>
   );

@@ -700,6 +700,14 @@ export function lessonsBySubject(subject: Subject): Lesson[] {
   return LESSONS.filter((l) => l.subject === subject);
 }
 
+export function adjacentLessons(id: string): { prev?: Lesson; next?: Lesson } {
+  const lesson = getLesson(id);
+  if (!lesson) return {};
+  const siblings = lessonsBySubject(lesson.subject);
+  const i = siblings.findIndex((l) => l.id === id);
+  return { prev: siblings[i - 1], next: siblings[i + 1] };
+}
+
 export function allTopicsForSubject(subject: Subject): { topic: string; weight: number; lessonId: string }[] {
   const out: { topic: string; weight: number; lessonId: string }[] = [];
   const seen = new Set<string>();
