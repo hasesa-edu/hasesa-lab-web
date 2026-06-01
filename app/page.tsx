@@ -47,7 +47,7 @@ export default function Home() {
             <span className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse" />
             {tr("hero.tag")}
           </div>
-          <h1 className="mt-6 text-5xl sm:text-6xl md:text-[5rem] font-extrabold leading-[0.95] tracking-tight text-white">
+          <h1 className="mt-6 text-5xl sm:text-6xl md:text-[4rem] font-extrabold leading-[0.95] tracking-tight text-white">
             {tr("hero.title.before")}{" "}
             <span className="text-brand-soft">{tr("hero.title.highlight")}</span>
           </h1>
@@ -79,75 +79,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* PILLARS */}
-      <section className="max-w-5xl mx-auto px-4 pt-20 sm:pt-24 pb-20">
-        <div className="max-w-2xl mx-auto text-center">
-          <p className="text-xs uppercase tracking-[0.18em] font-bold text-brand">
-            {tr("pillars.eyebrow")}
-          </p>
-          <h2 className="mt-2 text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-ink leading-[1.05]">
-            {tr("pillars.title")}
-          </h2>
-        </div>
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <PillarExperiment tr={tr} />
-          <PillarAITutor tr={tr} />
-        </div>
-      </section>
-
-      {/* MORE EXPERIMENTS GRID */}
-      <section className="max-w-5xl mx-auto px-4 pb-20">
-        <div className="max-w-2xl mx-auto text-center">
-          <p className="text-xs uppercase tracking-[0.18em] font-bold text-brand">
-            {tr("exps.eyebrow")}
-          </p>
-          <h2 className="mt-2 text-3xl sm:text-4xl font-extrabold tracking-tight text-ink leading-tight">
-            {tr("exps.title")}
-          </h2>
-          <p className="mt-3 text-ink-muted leading-relaxed">{tr("exps.sub")}</p>
-        </div>
-        <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <ExperimentTile
-            emoji="🪙"
-            subjectKey="exps.phy.subject"
-            titleKey="exps.phy.title"
-            bodyKey="exps.phy.body"
-            tr={tr}
-          />
-          <ExperimentTile
-            emoji="🌳"
-            subjectKey="exps.math.subject"
-            titleKey="exps.math.title"
-            bodyKey="exps.math.body"
-            tr={tr}
-          />
-          <ExperimentTile
-            emoji="🥬"
-            subjectKey="exps.chem.subject"
-            titleKey="exps.chem.title"
-            bodyKey="exps.chem.body"
-            tr={tr}
-          />
-          <ExperimentTile
-            emoji="🧅"
-            subjectKey="exps.bio.subject"
-            titleKey="exps.bio.title"
-            bodyKey="exps.bio.body"
-            tr={tr}
-          />
-        </div>
-        <div className="mt-8 text-center">
-          <Link
-            href="/lessons"
-            className="inline-flex items-center text-sm font-semibold text-brand hover:text-brand-hover transition"
-          >
-            {tr("exps.cta")} →
-          </Link>
-        </div>
-      </section>
+      {/* PILLARS — on a brand-soft tint for visual rhythm */}
+      <div className="bg-brand-soft/30">
+        <section className="max-w-5xl mx-auto px-4 pt-20 sm:pt-24 pb-20 sm:pb-24">
+          <div className="max-w-2xl mx-auto text-center">
+            <p className="text-xs uppercase tracking-[0.18em] font-bold text-brand">
+              {tr("pillars.eyebrow")}
+            </p>
+            <h2 className="mt-2 text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-ink leading-[1.05]">
+              {tr("pillars.title")}
+            </h2>
+          </div>
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <PillarExperiment tr={tr} />
+            <PillarAITutor tr={tr} />
+          </div>
+        </section>
+      </div>
 
       {/* PARTNERS */}
-      <section className="max-w-5xl mx-auto px-4 pb-20">
+      <section className="max-w-5xl mx-auto px-4 pt-20 sm:pt-24 pb-20">
         <p className="text-center text-xs uppercase tracking-[0.18em] font-semibold text-brand">
           {tr("partners.eyebrow")}
         </p>
@@ -259,17 +210,7 @@ function PillarExperiment({ tr }: { tr: TR }) {
             </span>
           </li>
         </ol>
-        <div className="mt-4 pt-3 border-t border-brand/15 text-[11px] uppercase tracking-[0.16em] font-semibold text-ink-muted">
-          {tr("pillars.exp.mock.tag")}
-        </div>
       </div>
-
-      <Link
-        href="/lessons"
-        className="mt-6 inline-flex items-center text-sm font-semibold text-brand hover:text-brand-hover transition self-start"
-      >
-        {tr("pillars.exp.cta")} →
-      </Link>
     </div>
   );
 }
@@ -292,9 +233,6 @@ function PillarAITutor({ tr }: { tr: TR }) {
       </p>
 
       <div className="mt-6 rounded-2xl border border-line bg-surface-2 p-4 space-y-3">
-        <p className="text-[10px] uppercase tracking-[0.18em] font-bold text-brand text-center">
-          {tr("pillars.ai.mock.label")}
-        </p>
         <div className="flex justify-end">
           <div className="max-w-[85%] bg-brand text-brand-on px-3.5 py-2 rounded-2xl rounded-br-md text-sm shadow-soft">
             {tr("pillars.ai.mock.user")}
@@ -308,9 +246,6 @@ function PillarAITutor({ tr }: { tr: TR }) {
             <p className="text-ink leading-relaxed">
               {tr("pillars.ai.mock.assistant1")}
             </p>
-            <p className="text-ink leading-relaxed">
-              {tr("pillars.ai.mock.assistant2")}
-            </p>
           </div>
           <p className="mt-2 text-[11px] text-ink-subtle flex items-center gap-1 ml-1">
             <span>📖</span>
@@ -318,42 +253,6 @@ function PillarAITutor({ tr }: { tr: TR }) {
           </p>
         </div>
       </div>
-
-      <Link
-        href="/chat"
-        className="mt-6 inline-flex items-center text-sm font-semibold text-brand hover:text-brand-hover transition self-start"
-      >
-        {tr("pillars.ai.cta")} →
-      </Link>
-    </div>
-  );
-}
-
-function ExperimentTile({
-  emoji,
-  subjectKey,
-  titleKey,
-  bodyKey,
-  tr,
-}: {
-  emoji: string;
-  subjectKey: Key;
-  titleKey: Key;
-  bodyKey: Key;
-  tr: TR;
-}) {
-  return (
-    <div className="group rounded-2xl border border-line bg-surface p-5 hover:border-brand/40 hover:shadow-card transition flex flex-col">
-      <div className="text-3xl transition group-hover:scale-110">{emoji}</div>
-      <p className="mt-3 text-[10px] uppercase tracking-[0.18em] font-bold text-brand">
-        {tr(subjectKey)}
-      </p>
-      <h3 className="mt-1 font-bold tracking-tight text-ink leading-snug">
-        {tr(titleKey)}
-      </h3>
-      <p className="mt-1 text-xs text-ink-muted leading-relaxed">
-        {tr(bodyKey)}
-      </p>
     </div>
   );
 }

@@ -8,7 +8,7 @@ export function Footer() {
   return (
     <footer className="border-t border-line mt-16">
       <div className="max-w-5xl mx-auto px-4 py-7 text-center">
-        <blockquote className="text-sm italic text-ink-muted leading-relaxed max-w-2xl mx-auto">
+        <blockquote className="text-sm italic text-ink-muted leading-relaxed max-w-xl mx-auto">
           &ldquo;{tr("dewey.quote")}&rdquo;
         </blockquote>
         <p className="mt-2 text-xs text-ink-subtle">{tr("dewey.attribution")}</p>
