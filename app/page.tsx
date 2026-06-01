@@ -23,54 +23,59 @@ export default function Home() {
     <div className="relative overflow-hidden">
       <Backdrop />
 
-      {/* HERO */}
-      <section className="relative max-w-5xl mx-auto px-4 pt-10 sm:pt-14 pb-20 sm:pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-16 items-center">
-          <div className="lg:pr-4">
-            <div className="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-brand-soft/50 px-3 py-1 text-xs font-semibold text-brand-hover">
-              <span className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse" />
-              {tr("hero.tag")}
-            </div>
-            <h1 className="mt-6 text-[2.7rem] sm:text-6xl md:text-[4.5rem] font-extrabold leading-[0.95] tracking-tight text-ink">
-              {tr("hero.title.before")}{" "}
-              <span className="relative inline-block">
-                <span
-                  aria-hidden
-                  className="absolute inset-x-[-2px] bottom-1 sm:bottom-1.5 h-4 sm:h-5 md:h-6 bg-sun-soft rounded-sm"
-                />
-                <span className="relative text-brand-hover">
-                  {tr("hero.title.highlight")}
-                </span>
-              </span>
-            </h1>
-            <p className="mt-6 text-lg text-ink-muted max-w-xl leading-relaxed">
-              {tr("hero.sub")}
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link
-                href={primaryHref}
-                className="inline-flex items-center px-6 py-3 bg-brand text-brand-on rounded-xl hover:bg-brand-hover font-semibold shadow-card transition"
-              >
-                {primaryLabel} →
-              </Link>
-              <Link
-                href="/chat"
-                className="inline-flex items-center px-6 py-3 bg-surface text-ink border border-line rounded-xl hover:border-brand/60 hover:text-brand font-medium transition"
-              >
-                {tr("hero.cta.chat")}
-              </Link>
-            </div>
-            <p className="mt-5 text-xs text-ink-muted">
-              <span className="inline-flex items-center gap-1 font-semibold text-brand-hover">
-                <span className="w-1.5 h-1.5 rounded-full bg-brand" />
-                {tr("hero.pilot")}
-              </span>
-              <span className="mx-2">·</span>
-              {tr("hero.pilot.note")}
-            </p>
-          </div>
+      {/* HERO — full-bleed looping product video as the background */}
+      <section className="relative overflow-hidden">
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-label={tr("hero.video.alt")}
+        >
+          <source src="/hero-demo.mp4" type="video/mp4" />
+        </video>
+        {/* Dark overlay for headline readability */}
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/45 to-black/75"
+        />
 
-          <HeroCollage tr={tr} />
+        <div className="relative max-w-3xl mx-auto px-4 pt-24 sm:pt-32 pb-24 sm:pb-32 text-center text-white">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 backdrop-blur px-3 py-1 text-xs font-semibold text-white">
+            <span className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse" />
+            {tr("hero.tag")}
+          </div>
+          <h1 className="mt-6 text-5xl sm:text-6xl md:text-[5rem] font-extrabold leading-[0.95] tracking-tight text-white">
+            {tr("hero.title.before")}{" "}
+            <span className="text-brand-soft">{tr("hero.title.highlight")}</span>
+          </h1>
+          <p className="mt-6 text-lg text-white/90 max-w-xl mx-auto leading-relaxed">
+            {tr("hero.sub")}
+          </p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href={primaryHref}
+              className="inline-flex items-center px-6 py-3 bg-brand text-brand-on rounded-xl hover:bg-brand-hover font-semibold shadow-card transition"
+            >
+              {primaryLabel} →
+            </Link>
+            <Link
+              href="/chat"
+              className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur text-white border border-white/40 rounded-xl hover:bg-white/20 hover:border-white/70 font-medium transition"
+            >
+              {tr("hero.cta.chat")}
+            </Link>
+          </div>
+          <p className="mt-5 text-xs text-white/80">
+            <span className="inline-flex items-center gap-1 font-semibold text-white">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand" />
+              {tr("hero.pilot")}
+            </span>
+            <span className="mx-2">·</span>
+            {tr("hero.pilot.note")}
+          </p>
         </div>
       </section>
 
@@ -201,79 +206,6 @@ function Backdrop() {
           "radial-gradient(ellipse 70% 50% at 50% 0%, rgb(var(--brand) / 0.18), transparent 70%)",
       }}
     />
-  );
-}
-
-/* Asymmetric collage of two Ethiopian portraits (Unsplash). */
-function HeroCollage({ tr }: { tr: TR }) {
-  return (
-    <div className="relative mx-auto w-full max-w-[460px] h-[400px] sm:h-[460px] lg:h-[500px]">
-      {/* soft brand glow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-6 -z-10 rounded-[60px] bg-gradient-to-br from-brand-soft via-sun-soft/40 to-transparent blur-2xl opacity-80"
-      />
-
-      {/* decorative dot pattern — brand */}
-      <div
-        aria-hidden
-        className="absolute -top-1 left-2 grid grid-cols-4 gap-1.5 opacity-50"
-      >
-        {Array.from({ length: 16 }).map((_, i) => (
-          <span key={i} className="block h-1 w-1 rounded-full bg-brand" />
-        ))}
-      </div>
-
-      {/* decorative dot pattern — amber */}
-      <div
-        aria-hidden
-        className="absolute bottom-1 -right-1 grid grid-cols-4 gap-1.5 opacity-60"
-      >
-        {Array.from({ length: 16 }).map((_, i) => (
-          <span key={i} className="block h-1 w-1 rounded-full bg-amber-400" />
-        ))}
-      </div>
-
-      {/* Photo 1 — Ethiopian girl in traditional dress (top-right, larger) */}
-      <a
-        href="https://unsplash.com/photos/VC_pOerCKNU"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="group absolute top-0 right-2 sm:right-4 w-[66%] aspect-[3/4] -rotate-[3deg] hover:-rotate-[1deg] transition duration-500 z-10"
-        title={tr("hero.collage.credit1")}
-      >
-        <div className="relative h-full w-full overflow-hidden rounded-2xl border-[6px] border-white shadow-pop">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://images.unsplash.com/photo-1764145177622-8317fbfe1877?w=900&q=80&auto=format&fit=crop&crop=faces"
-            alt={tr("hero.collage.alt1")}
-            className="h-full w-full object-cover"
-            loading="eager"
-            decoding="async"
-          />
-        </div>
-      </a>
-
-      {/* Photo 2 — boy in Addis Ababa (bottom-left, smaller) */}
-      <a
-        href="https://unsplash.com/photos/uWj6n0eEBLI"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="group absolute bottom-2 left-0 sm:left-2 w-[58%] aspect-[3/4] rotate-[4deg] hover:rotate-[1deg] transition duration-500"
-        title={tr("hero.collage.credit2")}
-      >
-        <div className="relative h-full w-full overflow-hidden rounded-2xl border-[6px] border-white shadow-pop">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://images.unsplash.com/photo-1633539656332-d0861676473a?w=900&q=80&auto=format&fit=crop&crop=faces"
-            alt={tr("hero.collage.alt2")}
-            className="h-full w-full object-cover"
-            loading="eager"
-            decoding="async"
-          />
-        </div>
-      </a>
-    </div>
   );
 }
 

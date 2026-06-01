@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./globals.css";
 import "katex/dist/katex.min.css";
 import { LocaleProvider } from "@/components/LocaleProvider";
@@ -10,10 +10,10 @@ import { PWARegister } from "@/components/PWARegister";
 import { PageViewTracker } from "@/components/PageViewTracker";
 import { ThemeProvider, themeBootstrapScript } from "@/components/ThemeProvider";
 
-const inter = Inter({
+const geist = Geist({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-inter",
+  variable: "--font-geist",
 });
 
 const TITLE = "Personal AI Tutor — quality education for Ethiopian high schools";
@@ -53,7 +53,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang="en" className={geist.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
       </head>
