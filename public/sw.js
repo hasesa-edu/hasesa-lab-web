@@ -1,10 +1,15 @@
 /* AI-Edu Ethiopia — minimal demo service worker */
-const VERSION = "v1";
+const VERSION = "v2";
 const APP_SHELL = "ai-edu-shell-" + VERSION;
 const STATIC = "ai-edu-static-" + VERSION;
 const PAGES = "ai-edu-pages-" + VERSION;
 
-const PRECACHE_URLS = ["/", "/lessons", "/chat", "/manifest.json", "/icon.svg"];
+// Precache only the home shell + essentials. /lessons and /chat are heavier
+// pages; they'll be cached on first visit by the fetch handler rather than
+// downloaded eagerly when the SW installs.
+const PRECACHE_URLS = ["/", "/manifest.json", "/icon.svg"];
+
+// Bump VERSION when this list changes so old caches get evicted on activate.
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

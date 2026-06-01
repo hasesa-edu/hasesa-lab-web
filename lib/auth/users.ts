@@ -102,7 +102,7 @@ export async function getUserDTO(userId: string): Promise<UserDTO | null> {
     email: u.email,
     displayName: u.displayName,
     role: u.role,
-    language: u.language,
+    language: u.language as Locale,
     region: u.region,
     school: u.school,
     under18: u.under18,

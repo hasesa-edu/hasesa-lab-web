@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { LOCALES } from "@/lib/i18n";
 import { useLocale } from "./LocaleProvider";
 import { useUser } from "./UserProvider";
 import { apiSignout } from "@/lib/api";
@@ -11,7 +10,7 @@ import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
 
 export function Nav() {
-  const { locale, setLocale, tr } = useLocale();
+  const { tr } = useLocale();
   const { user, refresh } = useUser();
   const router = useRouter();
   const pathname = usePathname();
@@ -131,26 +130,6 @@ export function Nav() {
         </nav>
 
         <div className="ml-auto hidden sm:flex items-center gap-2">
-          {/* TEMP: language selector hidden — re-enable when am/om translations are ready */}
-          <div className="hidden items-center rounded-full border border-line bg-surface p-0.5 text-xs">
-            {LOCALES.map((l) => (
-              <button
-                key={l.code}
-                onClick={() => setLocale(l.code)}
-                className={
-                  "px-2.5 py-1 rounded-full transition font-medium " +
-                  (locale === l.code
-                    ? "bg-brand text-brand-on shadow-soft"
-                    : "text-ink-muted hover:text-ink")
-                }
-                aria-pressed={locale === l.code}
-                aria-label={l.label}
-              >
-                {l.native}
-              </button>
-            ))}
-          </div>
-
           {/* TEMP: theme toggle hidden — light-only for now */}
           <ThemeToggle className="hidden" />
 
@@ -278,26 +257,6 @@ export function Nav() {
                 <Link href="/teacher" onClick={closeMobile} className={mobileLinkClass("/teacher")} aria-current={isActive("/teacher") ? "page" : undefined}>{tr("nav.teacher")}</Link>
               )}
             </nav>
-
-            {/* TEMP: language selector hidden — re-enable when am/om translations are ready */}
-            <div className="hidden items-center rounded-full border border-line bg-surface p-0.5 text-sm">
-              {LOCALES.map((l) => (
-                <button
-                  key={l.code}
-                  onClick={() => setLocale(l.code)}
-                  className={
-                    "flex-1 px-3 py-2 rounded-full transition font-medium " +
-                    (locale === l.code
-                      ? "bg-brand text-brand-on shadow-soft"
-                      : "text-ink-muted")
-                  }
-                  aria-pressed={locale === l.code}
-                  aria-label={l.label}
-                >
-                  {l.native}
-                </button>
-              ))}
-            </div>
 
             <div className="pt-1">
               {user ? (

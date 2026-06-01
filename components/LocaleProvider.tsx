@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext } from "react";
 import type { Locale } from "@/lib/i18n";
 import { tr as translate, t as dict } from "@/lib/i18n";
 
@@ -12,29 +12,15 @@ type Ctx = {
 
 const LocaleCtx = createContext<Ctx | null>(null);
 
+// English-only at this stage. Re-introduce locale state + persistence when
+// Amharic / Afaan Oromo content is ready.
 export function LocaleProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>("en");
-
-  useEffect(() => {
-    const stored = (typeof window !== "undefined" && (localStorage.getItem("locale") as Locale | null)) || null;
-    if (stored && (stored === "en" || stored === "am" || stored === "om")) {
-      setLocaleState(stored);
-    }
-  }, []);
-
-  const setLocale = (l: Locale) => {
-    setLocaleState(l);
-    try {
-      localStorage.setItem("locale", l);
-    } catch {}
-    document.documentElement.lang = l === "en" ? "en" : l === "am" ? "am" : "om";
+  const value: Ctx = {
+    locale: "en",
+    setLocale: () => {},
+    tr: (k) => translate(k, "en"),
   };
-
-  return (
-    <LocaleCtx.Provider value={{ locale, setLocale, tr: (k) => translate(k, locale) }}>
-      {children}
-    </LocaleCtx.Provider>
-  );
+  return <LocaleCtx.Provider value={value}>{children}</LocaleCtx.Provider>;
 }
 
 export function useLocale() {
