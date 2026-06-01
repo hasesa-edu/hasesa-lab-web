@@ -52,7 +52,8 @@ export function Nav() {
         </nav>
 
         <div className="ml-auto hidden sm:flex items-center gap-2">
-          <div className="flex items-center rounded-full border border-line bg-surface p-0.5 text-xs">
+          {/* TEMP: language selector hidden — re-enable when am/om translations are ready */}
+          <div className="hidden items-center rounded-full border border-line bg-surface p-0.5 text-xs">
             {LOCALES.map((l) => (
               <button
                 key={l.code}
@@ -71,7 +72,8 @@ export function Nav() {
             ))}
           </div>
 
-          <ThemeToggle />
+          {/* TEMP: theme toggle hidden — light-only for now */}
+          <ThemeToggle className="hidden" />
 
           {user ? (
             <div className="relative">
@@ -129,7 +131,8 @@ export function Nav() {
         </div>
 
         <div className="ml-auto flex sm:hidden items-center gap-1">
-          <ThemeToggle />
+          {/* TEMP: theme toggle hidden — light-only for now */}
+          <ThemeToggle className="hidden" />
           <button
             type="button"
             onClick={() => setMobileOpen((o) => !o)}
@@ -187,7 +190,8 @@ export function Nav() {
               )}
             </nav>
 
-            <div className="flex items-center rounded-full border border-line bg-surface p-0.5 text-sm">
+            {/* TEMP: language selector hidden — re-enable when am/om translations are ready */}
+            <div className="hidden items-center rounded-full border border-line bg-surface p-0.5 text-sm">
               {LOCALES.map((l) => (
                 <button
                   key={l.code}
