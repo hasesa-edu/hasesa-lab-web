@@ -34,6 +34,10 @@ export default function Home() {
           playsInline
           preload="metadata"
           poster="/hero-demo.poster.jpg"
+          // Background video — yields bandwidth to anything more visible.
+          // React's <video> types don't include fetchpriority yet, so we
+          // spread it as a raw attribute.
+          {...({ fetchpriority: "low" } as Record<string, string>)}
           aria-label={tr("hero.video.alt")}
         >
           {/* Chrome/Firefox pick the smaller WebM; Safari falls through to MP4. */}
@@ -292,6 +296,10 @@ function PartnerCard({
             height={128}
             className="h-full w-full object-contain"
             loading="lazy"
+            // Below the fold so we keep loading="lazy", but when the user
+            // scrolls here we want the logos ahead of the still-streaming
+            // hero video.
+            fetchPriority="high"
           />
         </div>
         <div className="min-w-0">
