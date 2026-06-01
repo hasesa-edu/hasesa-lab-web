@@ -130,7 +130,7 @@ function ChatInner() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
       <header>
-        <h1 className="text-3xl font-bold tracking-tight text-ink">{tr("chat.title")}</h1>
+        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-ink">{tr("chat.title")}</h1>
         <p className="text-ink-muted mt-1.5 text-sm">{tr("chat.subtitle")}</p>
         {lesson && (
           <div className="mt-4 inline-flex items-center gap-2 text-xs bg-brand-soft text-brand-hover dark:text-brand px-3 py-1.5 rounded-full border border-brand/20">

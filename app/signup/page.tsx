@@ -59,7 +59,7 @@ export default function SignupPage() {
   return (
     <div className="max-w-md mx-auto px-4 py-14">
       <div className="rounded-2xl border border-line bg-surface p-7 shadow-card">
-        <h1 className="text-2xl font-bold tracking-tight text-ink">{tr("auth.signup.title")}</h1>
+        <h1 className="text-3xl font-extrabold tracking-tight text-ink">{tr("auth.signup.title")}</h1>
         <p className="text-sm text-ink-muted mt-1.5">{tr("auth.signup.tagline")}</p>
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
