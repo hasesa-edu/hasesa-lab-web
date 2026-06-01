@@ -55,25 +55,10 @@ export const t: Dict = {
     am: "በደቂቃ ውስጥ የነጻ መለያ ይፍጠሩ። SMS አያስፈልግም።",
     om: "Daqiiqaa tokko keessatti akaawuntii bilisaa uumi. SMS hin barbaachisu.",
   },
-  "hero.collage.alt1": {
-    en: "Ethiopian girl in traditional dress smiling",
-    am: "ኢትዮጵያዊት ልጅ በባህላዊ ልብስ ስታሳ",
-    om: "Intalli Itoophiyaa uffata aadaa uffattee seequu",
-  },
-  "hero.collage.credit1": {
-    en: "Photo: Shalom Melaku / Unsplash",
-    am: "ፎቶ፦ ሻሎም መላኩ / Unsplash",
-    om: "Suuraa: Shalom Melaku / Unsplash",
-  },
-  "hero.collage.alt2": {
-    en: "Young boy in Addis Ababa smiling at the camera",
-    am: "በአዲስ አበባ ያለ ወጣት ልጅ ካሜራውን እያየ ሲስቅ",
-    om: "Mucaan Finfinnee kaameraa ilaalee seequu",
-  },
-  "hero.collage.credit2": {
-    en: "Photo: Fray Bekele / Unsplash",
-    am: "ፎቶ፦ ፍሬ በቀለ / Unsplash",
-    om: "Suuraa: Fray Bekele / Unsplash",
+  "hero.video.alt": {
+    en: "Short demo of the AI tutor answering a question with worked steps",
+    am: "AI አስተማሪው ጥያቄን ደረጃ-በ-ደረጃ ሲመልስ የሚያሳይ አጭር ማሳያ",
+    om: "Agarsiisa gabaabaa barsiisaa AI gaaffii tarkaanfii-tarkaanfiin deebisuu",
   },
 
   // Two pillars
