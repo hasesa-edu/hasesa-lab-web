@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { LOCALES } from "@/lib/i18n";
 import { useLocale } from "./LocaleProvider";
 import { useUser } from "./UserProvider";
@@ -14,8 +14,49 @@ export function Nav() {
   const { locale, setLocale, tr } = useLocale();
   const { user, refresh } = useUser();
   const router = useRouter();
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  const mobilePanelRef = useRef<HTMLDivElement>(null);
+  const hamburgerBtnRef = useRef<HTMLButtonElement>(null);
+
+  // Close menus on outside-click and on Escape.
+  useEffect(() => {
+    if (!menuOpen && !mobileOpen) return;
+    function onPointerDown(e: MouseEvent) {
+      const target = e.target as Node;
+      if (
+        menuOpen &&
+        userMenuRef.current &&
+        !userMenuRef.current.contains(target)
+      ) {
+        setMenuOpen(false);
+      }
+      if (
+        mobileOpen &&
+        mobilePanelRef.current &&
+        !mobilePanelRef.current.contains(target) &&
+        hamburgerBtnRef.current &&
+        !hamburgerBtnRef.current.contains(target)
+      ) {
+        setMobileOpen(false);
+      }
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setMenuOpen(false);
+        setMobileOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen, mobileOpen]);
 
   async function handleSignOut() {
     await apiSignout();
@@ -29,25 +70,63 @@ export function Nav() {
     setMobileOpen(false);
   }
 
-  const navLink =
-    "text-ink-muted hover:text-brand transition-colors text-sm font-medium";
-  const mobileLink =
-    "block px-3 py-3 rounded-md text-ink hover:bg-surface-2 text-base font-medium";
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+  const navLinkClass = (href: string) =>
+    "transition-colors text-sm font-medium " +
+    (isActive(href) ? "text-brand" : "text-ink-muted hover:text-brand");
+
+  const mobileLinkClass = (href: string) =>
+    "block px-3 py-3 rounded-md text-base font-medium " +
+    (isActive(href)
+      ? "text-brand bg-brand-soft/40"
+      : "text-ink hover:bg-surface-2");
 
   return (
-    <header className="sticky top-0 z-20 border-b border-line/80 bg-canvas/80 backdrop-blur-md supports-[backdrop-filter]:bg-canvas/70">
+    <header className="sticky top-0 z-20 border-b border-line bg-canvas">
       <div className="max-w-5xl mx-auto px-4 py-3 flex items-center gap-4 sm:gap-6">
         <Logo />
 
         <nav className="hidden sm:flex items-center gap-5">
-          <Link href="/" className={navLink}>{tr("nav.home")}</Link>
-          <Link href="/lessons" className={navLink}>{tr("nav.lessons")}</Link>
-          <Link href="/chat" className={navLink}>{tr("nav.tutor")}</Link>
+          <Link
+            href="/"
+            className={navLinkClass("/")}
+            aria-current={isActive("/") ? "page" : undefined}
+          >
+            {tr("nav.home")}
+          </Link>
+          <Link
+            href="/lessons"
+            className={navLinkClass("/lessons")}
+            aria-current={isActive("/lessons") ? "page" : undefined}
+          >
+            {tr("nav.lessons")}
+          </Link>
+          <Link
+            href="/chat"
+            className={navLinkClass("/chat")}
+            aria-current={isActive("/chat") ? "page" : undefined}
+          >
+            {tr("nav.tutor")}
+          </Link>
           {user && user.role === "student" && (
-            <Link href="/dashboard" className={navLink}>{tr("nav.dashboard")}</Link>
+            <Link
+              href="/dashboard"
+              className={navLinkClass("/dashboard")}
+              aria-current={isActive("/dashboard") ? "page" : undefined}
+            >
+              {tr("nav.dashboard")}
+            </Link>
           )}
           {user && user.role === "teacher" && (
-            <Link href="/teacher" className={navLink}>{tr("nav.teacher")}</Link>
+            <Link
+              href="/teacher"
+              className={navLinkClass("/teacher")}
+              aria-current={isActive("/teacher") ? "page" : undefined}
+            >
+              {tr("nav.teacher")}
+            </Link>
           )}
         </nav>
 
@@ -76,7 +155,7 @@ export function Nav() {
           <ThemeToggle className="hidden" />
 
           {user ? (
-            <div className="relative">
+            <div className="relative" ref={userMenuRef}>
               <button
                 onClick={() => setMenuOpen((o) => !o)}
                 className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full border border-line bg-surface hover:border-brand/60 text-sm transition"
@@ -130,10 +209,19 @@ export function Nav() {
           )}
         </div>
 
-        <div className="ml-auto flex sm:hidden items-center gap-1">
+        <div className="ml-auto flex sm:hidden items-center gap-1.5">
           {/* TEMP: theme toggle hidden — light-only for now */}
           <ThemeToggle className="hidden" />
+          {!user && (
+            <Link
+              href="/signup"
+              className="text-sm px-3 py-1.5 rounded-md bg-brand text-brand-on hover:bg-brand-hover font-semibold shadow-soft transition"
+            >
+              {tr("nav.signup")}
+            </Link>
+          )}
           <button
+            ref={hamburgerBtnRef}
             type="button"
             onClick={() => setMobileOpen((o) => !o)}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
@@ -160,6 +248,7 @@ export function Nav() {
       {mobileOpen && (
         <div
           id="mobile-nav-panel"
+          ref={mobilePanelRef}
           className="sm:hidden border-t border-line bg-canvas"
         >
           <div className="max-w-5xl mx-auto px-4 py-3 space-y-3">
@@ -176,17 +265,17 @@ export function Nav() {
             )}
 
             <nav className="flex flex-col">
-              <Link href="/" onClick={closeMobile} className={mobileLink}>{tr("nav.home")}</Link>
-              <Link href="/lessons" onClick={closeMobile} className={mobileLink}>{tr("nav.lessons")}</Link>
-              <Link href="/chat" onClick={closeMobile} className={mobileLink}>{tr("nav.tutor")}</Link>
+              <Link href="/" onClick={closeMobile} className={mobileLinkClass("/")} aria-current={isActive("/") ? "page" : undefined}>{tr("nav.home")}</Link>
+              <Link href="/lessons" onClick={closeMobile} className={mobileLinkClass("/lessons")} aria-current={isActive("/lessons") ? "page" : undefined}>{tr("nav.lessons")}</Link>
+              <Link href="/chat" onClick={closeMobile} className={mobileLinkClass("/chat")} aria-current={isActive("/chat") ? "page" : undefined}>{tr("nav.tutor")}</Link>
               {user && user.role === "student" && (
                 <>
-                  <Link href="/dashboard" onClick={closeMobile} className={mobileLink}>{tr("nav.dashboard")}</Link>
-                  <Link href="/join" onClick={closeMobile} className={mobileLink}>{tr("student.joinClass")}</Link>
+                  <Link href="/dashboard" onClick={closeMobile} className={mobileLinkClass("/dashboard")} aria-current={isActive("/dashboard") ? "page" : undefined}>{tr("nav.dashboard")}</Link>
+                  <Link href="/join" onClick={closeMobile} className={mobileLinkClass("/join")} aria-current={isActive("/join") ? "page" : undefined}>{tr("student.joinClass")}</Link>
                 </>
               )}
               {user && user.role === "teacher" && (
-                <Link href="/teacher" onClick={closeMobile} className={mobileLink}>{tr("nav.teacher")}</Link>
+                <Link href="/teacher" onClick={closeMobile} className={mobileLinkClass("/teacher")} aria-current={isActive("/teacher") ? "page" : undefined}>{tr("nav.teacher")}</Link>
               )}
             </nav>
 

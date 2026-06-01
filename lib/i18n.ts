@@ -12,7 +12,7 @@ export const t: Dict = {
   // Nav
   "nav.home": { en: "Home", am: "መነሻ", om: "Mana" },
   "nav.lessons": { en: "Lessons", am: "ትምህርቶች", om: "Barnoota" },
-  "nav.tutor": { en: "AI Tutor", am: "የAI አስተማሪ", om: "Barsiisaa AI" },
+  "nav.tutor": { en: "Tutor", am: "አስተማሪ", om: "Barsiisaa" },
   "nav.dashboard": { en: "My progress", am: "የእኔ ሂደት", om: "Adeemsa koo" },
   "nav.teacher": { en: "Teacher", am: "መምህር", om: "Barsiisaa" },
   "nav.signin": { en: "Sign in", am: "ግባ", om: "Seeni" },

@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type BeforeInstallPromptEvent = Event & {
@@ -8,6 +9,7 @@ type BeforeInstallPromptEvent = Event & {
 };
 
 export function PWARegister() {
+  const pathname = usePathname();
   const [installEvent, setInstallEvent] = useState<BeforeInstallPromptEvent | null>(null);
   const [dismissed, setDismissed] = useState(false);
 
@@ -30,7 +32,9 @@ export function PWARegister() {
     setDismissed(localStorage.getItem("pwa-install-dismissed") === "1");
   }, []);
 
-  if (!installEvent || dismissed) return null;
+  // The install card only appears on the marketing home page so it doesn't
+  // overlap content on task-focused pages (chat, dashboard, etc.).
+  if (pathname !== "/" || !installEvent || dismissed) return null;
 
   return (
     <div className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-4 sm:bottom-4 sm:max-w-sm z-30 bg-surface border border-brand/30 rounded-xl shadow-pop p-3 flex items-start gap-3">
