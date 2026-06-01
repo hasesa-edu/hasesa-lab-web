@@ -18,7 +18,7 @@ const geist = Geist({
 
 const TITLE = "Personal AI Tutor — quality education for Ethiopian high schools";
 const DESCRIPTION =
-  "An AI tutor built for deep understanding, not just exam answers. MoE-aligned lessons in English, Amharic, and Afaan Oromo, each with an at-home experiment. Demo covers Grade 11 Math, Physics, Chemistry, and Biology.";
+  "An AI tutor built for deep understanding, not just exam answers. MoE-aligned lessons in English, each with an at-home experiment. Demo covers Grade 11 Math, Physics, Chemistry, and Biology.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://personalaitutor.app"),
@@ -33,7 +33,6 @@ export const metadata: Metadata = {
     title: TITLE,
     description: DESCRIPTION,
     locale: "en_US",
-    alternateLocale: ["am_ET", "om_ET"],
   },
   twitter: {
     card: "summary_large_image",

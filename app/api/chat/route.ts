@@ -12,8 +12,6 @@ type Msg = { role: "user" | "assistant"; content: string };
 
 const LANG_NAME: Record<Locale, string> = {
   en: "English",
-  am: "Amharic (አማርኛ)",
-  om: "Afaan Oromo (Afaan Oromoo)",
 };
 
 function uid(): string {

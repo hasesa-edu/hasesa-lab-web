@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
 import { SUBJECTS, type Subject } from "@/lib/lessons";
+import type { Locale } from "@/lib/i18n";
 import { apiCreateClass, apiListClasses, type TeacherClass } from "@/lib/api";
 
 export default function TeacherPage() {
@@ -132,7 +133,7 @@ export default function TeacherPage() {
   );
 }
 
-function ClassDetail({ cls, tr, locale }: { cls: TeacherClass; tr: (k: any) => string; locale: "en" | "am" | "om" }) {
+function ClassDetail({ cls, tr, locale }: { cls: TeacherClass; tr: (k: any) => string; locale: Locale }) {
   return (
     <div>
       <div className="rounded-xl border border-brand/25 bg-brand-soft/40 p-5">
@@ -169,7 +170,7 @@ function SubjectAggregate({
   cls: TeacherClass;
   subject: Subject;
   tr: (k: any) => string;
-  locale: "en" | "am" | "om";
+  locale: Locale;
 }) {
   const meta = SUBJECTS.find((s) => s.id === subject)!;
   const rows = cls.aggregate.filter((a) => a.subject === subject);

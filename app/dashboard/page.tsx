@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useLocale } from "@/components/LocaleProvider";
+import type { Locale } from "@/lib/i18n";
 import { useUser } from "@/components/UserProvider";
 import {
   SUBJECTS,
@@ -137,7 +138,7 @@ function MasterySubjectCard({
 }: {
   subject: Subject;
   mastery: Record<string, Record<string, number>>;
-  locale: "en" | "am" | "om";
+  locale: Locale;
   tr: (k: any) => string;
 }) {
   const meta = SUBJECTS.find((s) => s.id === subject)!;
