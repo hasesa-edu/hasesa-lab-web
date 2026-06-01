@@ -24,7 +24,7 @@ export default function Home() {
       <Backdrop />
 
       {/* HERO */}
-      <section className="relative max-w-6xl mx-auto px-4 pt-10 sm:pt-14 pb-20 sm:pb-24">
+      <section className="relative max-w-5xl mx-auto px-4 pt-10 sm:pt-14 pb-20 sm:pb-24">
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-16 items-center">
           <div className="lg:pr-4">
             <div className="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-brand-soft/50 px-3 py-1 text-xs font-semibold text-brand-hover">
@@ -75,7 +75,7 @@ export default function Home() {
       </section>
 
       {/* PILLARS */}
-      <section className="max-w-6xl mx-auto px-4 pb-20">
+      <section className="max-w-5xl mx-auto px-4 pb-20">
         <div className="max-w-2xl mx-auto text-center">
           <p className="text-xs uppercase tracking-[0.18em] font-bold text-brand">
             {tr("pillars.eyebrow")}
@@ -91,7 +91,7 @@ export default function Home() {
       </section>
 
       {/* MORE EXPERIMENTS GRID */}
-      <section className="max-w-6xl mx-auto px-4 pb-20">
+      <section className="max-w-5xl mx-auto px-4 pb-20">
         <div className="max-w-2xl mx-auto text-center">
           <p className="text-xs uppercase tracking-[0.18em] font-bold text-brand">
             {tr("exps.eyebrow")}
@@ -141,45 +141,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* DEWEY */}
-      <section className="max-w-3xl mx-auto px-4 pb-20">
-        <figure className="relative rounded-2xl border border-line bg-surface px-6 py-10 sm:px-10 sm:py-14 text-center shadow-soft overflow-hidden">
-          <span
-            aria-hidden
-            className="pointer-events-none absolute -top-4 left-6 sm:left-10 text-[120px] leading-none font-serif text-brand/15 select-none"
-          >
-            &ldquo;
-          </span>
-          <p className="text-xs uppercase tracking-[0.18em] font-semibold text-brand">
-            {tr("dewey.eyebrow")}
-          </p>
-          <blockquote className="mt-4 text-xl sm:text-2xl font-medium italic leading-relaxed tracking-tight text-ink">
-            {tr("dewey.quote")}
-          </blockquote>
-          <figcaption className="mt-4 text-sm text-ink-muted">
-            {tr("dewey.attribution")}
-          </figcaption>
-          <div className="mx-auto mt-8 h-px w-12 bg-line" />
-          <p className="mt-6 text-sm sm:text-base text-ink-muted leading-relaxed max-w-2xl mx-auto">
-            {tr("dewey.gloss")}
-          </p>
-        </figure>
-      </section>
-
       {/* PARTNERS */}
       <section className="max-w-5xl mx-auto px-4 pb-20">
-        <div className="text-center">
-          <p className="text-xs uppercase tracking-[0.18em] font-semibold text-brand">
-            {tr("partners.eyebrow")}
-          </p>
-          <h2 className="mt-2 text-2xl sm:text-3xl font-bold tracking-tight text-ink">
-            {tr("partners.title")}
-          </h2>
-          <p className="mt-2 text-ink-muted max-w-2xl mx-auto">
-            {tr("partners.sub")}
-          </p>
-        </div>
-        <ul className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <p className="text-center text-xs uppercase tracking-[0.18em] font-semibold text-brand">
+          {tr("partners.eyebrow")}
+        </p>
+        <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <PartnerCard
             href="https://www.thesciencebasement.org/"
             logo="/partners/science-basement.png"
