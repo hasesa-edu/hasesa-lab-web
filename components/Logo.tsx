@@ -42,7 +42,7 @@ export function Logo({ className = "" }: { className?: string }) {
         <span className="font-semibold text-[15px] tracking-tight text-ink">
           Personal AI Tutor
         </span>
-        <span className="text-[10px] uppercase tracking-[0.14em] text-ink-subtle mt-0.5">
+        <span className="hidden md:block text-[10px] uppercase tracking-[0.14em] text-ink-subtle mt-0.5">
           High school · Ethiopia
         </span>
       </span>

@@ -60,8 +60,8 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-ink">
+    <div className="max-w-5xl mx-auto px-4 py-12">
+      <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-ink">
         {tr("dash.greeting")}, {user.displayName} 👋
       </h1>
       <p className="text-ink-muted mt-1.5 text-sm">{tr("dash.title")}</p>

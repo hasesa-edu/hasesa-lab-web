@@ -70,7 +70,7 @@ export default function OnboardingPage() {
     return (
       <div className="max-w-md mx-auto px-4 py-14">
         <div className="rounded-2xl border border-line bg-surface p-7 shadow-card">
-          <h1 className="text-2xl font-bold tracking-tight text-ink">{tr("onboard.welcome")}</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight text-ink">{tr("onboard.welcome")}</h1>
           <h2 className="mt-6 font-medium text-ink">{tr("onboard.pickSubjects")}</h2>
           <div className="mt-3 grid grid-cols-2 gap-2">
             {SUBJECTS.map((s) => (
@@ -111,7 +111,7 @@ export default function OnboardingPage() {
     const allAnswered = diagQs.every((q) => answers[q.key] !== undefined);
     return (
       <div className="max-w-2xl mx-auto px-4 py-12">
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink">{tr("onboard.diag.title")}</h1>
+        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-ink">{tr("onboard.diag.title")}</h1>
         <p className="text-sm text-ink-muted mt-2">{tr("onboard.diag.intro")}</p>
 
         <ol className="mt-6 space-y-5">
@@ -166,7 +166,7 @@ export default function OnboardingPage() {
   return (
     <div className="max-w-md mx-auto px-4 py-16 text-center">
       <div className="text-5xl">🎉</div>
-      <h1 className="mt-3 text-2xl font-bold tracking-tight text-ink">{tr("onboard.done.title")}</h1>
+      <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-ink">{tr("onboard.done.title")}</h1>
       <p className="mt-2 text-ink-muted">{tr("onboard.done.body")}</p>
       <button
         onClick={() => router.push("/dashboard")}

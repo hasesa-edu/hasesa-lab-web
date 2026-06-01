@@ -12,7 +12,7 @@ export default function LessonsPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-12">
-      <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-ink">
+      <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-ink">
         {tr("lessons.title")}
       </h1>
       <p className="text-ink-muted mt-2 max-w-2xl">{tr("lessons.subtitle")}</p>

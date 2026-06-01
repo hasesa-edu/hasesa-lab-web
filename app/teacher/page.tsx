@@ -65,7 +65,7 @@ export default function TeacherPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-12">
-      <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-ink">{tr("teacher.title")}</h1>
+      <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-ink">{tr("teacher.title")}</h1>
       <p className="text-ink-muted mt-1.5 text-sm max-w-2xl">{tr("teacher.subtitle")}</p>
 
       <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
