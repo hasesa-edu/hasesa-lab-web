@@ -38,8 +38,8 @@ export default {
       },
       fontFamily: {
         sans: [
-          "var(--font-inter)",
-          "Inter",
+          "var(--font-geist)",
+          "Geist",
           "system-ui",
           "-apple-system",
           "Segoe UI",
