@@ -60,12 +60,14 @@ export default function Home() {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link
               href={primaryHref}
+              prefetch={false}
               className="inline-flex items-center px-6 py-3 bg-brand text-brand-on rounded-xl hover:bg-brand-hover font-semibold shadow-card transition"
             >
               {primaryLabel} →
             </Link>
             <Link
               href="/chat"
+              prefetch={false}
               className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur text-white border border-white/40 rounded-xl hover:bg-white/20 hover:border-white/70 font-medium transition"
             >
               {tr("hero.cta.chat")}
@@ -131,12 +133,14 @@ export default function Home() {
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
             <Link
               href={primaryHref}
+              prefetch={false}
               className="inline-flex items-center px-6 py-3 bg-brand text-brand-on rounded-xl hover:bg-brand-hover font-semibold shadow-card transition"
             >
               {primaryLabel} →
             </Link>
             <Link
               href="/lessons"
+              prefetch={false}
               className="inline-flex items-center px-6 py-3 bg-surface text-ink border border-line rounded-xl hover:border-brand/60 hover:text-brand font-medium transition"
             >
               {tr("hero.cta.lessons")}
