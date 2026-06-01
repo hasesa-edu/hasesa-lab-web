@@ -20,10 +20,15 @@ function systemPref(): ResolvedTheme {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
+// TEMP: app is light-only for now — toggle is hidden in the Nav and we ignore
+// whatever's stored / preferred and always apply light. Remove the override to re-enable.
+const LIGHT_ONLY = true;
+
 function applyTheme(resolved: ResolvedTheme) {
   const root = document.documentElement;
-  root.classList.toggle("dark", resolved === "dark");
-  root.style.colorScheme = resolved;
+  const effective: ResolvedTheme = LIGHT_ONLY ? "light" : resolved;
+  root.classList.toggle("dark", effective === "dark");
+  root.style.colorScheme = effective;
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
@@ -74,13 +79,12 @@ export function useTheme() {
 }
 
 // Inline script string for <head> to avoid flash of incorrect theme.
+// TEMP: light-only — always strips any dark class and sets color-scheme: light.
+// To restore dark support, revert this alongside the LIGHT_ONLY override above.
 export const themeBootstrapScript = `(() => {
   try {
-    var s = localStorage.getItem('${STORAGE_KEY}');
-    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    var dark = s === 'dark' || ((!s || s === 'system') && prefersDark);
     var root = document.documentElement;
-    if (dark) root.classList.add('dark');
-    root.style.colorScheme = dark ? 'dark' : 'light';
+    root.classList.remove('dark');
+    root.style.colorScheme = 'light';
   } catch (e) {}
 })();`;
