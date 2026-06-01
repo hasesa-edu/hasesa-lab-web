@@ -24,7 +24,7 @@ export default function Home() {
       <Backdrop />
 
       {/* HERO — full-bleed looping product video as the background */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden min-h-[calc(100vh-61px)] flex items-center">
         <video
           className="absolute inset-0 w-full h-full object-cover"
           autoPlay
@@ -42,7 +42,7 @@ export default function Home() {
           className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/45 to-black/75"
         />
 
-        <div className="relative max-w-3xl mx-auto px-4 pt-24 sm:pt-32 pb-24 sm:pb-32 text-center text-white">
+        <div className="relative w-full max-w-3xl mx-auto px-4 py-16 text-center text-white">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 backdrop-blur px-3 py-1 text-xs font-semibold text-white">
             <span className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse" />
             {tr("hero.tag")}
@@ -80,7 +80,7 @@ export default function Home() {
       </section>
 
       {/* PILLARS */}
-      <section className="max-w-5xl mx-auto px-4 pb-20">
+      <section className="max-w-5xl mx-auto px-4 pt-20 sm:pt-24 pb-20">
         <div className="max-w-2xl mx-auto text-center">
           <p className="text-xs uppercase tracking-[0.18em] font-bold text-brand">
             {tr("pillars.eyebrow")}
