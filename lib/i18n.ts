@@ -27,19 +27,19 @@ export const t: Dict = {
     om: "Barnoota qulqullina qabu manneen barumsaa sadarkaa lammaffaa Itoophiyaaf",
   },
   "hero.title.before": {
-    en: "Don't just memorize it. Build it.",
-    am: "ብቻ አታስታውሱት። ይገንቡት።",
-    om: "Yaadachuu qofa hin tahin. Ijaari.",
+    en: "Don't memorize. Do it.",
+    am: "አታስታውሱ። ይስሩት።",
+    om: "Hin yaadatiin. Hojjedhu.",
   },
   "hero.title.highlight": {
-    en: "Then ask the AI.",
-    am: "ከዚያ AI ይጠይቁ።",
-    om: "Ergasii AI gaafadhu.",
+    en: "Learn your way.",
+    am: "በራስዎ መንገድ ይማሩ።",
+    om: "Karaa keetiin baradhu.",
   },
   "hero.sub": {
-    en: "Every Grade 11 Math, Physics, Chemistry, and Biology lesson comes with a hands-on experiment you can do at home — and a patient AI tutor that knows your textbook, in English, Amharic, or Afaan Oromo.",
-    am: "እያንዳንዱ የ11ኛ ክፍል ሒሳብ፣ ፊዚክስ፣ ኬሚስትሪና ባዮሎጂ ትምህርት በቤት የሚሰራ የተግባር ሙከራና መጽሐፍዎን የሚያውቅ ትዕግስተኛ AI አስተማሪ ይዟል — በእንግሊዝኛ፣ በአማርኛ ወይም በአፋን ኦሮሞ።",
-    om: "Barnoonni Heerregaa, Fiiziksii, Keemistirii fi Baayooloojii Kutaa 11 hundi shaakala harkaan hojjetamu kan mana keessatti hojjettu fi barsiisaa AI obsaa kitaaba kee beeku qaba — Ingiliffaan, Amaariffaan, ykn Afaan Oromootiin.",
+    en: "An at-home experiment for every lesson, plus a tutor that learns at your pace.",
+    am: "ለእያንዳንዱ ትምህርት በቤት የሚሰራ ሙከራ፣ ከእርስዎ ፍጥነት ጋር የሚማር አስተማሪ።",
+    om: "Barnoota tokkoo tokkoof shaakala mana keessatti, fi barsiisaa saffisa keetiin baratu.",
   },
   "hero.cta.lessons": { en: "Browse lessons", am: "ትምህርቶችን ይመልከቱ", om: "Barnoota ilaali" },
   "hero.cta.chat": { en: "Try the AI tutor", am: "AI አስተማሪውን ይሞክሩ", om: "Barsiisaa AI yaali" },
@@ -176,17 +176,7 @@ export const t: Dict = {
   },
 
   // Partners
-  "partners.eyebrow": { en: "Partners", am: "አጋሮች", om: "Hiriyoota" },
-  "partners.title": {
-    en: "Building this together",
-    am: "ይህንን አብረን እየገነባን ነው",
-    om: "Kana waliin ijaaraa jirra",
-  },
-  "partners.sub": {
-    en: "We're collaborating with organizations that share our belief in hands-on, accessible education.",
-    am: "በተግባራዊና ለሁሉም ተደራሽ ትምህርት ላይ እምነታችንን ከሚጋሩ ድርጅቶች ጋር አብረን እንሰራለን።",
-    om: "Dhaabbilee amantii keenya barnoota hojiidhaan, hunda bira ga'u qoodaniin waliin hojjenna.",
-  },
+  "partners.eyebrow": { en: "Our partners", am: "የእኛ አጋሮች", om: "Hiriyoota keenya" },
   "partners.sb.tag": {
     en: "Science communication by researchers-in-training.",
     am: "በምርምር ላይ ባሉ ተመራማሪዎች የሳይንስ ግንኙነት።",
@@ -264,26 +254,16 @@ export const t: Dict = {
     om: "Seelii biqiltuu dhugaa ilaali",
   },
 
-  // Dewey quote
-  "dewey.eyebrow": {
-    en: "Built on a simple idea",
-    am: "በቀላል ሐሳብ ላይ የተመሰረተ",
-    om: "Yaada salphaa irratti ijaarame",
-  },
+  // Dewey quote (lives in the Footer)
   "dewey.quote": {
-    en: "The child's own instincts and powers furnish the material and give the starting point for all education.",
-    am: "የልጁ የራሱ ስሜቶችና ችሎታዎች ለሁሉም ትምህርት ቁሳቁስን ያቀርባሉ፣ መነሻ ነጥብንም ይሰጣሉ።",
-    om: "Miirri fi humni mucaa mataa isaa barnoota hundaaf maatii fi ka'umsa kenna.",
+    en: "Give the pupils something to do, not something to learn; and the doing is of such a nature as to demand thinking; learning naturally results.",
+    am: "ለተማሪዎች የሚሰሩትን ይስጡ፣ የሚማሩትን አይደለም፤ መሥራቱም ማሰብን የሚጠይቅ ስለሆነ መማር በተፈጥሮ ይከሰታል።",
+    om: "Barattootaaf waan hojjetan kennaa, waan baratan miti፤ hojjechuun isaa yaaduu waan barbaaduuf, barachuun uumamaan dhufa.",
   },
   "dewey.attribution": {
-    en: "— John Dewey, My Pedagogic Creed (1897)",
-    am: "— ጆን ዲዊ፣ የእኔ ትምህርታዊ መርህ (1897)",
-    om: "— John Dewey, My Pedagogic Creed (1897)",
-  },
-  "dewey.gloss": {
-    en: "Personal AI Tutor is built on Dewey's idea: every learner starts somewhere different — so every lesson, quiz, and conversation adapts to where they are.",
-    am: "Personal AI Tutor በዲዊ ሐሳብ ላይ የተመሰረተ ነው፦ እያንዳንዱ ተማሪ ከተለያየ ቦታ ይጀምራል — እያንዳንዱ ትምህርት፣ ፈተናና ውይይት ለእሱ ቦታ ይስማማል።",
-    om: "Personal AI Tutor yaada Dewey irratti ijaarameera፦ barataan hundi bakka adda addaa irraa eegala — barnoonni, qormaanni, fi mariin hundi bakka inni jiruun walsimu.",
+    en: "— John Dewey",
+    am: "— ጆን ዲዊ",
+    om: "— John Dewey",
   },
 
   // CTA strip
