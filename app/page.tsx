@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
@@ -284,10 +285,11 @@ function PartnerCard({
         className="group flex items-center gap-4 rounded-xl border border-line bg-surface p-4 sm:p-5 shadow-soft hover:border-brand/40 hover:shadow-card transition"
       >
         <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-surface-2 border border-line overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={logo}
             alt={`${name} logo`}
+            width={128}
+            height={128}
             className="h-full w-full object-contain"
             loading="lazy"
           />
