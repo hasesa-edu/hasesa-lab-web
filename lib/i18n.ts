@@ -68,9 +68,9 @@ export const t: Dict = {
     om: "Barnoota hunda keessa wantoota lama",
   },
   "pillars.title": {
-    en: "Real experiments. Real answers.",
-    am: "እውነተኛ ሙከራዎች። እውነተኛ መልሶች።",
-    om: "Shaakala dhugaa. Deebii dhugaa.",
+    en: "Two ways to make it stick.",
+    am: "ትምህርቱ እንዲቆይ ሁለት መንገዶች።",
+    om: "Karaa lama barnoonni si bira akka turuuf.",
   },
   "pillars.exp.eyebrow": { en: "Hands-on", am: "በተግባር", om: "Hojiidhaan" },
   "pillars.exp.title": {
@@ -82,11 +82,6 @@ export const t: Dict = {
     en: "Every topic ships with something tactile. Build a pH meter from red cabbage. Find a tree's height from its shadow. No fancy lab needed.",
     am: "እያንዳንዱ ርዕስ በቤት የሚሰራ ነገር አለው። ከቀይ ጎመን የpH መለኪያ ይገንቡ። ከዛፍ ጥላ የዛፉን ርዝመት ይፈልጉ። ውድ ላብራቶሪ አያስፈልግም።",
     om: "Mata-dureen hundi waan harkaan tuqamuu danda'u wajjin dhufa. Cuunfaa raafuu diimaa irraa madaala pH ijaari. Gaaddidduu mukaa irraa dheerina muka argadhu. Laaboraatoorii gatii guddaa hin barbaachisu.",
-  },
-  "pillars.exp.cta": {
-    en: "See all lessons",
-    am: "ሁሉንም ትምህርቶች ይመልከቱ",
-    om: "Barnoota hunda ilaali",
   },
   "pillars.exp.mock.label": {
     en: "AT-HOME EXPERIMENT",
@@ -113,11 +108,6 @@ export const t: Dict = {
     am: "ቤኪንግ ሶዳ ይጨምሩ — ሰማያዊ ይሆናል።",
     om: "Beekiing sooda itti dabali — cuquliisa ta'a.",
   },
-  "pillars.exp.mock.tag": {
-    en: "Chemistry · Acids & Bases",
-    am: "ኬሚስትሪ · አሲድና ቤዝ",
-    om: "Keemistirii · Asiidiifi Beezii",
-  },
   "pillars.ai.eyebrow": { en: "AI tutor", am: "AI አስተማሪ", om: "Barsiisaa AI" },
   "pillars.ai.title": {
     en: "A patient teacher, always on",
@@ -129,16 +119,6 @@ export const t: Dict = {
     am: "ተቸግረዋል? በማንኛውም ጊዜ ይጠይቁ። አስተማሪው ደረጃ-በ-ደረጃ ያስረዳል፣ መጽሐፍዎን ይከተላል፣ በቋንቋዎ ይመልሳል።",
     om: "Rakkoo qabda? Yeroo barbaadde gaafadhu. Barsiisichi tarkaanfii-tarkaanfiin ibsa, kitaaba kee hordofa, afaan keetiin deebii kenna.",
   },
-  "pillars.ai.cta": {
-    en: "Open the AI tutor",
-    am: "AI አስተማሪውን ይክፈቱ",
-    om: "Barsiisaa AI bani",
-  },
-  "pillars.ai.mock.label": {
-    en: "AI TUTOR · Physics ch.4",
-    am: "AI አስተማሪ · ፊዚክስ ምዕ.4",
-    om: "BARSIISAA AI · Fiiziksii bo.4",
-  },
   "pillars.ai.mock.user": {
     en: "Explain F = m·a like I'm 14.",
     am: "F = m·a እንደ 14 ዓመት ለሆነ ያስረዱኝ።",
@@ -148,11 +128,6 @@ export const t: Dict = {
     en: "Push something heavier → it speeds up slower.",
     am: "ከባድ ነገር ይግፉ → ቀስ ብሎ ይፈጥናል።",
     om: "Waan ulfaataa dhiibi → suuta saffisa.",
-  },
-  "pillars.ai.mock.assistant2": {
-    en: "Push the same thing harder → it speeds up faster.",
-    am: "ተመሳሳዩን ነገር በጥንካሬ ይግፉ → በፍጥነት ይፈጥናል።",
-    om: "Waan walfakkaataa cimsii dhiibi → saffisaan saffisa.",
   },
   "pillars.ai.mock.source": {
     en: "Grounded in your textbook",
@@ -171,72 +146,6 @@ export const t: Dict = {
     en: "A school in Addis Ababa serving students at scale.",
     am: "በብዙ ተማሪዎች የሚያገለግል በአዲስ አበባ የሚገኝ ትምህርት ቤት።",
     om: "Manni barumsaa Finfinneetti barattoota baay'eef tajaajilu.",
-  },
-
-  // Experiments grid (every subject, hands-on)
-  "exps.eyebrow": {
-    en: "More than a video",
-    am: "ከቪዲዮ በላይ",
-    om: "Vidiyoo caala",
-  },
-  "exps.title": {
-    en: "Every subject. Hands-on.",
-    am: "እያንዳንዱ ትምህርት። በተግባር።",
-    om: "Barnoota hunda. Hojiidhaan.",
-  },
-  "exps.sub": {
-    en: "No fancy lab gear. Just stuff you already have at home.",
-    am: "ምንም ውድ የላብ መሳሪያ አያስፈልግም። የቤትዎ ቁሳቁስ ይበቃል።",
-    om: "Meeshaa laaboraatoorii gatii guddaa hin barbaachisu. Wantoota mana keessa jiranii qofa.",
-  },
-  "exps.cta": {
-    en: "Browse all lessons",
-    am: "ሁሉንም ትምህርቶች ይመልከቱ",
-    om: "Barnoota hunda ilaali",
-  },
-  "exps.phy.subject": { en: "PHYSICS", am: "ፊዚክስ", om: "FIIZIKSII" },
-  "exps.phy.title": {
-    en: "A coin and a card",
-    am: "ሳንቲም እና ካርድ",
-    om: "Saantimaa fi kaardii",
-  },
-  "exps.phy.body": {
-    en: "Test Newton's first law",
-    am: "የኒውተንን የመጀመሪያ ህግ ይፈትኑ",
-    om: "Seera jalqabaa Niwutan yaali",
-  },
-  "exps.math.subject": { en: "MATHEMATICS", am: "ሒሳብ", om: "HEERREGAA" },
-  "exps.math.title": {
-    en: "A stick's shadow",
-    am: "የዘንግ ጥላ",
-    om: "Gaaddidduu ulee",
-  },
-  "exps.math.body": {
-    en: "Find a tree's height",
-    am: "የዛፍ ቁመት ይፈልጉ",
-    om: "Dheerina mukaa argadhu",
-  },
-  "exps.chem.subject": { en: "CHEMISTRY", am: "ኬሚስትሪ", om: "KEEMISTIRII" },
-  "exps.chem.title": {
-    en: "Red cabbage juice",
-    am: "የቀይ ጎመን ጭማቂ",
-    om: "Cuunfaa raafuu diimaa",
-  },
-  "exps.chem.body": {
-    en: "A working pH meter",
-    am: "የሚሰራ የpH መለኪያ",
-    om: "Madaala pH dalagaa",
-  },
-  "exps.bio.subject": { en: "BIOLOGY", am: "ባዮሎጂ", om: "BAAYOOLOOJII" },
-  "exps.bio.title": {
-    en: "Onion skin",
-    am: "የሽንኩርት ቆዳ",
-    om: "Qola shunkurtii",
-  },
-  "exps.bio.body": {
-    en: "See real plant cells",
-    am: "እውነተኛ የተክል ሕዋሶችን ይመልከቱ",
-    om: "Seelii biqiltuu dhugaa ilaali",
   },
 
   // Dewey quote (lives in the Footer)
