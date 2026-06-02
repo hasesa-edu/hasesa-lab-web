@@ -43,7 +43,7 @@ export function Logo({ className = "" }: { className?: string }) {
           Hasesa
         </span>
         <span className="hidden md:block text-[10px] uppercase tracking-[0.14em] text-ink-subtle mt-0.5">
-          High school · Ethiopia
+          Personal AI Tutor
         </span>
       </span>
     </Link>
