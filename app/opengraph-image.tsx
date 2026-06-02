@@ -66,7 +66,7 @@ export default async function OG() {
                 marginTop: 4,
               }}
             >
-              High school · Ethiopia
+              Personal AI Tutor
             </div>
           </div>
         </div>
@@ -82,7 +82,7 @@ export default async function OG() {
             maxWidth: 1000,
           }}
         >
-          Learn deeply. Not just for the exam.
+          Don't memorize. Do it. Learn your way.
         </div>
 
         {/* Subhead */}
@@ -96,7 +96,7 @@ export default async function OG() {
             fontWeight: 400,
           }}
         >
-          A trilingual AI tutor with an at-home experiment in every lesson.
+          An at-home experiment for every lesson, plus a tutor that learns at your pace.
         </div>
 
         {/* Footer row */}
@@ -108,17 +108,10 @@ export default async function OG() {
             right: 64,
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
+            justifyContent: "flex-end",
             fontSize: 22,
           }}
         >
-          <div style={{ display: "flex", gap: 18, opacity: 0.9 }}>
-            <span>English</span>
-            <span>·</span>
-            <span>አማርኛ</span>
-            <span>·</span>
-            <span>Afaan Oromoo</span>
-          </div>
           <div
             style={{
               display: "flex",

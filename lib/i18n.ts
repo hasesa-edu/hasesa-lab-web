@@ -22,7 +22,7 @@ export const t: Dict = {
 
   // Hero
   "hero.tag": {
-    en: "Quality education for Ethiopian high schools",
+    en: "Quality Education for Ethiopian High Schools",
   },
   "hero.title.before": {
     en: "Don't memorize. Do it.",
