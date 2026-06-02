@@ -1,4 +1,4 @@
-# Personal AI Tutor — Demo
+# Hasesa — Demo
 
 An AI tutor demo for Grade 11 Ethiopian students.
 

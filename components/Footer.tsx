@@ -24,7 +24,7 @@ export function Footer() {
         <div className="max-w-5xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-ink-subtle">
           <div className="flex items-center gap-2">
             <LogoMark size={18} />
-            <span className="font-medium text-ink-muted">Personal AI Tutor</span>
+            <span className="font-medium text-ink-muted">Hasesa</span>
           </div>
           <p>{tr("footer.demo")}</p>
         </div>

@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "Personal AI Tutor — quality education for Ethiopian high schools";
+export const alt = "Hasesa — Quality Education for Ethiopian High Schools";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -55,7 +55,7 @@ export default async function OG() {
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ fontSize: 32, fontWeight: 700, letterSpacing: "-0.02em" }}>
-              Personal AI Tutor
+              Hasesa
             </div>
             <div
               style={{
