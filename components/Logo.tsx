@@ -40,7 +40,7 @@ export function Logo({ className = "" }: { className?: string }) {
       <LogoMark size={28} className="transition group-hover:scale-105" />
       <span className="flex flex-col leading-none">
         <span className="font-semibold text-[15px] tracking-tight text-ink">
-          Personal AI Tutor
+          Hasesa
         </span>
         <span className="hidden md:block text-[10px] uppercase tracking-[0.14em] text-ink-subtle mt-0.5">
           High school · Ethiopia

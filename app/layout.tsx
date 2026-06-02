@@ -16,7 +16,7 @@ const geist = Geist({
   variable: "--font-geist",
 });
 
-const TITLE = "Personal AI Tutor — quality education for Ethiopian high schools";
+const TITLE = "Hasesa — Quality Education for Ethiopian High Schools";
 const DESCRIPTION =
   "An AI tutor built for deep understanding, not just exam answers. MoE-aligned lessons in English, each with an at-home experiment. Demo covers Grade 11 Math, Physics, Chemistry, and Biology.";
 
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   // which appends a content-hash to the URL so browsers don't serve a stale icon.
   openGraph: {
     type: "website",
-    siteName: "Personal AI Tutor",
+    siteName: "Hasesa",
     title: TITLE,
     description: DESCRIPTION,
     locale: "en_US",
