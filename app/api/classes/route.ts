@@ -1,15 +1,18 @@
 import { NextRequest } from "next/server";
+import { randomInt } from "crypto";
 import { requireSession } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
 import { eq } from "drizzle-orm";
 import { allTopicsForSubject, SUBJECTS, type Subject } from "@/lib/lessons";
+import { readJsonLimited, BODY_LIMIT } from "@/lib/http";
 
 export const runtime = "nodejs";
 
 function generateClassCode(): string {
   const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   let out = "";
-  for (let i = 0; i < 6; i++) out += alphabet[Math.floor(Math.random() * alphabet.length)];
+  // Cryptographic RNG so codes can't be predicted/enumerated.
+  for (let i = 0; i < 6; i++) out += alphabet[randomInt(alphabet.length)];
   return out;
 }
 
@@ -55,13 +58,9 @@ export async function POST(req: NextRequest) {
   const user = (await db.select().from(schema.users).where(eq(schema.users.id, sess.userId)).limit(1))[0];
   if (!user || user.role !== "teacher") return Response.json({ error: "Teachers only" }, { status: 403 });
 
-  let body: any;
-  try {
-    body = await req.json();
-  } catch {
-    return Response.json({ error: "Invalid JSON" }, { status: 400 });
-  }
-  const name = (body?.name || "").trim();
+  const parsed = await readJsonLimited(req, BODY_LIMIT.small);
+  if (!parsed.ok) return Response.json({ error: parsed.error }, { status: parsed.status });
+  const name = (typeof parsed.data?.name === "string" ? parsed.data.name : "").trim().slice(0, 120);
   if (!name) return Response.json({ error: "Class name required" }, { status: 400 });
 
   // generate unique code (try a few times)

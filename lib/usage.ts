@@ -39,23 +39,32 @@ export async function checkAndIncrement(
 ): Promise<{ ok: true; current: number; cap: number } | { ok: false; current: number; cap: number }> {
   const ym = currentYearMonth();
   const cap = CAPS[field];
-  const cur = await getCurrentUsage(userId);
-  if ((cur as any)[field] + amount > cap) {
-    return { ok: false, current: (cur as any)[field], cap };
-  }
+  const col = FIELD_MAP[field];
+
+  // Ensure the month's row exists so the conditional UPDATE below can target it.
   await db
     .insert(schema.usage)
-    .values({
-      userId,
-      yearMonth: ym,
-      chatTurns: field === "chatTurns" ? amount : 0,
-      quizBatches: field === "quizBatches" ? amount : 0,
-      aiGrades: field === "aiGrades" ? amount : 0,
-      asrMinutes: field === "asrMinutes" ? amount : 0,
-    })
-    .onConflictDoUpdate({
-      target: [schema.usage.userId, schema.usage.yearMonth],
-      set: { [field]: sql`${FIELD_MAP[field]} + ${amount}` },
-    });
-  return { ok: true, current: (cur as any)[field] + amount, cap };
+    .values({ userId, yearMonth: ym, chatTurns: 0, quizBatches: 0, aiGrades: 0, asrMinutes: 0 })
+    .onConflictDoNothing();
+
+  // Atomically increment only if it stays within the cap. Doing the check and
+  // the write in a single statement avoids a TOCTOU race where concurrent
+  // requests all read an under-cap value and then all increment past it.
+  const updated = await db
+    .update(schema.usage)
+    .set({ [field]: sql`${col} + ${amount}` })
+    .where(
+      and(
+        eq(schema.usage.userId, userId),
+        eq(schema.usage.yearMonth, ym),
+        sql`${col} + ${amount} <= ${cap}`
+      )
+    )
+    .returning({ value: col });
+
+  if (!updated.length) {
+    const cur = await getCurrentUsage(userId);
+    return { ok: false, current: (cur as any)[field], cap };
+  }
+  return { ok: true, current: (updated[0] as any).value, cap };
 }
