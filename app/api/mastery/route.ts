@@ -3,6 +3,7 @@ import { requireSession } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
 import { eq, sql } from "drizzle-orm";
 import { allTopicsForSubject, SUBJECTS, type Subject } from "@/lib/lessons";
+import { readJsonLimited, BODY_LIMIT } from "@/lib/http";
 
 export const runtime = "nodejs";
 
@@ -34,15 +35,15 @@ export async function POST(req: NextRequest) {
   const sess = await requireSession();
   if (!sess) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-  let body: any;
-  try {
-    body = await req.json();
-  } catch {
-    return Response.json({ error: "Invalid JSON" }, { status: 400 });
-  }
-  const { subject, topic, delta, value } = body ?? {};
+  const parsed = await readJsonLimited(req, BODY_LIMIT.small);
+  if (!parsed.ok) return Response.json({ error: parsed.error }, { status: parsed.status });
+  const { subject, topic, delta, value } = parsed.data ?? {};
   if (!subject || !topic) return Response.json({ error: "Missing subject/topic" }, { status: 400 });
   if (!SUBJECTS.find((s) => s.id === subject)) return Response.json({ error: "Bad subject" }, { status: 400 });
+  // Only accept real topics for the subject — prevents inserting junk rows.
+  if (!allTopicsForSubject(subject as Subject).some((t) => t.topic === topic)) {
+    return Response.json({ error: "Bad topic" }, { status: 400 });
+  }
 
   // Fetch current
   const rows = await db

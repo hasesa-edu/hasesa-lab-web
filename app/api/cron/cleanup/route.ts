@@ -1,8 +1,19 @@
 import { NextRequest } from "next/server";
+import { timingSafeEqual } from "crypto";
 import { db, schema } from "@/lib/db/client";
 import { lt, sql } from "drizzle-orm";
 
 export const runtime = "nodejs";
+
+function safeEqual(a: string, b: string): boolean {
+  const ab = Buffer.from(a, "utf8");
+  const bb = Buffer.from(b, "utf8");
+  if (ab.length !== bb.length) {
+    timingSafeEqual(ab, ab);
+    return false;
+  }
+  return timingSafeEqual(ab, bb);
+}
 
 /**
  * Daily cleanup of messages past their retention window.
@@ -16,7 +27,7 @@ export const runtime = "nodejs";
 export async function GET(req: NextRequest) {
   const expected = process.env.CRON_SECRET;
   const auth = req.headers.get("authorization");
-  if (!expected || auth !== `Bearer ${expected}`) {
+  if (!expected || !auth || !safeEqual(auth, `Bearer ${expected}`)) {
     return Response.json({ error: "Forbidden" }, { status: 403 });
   }
 

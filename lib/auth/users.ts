@@ -2,13 +2,31 @@ import { db, schema } from "@/lib/db/client";
 import { and, eq, sql } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import type { Locale } from "@/lib/i18n";
-import type { Subject } from "@/lib/lessons";
+import { SUBJECTS, type Subject } from "@/lib/lessons";
 
 export type Role = "student" | "teacher";
 
 // A valid bcrypt hash compared against when an email is not found, so that
 // verifyCredentials spends the same time whether or not the account exists.
 const DUMMY_HASH = "$2b$10$MJi3uIOk4dm.AKGwE1PsgOw3zxfBwC37qALqpm6yD2V2vIpzWHWBW";
+
+const VALID_SUBJECTS = new Set<string>(SUBJECTS.map((s) => s.id));
+const VALID_LOCALES = new Set<string>(["en"]);
+const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+const MAX_TEXT = 120;
+const MAX_SUBJECTS = 8;
+
+function capStr(v: unknown, max = MAX_TEXT): string | undefined {
+  if (typeof v !== "string") return undefined;
+  return v.trim().slice(0, max);
+}
+
+function cleanSubjects(v: unknown): Subject[] | undefined {
+  if (!Array.isArray(v)) return undefined;
+  return v
+    .filter((x): x is Subject => typeof x === "string" && VALID_SUBJECTS.has(x))
+    .slice(0, MAX_SUBJECTS);
+}
 
 export type UserDTO = {
   id: string;
@@ -39,10 +57,19 @@ export async function createUserAccount(input: {
   under18?: boolean;
   subjects?: Subject[];
 }): Promise<{ ok: true; userId: string } | { ok: false; reason: "taken" | "invalid" }> {
-  const email = input.email.trim().toLowerCase();
-  const displayName = input.displayName.trim() || email.split("@")[0];
+  const email = (typeof input.email === "string" ? input.email : "").trim().toLowerCase();
+  const displayName = (capStr(input.displayName, 100) || email.split("@")[0]).slice(0, 100);
 
-  if (!email.includes("@") || input.password.length < 8) return { ok: false, reason: "invalid" };
+  if (
+    email.length > 254 ||
+    !EMAIL_RE.test(email) ||
+    typeof input.password !== "string" ||
+    input.password.length < 8 ||
+    input.password.length > 200 ||
+    !VALID_LOCALES.has(input.language)
+  ) {
+    return { ok: false, reason: "invalid" };
+  }
 
   const existing = await db
     .select({ id: schema.users.id })
@@ -62,10 +89,10 @@ export async function createUserAccount(input: {
     displayName,
     role: input.role,
     language: input.language,
-    region: input.region ?? null,
-    school: input.school ?? null,
+    region: capStr(input.region) ?? null,
+    school: capStr(input.school) ?? null,
     under18: input.under18 ?? false,
-    subjects: input.subjects ?? [],
+    subjects: cleanSubjects(input.subjects) ?? [],
   });
 
   return { ok: true, userId: id };
@@ -123,11 +150,16 @@ export async function updateUserProfile(
   patch: { subjects?: Subject[]; language?: Locale; region?: string; school?: string; extendedRetention?: boolean }
 ) {
   const set: Record<string, unknown> = {};
-  if (patch.subjects !== undefined) set.subjects = patch.subjects;
-  if (patch.language !== undefined) set.language = patch.language;
-  if (patch.region !== undefined) set.region = patch.region;
-  if (patch.school !== undefined) set.school = patch.school;
-  if (patch.extendedRetention !== undefined) set.extendedRetention = patch.extendedRetention;
+  if (patch.subjects !== undefined) {
+    const s = cleanSubjects(patch.subjects);
+    if (s !== undefined) set.subjects = s;
+  }
+  if (patch.language !== undefined && VALID_LOCALES.has(patch.language as string)) {
+    set.language = patch.language;
+  }
+  if (patch.region !== undefined) set.region = capStr(patch.region) ?? null;
+  if (patch.school !== undefined) set.school = capStr(patch.school) ?? null;
+  if (patch.extendedRetention !== undefined) set.extendedRetention = !!patch.extendedRetention;
   if (Object.keys(set).length === 0) return;
   await db.update(schema.users).set(set).where(eq(schema.users.id, userId));
 }

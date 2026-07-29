@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { verifyCredentials } from "@/lib/auth/users";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { readJsonLimited, BODY_LIMIT } from "@/lib/http";
 
 export const runtime = "nodejs";
 
@@ -15,13 +16,9 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  let body: any;
-  try {
-    body = await req.json();
-  } catch {
-    return Response.json({ error: "Invalid JSON" }, { status: 400 });
-  }
-  const { email, password } = body ?? {};
+  const parsed = await readJsonLimited(req, BODY_LIMIT.small);
+  if (!parsed.ok) return Response.json({ error: parsed.error }, { status: parsed.status });
+  const { email, password } = parsed.data ?? {};
   if (!email || !password) return Response.json({ error: "Missing credentials" }, { status: 400 });
 
   const result = await verifyCredentials(email, password);
