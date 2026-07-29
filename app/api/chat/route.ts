@@ -5,6 +5,10 @@ import { getSession } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
 import { and, eq } from "drizzle-orm";
 import { CAPS, checkAndIncrement, getCurrentUsage } from "@/lib/usage";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { readJsonLimited, BODY_LIMIT } from "@/lib/http";
+
+const MAX_MESSAGE_CHARS = 8000;
 
 export const runtime = "nodejs";
 
@@ -64,12 +68,21 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  let body: { messages: Msg[]; locale?: Locale; lessonId?: string; conversationId?: string };
-  try {
-    body = await req.json();
-  } catch {
-    return new Response(JSON.stringify({ error: "Invalid JSON" }), { status: 400 });
+  // Throttle every caller (esp. anonymous) so the endpoint can't be looped to
+  // burn Groq spend. 20 requests per IP per 5 minutes.
+  const limit = rateLimit(`chat:${clientIp(req)}`, 20, 5 * 60 * 1000);
+  if (!limit.ok) {
+    return new Response(
+      JSON.stringify({ error: "Too many requests. Please slow down." }),
+      { status: 429, headers: { "content-type": "application/json", "retry-after": String(limit.retryAfter) } }
+    );
   }
+
+  const parsed = await readJsonLimited(req, BODY_LIMIT.chat);
+  if (!parsed.ok) {
+    return new Response(JSON.stringify({ error: parsed.error }), { status: parsed.status });
+  }
+  const body = parsed.data as { messages: Msg[]; locale?: Locale; lessonId?: string; conversationId?: string };
 
   const { messages, locale = "en", lessonId } = body;
   let conversationId = body.conversationId;
@@ -84,7 +97,8 @@ export async function POST(req: NextRequest) {
       (m): m is Msg =>
         !!m &&
         (m.role === "user" || m.role === "assistant") &&
-        typeof m.content === "string"
+        typeof m.content === "string" &&
+        m.content.length <= MAX_MESSAGE_CHARS
     )
     .slice(-20);
   if (safeMessages.length === 0) {

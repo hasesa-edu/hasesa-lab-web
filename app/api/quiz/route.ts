@@ -2,6 +2,8 @@ import { NextRequest } from "next/server";
 import { getLesson } from "@/lib/lessons";
 import { getSession } from "@/lib/auth/session";
 import { checkAndIncrement } from "@/lib/usage";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { readJsonLimited, BODY_LIMIT } from "@/lib/http";
 
 export const runtime = "nodejs";
 
@@ -22,16 +24,23 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: "GROQ_API_KEY not configured" }, { status: 500 });
   }
 
-  let body: { lessonId: string; count?: number };
-  try {
-    body = await req.json();
-  } catch {
-    return Response.json({ error: "Invalid JSON" }, { status: 400 });
+  // Throttle every caller (esp. anonymous) to prevent Groq cost amplification.
+  const limit = rateLimit(`quiz:${clientIp(req)}`, 10, 5 * 60 * 1000);
+  if (!limit.ok) {
+    return Response.json(
+      { error: "Too many requests. Please slow down." },
+      { status: 429, headers: { "retry-after": String(limit.retryAfter) } }
+    );
   }
+
+  const reqBody = await readJsonLimited(req, BODY_LIMIT.small);
+  if (!reqBody.ok) return Response.json({ error: reqBody.error }, { status: reqBody.status });
+  const body = reqBody.data as { lessonId: string; count?: number };
 
   const lesson = getLesson(body.lessonId);
   if (!lesson) return Response.json({ error: "Lesson not found" }, { status: 404 });
-  const count = Math.min(Math.max(body.count ?? 3, 1), 5);
+  const requested = Number(body.count ?? 3);
+  const count = Number.isFinite(requested) ? Math.min(Math.max(requested, 1), 5) : 3;
 
   const session = await getSession();
   if (session.userId) {

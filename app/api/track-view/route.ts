@@ -1,6 +1,8 @@
 import { NextRequest } from "next/server";
 import { db, schema } from "@/lib/db/client";
 import { getSession } from "@/lib/auth/session";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { readJsonLimited, BODY_LIMIT } from "@/lib/http";
 
 export const runtime = "nodejs";
 
@@ -14,12 +16,13 @@ function truncate(s: string | null | undefined, max: number): string | null {
 }
 
 export async function POST(req: NextRequest) {
-  let body: { path?: string; referrer?: string } = {};
-  try {
-    body = await req.json();
-  } catch {
-    return Response.json({ ok: false }, { status: 400 });
-  }
+  // Cap analytics write rate per IP so page_views can't be flooded.
+  const limit = rateLimit(`track:${clientIp(req)}`, 60, 60 * 1000);
+  if (!limit.ok) return Response.json({ ok: false }, { status: 429 });
+
+  const parsed = await readJsonLimited(req, BODY_LIMIT.tiny);
+  if (!parsed.ok) return Response.json({ ok: false }, { status: parsed.status });
+  const body = (parsed.data ?? {}) as { path?: string; referrer?: string };
 
   const path = truncate(body.path, 512);
   if (!path) return Response.json({ ok: false }, { status: 400 });
