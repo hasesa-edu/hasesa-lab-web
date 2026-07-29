@@ -86,7 +86,7 @@ export default function SignupPage() {
 
           <Field label={tr("auth.email")} type="email" value={email} onChange={setEmail} autoComplete="email" autoFocus required />
           <Field label={tr("auth.displayName")} value={displayName} onChange={setDisplayName} autoComplete="nickname" />
-          <Field label={tr("auth.password")} value={password} onChange={setPassword} type="password" autoComplete="new-password" required minLength={6} />
+          <Field label={tr("auth.password")} value={password} onChange={setPassword} type="password" autoComplete="new-password" required minLength={8} />
           <p className="text-xs text-ink-subtle -mt-2">{tr("auth.passwordRule")}</p>
 
           {role === "student" && (
