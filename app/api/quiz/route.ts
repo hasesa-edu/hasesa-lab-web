@@ -87,7 +87,8 @@ ${lesson.quiz.map((q, i) => `${i + 1}. ${q.q}`).join("\n")}`;
 
   if (!groqRes.ok) {
     const text = await groqRes.text().catch(() => "");
-    return Response.json({ error: `Groq error ${groqRes.status}: ${text.slice(0, 200)}` }, { status: 502 });
+    console.error(`Groq error ${groqRes.status}: ${text.slice(0, 200)}`);
+    return Response.json({ error: "Quiz generation is temporarily unavailable." }, { status: 502 });
   }
 
   const data = await groqRes.json();

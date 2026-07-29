@@ -6,6 +6,10 @@ import type { Subject } from "@/lib/lessons";
 
 export type Role = "student" | "teacher";
 
+// A valid bcrypt hash compared against when an email is not found, so that
+// verifyCredentials spends the same time whether or not the account exists.
+const DUMMY_HASH = "$2b$10$MJi3uIOk4dm.AKGwE1PsgOw3zxfBwC37qALqpm6yD2V2vIpzWHWBW";
+
 export type UserDTO = {
   id: string;
   email: string;
@@ -38,7 +42,7 @@ export async function createUserAccount(input: {
   const email = input.email.trim().toLowerCase();
   const displayName = input.displayName.trim() || email.split("@")[0];
 
-  if (!email.includes("@") || input.password.length < 6) return { ok: false, reason: "invalid" };
+  if (!email.includes("@") || input.password.length < 8) return { ok: false, reason: "invalid" };
 
   const existing = await db
     .select({ id: schema.users.id })
@@ -77,9 +81,11 @@ export async function verifyCredentials(
     .from(schema.users)
     .where(eq(schema.users.email, norm))
     .limit(1);
-  if (!rows.length) return { ok: false };
-  const ok = await bcrypt.compare(password, rows[0].hash);
-  if (!ok) return { ok: false };
+  // Always run a bcrypt comparison — even for unknown emails — so response
+  // timing doesn't reveal whether an account exists (user enumeration).
+  const hash = rows[0]?.hash ?? DUMMY_HASH;
+  const ok = await bcrypt.compare(password, hash);
+  if (!rows.length || !ok) return { ok: false };
   return { ok: true, userId: rows[0].id };
 }
 

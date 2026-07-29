@@ -3,7 +3,7 @@ import { getLesson } from "@/lib/lessons";
 import type { Locale } from "@/lib/i18n";
 import { getSession } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { CAPS, checkAndIncrement, getCurrentUsage } from "@/lib/usage";
 
 export const runtime = "nodejs";
@@ -77,6 +77,20 @@ export async function POST(req: NextRequest) {
     return new Response(JSON.stringify({ error: "messages required" }), { status: 400 });
   }
 
+  // Only trust user/assistant turns from the client; drop any injected
+  // "system" role and malformed entries, and cap history length.
+  const safeMessages: Msg[] = messages
+    .filter(
+      (m): m is Msg =>
+        !!m &&
+        (m.role === "user" || m.role === "assistant") &&
+        typeof m.content === "string"
+    )
+    .slice(-20);
+  if (safeMessages.length === 0) {
+    return new Response(JSON.stringify({ error: "messages required" }), { status: 400 });
+  }
+
   // Auth: if signed in, persist + enforce caps. Anonymous: just stream, no persistence.
   const session = await getSession();
   const userId = session.userId;
@@ -92,18 +106,30 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Ensure conversation exists
+    // Ensure conversation exists and belongs to this user (prevents writing
+    // into another user's conversation via a supplied conversationId).
     if (!conversationId) {
       conversationId = uid();
       await db.insert(schema.conversations).values({ id: conversationId, userId, lessonId: lessonId ?? null });
     } else {
+      const owned = await db
+        .select({ id: schema.conversations.id })
+        .from(schema.conversations)
+        .where(and(eq(schema.conversations.id, conversationId), eq(schema.conversations.userId, userId)))
+        .limit(1);
+      if (!owned.length) {
+        return new Response(JSON.stringify({ error: "Conversation not found" }), {
+          status: 404,
+          headers: { "content-type": "application/json" },
+        });
+      }
       await db
         .update(schema.conversations)
         .set({ updatedAt: new Date() })
-        .where(eq(schema.conversations.id, conversationId));
+        .where(and(eq(schema.conversations.id, conversationId), eq(schema.conversations.userId, userId)));
     }
     // Persist user's last message
-    const lastUser = [...messages].reverse().find((m) => m.role === "user");
+    const lastUser = [...safeMessages].reverse().find((m) => m.role === "user");
     if (lastUser) {
       await db.insert(schema.messages).values({
         id: uid(),
@@ -125,14 +151,16 @@ export async function POST(req: NextRequest) {
       stream: true,
       temperature: 0.4,
       max_tokens: 800,
-      messages: [{ role: "system", content: systemPrompt }, ...messages],
+      messages: [{ role: "system", content: systemPrompt }, ...safeMessages],
     }),
   });
 
   if (!groqRes.ok || !groqRes.body) {
+    // Log upstream detail server-side; don't relay it to the client.
     const text = await groqRes.text().catch(() => "");
+    console.error(`Groq error ${groqRes.status}: ${text.slice(0, 300)}`);
     return new Response(
-      JSON.stringify({ error: `Groq error ${groqRes.status}: ${text.slice(0, 300)}` }),
+      JSON.stringify({ error: "The tutor is temporarily unavailable. Please try again." }),
       { status: 502, headers: { "content-type": "application/json" } }
     );
   }
