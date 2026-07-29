@@ -161,7 +161,7 @@ export const t: Dict = {
   "auth.email": { en: "Email" },
   "auth.displayName": { en: "Display name (optional)" },
   "auth.password": { en: "Password" },
-  "auth.passwordRule": { en: "Minimum 6 characters." },
+  "auth.passwordRule": { en: "Minimum 8 characters." },
   "auth.role": { en: "I am a…" },
   "auth.role.student": { en: "Student" },
   "auth.role.teacher": { en: "Teacher" },
