@@ -1,5 +1,5 @@
 import type { Locale } from "./i18n";
-import type { Subject } from "./lessons";
+import type { Grade, Subject } from "./experiments";
 
 export type Role = "student" | "teacher";
 
@@ -14,7 +14,7 @@ export type UserDTO = {
   under18: boolean;
   extendedRetention: boolean;
   subjects: Subject[];
-  joinedClasses: string[];
+  grade: Grade | null;
 };
 
 async function jsonOrThrow(res: Response): Promise<any> {
@@ -36,12 +36,12 @@ export async function apiSignup(input: {
   email: string;
   password: string;
   displayName: string;
-  role: Role;
   language: Locale;
   region?: string;
   school?: string;
   under18?: boolean;
   subjects?: Subject[];
+  grade?: Grade | null;
 }) {
   const res = await fetch("/api/auth/signup", {
     method: "POST",
@@ -80,62 +80,30 @@ export async function apiPatchMe(patch: Partial<UserDTO>): Promise<UserDTO> {
   return data.user;
 }
 
-export async function apiGetMastery(): Promise<Record<string, Record<string, number>>> {
-  const res = await fetch("/api/mastery");
-  const data = await jsonOrThrow(res);
-  return data.mastery ?? {};
-}
-
-export async function apiBumpMastery(subject: Subject, topic: string, delta: number): Promise<number> {
-  const res = await fetch("/api/mastery", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ subject, topic, delta }),
-  });
-  const data = await jsonOrThrow(res);
-  return data.value;
-}
-
-export async function apiSetMastery(subject: Subject, topic: string, value: number): Promise<number> {
-  const res = await fetch("/api/mastery", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ subject, topic, value }),
-  });
-  const data = await jsonOrThrow(res);
-  return data.value;
-}
-
-export type TeacherClass = {
-  code: string;
-  name: string;
-  memberCount: number;
-  aggregate: {
-    subject: string;
-    topic: string;
-    avg: number;
-    weight: number;
-    lessonId: string;
-    n: number;
-  }[];
+export type ProgressDTO = {
+  experimentId: string;
+  status: "started" | "done";
+  observations: string | null;
+  updatedAt: string;
+  completedAt: string | null;
 };
 
-export async function apiListClasses(): Promise<TeacherClass[]> {
-  const res = await fetch("/api/classes");
+export async function apiGetProgress(): Promise<ProgressDTO[]> {
+  const res = await fetch("/api/progress");
   const data = await jsonOrThrow(res);
-  return data.classes ?? [];
+  return data.progress ?? [];
 }
 
-export async function apiCreateClass(name: string): Promise<{ code: string; name: string }> {
-  const res = await fetch("/api/classes", {
+export async function apiSaveProgress(input: {
+  experimentId: string;
+  status?: "started" | "done";
+  observations?: string;
+}): Promise<ProgressDTO> {
+  const res = await fetch("/api/progress", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ name }),
+    body: JSON.stringify(input),
   });
-  return jsonOrThrow(res);
-}
-
-export async function apiJoinClass(code: string): Promise<{ code: string; name: string }> {
-  const res = await fetch(`/api/classes/${encodeURIComponent(code)}/join`, { method: "POST" });
-  return jsonOrThrow(res);
+  const data = await jsonOrThrow(res);
+  return data.progress;
 }
