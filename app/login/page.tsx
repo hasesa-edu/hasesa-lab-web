@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
-import { apiSignin, apiMe } from "@/lib/api";
+import { apiSignin } from "@/lib/api";
 
 export default function LoginPage() {
   const { tr } = useLocale();
@@ -22,9 +22,8 @@ export default function LoginPage() {
     setBusy(true);
     try {
       await apiSignin(email, password);
-      const u = await apiMe();
       await refresh();
-      router.push(u?.role === "teacher" ? "/teacher" : "/dashboard");
+      router.push("/dashboard");
     } catch (e: any) {
       console.error("signin failed:", e);
       setError(tr("auth.err.wrong"));

@@ -96,35 +96,26 @@ export function Nav() {
             {tr("nav.home")}
           </Link>
           <Link
-            href="/lessons"
-            className={navLinkClass("/lessons")}
-            aria-current={isActive("/lessons") ? "page" : undefined}
+            href="/experiments"
+            className={navLinkClass("/experiments")}
+            aria-current={isActive("/experiments") ? "page" : undefined}
           >
-            {tr("nav.lessons")}
+            {tr("nav.experiments")}
           </Link>
           <Link
             href="/chat"
             className={navLinkClass("/chat")}
             aria-current={isActive("/chat") ? "page" : undefined}
           >
-            {tr("nav.tutor")}
+            {tr("nav.assistant")}
           </Link>
-          {user && user.role === "student" && (
+          {user && (
             <Link
               href="/dashboard"
               className={navLinkClass("/dashboard")}
               aria-current={isActive("/dashboard") ? "page" : undefined}
             >
               {tr("nav.dashboard")}
-            </Link>
-          )}
-          {user && user.role === "teacher" && (
-            <Link
-              href="/teacher"
-              className={navLinkClass("/teacher")}
-              aria-current={isActive("/teacher") ? "page" : undefined}
-            >
-              {tr("nav.teacher")}
             </Link>
           )}
         </nav>
@@ -148,19 +139,19 @@ export function Nav() {
                 <div className="absolute right-0 mt-2 bg-surface border border-line rounded-lg shadow-pop py-1 text-sm min-w-[200px] overflow-hidden">
                   <div className="px-3 py-2 text-xs text-ink-subtle border-b border-line">
                     <div className="text-ink-muted truncate">{user.email}</div>
-                    <div className="mt-0.5">
-                      {user.role === "teacher" ? tr("auth.role.teacher") : tr("auth.role.student")}
-                    </div>
+                    {user.grade && (
+                      <div className="mt-0.5">
+                        {tr("experiments.grade")} {user.grade}
+                      </div>
+                    )}
                   </div>
-                  {user.role === "student" && (
-                    <Link
-                      href="/join"
-                      onClick={() => setMenuOpen(false)}
-                      className="block px-3 py-2 hover:bg-surface-2 text-ink"
-                    >
-                      {tr("student.joinClass")}
-                    </Link>
-                  )}
+                  <Link
+                    href="/onboarding"
+                    onClick={() => setMenuOpen(false)}
+                    className="block px-3 py-2 hover:bg-surface-2 text-ink"
+                  >
+                    {tr("nav.settings")}
+                  </Link>
                   <button
                     onClick={handleSignOut}
                     className="block w-full text-left px-3 py-2 hover:bg-surface-2 text-red-600 dark:text-red-400"
@@ -245,16 +236,13 @@ export function Nav() {
 
             <nav className="flex flex-col">
               <Link href="/" onClick={closeMobile} className={mobileLinkClass("/")} aria-current={isActive("/") ? "page" : undefined}>{tr("nav.home")}</Link>
-              <Link href="/lessons" onClick={closeMobile} className={mobileLinkClass("/lessons")} aria-current={isActive("/lessons") ? "page" : undefined}>{tr("nav.lessons")}</Link>
-              <Link href="/chat" onClick={closeMobile} className={mobileLinkClass("/chat")} aria-current={isActive("/chat") ? "page" : undefined}>{tr("nav.tutor")}</Link>
-              {user && user.role === "student" && (
+              <Link href="/experiments" onClick={closeMobile} className={mobileLinkClass("/experiments")} aria-current={isActive("/experiments") ? "page" : undefined}>{tr("nav.experiments")}</Link>
+              <Link href="/chat" onClick={closeMobile} className={mobileLinkClass("/chat")} aria-current={isActive("/chat") ? "page" : undefined}>{tr("nav.assistant")}</Link>
+              {user && (
                 <>
                   <Link href="/dashboard" onClick={closeMobile} className={mobileLinkClass("/dashboard")} aria-current={isActive("/dashboard") ? "page" : undefined}>{tr("nav.dashboard")}</Link>
-                  <Link href="/join" onClick={closeMobile} className={mobileLinkClass("/join")} aria-current={isActive("/join") ? "page" : undefined}>{tr("student.joinClass")}</Link>
+                  <Link href="/onboarding" onClick={closeMobile} className={mobileLinkClass("/onboarding")} aria-current={isActive("/onboarding") ? "page" : undefined}>{tr("nav.settings")}</Link>
                 </>
-              )}
-              {user && user.role === "teacher" && (
-                <Link href="/teacher" onClick={closeMobile} className={mobileLinkClass("/teacher")} aria-current={isActive("/teacher") ? "page" : undefined}>{tr("nav.teacher")}</Link>
               )}
             </nav>
 

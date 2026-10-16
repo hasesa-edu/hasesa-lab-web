@@ -6,6 +6,16 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256],
     formats: ["image/avif", "image/webp"],
   },
+  async redirects() {
+    // Old exam-prep routes. /lessons IDs were kept as experiment IDs.
+    return [
+      { source: "/lessons", destination: "/experiments", permanent: true },
+      { source: "/lessons/:id", destination: "/experiments/:id", permanent: true },
+      { source: "/teacher", destination: "/dashboard", permanent: false },
+      { source: "/join", destination: "/dashboard", permanent: false },
+      { source: "/mock/:subject", destination: "/dashboard", permanent: false },
+    ];
+  },
   async headers() {
     // Baseline security headers applied to every response.
     // CSP allows 'unsafe-inline' scripts because the app ships an inline theme
@@ -27,6 +37,8 @@ const nextConfig = {
           "script-src 'self' 'unsafe-inline'",
           "style-src 'self' 'unsafe-inline'",
           "img-src 'self' data: blob: https:",
+          "media-src 'self' blob:",
+          "frame-src https://www.youtube-nocookie.com",
           "font-src 'self' data:",
           "connect-src 'self'",
           "frame-ancestors 'none'",

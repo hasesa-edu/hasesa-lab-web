@@ -14,14 +14,14 @@ type RecentViewRow = {
   referrer: string | null;
   createdAt: Date;
 };
-type UserStatsRow = { total: number; students: number; teachers: number; d1: number; d7: number; d30: number };
+type UserStatsRow = { total: number; d1: number; d7: number; d30: number };
 type ViewStatsRow = { total: number; d1: number; d7: number; d30: number; unique7d: number };
-type EngagementRow = { convos: number; messages: number };
+type EngagementRow = { convos: number; messages: number; expStarted: number; expDone: number };
 type UserRow = {
   id: string;
   email: string;
   displayName: string;
-  role: "student" | "teacher";
+  grade: number | null;
   language: string;
   region: string | null;
   school: string | null;
@@ -54,8 +54,6 @@ async function loadStats() {
     db.execute<UserStatsRow>(sql`
       select
         count(*)::int as total,
-        count(*) filter (where role = 'student')::int as students,
-        count(*) filter (where role = 'teacher')::int as teachers,
         count(*) filter (where created_at >= ${d1})::int as d1,
         count(*) filter (where created_at >= ${d7})::int as d7,
         count(*) filter (where created_at >= ${d30})::int as d30
@@ -73,10 +71,12 @@ async function loadStats() {
     db.execute<EngagementRow>(sql`
       select
         (select count(*)::int from conversations) as convos,
-        (select count(*)::int from messages) as messages
+        (select count(*)::int from messages) as messages,
+        (select count(*)::int from experiment_progress) as "expStarted",
+        (select count(*)::int from experiment_progress where status = 'done') as "expDone"
     `),
     db.execute<UserRow>(sql`
-      select id, email, display_name as "displayName", role, language,
+      select id, email, display_name as "displayName", grade, language,
              region, school, subjects, created_at as "createdAt"
       from users
       order by created_at desc
@@ -114,14 +114,12 @@ async function loadStats() {
     `),
   ]));
 
-  const u = rows<UserStatsRow>(userStats)[0] ?? { total: 0, students: 0, teachers: 0, d1: 0, d7: 0, d30: 0 };
+  const u = rows<UserStatsRow>(userStats)[0] ?? { total: 0, d1: 0, d7: 0, d30: 0 };
   const v = rows<ViewStatsRow>(viewStats)[0] ?? { total: 0, d1: 0, d7: 0, d30: 0, unique7d: 0 };
-  const e = rows<EngagementRow>(engagement)[0] ?? { convos: 0, messages: 0 };
+  const e = rows<EngagementRow>(engagement)[0] ?? { convos: 0, messages: 0, expStarted: 0, expDone: 0 };
 
   return {
     usersTotal: u.total,
-    usersStudents: u.students,
-    usersTeachers: u.teachers,
     users1d: u.d1,
     users7d: u.d7,
     users30d: u.d30,
@@ -136,6 +134,8 @@ async function loadStats() {
     recentViews: rows<RecentViewRow>(recentViews),
     convosTotal: e.convos,
     messagesTotal: e.messages,
+    experimentsStarted: e.expStarted,
+    experimentsDone: e.expDone,
     users: rows<UserRow>(usersList),
   };
 }
@@ -197,7 +197,7 @@ export default async function AdminPage() {
       <section>
         <h2 className="text-sm font-semibold uppercase tracking-wide text-ink-muted">Users</h2>
         <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
-          <StatCard label="Total users" value={s.usersTotal} sub={`${s.usersStudents} students · ${s.usersTeachers} teachers`} />
+          <StatCard label="Total users" value={s.usersTotal} />
           <StatCard label="New in 24h" value={s.users1d} />
           <StatCard label="New in 7d" value={s.users7d} />
           <StatCard label="New in 30d" value={s.users30d} />
@@ -217,7 +217,7 @@ export default async function AdminPage() {
                 <tr>
                   <th className="text-left px-3 py-2">Name</th>
                   <th className="text-left px-3 py-2">Email</th>
-                  <th className="text-left px-3 py-2">Role</th>
+                  <th className="text-left px-3 py-2">Grade</th>
                   <th className="text-left px-3 py-2">Lang</th>
                   <th className="text-left px-3 py-2">Region</th>
                   <th className="text-left px-3 py-2">School</th>
@@ -237,17 +237,7 @@ export default async function AdminPage() {
                     <tr key={u.id} className="border-t border-line align-top">
                       <td className="px-3 py-2 text-ink font-medium">{u.displayName}</td>
                       <td className="px-3 py-2 text-ink">{u.email}</td>
-                      <td className="px-3 py-2">
-                        <span
-                          className={
-                            u.role === "teacher"
-                              ? "inline-block px-2 py-0.5 rounded text-xs bg-brand/15 text-brand"
-                              : "inline-block px-2 py-0.5 rounded text-xs bg-canvas text-ink-muted border border-line"
-                          }
-                        >
-                          {u.role}
-                        </span>
-                      </td>
+                      <td className="px-3 py-2 text-ink tabular-nums">{u.grade ?? "—"}</td>
                       <td className="px-3 py-2 text-ink-muted uppercase">{u.language}</td>
                       <td className="px-3 py-2 text-ink">{u.region || "—"}</td>
                       <td className="px-3 py-2 text-ink">{u.school || "—"}</td>
@@ -288,6 +278,8 @@ export default async function AdminPage() {
         <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
           <StatCard label="Conversations" value={s.convosTotal} />
           <StatCard label="Chat messages" value={s.messagesTotal} />
+          <StatCard label="Experiments started" value={s.experimentsStarted} sub="student × experiment" />
+          <StatCard label="Experiments completed" value={s.experimentsDone} />
         </div>
       </section>
 

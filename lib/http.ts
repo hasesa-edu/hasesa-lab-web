@@ -61,7 +61,7 @@ export async function readJsonLimited(
 
 // Common body-size ceilings (bytes).
 export const BODY_LIMIT = {
-  small: 16 * 1024, // auth, profile, mastery, classes
+  small: 16 * 1024, // auth, profile, experiment progress
   tiny: 8 * 1024, // analytics pings
   chat: 256 * 1024, // chat history array
 } as const;

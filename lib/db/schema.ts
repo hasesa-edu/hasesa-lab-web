@@ -14,11 +14,15 @@ export const users = pgTable(
     under18: boolean("under_18").notNull().default(false),
     extendedRetention: boolean("extended_retention").notNull().default(false),
     subjects: text("subjects").array().notNull().default([]),
+    grade: integer("grade"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [uniqueIndex("users_email_lower_idx").on(t.email)]
 );
 
+// Legacy (exam-prep era): mastery, classes and class_members are no longer read
+// or written. Kept defined so `db:push` doesn't drop existing data; remove them
+// in a deliberate migration.
 export const mastery = pgTable(
   "mastery",
   {
@@ -58,6 +62,22 @@ export const classMembers = pgTable(
     joinedAt: timestamp("joined_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [primaryKey({ columns: [t.classCode, t.userId] })]
+);
+
+// One row per student per experiment they've started or completed.
+export const experimentProgress = pgTable(
+  "experiment_progress",
+  {
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    experimentId: text("experiment_id").notNull(),
+    status: text("status").notNull().$type<"started" | "done">(),
+    observations: text("observations"),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.experimentId] })]
 );
 
 export const conversations = pgTable(
