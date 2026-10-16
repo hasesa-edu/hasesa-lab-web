@@ -1,37 +1,30 @@
 "use client";
 
 import { Suspense, useEffect, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import { useLocale } from "@/components/LocaleProvider";
-import { getLesson } from "@/lib/lessons";
+import { EXPERIMENTS, getExperiment } from "@/lib/experiments";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
-const SUGGESTIONS: { emoji: string; en: string; am: string; om: string }[] = [
-  {
-    emoji: "⚛️",
-    en: "Explain Newton's second law with a simple example.",
-    am: "የኒውተንን ሁለተኛ ህግ በቀላል ምሳሌ ያስረዱኝ።",
-    om: "Seera lammaffaa Niwutan fakkeenya salphaadhaan ibsi.",
-  },
-  {
-    emoji: "🏃",
-    en: "What's the difference between speed and velocity?",
-    am: "ፍጥነትና ቬሎሲቲ መካከል ያለው ልዩነት ምንድነው?",
-    om: "Garaagarummaan saffisaa fi velocity gidduu jiru maali?",
-  },
-  {
-    emoji: "🧪",
-    en: "How do I balance a chemistry equation? Walk me through one.",
-    am: "የኬሚስትሪ እኩልታ እንዴት ሚዛናዊ ማድረግ እችላለሁ? በአንዱ ይምሩኝ።",
-    om: "Wal-qixxata keemistirii akkamiin wal-qixxeessuun danda'a? Tokko qajeelchaan natti agarsiisi.",
-  },
+const GENERAL_SUGGESTIONS: { emoji: string; text: string }[] = [
+  { emoji: "🍓", text: "My strawberry DNA isn't clumping. What could have gone wrong?" },
+  { emoji: "🔋", text: "Why does a lemon battery need two different metals?" },
+  { emoji: "🧪", text: "What household things can I safely use as a pH indicator?" },
 ];
+
+function experimentSuggestions(title: string): { emoji: string; text: string }[] {
+  return [
+    { emoji: "💡", text: `Explain the science behind "${title}" in simple words.` },
+    { emoji: "🛠️", text: "My result doesn't match what the guide says. Help me figure out why." },
+    { emoji: "🔁", text: "What could I change to turn this into my own fair test?" },
+  ];
+}
 
 export default function ChatPage() {
   return (
@@ -48,8 +41,10 @@ function ChatLoading() {
 
 function ChatInner() {
   const params = useSearchParams();
-  const lessonId = params.get("lesson") || undefined;
-  const lesson = lessonId ? getLesson(lessonId) : undefined;
+  const router = useRouter();
+  const experiment = getExperiment(params.get("experiment") || params.get("lesson") || "");
+  const experimentId = experiment?.id;
+  const suggestions = experiment ? experimentSuggestions(experiment.title) : GENERAL_SUGGESTIONS;
 
   const { locale, tr } = useLocale();
   const [messages, setMessages] = useState<Msg[]>([]);
@@ -57,6 +52,7 @@ function ChatInner() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showNewPill, setShowNewPill] = useState(false);
+  const conversationIdRef = useRef<string | undefined>(undefined);
   const endRef = useRef<HTMLDivElement>(null);
   const stickRef = useRef(true);
 
@@ -79,6 +75,17 @@ function ChatInner() {
     }
   }, [messages]);
 
+  // Switching experiment starts a fresh conversation with new grounding.
+  useEffect(() => {
+    setMessages([]);
+    setError(null);
+    conversationIdRef.current = undefined;
+  }, [experimentId]);
+
+  function pickExperiment(id: string) {
+    router.replace(id ? `/chat?experiment=${encodeURIComponent(id)}` : "/chat", { scroll: false });
+  }
+
   function jumpToBottom() {
     stickRef.current = true;
     setShowNewPill(false);
@@ -99,13 +106,20 @@ function ChatInner() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ messages: newMessages, locale, lessonId }),
+        body: JSON.stringify({
+          messages: newMessages,
+          locale,
+          experimentId,
+          conversationId: conversationIdRef.current,
+        }),
       });
 
       if (!res.ok || !res.body) {
         const errText = await res.text().catch(() => "");
         throw new Error(errText || `HTTP ${res.status}`);
       }
+
+      conversationIdRef.current = res.headers.get("x-conversation-id") ?? conversationIdRef.current;
 
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
@@ -136,13 +150,30 @@ function ChatInner() {
       <header>
         <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-ink">{tr("chat.title")}</h1>
         <p className="text-ink-muted mt-1.5 text-sm">{tr("chat.subtitle")}</p>
-        {lesson && (
-          <div className="mt-4 inline-flex items-center gap-2 text-xs bg-brand-soft text-brand-hover dark:text-brand px-3 py-1.5 rounded-full border border-brand/20">
-            <span>📖</span>
-            <span>{tr("chat.grounded")}: {lesson.title[locale]}</span>
-            <Link href={`/lessons/${lesson.id}`} className="underline ml-1">{tr("chat.viewLesson")}</Link>
-          </div>
-        )}
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <label htmlFor="experiment-picker" className="text-xs font-medium text-ink-subtle">
+            {tr("chat.pickLabel")}
+          </label>
+          <select
+            id="experiment-picker"
+            value={experimentId ?? ""}
+            onChange={(e) => pickExperiment(e.target.value)}
+            disabled={busy}
+            className="max-w-full text-sm px-3 py-1.5 rounded-lg border border-line bg-surface text-ink focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/30"
+          >
+            <option value="">{tr("chat.pickNone")}</option>
+            {EXPERIMENTS.map((e) => (
+              <option key={e.id} value={e.id}>
+                G{e.grade} · {e.title}
+              </option>
+            ))}
+          </select>
+          {experiment && (
+            <Link href={`/experiments/${experiment.id}`} className="text-xs text-brand underline">
+              {tr("chat.viewExperiment")}
+            </Link>
+          )}
+        </div>
       </header>
 
       <div className="mt-6 min-h-[280px]">
@@ -153,14 +184,14 @@ function ChatInner() {
             </p>
             <p className="text-sm text-ink-muted mt-1.5">{tr("chat.empty.body")}</p>
             <div className="mt-5 grid gap-2.5">
-              {SUGGESTIONS.map((s, i) => (
+              {suggestions.map((s, i) => (
                 <button
                   key={i}
-                  onClick={() => send(s[locale])}
+                  onClick={() => send(s.text)}
                   className="group flex items-start gap-3 text-left text-sm px-4 py-3 rounded-xl border border-line bg-surface hover:border-brand/60 hover:bg-brand-soft/30 hover:shadow-soft transition text-ink"
                 >
                   <span className="text-lg leading-none mt-0.5">{s.emoji}</span>
-                  <span className="flex-1 leading-relaxed">{s[locale]}</span>
+                  <span className="flex-1 leading-relaxed">{s.text}</span>
                   <span className="text-brand opacity-0 group-hover:opacity-100 transition" aria-hidden>
                     →
                   </span>

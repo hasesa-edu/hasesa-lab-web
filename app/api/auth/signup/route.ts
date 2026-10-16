@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { createUserAccount } from "@/lib/auth/users";
+import { isGrade } from "@/lib/experiments";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { readJsonLimited, BODY_LIMIT } from "@/lib/http";
 
@@ -20,24 +21,21 @@ export async function POST(req: NextRequest) {
   if (!parsed.ok) return Response.json({ error: parsed.error }, { status: parsed.status });
   const body = parsed.data;
 
-  const { email, password, displayName, role, language, region, school, under18, subjects } = body ?? {};
-  if (!email || !password || !role || !language || !displayName) {
+  const { email, password, displayName, language, region, school, under18, subjects, grade } = body ?? {};
+  if (!email || !password || !language || !displayName) {
     return Response.json({ error: "Missing required fields" }, { status: 400 });
-  }
-  if (role !== "student" && role !== "teacher") {
-    return Response.json({ error: "Invalid role" }, { status: 400 });
   }
 
   const result = await createUserAccount({
     email,
     password,
     displayName,
-    role,
     language,
     region,
     school,
     under18: !!under18,
     subjects: Array.isArray(subjects) ? subjects : [],
+    grade: isGrade(grade) ? grade : null,
   });
 
   if (!result.ok) {
