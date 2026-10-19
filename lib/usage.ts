@@ -1,8 +1,10 @@
 import { db, schema } from "@/lib/db/client";
 import { and, eq, sql } from "drizzle-orm";
+import { PLAN } from "@/lib/billing/plan";
 
+// Daily caps, reset at midnight Addis Ababa time.
 export const CAPS = {
-  chatTurns: 50,
+  chatTurns: PLAN.dailyChatCap,
 } as const;
 
 export type UsageField = keyof typeof CAPS;
@@ -10,20 +12,19 @@ const FIELD_MAP: Record<UsageField, any> = {
   chatTurns: schema.usage.chatTurns,
 };
 
-export function currentYearMonth(d = new Date()): string {
-  const y = d.getUTCFullYear();
-  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-  return `${y}-${m}`;
+/** Today's date in Addis Ababa (UTC+3, no DST), e.g. "2026-10-19". */
+export function currentPeriod(d = new Date()): string {
+  return new Date(d.getTime() + 3 * 60 * 60 * 1000).toISOString().slice(0, 10);
 }
 
 export async function getCurrentUsage(userId: string) {
-  const ym = currentYearMonth();
+  const period = currentPeriod();
   const rows = await db
     .select()
     .from(schema.usage)
-    .where(and(eq(schema.usage.userId, userId), eq(schema.usage.yearMonth, ym)))
+    .where(and(eq(schema.usage.userId, userId), eq(schema.usage.period, period)))
     .limit(1);
-  return rows[0] ?? { userId, yearMonth: ym, chatTurns: 0 };
+  return rows[0] ?? { userId, period, chatTurns: 0 };
 }
 
 export async function checkAndIncrement(
@@ -31,14 +32,14 @@ export async function checkAndIncrement(
   field: UsageField,
   amount = 1
 ): Promise<{ ok: true; current: number; cap: number } | { ok: false; current: number; cap: number }> {
-  const ym = currentYearMonth();
+  const period = currentPeriod();
   const cap = CAPS[field];
   const col = FIELD_MAP[field];
 
   // Ensure the month's row exists so the conditional UPDATE below can target it.
   await db
     .insert(schema.usage)
-    .values({ userId, yearMonth: ym, chatTurns: 0 })
+    .values({ userId, period, chatTurns: 0 })
     .onConflictDoNothing();
 
   // Atomically increment only if it stays within the cap. Doing the check and
@@ -50,7 +51,7 @@ export async function checkAndIncrement(
     .where(
       and(
         eq(schema.usage.userId, userId),
-        eq(schema.usage.yearMonth, ym),
+        eq(schema.usage.period, period),
         sql`${col} + ${amount} <= ${cap}`
       )
     )

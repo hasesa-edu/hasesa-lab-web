@@ -1,25 +1,9 @@
-export type Subject = "physics" | "chemistry" | "biology";
-export type Grade = 9 | 10 | 11 | 12;
+import "server-only";
+import { isFreeGuide } from "@/lib/billing/plan";
+import type { CatalogItem, Grade, Subject } from "@/lib/subjects";
 
-export const SUBJECTS: { id: Subject; label: string; emoji: string }[] = [
-  { id: "physics", label: "Physics", emoji: "⚛️" },
-  { id: "chemistry", label: "Chemistry", emoji: "🧪" },
-  { id: "biology", label: "Biology", emoji: "🧬" },
-];
-
-export const GRADES: Grade[] = [9, 10, 11, 12];
-
-export function subjectMeta(id: Subject) {
-  return SUBJECTS.find((s) => s.id === id)!;
-}
-
-export function isSubject(v: unknown): v is Subject {
-  return typeof v === "string" && SUBJECTS.some((s) => s.id === v);
-}
-
-export function isGrade(v: unknown): v is Grade {
-  return typeof v === "number" && (GRADES as number[]).includes(v);
-}
+export { SUBJECTS, GRADES, subjectMeta, isSubject, isGrade } from "@/lib/subjects";
+export type { Subject, Grade, CatalogItem } from "@/lib/subjects";
 
 export type ExperimentVideo = {
   /** YouTube video ID (the 11-char string after `?v=`) */
@@ -62,8 +46,8 @@ export type Experiment = {
   troubleshooting: { problem: string; fix: string }[];
   video?: ExperimentVideo;
   conceptCheck: ConceptCheckItem[];
-  /** Sample content, pending review by Ethiopian subject teachers. */
-  sample: boolean;
+  /** The scientist who reviewed this guide. The credit is hidden until it's set. */
+  reviewedBy?: { name: string; title: string };
 };
 
 export const EXPERIMENTS: Experiment[] = [
@@ -111,7 +95,6 @@ export const EXPERIMENTS: Experiment[] = [
       { q: "Oil floats on water. What does this tell you?", choices: ["Oil is heavier than water", "Oil is less dense than water", "Oil has more mass", "Oil is a solid"], answerIndex: 1, explanation: "Floating depends on density, not total mass. A litre of oil has less mass than a litre of water." },
       { q: "A 20 g object has a volume of 10 cm³. Will it sink or float in water (1 g/cm³)?", choices: ["Float", "Sink", "Stay exactly in the middle", "Can't tell"], answerIndex: 1, explanation: "ρ = 20 / 10 = 2 g/cm³, which is greater than water's 1 g/cm³, so it sinks." },
     ],
-    sample: true,
   },
   {
     id: "g9-chem-separate-mixture",
@@ -156,7 +139,6 @@ export const EXPERIMENTS: Experiment[] = [
       { q: "Why does the salt pass through the filter but the sand doesn't?", choices: ["Salt is lighter", "Dissolved salt particles are far smaller than the filter holes", "The filter is magnetic", "Sand dissolves faster"], answerIndex: 1, explanation: "Dissolved salt exists as tiny ions spread through the water, small enough to pass through the filter." },
       { q: "Which method removes water and leaves dissolved salt behind?", choices: ["Filtration", "Decanting", "Evaporation", "Magnetism"], answerIndex: 2, explanation: "Evaporation turns the water into vapour; the salt doesn't evaporate, so it stays." },
     ],
-    sample: true,
   },
   {
     id: "g9-bio-starch-test",
@@ -198,7 +180,6 @@ export const EXPERIMENTS: Experiment[] = [
       { q: "Iodine turns blue-black on a food. What does that show?", choices: ["Protein is present", "Starch is present", "Fat is present", "Water is present"], answerIndex: 1, explanation: "Blue-black is the positive result for starch." },
       { q: "Why might a ripe banana react less than an unripe one?", choices: ["Ripening turns starch into sugar", "Ripe bananas contain iodine", "Ripe bananas have more starch", "Bananas have no carbohydrates"], answerIndex: 0, explanation: "Ripening enzymes break starch down into sweet sugars, which don't react with iodine." },
     ],
-    sample: true,
   },
 
   // ======================= GRADE 10 =======================
@@ -246,7 +227,6 @@ export const EXPERIMENTS: Experiment[] = [
       { q: "Why do you need two different metals?", choices: ["For decoration", "Different metals give up electrons differently, creating a voltage", "To make the lemon sour", "One metal is enough"], answerIndex: 1, explanation: "The voltage comes from the difference in how readily the two metals lose electrons." },
       { q: "Three cells of 0.9 V are connected in series. What is the total voltage?", choices: ["0.3 V", "0.9 V", "1.8 V", "2.7 V"], answerIndex: 3, explanation: "In series, voltages add: 0.9 + 0.9 + 0.9 = 2.7 V." },
     ],
-    sample: true,
   },
   {
     id: "g10-chem-rusting",
@@ -291,7 +271,6 @@ export const EXPERIMENTS: Experiment[] = [
       { q: "Which two things are both needed for iron to rust?", choices: ["Oil and water", "Oxygen and water", "Salt and oil", "Light and heat"], answerIndex: 1, explanation: "The dry cup (no water) and the oil-sealed cup (no oxygen) barely rusted." },
       { q: "Why does painting a roof stop it rusting?", choices: ["Paint is magnetic", "Paint keeps oxygen and water away from the iron", "Paint adds zinc", "Paint makes the iron heavier"], answerIndex: 1, explanation: "Paint is a barrier — remove one of the two ingredients and rusting stops." },
     ],
-    sample: true,
   },
   {
     id: "g10-bio-yeast-respiration",
@@ -336,7 +315,6 @@ export const EXPERIMENTS: Experiment[] = [
       { q: "Which gas inflates the balloon?", choices: ["Oxygen", "Nitrogen", "Carbon dioxide", "Hydrogen"], answerIndex: 2, explanation: "Carbon dioxide is released by yeast during respiration and fermentation." },
       { q: "Why did the cold-water bottle inflate more slowly?", choices: ["Cold water has no sugar", "Enzymes work slowly at low temperature", "Yeast only live in the dark", "Cold water contains more oxygen"], answerIndex: 1, explanation: "Lower temperatures slow down the enzyme-controlled reactions of respiration." },
     ],
-    sample: true,
   },
 
   // ======================= GRADE 11 (ported) =======================
@@ -380,7 +358,6 @@ export const EXPERIMENTS: Experiment[] = [
       { q: "A student walks 100 m east, then 40 m west. What is the magnitude of displacement?", choices: ["60 m", "100 m", "140 m", "40 m"], answerIndex: 0, explanation: "Displacement is the net change in position: 100 − 40 = 60 m east. Distance traveled would be 140 m." },
       { q: "Which quantity is always non-negative?", choices: ["Velocity", "Displacement", "Speed", "Acceleration"], answerIndex: 2, explanation: "Speed is a scalar magnitude — always ≥ 0. The others are vectors and can be negative depending on direction." },
     ],
-    sample: true,
   },
   {
     id: "phy-mech-02-newtons-laws",
@@ -421,7 +398,6 @@ export const EXPERIMENTS: Experiment[] = [
       { q: "Why does the coin fall into the cup instead of flying away with the card?", choices: ["The coin is magnetic", "Its inertia resists the brief sideways force", "Gravity pulls harder on coins", "Air pushes it down"], answerIndex: 1, explanation: "The friction force acts for too short a time to change the coin's motion much." },
       { q: "If you double the net force on an object, what happens to its acceleration (mass unchanged)?", choices: ["Halved", "Unchanged", "Doubled", "Quadrupled"], answerIndex: 2, explanation: "F = m·a. With m fixed, a is proportional to F, so doubling F doubles a." },
     ],
-    sample: true,
   },
   {
     id: "phy-mech-03-free-fall",
@@ -459,7 +435,6 @@ export const EXPERIMENTS: Experiment[] = [
       { q: "Two balls of different mass are dropped from the same height in a vacuum. Which hits first?", choices: ["The heavier one", "The lighter one", "They hit at the same time", "Depends on size"], answerIndex: 2, explanation: "In free fall, all objects accelerate at the same g regardless of mass." },
       { q: "What made the flat paper fall slowly?", choices: ["Its small mass", "Air resistance on its large surface", "Weaker gravity", "Static electricity"], answerIndex: 1, explanation: "Crumpling the same paper (same mass) made it fall fast, so mass wasn't the cause — surface area and air resistance were." },
     ],
-    sample: true,
   },
   {
     id: "phy-mech-04-energy",
@@ -499,7 +474,6 @@ export const EXPERIMENTS: Experiment[] = [
       { q: "Where does the pendulum have the most kinetic energy?", choices: ["At the highest point", "At the lowest point", "Halfway up", "It's the same everywhere"], answerIndex: 1, explanation: "At the lowest point, all the potential energy has been converted into kinetic energy." },
       { q: "Why does each swing get a little lower?", choices: ["Gravity gets weaker", "Energy is lost to air resistance and friction", "The string gets longer", "Mass decreases"], answerIndex: 1, explanation: "Some mechanical energy is converted to heat by air resistance and friction at the pivot." },
     ],
-    sample: true,
   },
   {
     id: "chem-mol-01-mole",
@@ -540,7 +514,6 @@ export const EXPERIMENTS: Experiment[] = [
       { q: "What does Avogadro's number represent?", choices: ["Mass of one mole in grams", "Number of particles in one mole", "Volume of one mole of gas", "Number of protons in carbon-12"], answerIndex: 1, explanation: "N_A ≈ 6.022 × 10²³ is the number of particles in one mole." },
       { q: "How many moles are in 9 g of water (18 g/mol)?", choices: ["0.5 mol", "2 mol", "9 mol", "162 mol"], answerIndex: 0, explanation: "Moles = mass / molar mass = 9 / 18 = 0.5 mol." },
     ],
-    sample: true,
   },
   {
     id: "chem-acid-01-ph",
@@ -586,7 +559,6 @@ export const EXPERIMENTS: Experiment[] = [
       { q: "A solution has pH = 4. How does its [H⁺] compare to one with pH = 6?", choices: ["100× higher", "2× higher", "100× lower", "The same"], answerIndex: 0, explanation: "Each pH unit is a 10× change. 6 − 4 = 2 units, so [H⁺] at pH 4 is 10² = 100× higher than at pH 6." },
       { q: "The indicator turns green when you add soap water. Soap water is…", choices: ["Strongly acidic", "Neutral", "Basic", "Impossible to tell"], answerIndex: 2, explanation: "Blue/green means the solution is basic." },
     ],
-    sample: true,
   },
   {
     id: "bio-cell-01-organelles",
@@ -629,7 +601,6 @@ export const EXPERIMENTS: Experiment[] = [
       { q: "Which structure is found in plant cells but NOT animal cells?", choices: ["Mitochondria", "Cell wall", "Nucleus", "Ribosomes"], answerIndex: 1, explanation: "Cell walls (cellulose) are a defining plant feature. Animals have only a flexible cell membrane." },
       { q: "Why don't onion skin cells look green?", choices: ["They have no chloroplasts", "They are dead", "They have no nucleus", "They are animal cells"], answerIndex: 0, explanation: "The onion bulb grows underground, so its cells don't photosynthesise and have no chloroplasts." },
     ],
-    sample: true,
   },
   {
     id: "bio-div-01-mitosis-meiosis",
@@ -670,7 +641,6 @@ export const EXPERIMENTS: Experiment[] = [
       { q: "Which process produces genetically identical daughter cells?", choices: ["Mitosis", "Meiosis", "Fertilization", "Crossing over"], answerIndex: 0, explanation: "Mitosis copies the parent cell exactly. Meiosis and crossing over generate variation." },
       { q: "How many cells does one round of meiosis produce from one starting cell?", choices: ["1", "2", "4", "8"], answerIndex: 2, explanation: "Meiosis is two divisions in a row, producing 4 haploid daughter cells from one diploid parent." },
     ],
-    sample: true,
   },
   {
     id: "bio-gen-01-dna-structure",
@@ -724,7 +694,6 @@ export const EXPERIMENTS: Experiment[] = [
       { q: "What was the job of the dish soap?", choices: ["To colour the DNA", "To break open the fatty cell and nuclear membranes", "To make the DNA heavier", "To kill bacteria"], answerIndex: 1, explanation: "Membranes are made of lipids (fats); soap dissolves them, releasing the DNA." },
       { q: "In DNA, which bases pair with each other?", choices: ["A–G and T–C", "A–T and G–C", "A–C and T–G", "Any base can pair with any base"], answerIndex: 1, explanation: "Adenine always pairs with thymine, and guanine always pairs with cytosine." },
     ],
-    sample: true,
   },
 
   // ======================= GRADE 12 =======================
@@ -772,7 +741,6 @@ export const EXPERIMENTS: Experiment[] = [
       { q: "What happens to the electromagnet's strength if you double the number of turns?", choices: ["It halves", "It stays the same", "It roughly doubles", "It becomes zero"], answerIndex: 2, explanation: "B is proportional to the number of turns per length, n." },
       { q: "Why does the electromagnet drop the clips when the battery is disconnected?", choices: ["The nail gets cold", "No current means no magnetic field", "The clips get heavier", "Gravity increases"], answerIndex: 1, explanation: "The magnetic field exists only while current flows through the coil." },
     ],
-    sample: true,
   },
   {
     id: "g12-chem-reaction-rate",
@@ -813,7 +781,6 @@ export const EXPERIMENTS: Experiment[] = [
       { q: "Why does the tablet react faster in warm water?", choices: ["Warm water has more oxygen", "Particles move faster and collide more often with enough energy", "Warm water is denser", "The tablet is softer"], answerIndex: 1, explanation: "Higher temperature increases both collision frequency and the fraction of collisions above the activation energy." },
       { q: "Crushing the tablet speeds up the reaction because it…", choices: ["Increases surface area", "Raises the temperature", "Adds a catalyst", "Removes the carbonate"], answerIndex: 0, explanation: "More exposed surface means more particles available to collide at once." },
     ],
-    sample: true,
   },
   {
     id: "g12-bio-catalase-enzyme",
@@ -856,7 +823,6 @@ export const EXPERIMENTS: Experiment[] = [
       { q: "What gas is in the bubbles?", choices: ["Carbon dioxide", "Hydrogen", "Oxygen", "Nitrogen"], answerIndex: 2, explanation: "Catalase breaks 2H₂O₂ into 2H₂O + O₂." },
       { q: "Why does the boiled potato produce almost no bubbles?", choices: ["Boiling removed all the water", "The enzyme was denatured by heat", "Boiled potatoes have more starch", "The peroxide was used up"], answerIndex: 1, explanation: "Heat changes the shape of the enzyme's active site, so it can no longer catalyse the reaction." },
     ],
-    sample: true,
   },
 ];
 
@@ -879,4 +845,25 @@ export function adjacentExperiments(id: string): { prev?: Experiment; next?: Exp
   const siblings = experimentsBy({ subject: exp.subject });
   const i = siblings.findIndex((e) => e.id === id);
   return { prev: siblings[i - 1], next: siblings[i + 1] };
+}
+
+export function toCatalogItem(e: Experiment): CatalogItem {
+  return {
+    id: e.id,
+    subject: e.subject,
+    grade: e.grade,
+    unit: e.unit,
+    title: e.title,
+    summary: e.summary,
+    estimatedMinutes: e.estimatedMinutes,
+    difficulty: e.difficulty,
+    hasVideo: !!e.video,
+    materialsCount: e.materials.length,
+    free: isFreeGuide(e.id),
+  };
+}
+
+/** Summaries of every experiment. Safe to pass to client components. */
+export function getCatalog(): CatalogItem[] {
+  return EXPERIMENTS.map(toCatalogItem);
 }

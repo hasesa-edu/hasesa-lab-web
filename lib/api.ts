@@ -1,5 +1,5 @@
 import type { Locale } from "./i18n";
-import type { Grade, Subject } from "./experiments";
+import type { Grade, Subject } from "./subjects";
 
 export type UserDTO = {
   id: string;
@@ -12,6 +12,8 @@ export type UserDTO = {
   extendedRetention: boolean;
   subjects: Subject[];
   grade: Grade | null;
+  avatarUrl: string | null;
+  paidUntil: string | null;
 };
 
 async function jsonOrThrow(res: Response): Promise<any> {
@@ -27,34 +29,6 @@ async function jsonOrThrow(res: Response): Promise<any> {
     throw new Error(msg);
   }
   return data;
-}
-
-export async function apiSignup(input: {
-  email: string;
-  password: string;
-  displayName: string;
-  language: Locale;
-  region?: string;
-  school?: string;
-  under18?: boolean;
-  subjects?: Subject[];
-  grade?: Grade | null;
-}) {
-  const res = await fetch("/api/auth/signup", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(input),
-  });
-  return jsonOrThrow(res);
-}
-
-export async function apiSignin(email: string, password: string) {
-  const res = await fetch("/api/auth/signin", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ email, password }),
-  });
-  return jsonOrThrow(res);
 }
 
 export async function apiSignout() {
