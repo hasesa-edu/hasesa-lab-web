@@ -20,7 +20,7 @@ function safeEqual(a: string, b: string): boolean {
  * Per NFR-12:
  *   - default retention: 90 days
  *   - extended retention (per-user opt-in): 365 days
- * Derived signals (mastery) are retained forever.
+ * Derived signals (experiment progress and notes) are retained forever.
  *
  * Triggered by Vercel Cron. Requires header `Authorization: Bearer ${CRON_SECRET}`.
  */

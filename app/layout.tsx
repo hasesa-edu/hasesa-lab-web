@@ -16,9 +16,9 @@ const geist = Geist({
   variable: "--font-geist",
 });
 
-const TITLE = "Hasesa — Quality Education for Ethiopian High Schools";
+const TITLE = "Hasesa — Quality Education for Ethiopian High School Students";
 const DESCRIPTION =
-  "An AI tutor built for deep understanding, not just exam answers. MoE-aligned lessons in English, each with an at-home experiment. Demo covers Grade 11 Math, Physics, Chemistry, and Biology.";
+  "Hands-on science for Ethiopian high school students. Curriculum-aligned biology, chemistry and physics experiments for grades 9–12 using local materials, with step-by-step guides, demo videos, and an AI lab assistant.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://personalaitutor.app"),
