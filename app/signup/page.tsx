@@ -6,9 +6,7 @@ import { useState } from "react";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
 import { apiSignup } from "@/lib/api";
-import { SUBJECTS, type Subject } from "@/lib/lessons";
-
-type Role = "student" | "teacher";
+import { GRADES, type Grade } from "@/lib/experiments";
 
 export default function SignupPage() {
   const { tr, locale } = useLocale();
@@ -18,17 +16,12 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<Role>("student");
   const [region, setRegion] = useState("");
   const [school, setSchool] = useState("");
   const [under18, setUnder18] = useState(false);
-  const [subjects, setSubjects] = useState<Subject[]>(["math", "physics", "chemistry", "biology"]);
+  const [grade, setGrade] = useState<Grade | "">("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-
-  function toggleSubject(s: Subject) {
-    setSubjects((cur) => (cur.includes(s) ? cur.filter((x) => x !== s) : [...cur, s]));
-  }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -39,15 +32,14 @@ export default function SignupPage() {
         email,
         password,
         displayName: displayName || email.split("@")[0],
-        role,
         language: locale,
         region: region || undefined,
         school: school || undefined,
         under18,
-        subjects: role === "student" ? subjects : [],
+        grade: grade || null,
       });
       await refresh();
-      router.push(role === "teacher" ? "/teacher" : "/onboarding");
+      router.push("/onboarding");
     } catch (e: any) {
       console.error("signup failed:", e);
       setError(e?.message === "username-taken" ? tr("auth.err.takenUsername") : tr("auth.err.signup"));
@@ -63,58 +55,27 @@ export default function SignupPage() {
         <p className="text-sm text-ink-muted mt-1.5">{tr("auth.signup.tagline")}</p>
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
-          <div>
-            <label className="text-sm font-medium text-ink">{tr("auth.role")}</label>
-            <div className="mt-1.5 flex gap-2">
-              {(["student", "teacher"] as Role[]).map((r) => (
-                <button
-                  type="button"
-                  key={r}
-                  onClick={() => setRole(r)}
-                  className={
-                    "flex-1 px-3 py-2 rounded-lg border text-sm font-medium transition " +
-                    (role === r
-                      ? "bg-brand text-brand-on border-brand shadow-soft"
-                      : "bg-canvas text-ink border-line hover:border-brand/60")
-                  }
-                >
-                  {tr(r === "student" ? "auth.role.student" : "auth.role.teacher")}
-                </button>
-              ))}
-            </div>
-          </div>
-
           <Field label={tr("auth.email")} type="email" value={email} onChange={setEmail} autoComplete="email" autoFocus required />
           <Field label={tr("auth.displayName")} value={displayName} onChange={setDisplayName} autoComplete="nickname" />
           <Field label={tr("auth.password")} value={password} onChange={setPassword} type="password" autoComplete="new-password" required minLength={8} />
           <p className="text-xs text-ink-subtle -mt-2">{tr("auth.passwordRule")}</p>
 
-          {role === "student" && (
-            <div>
-              <label className="text-sm font-medium text-ink">{tr("common.subjects")}</label>
-              <div className="mt-1.5 grid grid-cols-2 gap-2">
-                {SUBJECTS.map((s) => (
-                  <label
-                    key={s.id}
-                    className={
-                      "flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer text-sm transition " +
-                      (subjects.includes(s.id)
-                        ? "border-brand bg-brand-soft/40 text-ink"
-                        : "border-line bg-canvas text-ink hover:border-brand/60")
-                    }
-                  >
-                    <input
-                      type="checkbox"
-                      checked={subjects.includes(s.id)}
-                      onChange={() => toggleSubject(s.id)}
-                      className="accent-brand"
-                    />
-                    <span>{s.emoji} {s.label[locale]}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          )}
+          <div>
+            <label htmlFor="grade" className="text-sm font-medium text-ink block">{tr("auth.grade")}</label>
+            <select
+              id="grade"
+              value={grade}
+              onChange={(e) => setGrade(e.target.value ? (Number(e.target.value) as Grade) : "")}
+              className="mt-1.5 w-full px-3.5 py-2.5 border border-line rounded-lg focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/30 bg-canvas text-ink"
+            >
+              <option value="">{tr("auth.grade.none")}</option>
+              {GRADES.map((g) => (
+                <option key={g} value={g}>
+                  {tr("experiments.grade")} {g}
+                </option>
+              ))}
+            </select>
+          </div>
 
           <Field label={tr("auth.region")} value={region} onChange={setRegion} />
           <Field label={tr("auth.school")} value={school} onChange={setSchool} />

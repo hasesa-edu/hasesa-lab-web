@@ -1,37 +1,43 @@
-# Hasesa — Demo
+# Hasesa — Hands-on science for Ethiopian high school students
 
-An AI tutor demo for Grade 11 Ethiopian students.
+Hasesa helps students in grades 9–12 do real biology, chemistry and physics experiments on their own, using cheap, locally available materials. Each experiment has:
 
-This is a **demo shell** of the MVP — most screens described in the requirements exist with working interactions, but content is sample-only and there is no real backend.
+- **A step-by-step guide**: concept background, materials (with local substitutes), safety notes, a tickable procedure, expected results and why they happen, and troubleshooting.
+- **A pre-recorded demo video**: YouTube embeds for now. Self-hosted recordings are supported through `video.src`.
+- **An AI lab assistant** grounded in that guide. It explains the concepts, helps troubleshoot experiments that didn't work, and cites the step it relied on.
 
-## What's in this demo
+The model was piloted in June 2026: a strawberry DNA extraction with Grade 11 students at Magic Carpet School, guided live by researchers from The Science Basement. Hasesa replaces that live support with guides, videos and the lab assistant so any student can do the experiments on their own, wherever they are.
 
-- **Landing** — mission, differentiation, value props
-- **Lessons** — sample content for all 4 subjects (Math, Physics, Chemistry, Biology), filterable, with MoE codes and EUEE topic tags
-- **Lesson detail** — sections, worked example, in-lesson quiz, AI-generated practice questions on demand
-- **AI Tutor** — Groq (Llama 3.3 70B), grounded in lesson context with citation, refuses off-topic
-- **Trilingual UI** — English, Amharic, Afaan Oromo for all UI strings; lesson bodies in English
-- **Accounts** — sign up as student or teacher, username + password (demo: stored in browser only)
-- **Onboarding** — pick subjects, optional under-18 privacy notice, short diagnostic quiz
-- **Student dashboard** — recommended next lessons (weighted by mastery gap × EUEE weight), per-topic mastery bars
-- **Mock test** — EUEE-style mock per subject, scored with per-topic breakdown
-- **Teacher dashboard** — create class codes, see aggregate (never individual) mastery + weakest topics
-- **Class codes** — students join via code, contribute to class aggregate
-- **PWA** — installable manifest, service worker (network-first HTML, cache-first static)
+## What's in the app
+
+| Route | What it does |
+|---|---|
+| `/` | Landing page |
+| `/experiments` | Catalogue, filterable by grade (9–12) and subject |
+| `/experiments/[id]` | The experiment guide, a short concept check, and a lab-notebook card to save observations and mark it done |
+| `/chat` | Lab assistant. `?experiment=<id>` grounds it in that guide; a picker on the page does the same. |
+| `/dashboard` | My lab notebook: in progress, suggested next, and completed experiments with notes |
+| `/onboarding` | Pick grade and subjects |
+| `/signup`, `/login` | Email + password accounts (students) |
+| `/admin` | Analytics for the operator (env-credential login) |
+
+Old exam-prep routes (`/lessons`, `/teacher`, `/join`, `/mock/*`) redirect to their replacements (see `next.config.js`).
+
+Experiment content lives in `lib/experiments.ts`. All 18 experiments are **samples pending review** by Ethiopian subject teachers.
 
 ## Stack
 
-- Next.js 16 (App Router) + React 19 + TypeScript
-- Tailwind CSS v3
-- Groq API (Llama 3.3 70B) — free tier, OpenAI-compatible
-- All state in localStorage — there is no server-side persistence
+- Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v3
+- Postgres on Neon, via Drizzle ORM (`lib/db/schema.ts`)
+- iron-session cookies + bcrypt password hashing
+- Any OpenAI-compatible LLM API for the lab assistant (Groq `openai/gpt-oss-120b` by default; set `AI_BASE_URL` / `AI_MODEL` to switch)
 
 ## Local development
 
 ```bash
 npm install
-cp .env.example .env.local
-# add your GROQ_API_KEY to .env.local (free key at https://console.groq.com)
+cp .env.example .env.local   # fill in AI_API_KEY, DATABASE_URL, SESSION_SECRET, ADMIN_PASSWORD
+npm run db:push              # create/update tables
 npm run dev
 ```
 
@@ -39,24 +45,16 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Deploying to Vercel
 
-1. Push to GitHub.
-2. Import the repo on [vercel.com/new](https://vercel.com/new).
-3. Add env var `GROQ_API_KEY` in project settings.
-4. Deploy.
+1. Import the repo on [vercel.com/new](https://vercel.com/new).
+2. Set the env vars from `.env.example`.
+3. Run `npm run db:push` against the production database whenever `lib/db/schema.ts` changes.
 
-## What's intentionally NOT in this demo (still spec, not built)
+## Not built yet
 
-These pieces from `REQUIREMENTS.md` would all be in a real MVP but are out of scope for a one-session build:
+- Reviewed curriculum content, and coverage of the full grade 9–12 syllabus.
+- Our own pre-recorded experiment videos.
+- Amharic and Afaan Oromo.
+- Offline experiment packs.
+- Full-corpus retrieval for the assistant. Today it is grounded in one experiment at a time.
 
-- **Real curriculum content** — every lesson here is a sample. A real MVP needs the Grade 11 MoE syllabus reviewed and authored by Ethiopian subject teachers.
-- **Real translations** — lesson *bodies* are English-only. AM/OM only cover UI strings.
-- **Real backend** — no Postgres, no server-side auth, no password hashing. Accounts live in `localStorage`.
-- **Email / SMS auth** — only the username + password flow exists.
-- **Voice (ASR/TTS)** — not built. Spec gates this on per-language quality (NFR-8).
-- **True RAG** — the chatbot grounds in one in-memory lesson at a time, not a vector-store-backed corpus search.
-- **Conversation persistence** with tiered retention (NFR-12).
-- **Compliance** — no WCAG audit, no privacy/legal review, no AI cost caps enforced per user (NFR-14).
-- **Performance gates** — no CI-throttled-network testing.
-- **Item flagging** for AI-generated questions, full QA gate from FR-14.
-
-See `REQUIREMENTS.md` for the full product spec.
+`REQUIREMENTS.md` is the earlier exam-prep spec and is kept for reference.

@@ -1,10 +1,8 @@
 import { db, schema } from "@/lib/db/client";
-import { and, eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import type { Locale } from "@/lib/i18n";
-import { SUBJECTS, type Subject } from "@/lib/lessons";
-
-export type Role = "student" | "teacher";
+import { SUBJECTS, isGrade, type Grade, type Subject } from "@/lib/experiments";
 
 // A valid bcrypt hash compared against when an email is not found, so that
 // verifyCredentials spends the same time whether or not the account exists.
@@ -28,18 +26,22 @@ function cleanSubjects(v: unknown): Subject[] | undefined {
     .slice(0, MAX_SUBJECTS);
 }
 
+function cleanGrade(v: unknown): Grade | null | undefined {
+  if (v === null) return null;
+  return isGrade(v) ? v : undefined;
+}
+
 export type UserDTO = {
   id: string;
   email: string;
   displayName: string;
-  role: Role;
   language: Locale;
   region?: string | null;
   school?: string | null;
   under18: boolean;
   extendedRetention: boolean;
   subjects: Subject[];
-  joinedClasses: string[];
+  grade: Grade | null;
 };
 
 function uid(): string {
@@ -50,12 +52,12 @@ export async function createUserAccount(input: {
   email: string;
   password: string;
   displayName: string;
-  role: Role;
   language: Locale;
   region?: string;
   school?: string;
   under18?: boolean;
   subjects?: Subject[];
+  grade?: Grade | null;
 }): Promise<{ ok: true; userId: string } | { ok: false; reason: "taken" | "invalid" }> {
   const email = (typeof input.email === "string" ? input.email : "").trim().toLowerCase();
   const displayName = (capStr(input.displayName, 100) || email.split("@")[0]).slice(0, 100);
@@ -87,12 +89,12 @@ export async function createUserAccount(input: {
     email,
     passwordHash: hash,
     displayName,
-    role: input.role,
     language: input.language,
     region: capStr(input.region) ?? null,
     school: capStr(input.school) ?? null,
     under18: input.under18 ?? false,
     subjects: cleanSubjects(input.subjects) ?? [],
+    grade: cleanGrade(input.grade) ?? null,
   });
 
   return { ok: true, userId: id };
@@ -125,34 +127,39 @@ export async function getUserDTO(userId: string): Promise<UserDTO | null> {
   if (!rows.length) return null;
   const u = rows[0];
 
-  const joins = await db
-    .select({ code: schema.classMembers.classCode })
-    .from(schema.classMembers)
-    .where(eq(schema.classMembers.userId, userId));
-
   return {
     id: u.id,
     email: u.email,
     displayName: u.displayName,
-    role: u.role,
     language: u.language as Locale,
     region: u.region,
     school: u.school,
     under18: u.under18,
     extendedRetention: u.extendedRetention,
-    subjects: (u.subjects ?? []) as Subject[],
-    joinedClasses: joins.map((j) => j.code),
+    subjects: ((u.subjects ?? []) as string[]).filter((s): s is Subject => VALID_SUBJECTS.has(s)),
+    grade: isGrade(u.grade) ? u.grade : null,
   };
 }
 
 export async function updateUserProfile(
   userId: string,
-  patch: { subjects?: Subject[]; language?: Locale; region?: string; school?: string; extendedRetention?: boolean }
+  patch: {
+    subjects?: Subject[];
+    grade?: Grade | null;
+    language?: Locale;
+    region?: string;
+    school?: string;
+    extendedRetention?: boolean;
+  }
 ) {
   const set: Record<string, unknown> = {};
   if (patch.subjects !== undefined) {
     const s = cleanSubjects(patch.subjects);
     if (s !== undefined) set.subjects = s;
+  }
+  if (patch.grade !== undefined) {
+    const g = cleanGrade(patch.grade);
+    if (g !== undefined) set.grade = g;
   }
   if (patch.language !== undefined && VALID_LOCALES.has(patch.language as string)) {
     set.language = patch.language;
