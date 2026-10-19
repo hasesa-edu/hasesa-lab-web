@@ -5,7 +5,9 @@ export const users = pgTable(
   {
     id: text("id").primaryKey(),
     email: text("email").notNull(),
-    passwordHash: text("password_hash").notNull(),
+    // Google account ID ("sub" claim). Google is the only sign-in method.
+    googleSub: text("google_sub").notNull(),
+    avatarUrl: text("avatar_url"),
     displayName: text("display_name").notNull(),
     language: text("language").notNull().$type<"en" | "am" | "om">().default("en"),
     region: text("region"),
@@ -14,9 +16,11 @@ export const users = pgTable(
     extendedRetention: boolean("extended_retention").notNull().default(false),
     subjects: text("subjects").array().notNull().default([]),
     grade: integer("grade"),
+    // End of the student's prepaid access. Null or in the past = no plan.
+    paidUntil: timestamp("paid_until", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
-  (t) => [uniqueIndex("users_email_lower_idx").on(t.email)]
+  (t) => [uniqueIndex("users_email_lower_idx").on(t.email), uniqueIndex("users_google_sub_idx").on(t.googleSub)]
 );
 
 // One row per student per experiment they've started or completed.
@@ -83,15 +87,36 @@ export const pageViews = pgTable(
   ]
 );
 
-// Per-user monthly usage counters for NFR-14 cost caps
+// Per-user daily usage counters for cost caps
 export const usage = pgTable(
   "usage",
   {
     userId: text("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    yearMonth: text("year_month").notNull(), // e.g. "2026-05"
+    period: text("period").notNull(), // Addis Ababa calendar day, e.g. "2026-10-19"
     chatTurns: integer("chat_turns").notNull().default(0),
   },
-  (t) => [primaryKey({ columns: [t.userId, t.yearMonth] })]
+  (t) => [primaryKey({ columns: [t.userId, t.period] })]
+);
+
+// One row per checkout attempt (Chapa) or manual grant (admin).
+export const payments = pgTable(
+  "payments",
+  {
+    txRef: text("tx_ref").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    amountEtb: integer("amount_etb").notNull(),
+    currency: text("currency").notNull().default("ETB"),
+    days: integer("days").notNull(),
+    status: text("status").notNull().$type<"pending" | "success" | "failed">(),
+    source: text("source").notNull().$type<"chapa" | "admin">(),
+    chapaRef: text("chapa_ref"),
+    note: text("note"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    verifiedAt: timestamp("verified_at", { withTimezone: true }),
+  },
+  (t) => [index("payments_user_idx").on(t.userId, t.createdAt), index("payments_verified_idx").on(t.verifiedAt)]
 );

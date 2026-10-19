@@ -1,16 +1,10 @@
 import { db, schema } from "@/lib/db/client";
 import { eq } from "drizzle-orm";
-import bcrypt from "bcryptjs";
 import type { Locale } from "@/lib/i18n";
-import { SUBJECTS, isGrade, type Grade, type Subject } from "@/lib/experiments";
-
-// A valid bcrypt hash compared against when an email is not found, so that
-// verifyCredentials spends the same time whether or not the account exists.
-const DUMMY_HASH = "$2b$10$MJi3uIOk4dm.AKGwE1PsgOw3zxfBwC37qALqpm6yD2V2vIpzWHWBW";
+import { SUBJECTS, isGrade, type Grade, type Subject } from "@/lib/subjects";
 
 const VALID_SUBJECTS = new Set<string>(SUBJECTS.map((s) => s.id));
 const VALID_LOCALES = new Set<string>(["en"]);
-const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const MAX_TEXT = 120;
 const MAX_SUBJECTS = 8;
 
@@ -42,80 +36,49 @@ export type UserDTO = {
   extendedRetention: boolean;
   subjects: Subject[];
   grade: Grade | null;
+  avatarUrl: string | null;
+  /** ISO timestamp the paid pass ends, or null if the student never paid. */
+  paidUntil: string | null;
 };
 
-function uid(): string {
-  return Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
-}
-
-export async function createUserAccount(input: {
+/**
+ * Find or create the account for a verified Google identity. Matches on the
+ * Google account ID first, then on email (so a changed Google email doesn't
+ * fork the account). Returns whether this is a brand-new account.
+ */
+export async function upsertGoogleUser(profile: {
+  sub: string;
   email: string;
-  password: string;
-  displayName: string;
-  language: Locale;
-  region?: string;
-  school?: string;
-  under18?: boolean;
-  subjects?: Subject[];
-  grade?: Grade | null;
-}): Promise<{ ok: true; userId: string } | { ok: false; reason: "taken" | "invalid" }> {
-  const email = (typeof input.email === "string" ? input.email : "").trim().toLowerCase();
-  const displayName = (capStr(input.displayName, 100) || email.split("@")[0]).slice(0, 100);
+  name?: string;
+  picture?: string;
+}): Promise<{ userId: string; isNew: boolean }> {
+  const email = profile.email.trim().toLowerCase().slice(0, 254);
+  const displayName = (capStr(profile.name, 100) || email.split("@")[0]).slice(0, 100);
+  const avatarUrl = typeof profile.picture === "string" && profile.picture.startsWith("https://") ? profile.picture : null;
 
-  if (
-    email.length > 254 ||
-    !EMAIL_RE.test(email) ||
-    typeof input.password !== "string" ||
-    input.password.length < 8 ||
-    input.password.length > 200 ||
-    !VALID_LOCALES.has(input.language)
-  ) {
-    return { ok: false, reason: "invalid" };
+  const bySub = await db
+    .select({ id: schema.users.id })
+    .from(schema.users)
+    .where(eq(schema.users.googleSub, profile.sub))
+    .limit(1);
+  if (bySub.length) {
+    await db.update(schema.users).set({ email, avatarUrl }).where(eq(schema.users.id, bySub[0].id));
+    return { userId: bySub[0].id, isNew: false };
   }
 
-  const existing = await db
+  const byEmail = await db
     .select({ id: schema.users.id })
     .from(schema.users)
     .where(eq(schema.users.email, email))
     .limit(1);
+  if (byEmail.length) {
+    await db.update(schema.users).set({ googleSub: profile.sub, avatarUrl }).where(eq(schema.users.id, byEmail[0].id));
+    return { userId: byEmail[0].id, isNew: false };
+  }
 
-  if (existing.length) return { ok: false, reason: "taken" };
-
-  const hash = await bcrypt.hash(input.password, 10);
-  const id = uid();
-
-  await db.insert(schema.users).values({
-    id,
-    email,
-    passwordHash: hash,
-    displayName,
-    language: input.language,
-    region: capStr(input.region) ?? null,
-    school: capStr(input.school) ?? null,
-    under18: input.under18 ?? false,
-    subjects: cleanSubjects(input.subjects) ?? [],
-    grade: cleanGrade(input.grade) ?? null,
-  });
-
-  return { ok: true, userId: id };
-}
-
-export async function verifyCredentials(
-  email: string,
-  password: string
-): Promise<{ ok: true; userId: string } | { ok: false }> {
-  const norm = email.trim().toLowerCase();
-  const rows = await db
-    .select({ id: schema.users.id, hash: schema.users.passwordHash })
-    .from(schema.users)
-    .where(eq(schema.users.email, norm))
-    .limit(1);
-  // Always run a bcrypt comparison — even for unknown emails — so response
-  // timing doesn't reveal whether an account exists (user enumeration).
-  const hash = rows[0]?.hash ?? DUMMY_HASH;
-  const ok = await bcrypt.compare(password, hash);
-  if (!rows.length || !ok) return { ok: false };
-  return { ok: true, userId: rows[0].id };
+  const id = crypto.randomUUID();
+  await db.insert(schema.users).values({ id, email, googleSub: profile.sub, displayName, avatarUrl });
+  return { userId: id, isNew: true };
 }
 
 export async function getUserDTO(userId: string): Promise<UserDTO | null> {
@@ -138,6 +101,8 @@ export async function getUserDTO(userId: string): Promise<UserDTO | null> {
     extendedRetention: u.extendedRetention,
     subjects: ((u.subjects ?? []) as string[]).filter((s): s is Subject => VALID_SUBJECTS.has(s)),
     grade: isGrade(u.grade) ? u.grade : null,
+    avatarUrl: u.avatarUrl,
+    paidUntil: u.paidUntil ? u.paidUntil.toISOString() : null,
   };
 }
 

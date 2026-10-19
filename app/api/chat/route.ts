@@ -4,7 +4,8 @@ import type { Locale } from "@/lib/i18n";
 import { getSession } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
 import { and, eq } from "drizzle-orm";
-import { CAPS, checkAndIncrement, getCurrentUsage } from "@/lib/usage";
+import { checkAndIncrement } from "@/lib/usage";
+import { getEntitlement } from "@/lib/billing/entitlement";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { readJsonLimited, BODY_LIMIT } from "@/lib/http";
 
@@ -27,7 +28,14 @@ const LANG_NAME: Record<Locale, string> = {
 };
 
 function uid(): string {
-  return Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+  return crypto.randomUUID();
+}
+
+function jsonError(status: number, error: string, code?: string, extra: Record<string, string> = {}) {
+  return new Response(JSON.stringify({ error, code }), {
+    status,
+    headers: { "content-type": "application/json", ...extra },
+  });
 }
 
 function experimentContext(exp: Experiment): string {
@@ -105,7 +113,14 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  // Throttle every caller (esp. anonymous) so the endpoint can't be looped to
+  // The assistant is for students with an active pass only.
+  const session = await getSession();
+  const userId = session.userId;
+  if (!userId) return jsonError(401, "Please sign in to use the lab assistant.", "signin");
+  const ent = await getEntitlement(userId);
+  if (!ent.active) return jsonError(402, "The lab assistant is part of the Hasesa Lab pass.", "plan_required");
+
+  // Throttle every caller so the endpoint can't be looped to
   // burn AI provider quota. 20 requests per IP per 5 minutes.
   const limit = rateLimit(`chat:${clientIp(req)}`, 20, 5 * 60 * 1000);
   if (!limit.ok) {
@@ -151,53 +166,46 @@ export async function POST(req: NextRequest) {
     return new Response(JSON.stringify({ error: "messages required" }), { status: 400 });
   }
 
-  // Auth: if signed in, persist + enforce caps. Anonymous: just stream, no persistence.
-  const session = await getSession();
-  const userId = session.userId;
+  const cap = await checkAndIncrement(userId, "chatTurns", 1);
+  if (!cap.ok) {
+    return jsonError(
+      429,
+      `You've used all ${cap.cap} messages for today. They reset at midnight (Addis Ababa time).`,
+      "daily_cap"
+    );
+  }
 
-  if (userId) {
-    const cap = await checkAndIncrement(userId, "chatTurns", 1);
-    if (!cap.ok) {
-      return new Response(
-        JSON.stringify({
-          error: `Monthly chat turn cap reached (${cap.current}/${cap.cap}). Resets next month.`,
-        }),
-        { status: 429, headers: { "content-type": "application/json" } }
-      );
-    }
-
-    // Ensure conversation exists and belongs to this user (prevents writing
-    // into another user's conversation via a supplied conversationId).
-    if (!conversationId) {
-      conversationId = uid();
-      await db.insert(schema.conversations).values({ id: conversationId, userId, lessonId: experimentId ?? null });
-    } else {
-      const owned = await db
-        .select({ id: schema.conversations.id })
-        .from(schema.conversations)
-        .where(and(eq(schema.conversations.id, conversationId), eq(schema.conversations.userId, userId)))
-        .limit(1);
-      if (!owned.length) {
-        return new Response(JSON.stringify({ error: "Conversation not found" }), {
-          status: 404,
-          headers: { "content-type": "application/json" },
-        });
-      }
-      await db
-        .update(schema.conversations)
-        .set({ updatedAt: new Date() })
-        .where(and(eq(schema.conversations.id, conversationId), eq(schema.conversations.userId, userId)));
-    }
-    // Persist user's last message
-    const lastUser = [...safeMessages].reverse().find((m) => m.role === "user");
-    if (lastUser) {
-      await db.insert(schema.messages).values({
-        id: uid(),
-        conversationId,
-        role: "user",
-        content: lastUser.content,
+  // Ensure conversation exists and belongs to this user (prevents writing
+  // into another user's conversation via a supplied conversationId).
+  if (!conversationId) {
+    conversationId = uid();
+    await db.insert(schema.conversations).values({ id: conversationId, userId, lessonId: experimentId ?? null });
+  } else {
+    const owned = await db
+      .select({ id: schema.conversations.id })
+      .from(schema.conversations)
+      .where(and(eq(schema.conversations.id, conversationId), eq(schema.conversations.userId, userId)))
+      .limit(1);
+    if (!owned.length) {
+      return new Response(JSON.stringify({ error: "Conversation not found" }), {
+        status: 404,
+        headers: { "content-type": "application/json" },
       });
     }
+    await db
+      .update(schema.conversations)
+      .set({ updatedAt: new Date() })
+      .where(and(eq(schema.conversations.id, conversationId), eq(schema.conversations.userId, userId)));
+  }
+  // Persist user's last message
+  const lastUser = [...safeMessages].reverse().find((m) => m.role === "user");
+  if (lastUser) {
+    await db.insert(schema.messages).values({
+      id: uid(),
+      conversationId,
+      role: "user",
+      content: lastUser.content,
+    });
   }
 
   const systemPrompt = buildSystemPrompt(locale as Locale, experimentId);
@@ -283,5 +291,6 @@ export async function POST(req: NextRequest) {
     "cache-control": "no-cache",
   };
   if (conversationId) headers["x-conversation-id"] = conversationId;
+  headers["x-chat-remaining"] = String(Math.max(0, cap.cap - cap.current));
   return new Response(stream, { headers });
 }
