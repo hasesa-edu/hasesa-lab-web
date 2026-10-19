@@ -1,7 +1,7 @@
 {
-  "name": "Hasesa",
-  "short_name": "Hasesa",
-  "description": "Hands-on science experiments for Ethiopian grades 9–12, with step-by-step guides, videos and an AI lab assistant.",
+  "name": "Hasesa Lab",
+  "short_name": "Hasesa Lab",
+  "description": "Personalized, Hands-On Learning Guided by Real Scientists. Science experiments for Ethiopian grades 9–12, with step-by-step guides, videos and an AI lab assistant.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
