@@ -7,6 +7,8 @@ export const users = pgTable(
     email: text("email").notNull(),
     passwordHash: text("password_hash").notNull(),
     displayName: text("display_name").notNull(),
+    // Hasesa is individual and self-paced; every new account is a student.
+    // "teacher" only exists on legacy exam-prep-era rows.
     role: text("role").notNull().$type<"student" | "teacher">(),
     language: text("language").notNull().$type<"en" | "am" | "om">().default("en"),
     region: text("region"),
