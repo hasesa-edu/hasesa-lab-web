@@ -9,3 +9,10 @@ out
 .vercel
 next-env.d.ts
 tsconfig.tsbuildinfo
+
+# Local screenshots and recordings
+/screenshots/
+
+# Claude Code / Playwright local files
+.claude/settings.local.json
+.playwright-mcp/
