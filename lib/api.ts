@@ -1,13 +1,10 @@
 import type { Locale } from "./i18n";
 import type { Grade, Subject } from "./experiments";
 
-export type Role = "student" | "teacher";
-
 export type UserDTO = {
   id: string;
   email: string;
   displayName: string;
-  role: Role;
   language: Locale;
   region?: string | null;
   school?: string | null;
