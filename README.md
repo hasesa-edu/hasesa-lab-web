@@ -30,13 +30,13 @@ Experiment content lives in `lib/experiments.ts`. All 18 experiments are **sampl
 - Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v3
 - Postgres on Neon, via Drizzle ORM (`lib/db/schema.ts`)
 - iron-session cookies + bcrypt password hashing
-- Groq API (Llama 3.3 70B) for the lab assistant
+- Any OpenAI-compatible LLM API for the lab assistant (Groq `openai/gpt-oss-120b` by default; set `AI_BASE_URL` / `AI_MODEL` to switch)
 
 ## Local development
 
 ```bash
 npm install
-cp .env.example .env.local   # fill in GROQ_API_KEY, DATABASE_URL, SESSION_SECRET, ADMIN_PASSWORD
+cp .env.example .env.local   # fill in AI_API_KEY, DATABASE_URL, SESSION_SECRET, ADMIN_PASSWORD
 npm run db:push              # create/update tables
 npm run dev
 ```

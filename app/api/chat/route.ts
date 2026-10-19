@@ -10,6 +10,14 @@ import { readJsonLimited, BODY_LIMIT } from "@/lib/http";
 
 const MAX_MESSAGE_CHARS = 8000;
 
+// Any OpenAI-compatible chat completions API works. Defaults to Groq; set
+// AI_BASE_URL / AI_API_KEY / AI_MODEL to switch provider or model. GROQ_* are
+// still read for older .env files.
+const AI_BASE_URL = (process.env.AI_BASE_URL || "https://api.groq.com/openai/v1").replace(/\/+$/, "");
+const AI_MODEL = process.env.AI_MODEL || process.env.GROQ_MODEL || "openai/gpt-oss-120b";
+// Only sent when set, since non-reasoning models reject it.
+const AI_REASONING_EFFORT = process.env.AI_REASONING_EFFORT;
+
 export const runtime = "nodejs";
 
 type Msg = { role: "user" | "assistant"; content: string };
@@ -89,16 +97,16 @@ LANGUAGE: Respond in ${langName}. Do not switch unless the student asks.`;
 }
 
 export async function POST(req: NextRequest) {
-  const apiKey = process.env.GROQ_API_KEY;
+  const apiKey = process.env.AI_API_KEY || process.env.GROQ_API_KEY;
   if (!apiKey) {
-    return new Response(JSON.stringify({ error: "GROQ_API_KEY not configured" }), {
+    return new Response(JSON.stringify({ error: "AI_API_KEY not configured" }), {
       status: 500,
       headers: { "content-type": "application/json" },
     });
   }
 
   // Throttle every caller (esp. anonymous) so the endpoint can't be looped to
-  // burn Groq spend. 20 requests per IP per 5 minutes.
+  // burn AI provider quota. 20 requests per IP per 5 minutes.
   const limit = rateLimit(`chat:${clientIp(req)}`, 20, 5 * 60 * 1000);
   if (!limit.ok) {
     return new Response(
@@ -193,24 +201,24 @@ export async function POST(req: NextRequest) {
   }
 
   const systemPrompt = buildSystemPrompt(locale as Locale, experimentId);
-  const model = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
 
-  const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+  const aiRes = await fetch(`${AI_BASE_URL}/chat/completions`, {
     method: "POST",
     headers: { "content-type": "application/json", authorization: `Bearer ${apiKey}` },
     body: JSON.stringify({
-      model,
+      model: AI_MODEL,
       stream: true,
       temperature: 0.4,
       max_tokens: 800,
+      ...(AI_REASONING_EFFORT ? { reasoning_effort: AI_REASONING_EFFORT } : {}),
       messages: [{ role: "system", content: systemPrompt }, ...safeMessages],
     }),
   });
 
-  if (!groqRes.ok || !groqRes.body) {
+  if (!aiRes.ok || !aiRes.body) {
     // Log upstream detail server-side; don't relay it to the client.
-    const text = await groqRes.text().catch(() => "");
-    console.error(`Groq error ${groqRes.status}: ${text.slice(0, 300)}`);
+    const text = await aiRes.text().catch(() => "");
+    console.error(`AI provider error ${aiRes.status}: ${text.slice(0, 300)}`);
     return new Response(
       JSON.stringify({ error: "The lab assistant is temporarily unavailable. Please try again." }),
       { status: 502, headers: { "content-type": "application/json" } }
@@ -220,7 +228,7 @@ export async function POST(req: NextRequest) {
   let acc = "";
   const stream = new ReadableStream({
     async start(controller) {
-      const reader = groqRes.body!.getReader();
+      const reader = aiRes.body!.getReader();
       const decoder = new TextDecoder();
       const encoder = new TextEncoder();
       let buffer = "";
