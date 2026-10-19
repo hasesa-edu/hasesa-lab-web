@@ -13,6 +13,7 @@ const ERRORS: Record<string, string> = {
   state: "Your sign-in session expired. Please try again.",
   google: "We couldn't reach Google. Please try again.",
   email: "Your Google account needs a verified email address.",
+  config: "Google sign-in isn't set up yet. Please try again later.",
 };
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string; error?: string }> }) {
