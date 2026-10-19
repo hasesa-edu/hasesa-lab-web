@@ -21,7 +21,7 @@ const DESCRIPTION =
   "Hands-on science for Ethiopian high school students. Curriculum-aligned biology, chemistry and physics experiments for grades 9–12 using local materials, with step-by-step guides, demo videos, and an AI lab assistant.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://personalaitutor.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://hasesa.vercel.app"),
   title: TITLE,
   description: DESCRIPTION,
   manifest: "/manifest.json",
