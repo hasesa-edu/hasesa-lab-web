@@ -3,17 +3,11 @@ import { and, eq, sql } from "drizzle-orm";
 
 export const CAPS = {
   chatTurns: 50,
-  quizBatches: 20,
-  aiGrades: 30,
-  asrMinutes: 15,
 } as const;
 
 export type UsageField = keyof typeof CAPS;
 const FIELD_MAP: Record<UsageField, any> = {
   chatTurns: schema.usage.chatTurns,
-  quizBatches: schema.usage.quizBatches,
-  aiGrades: schema.usage.aiGrades,
-  asrMinutes: schema.usage.asrMinutes,
 };
 
 export function currentYearMonth(d = new Date()): string {
@@ -29,7 +23,7 @@ export async function getCurrentUsage(userId: string) {
     .from(schema.usage)
     .where(and(eq(schema.usage.userId, userId), eq(schema.usage.yearMonth, ym)))
     .limit(1);
-  return rows[0] ?? { userId, yearMonth: ym, chatTurns: 0, quizBatches: 0, aiGrades: 0, asrMinutes: 0 };
+  return rows[0] ?? { userId, yearMonth: ym, chatTurns: 0 };
 }
 
 export async function checkAndIncrement(
@@ -44,7 +38,7 @@ export async function checkAndIncrement(
   // Ensure the month's row exists so the conditional UPDATE below can target it.
   await db
     .insert(schema.usage)
-    .values({ userId, yearMonth: ym, chatTurns: 0, quizBatches: 0, aiGrades: 0, asrMinutes: 0 })
+    .values({ userId, yearMonth: ym, chatTurns: 0 })
     .onConflictDoNothing();
 
   // Atomically increment only if it stays within the cap. Doing the check and

@@ -11,10 +11,10 @@ type Dict = Record<string, { en: string }>;
 export const t: Dict = {
   // Nav
   "nav.home": { en: "Home" },
-  "nav.lessons": { en: "Lessons" },
-  "nav.tutor": { en: "Tutor" },
-  "nav.dashboard": { en: "My progress" },
-  "nav.teacher": { en: "Teacher" },
+  "nav.experiments": { en: "Experiments" },
+  "nav.assistant": { en: "Lab Assistant" },
+  "nav.dashboard": { en: "My lab notebook" },
+  "nav.settings": { en: "Grade & subjects" },
   "nav.signin": { en: "Sign in" },
   "nav.signup": { en: "Sign up" },
   "nav.signout": { en: "Sign out" },
@@ -22,7 +22,7 @@ export const t: Dict = {
 
   // Hero
   "hero.tag": {
-    en: "Quality Education for Ethiopian High Schools",
+    en: "Quality Education for Ethiopian High School Students",
   },
   "hero.title.before": {
     en: "Don't memorize. Do it.",
@@ -116,41 +116,46 @@ export const t: Dict = {
     en: "Create a free pilot account in under a minute. No SMS required.",
   },
 
-  // Lessons
-  "lessons.title": { en: "Lessons" },
-  "lessons.subtitle": {
-    en: "Grade 11 Math, Physics, Chemistry, and Biology — our demo content. Each lesson includes a video, worked example, an at-home experiment, and a quick quiz.",
+  // Experiments catalogue + guide
+  "experiments.title": { en: "Experiments" },
+  "experiments.subtitle": {
+    en: "Hands-on biology, chemistry and physics for grades 9–12, using materials you can find at home or in the market. Each one has a step-by-step guide, a video, and a lab assistant to help when you get stuck.",
   },
-  "lessons.all": { en: "All subjects" },
-  "lessons.estimate": { en: "min" },
-  "lessons.code": { en: "MoE code" },
-  "lessons.start": { en: "Open lesson" },
-  "lessons.back": { en: "← All lessons" },
-  "lessons.askAbout": { en: "Ask the AI tutor about this lesson" },
-  "lessons.nav.previous": { en: "Previous" },
-  "lessons.nav.next": { en: "Next" },
-  "lessons.nav.between": { en: "Between lessons" },
-  "lessons.notFound": { en: "Lesson not found." },
-  "lessons.badge.video": { en: "Video" },
-  "lessons.badge.videoTitle": { en: "Video lesson included" },
-  "lessons.badge.experiment": { en: "Experiment" },
-  "lessons.badge.experimentTitle": { en: "At-home experiment included" },
-  "lessons.badge.quiz": { en: "quiz" },
-  "lessons.badge.quizTitle": { en: "quick-check questions" },
-  "exp.label": { en: "At-home experiment" },
+  "experiments.grade": { en: "Grade" },
+  "experiments.allGrades": { en: "All grades" },
+  "experiments.allSubjects": { en: "All subjects" },
+  "experiments.filter.grade": { en: "Filter by grade" },
+  "experiments.filter.subject": { en: "Filter by subject" },
+  "experiments.none": { en: "No experiments match these filters yet." },
+  "experiments.minutes": { en: "min" },
+  "experiments.easy": { en: "Easy" },
+  "experiments.medium": { en: "Medium" },
+  "experiments.sample": { en: "Sample guide · pending teacher review" },
+  "experiments.badge.video": { en: "Video" },
+  "experiments.badge.materials": { en: "materials" },
+  "experiments.badge.done": { en: "Done" },
+  "experiments.badge.started": { en: "In progress" },
+  "experiments.back": { en: "← All experiments" },
+  "experiments.notFound": { en: "Experiment not found." },
+  "experiments.nav.previous": { en: "Previous" },
+  "experiments.nav.next": { en: "Next" },
+  "experiments.nav.between": { en: "Between experiments" },
 
-  // Chat
-  "chat.title": { en: "AI Tutor" },
-  "chat.subtitle": { en: "Ask anything about Grade 11 Math, Physics, Chemistry, or Biology." },
-  "chat.placeholder": { en: "e.g. Explain Newton's second law with an example" },
+  // Chat (lab assistant)
+  "chat.title": { en: "Lab Assistant" },
+  "chat.subtitle": {
+    en: "Stuck on an experiment, or not sure why it worked? Ask about grade 9–12 biology, chemistry or physics.",
+  },
+  "chat.placeholder": { en: "e.g. Why did my cabbage indicator turn green?" },
   "chat.send": { en: "Send" },
   "chat.thinking": { en: "Thinking…" },
-  "chat.empty.title": { en: "How can I help you study?" },
-  "chat.empty.body": { en: "Try one of the suggestions below, or type your own question." },
-  "chat.disclaimer": { en: "Demo build. AI can make mistakes — always check against your lesson." },
-  "chat.error": { en: "Couldn't reach the AI service. Try again." },
-  "chat.grounded": { en: "Grounded in" },
-  "chat.viewLesson": { en: "view" },
+  "chat.empty.title": { en: "How can I help with your experiment?" },
+  "chat.empty.body": { en: "Pick the experiment you're doing for better answers, or just ask." },
+  "chat.disclaimer": { en: "Demo build. AI can make mistakes — always follow the safety notes in the guide." },
+  "chat.error": { en: "Couldn't reach the lab assistant. Try again." },
+  "chat.pickLabel": { en: "Experiment:" },
+  "chat.pickNone": { en: "None (general question)" },
+  "chat.viewExperiment": { en: "Open guide" },
   "chat.newMessage": { en: "New message" },
 
   // Auth
@@ -162,19 +167,15 @@ export const t: Dict = {
   "auth.displayName": { en: "Display name (optional)" },
   "auth.password": { en: "Password" },
   "auth.passwordRule": { en: "Minimum 8 characters." },
-  "auth.role": { en: "I am a…" },
-  "auth.role.student": { en: "Student" },
-  "auth.role.teacher": { en: "Teacher" },
+  "auth.grade": { en: "Grade (optional)" },
+  "auth.grade.none": { en: "Choose your grade" },
   "auth.region": { en: "Region (optional)" },
   "auth.school": { en: "School (optional)" },
   "auth.under18": {
     en: "I am under 18. (We'll show a simplified privacy notice.)",
   },
   "auth.under18.notice": {
-    en: "We collect only your email, language, and learning progress. Demo notice — a production version would meet Ethiopia's data protection guidelines.",
-  },
-  "auth.privacy": {
-    en: "Demo accounts are stored only in your browser (localStorage). No real password hashing or server storage in this demo — do not use a real password.",
+    en: "We collect only your email, grade, and experiment progress and notes. Demo notice — a production version would meet Ethiopia's data protection guidelines.",
   },
   "auth.err.signup": { en: "Sign-up failed. Try again." },
   "auth.signin.cta": { en: "Sign in" },
@@ -186,114 +187,84 @@ export const t: Dict = {
   "auth.err.required": { en: "Username and password are required." },
 
   // Onboarding
-  "onboard.welcome": { en: "Welcome — let's set up your study plan." },
-  "onboard.pickSubjects": { en: "Which subjects do you want to study?" },
-  "onboard.continue": { en: "Continue" },
-  "onboard.diag.title": { en: "Quick diagnostic" },
-  "onboard.diag.intro": {
-    en: "Two short questions per subject. Don't worry about getting them right — this just tells us where to start you.",
-  },
-  "onboard.diag.skip": { en: "Skip" },
-  "onboard.finish": { en: "Finish onboarding" },
+  "onboard.welcome": { en: "Welcome — let's set up your lab." },
+  "onboard.pickGrade": { en: "Which grade are you in?" },
+  "onboard.pickSubjects": { en: "Which subjects do you want to experiment with?" },
+  "onboard.continue": { en: "Save" },
   "onboard.done.title": { en: "All set!" },
-  "onboard.done.body": { en: "Your dashboard is ready. Pick a recommended lesson to begin." },
+  "onboard.done.body": { en: "Your lab notebook is ready. Pick an experiment to begin." },
 
-  // Dashboard
-  "dash.title": { en: "My progress" },
+  // Lab notebook (dashboard)
+  "dash.title": { en: "My lab notebook" },
   "dash.greeting": { en: "Hello" },
-  "dash.recommended": { en: "Recommended for you" },
-  "dash.recommendedWhy": { en: "Picked from the topics you've struggled with most." },
-  "dash.mastery": { en: "Mastery by topic" },
-  "dash.weak": { en: "Weakest topics" },
-  "dash.takeMock": { en: "Take a practice exam" },
-  "dash.noActivity": { en: "No activity yet. Start a lesson!" },
-  "dash.recommendedWhyNew": {
-    en: "Start here — based on the subjects you picked.",
-  },
+  "dash.stat.done": { en: "Done" },
+  "dash.stat.inProgress": { en: "In progress" },
+  "dash.stat.total": { en: "Available" },
+  "dash.inProgress": { en: "Pick up where you left off" },
+  "dash.continue": { en: "Continue" },
+  "dash.next": { en: "Try next" },
+  "dash.nextWhyNew": { en: "Picked for your grade and subjects." },
+  "dash.nextWhy": { en: "Experiments you haven't tried yet, for your grade and subjects." },
+  "dash.start": { en: "Start" },
+  "dash.allDone": { en: "You've tried every experiment we have so far. More are coming!" },
+  "dash.completed": { en: "Completed experiments" },
+  "dash.noCompleted": { en: "Nothing here yet. Finish an experiment and mark it as done to save it here." },
+  "dash.noNotes": { en: "No observations recorded." },
+  "dash.browse": { en: "Browse all experiments" },
+  "dash.askAssistant": { en: "Ask the lab assistant" },
 
-  // Mock test
-  "mock.title": { en: "Practice exam" },
-  "mock.intro": { en: "10 mixed-topic questions from this subject — EUEE-style, but tuned for learning. No time limit on the demo." },
-  "mock.start": { en: "Start practice" },
-  "mock.question": { en: "Question" },
-  "mock.of": { en: "of" },
-  "mock.submit": { en: "Submit" },
-  "mock.next": { en: "Next" },
-  "mock.score": { en: "Your score" },
-  "mock.again": { en: "Try another" },
-  "mock.review": { en: "Review answers" },
-  "mock.questions": { en: "questions" },
-  "mock.byTopic": { en: "By topic" },
-  "mock.yourAnswer": { en: "Your answer" },
-  "mock.correctAnswer": { en: "Correct" },
-  "mock.subjectNotFound": { en: "Subject not found." },
+  // Notebook card on the experiment page
+  "notebook.cardTitle": { en: "Your lab notebook" },
+  "notebook.prompt": { en: "What did you observe? Write down your results, measurements, and anything surprising." },
+  "notebook.placeholder": { en: "e.g. The lemon juice turned the indicator bright pink…" },
+  "notebook.saveNotes": { en: "Save notes" },
+  "notebook.markDone": { en: "Mark as done" },
+  "notebook.markNotDone": { en: "Mark as not done" },
+  "notebook.saved": { en: "Saved." },
+  "notebook.markedDone": { en: "Nice work — saved to your notebook." },
+  "notebook.saveError": { en: "Couldn't save. Try again." },
+  "notebook.signinPrompt": { en: "Sign in to save your observations and track the experiments you've done." },
 
-  // Lesson video
-  "video.label": { en: "Watch the lesson" },
+  // Experiment video
   "video.credit": { en: "Video by" },
   "exp.video": { en: "Watch the demo" },
+  "exp.videoSoon": { en: "Video coming soon" },
+  "exp.videoSoonBody": { en: "We're recording a demo for this experiment. Until then, follow the step-by-step guide below." },
 
   // Why this matters
   "why.label": { en: "Why this matters" },
-  "why.untranslated": {
-    en: "",
-  },
 
-  // Lesson detail TOC
+  // Experiment guide TOC
   "toc.why": { en: "Why" },
   "toc.video": { en: "Video" },
-  "toc.lesson": { en: "Lesson" },
-  "toc.worked": { en: "Example" },
-  "toc.experiment": { en: "Experiment" },
-  "toc.quiz": { en: "Quiz" },
-  "toc.ask": { en: "Ask AI" },
+  "toc.concept": { en: "Concept" },
+  "toc.materials": { en: "Materials" },
+  "toc.safety": { en: "Safety" },
+  "toc.steps": { en: "Steps" },
+  "toc.results": { en: "Results" },
+  "toc.troubleshooting": { en: "Troubleshooting" },
+  "toc.check": { en: "Check" },
+  "toc.notebook": { en: "Notebook" },
 
-  // At-home experiment
+  // Experiment guide sections
+  "exp.concept": { en: "The science" },
   "exp.materials": { en: "You'll need" },
-  "exp.steps": { en: "Try it" },
-  "exp.observe": { en: "What you'll observe" },
+  "exp.safety": { en: "Safety first" },
+  "exp.steps": { en: "Step by step" },
+  "exp.step": { en: "Step" },
+  "exp.stepsDone": { en: "done" },
+  "exp.observe": { en: "What you should see" },
+  "exp.explanation": { en: "Why it happens" },
+  "exp.troubleshooting": { en: "Didn't work? Try this" },
+  "exp.stillStuck": { en: "Still stuck?" },
+  "exp.askAssistant": { en: "Ask the lab assistant" },
+  "exp.askAbout": { en: "Ask the lab assistant about this experiment" },
 
-  // Quiz / lesson interaction
-  "quiz.check": { en: "Quick check" },
-  "quiz.workedEx": { en: "Worked example" },
-  "quiz.problem": { en: "Problem." },
-  "quiz.solution": { en: "Solution." },
-  "quiz.generate": { en: "Generate more practice questions" },
-  "quiz.generating": { en: "Generating…" },
-  "quiz.generated": { en: "AI-generated practice" },
+  // Concept check
+  "quiz.check": { en: "Check your understanding" },
   "quiz.correct": { en: "Correct." },
   "quiz.incorrect": { en: "Not quite." },
   "quiz.tryAgain": { en: "Try again" },
-  "quiz.noneYet": {
-    en: "No AI-generated questions yet. Click the button above to make some.",
-  },
-  "quiz.genError": {
-    en: "Couldn't generate questions. Try again.",
-  },
-
-  // Teacher
-  "teacher.title": { en: "Teacher dashboard" },
-  "teacher.subtitle": {
-    en: "Create a class code, see aggregate progress. No individual student data — only class-level mastery.",
-  },
-  "teacher.yourClasses": { en: "Your classes" },
-  "teacher.err.load": { en: "Couldn't load your classes." },
-  "teacher.err.create": { en: "Couldn't create the class." },
-  "teacher.createClass": { en: "Create a class" },
-  "teacher.className": { en: "Class name" },
-  "teacher.create": { en: "Create" },
-  "teacher.share": { en: "Share this code with students:" },
-  "teacher.students": { en: "students" },
-  "teacher.aggregateMastery": { en: "Class average mastery" },
-  "teacher.weakest": { en: "Weakest topics for this class" },
-  "teacher.noClasses": { en: "No classes yet. Create one to get started." },
-  "teacher.noStudents": { en: "No students have joined yet. Share the code above." },
-
-  "student.joinClass": { en: "Join a class" },
-  "student.joinCode": { en: "Enter the class code from your teacher" },
-  "student.join": { en: "Join" },
-  "student.joined": { en: "Joined class" },
-  "student.joinErr": { en: "That code doesn't match any class." },
 
   // Common
   "common.subjects": { en: "Subjects" },
@@ -301,7 +272,6 @@ export const t: Dict = {
   "common.signinRequired": { en: "Please sign in to continue." },
   "common.signinCTA": { en: "Sign in" },
   "common.tryAgain": { en: "Try again" },
-  "lesson.nextLesson": { en: "Next lesson" },
 
   "footer.demo": {
     en: "Free during pilot · feedback welcome",

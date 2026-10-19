@@ -1,7 +1,7 @@
 {
   "name": "Hasesa",
   "short_name": "Hasesa",
-  "description": "AI tutor for Ethiopian high school students — MoE syllabus and EUEE-aligned.",
+  "description": "Hands-on science experiments for Ethiopian grades 9–12, with step-by-step guides, videos and an AI lab assistant.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
