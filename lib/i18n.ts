@@ -16,13 +16,15 @@ export const t: Dict = {
   "nav.dashboard": { en: "My lab notebook" },
   "nav.settings": { en: "Grade & subjects" },
   "nav.signin": { en: "Sign in" },
-  "nav.signup": { en: "Sign up" },
+  "nav.signup": { en: "Get started" },
+  "nav.pricing": { en: "Pricing" },
+  "nav.account": { en: "Account & billing" },
   "nav.signout": { en: "Sign out" },
   "nav.language": { en: "Language" },
 
   // Hero
   "hero.tag": {
-    en: "Quality Education for Ethiopian High School Students",
+    en: "Personalized, Hands-On Learning Guided by Real Scientists",
   },
   "hero.title.before": {
     en: "Don't memorize. Do it.",
@@ -33,15 +35,15 @@ export const t: Dict = {
   "hero.sub": {
     en: "An at-home experiment for every lesson, plus a tutor that learns at your pace.",
   },
-  "hero.cta.lessons": { en: "Browse lessons" },
-  "hero.cta.chat": { en: "Try the AI tutor" },
-  "hero.cta.signup": { en: "Get started" },
+  "hero.cta.lessons": { en: "Browse experiments" },
+  "hero.cta.pricing": { en: "See pricing" },
+  "hero.cta.signup": { en: "Continue with Google" },
   "hero.cta.dashboard": { en: "Go to my dashboard" },
-  "hero.pilot": {
-    en: "Free during pilot",
+  "hero.price": {
+    en: "300 ETB / month",
   },
-  "hero.pilot.note": {
-    en: "Create a free account in under a minute. No SMS needed.",
+  "hero.price.note": {
+    en: "Try 2 guides free. Pay with Telebirr, CBE Birr or card.",
   },
   "hero.video.alt": {
     en: "Short demo of the AI tutor answering a question with worked steps",
@@ -113,8 +115,24 @@ export const t: Dict = {
   // CTA strip
   "cta.title": { en: "Ready to start learning?" },
   "cta.sub": {
-    en: "Create a free pilot account in under a minute. No SMS required.",
+    en: "Sign in with Google in seconds, try two guides for free, and unlock everything for 300 ETB a month.",
   },
+
+  // Pricing
+  "pricing.eyebrow": { en: "Pricing" },
+  "pricing.title": { en: "One simple pass" },
+  "pricing.plan": { en: "Monthly pass" },
+  "pricing.per": { en: "/ month" },
+  "pricing.f.guides": { en: "Every step-by-step experiment guide, grades 9–12" },
+  "pricing.f.videos": { en: "Demo videos and local-material substitutes" },
+  "pricing.f.assistant": { en: "AI lab assistant, up to 30 questions a day" },
+  "pricing.f.notebook": { en: "Your lab notebook: progress and observations" },
+  "pricing.f.scientists": { en: "Guides reviewed by real scientists" },
+  "pricing.pay": { en: "Pay with Telebirr, CBE Birr, M-Pesa or card through Chapa. Each payment adds 30 days. No auto-charge, renew when you want." },
+  "pricing.cta": { en: "Get Hasesa Lab" },
+  "pricing.cta.renew": { en: "Add 30 more days" },
+  "pricing.free": { en: "Try 2 free guides first" },
+  "pricing.active": { en: "Your pass is active until" },
 
   // Experiments catalogue + guide
   "experiments.title": { en: "Experiments" },
@@ -247,9 +265,12 @@ export const t: Dict = {
   "common.signinCTA": { en: "Sign in" },
   "common.tryAgain": { en: "Try again" },
 
-  "footer.demo": {
-    en: "Free during pilot · feedback welcome",
+  "footer.motto": {
+    en: "Personalized, Hands-On Learning Guided by Real Scientists",
   },
+  "footer.terms": { en: "Terms" },
+  "footer.privacy": { en: "Privacy" },
+  "footer.refund": { en: "Refunds" },
 };
 
 export function tr(key: keyof typeof t, locale: Locale): string {

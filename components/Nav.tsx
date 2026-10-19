@@ -70,7 +70,7 @@ export function Nav() {
   }
 
   const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
+    href.includes("#") ? false : href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   const navLinkClass = (href: string) =>
     "transition-colors text-sm font-medium " +
@@ -109,6 +109,9 @@ export function Nav() {
           >
             {tr("nav.assistant")}
           </Link>
+          <Link href="/#pricing" className={navLinkClass("/#pricing")}>
+            {tr("nav.pricing")}
+          </Link>
           {user && (
             <Link
               href="/dashboard"
@@ -146,6 +149,13 @@ export function Nav() {
                     )}
                   </div>
                   <Link
+                    href="/account"
+                    onClick={() => setMenuOpen(false)}
+                    className="block px-3 py-2 hover:bg-surface-2 text-ink"
+                  >
+                    {tr("nav.account")}
+                  </Link>
+                  <Link
                     href="/onboarding"
                     onClick={() => setMenuOpen(false)}
                     className="block px-3 py-2 hover:bg-surface-2 text-ink"
@@ -165,15 +175,9 @@ export function Nav() {
             <>
               <Link
                 href="/login"
-                className="text-sm px-3 py-1.5 rounded-md text-ink-muted hover:text-ink transition"
-              >
-                {tr("nav.signin")}
-              </Link>
-              <Link
-                href="/signup"
                 className="text-sm px-3.5 py-1.5 rounded-md bg-brand text-brand-on hover:bg-brand-hover font-medium shadow-soft transition"
               >
-                {tr("nav.signup")}
+                {tr("nav.signin")}
               </Link>
             </>
           )}
@@ -184,10 +188,10 @@ export function Nav() {
           <ThemeToggle className="hidden" />
           {!user && (
             <Link
-              href="/signup"
+              href="/login"
               className="text-sm px-3 py-1.5 rounded-md bg-brand text-brand-on hover:bg-brand-hover font-semibold shadow-soft transition"
             >
-              {tr("nav.signup")}
+              {tr("nav.signin")}
             </Link>
           )}
           <button
@@ -238,9 +242,11 @@ export function Nav() {
               <Link href="/" onClick={closeMobile} className={mobileLinkClass("/")} aria-current={isActive("/") ? "page" : undefined}>{tr("nav.home")}</Link>
               <Link href="/experiments" onClick={closeMobile} className={mobileLinkClass("/experiments")} aria-current={isActive("/experiments") ? "page" : undefined}>{tr("nav.experiments")}</Link>
               <Link href="/chat" onClick={closeMobile} className={mobileLinkClass("/chat")} aria-current={isActive("/chat") ? "page" : undefined}>{tr("nav.assistant")}</Link>
+              <Link href="/#pricing" onClick={closeMobile} className={mobileLinkClass("/#pricing")}>{tr("nav.pricing")}</Link>
               {user && (
                 <>
                   <Link href="/dashboard" onClick={closeMobile} className={mobileLinkClass("/dashboard")} aria-current={isActive("/dashboard") ? "page" : undefined}>{tr("nav.dashboard")}</Link>
+                  <Link href="/account" onClick={closeMobile} className={mobileLinkClass("/account")} aria-current={isActive("/account") ? "page" : undefined}>{tr("nav.account")}</Link>
                   <Link href="/onboarding" onClick={closeMobile} className={mobileLinkClass("/onboarding")} aria-current={isActive("/onboarding") ? "page" : undefined}>{tr("nav.settings")}</Link>
                 </>
               )}
@@ -255,22 +261,13 @@ export function Nav() {
                   {tr("nav.signout")}
                 </button>
               ) : (
-                <div className="grid grid-cols-2 gap-2">
-                  <Link
-                    href="/login"
-                    onClick={closeMobile}
-                    className="text-center px-3 py-2.5 rounded-md border border-line text-ink font-medium hover:bg-surface-2 transition"
-                  >
-                    {tr("nav.signin")}
-                  </Link>
-                  <Link
-                    href="/signup"
-                    onClick={closeMobile}
-                    className="text-center px-3 py-2.5 rounded-md bg-brand text-brand-on hover:bg-brand-hover font-medium shadow-soft transition"
-                  >
-                    {tr("nav.signup")}
-                  </Link>
-                </div>
+                <Link
+                  href="/login"
+                  onClick={closeMobile}
+                  className="block text-center px-3 py-2.5 rounded-md bg-brand text-brand-on hover:bg-brand-hover font-medium shadow-soft transition"
+                >
+                  {tr("nav.signin")}
+                </Link>
               )}
             </div>
           </div>
