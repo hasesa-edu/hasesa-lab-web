@@ -9,7 +9,13 @@ export const runtime = "nodejs";
 export async function GET(req: NextRequest) {
   const state = generateState();
   const verifier = generateCodeVerifier();
-  const url = googleClient(req.nextUrl.origin).createAuthorizationURL(state, verifier, ["openid", "email", "profile"]);
+  let url: URL;
+  try {
+    url = googleClient(req.nextUrl.origin).createAuthorizationURL(state, verifier, ["openid", "email", "profile"]);
+  } catch (e) {
+    console.error(e);
+    return NextResponse.redirect(new URL("/login?error=config", req.nextUrl.origin));
+  }
   url.searchParams.set("prompt", "select_account");
 
   const res = NextResponse.redirect(url);
