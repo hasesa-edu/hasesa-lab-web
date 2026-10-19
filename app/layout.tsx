@@ -8,6 +8,7 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { PWARegister } from "@/components/PWARegister";
 import { PageViewTracker } from "@/components/PageViewTracker";
+import { RenewBanner } from "@/components/RenewBanner";
 import { ThemeProvider, themeBootstrapScript } from "@/components/ThemeProvider";
 import { BRAND, MOTTO } from "@/lib/brand";
 
@@ -62,6 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <LocaleProvider>
             <UserProvider>
               <Nav />
+              <RenewBanner />
               <main className="flex-1">{children}</main>
               <Footer />
               <PWARegister />

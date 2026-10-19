@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale } from "./LocaleProvider";
 import { LogoMark } from "./Logo";
@@ -27,7 +28,12 @@ export function Footer() {
             <LogoMark size={18} />
             <span className="font-medium text-ink-muted">{BRAND}</span>
           </div>
-          <p>{tr("footer.demo")}</p>
+          <p className="text-center">{tr("footer.motto")}</p>
+          <nav className="flex items-center gap-4" aria-label="Legal">
+            <Link href="/terms" className="hover:text-brand">{tr("footer.terms")}</Link>
+            <Link href="/privacy" className="hover:text-brand">{tr("footer.privacy")}</Link>
+            <Link href="/refund" className="hover:text-brand">{tr("footer.refund")}</Link>
+          </nav>
         </div>
       </div>
     </footer>

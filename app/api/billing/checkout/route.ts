@@ -24,7 +24,10 @@ export async function POST(req: NextRequest) {
     .limit(1);
   if (!rows.length) return Response.json({ error: "Please sign in first.", code: "signin" }, { status: 401 });
 
-  const site = (process.env.NEXT_PUBLIC_SITE_URL || req.nextUrl.origin).replace(/\/+$/, "");
+  // Send the student back to the origin they paid from (where their session
+  // cookie lives); the server-to-server callback goes to the public site.
+  const origin = req.nextUrl.origin;
+  const site = (process.env.NEXT_PUBLIC_SITE_URL || origin).replace(/\/+$/, "");
   const txRef = await createPendingPayment(sess.userId);
   const [firstName, ...rest] = rows[0].displayName.split(/\s+/);
   const result = await initializeCheckout({
@@ -33,7 +36,7 @@ export async function POST(req: NextRequest) {
     email: rows[0].email,
     firstName: firstName || undefined,
     lastName: rest.join(" ") || undefined,
-    returnUrl: `${site}/billing/return?tx_ref=${encodeURIComponent(txRef)}`,
+    returnUrl: `${origin}/billing/return?tx_ref=${encodeURIComponent(txRef)}`,
     callbackUrl: `${site}/api/billing/webhook`,
   });
   if (!result.ok) return Response.json({ error: result.error }, { status: 502 });
