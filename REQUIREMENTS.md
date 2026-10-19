@@ -1,197 +1,193 @@
-# AI Tutorial Website for Grade 11 Ethiopian Students — Requirements
+# Hasesa — Hands-on Science Experiments for Ethiopian Students (Grades 9–12) — Requirements
 
-**Version:** 0.2 (Draft)
-**Date:** 2026-05-18
+**Version:** 0.3 (Draft)
+**Date:** 2026-10-19
 **Owner:** TBD
+
+> **v0.3 change:** Hasesa has moved from Grade 11 exam prep to self-paced, hands-on experiments for grades 9–12. Each student uses it **individually, at any time, on their own device**. It is not a classroom or teacher-led product. These parts of v0.2 have been dropped: mathematics, the diagnostic, mastery tracking, AI-generated quizzes and grading, EUEE mock tests, and teacher class codes and dashboards.
 
 ---
 
 ## 1. Purpose
 
-Build an AI-powered tutorial website that helps Grade 11 Ethiopian students master the core science curriculum (Mathematics, Physics, Chemistry, Biology) and prepare for the Ethiopian University Entrance Examination (EUEE). The product must work reliably on low-end Android phones over unreliable, low-bandwidth networks, and be accessible in English, Amharic, and Afaan Oromo.
+Hasesa helps Ethiopian students in grades 9–12 do real Biology, Chemistry and Physics experiments by themselves, using cheap, locally available materials. Each experiment comes with a step-by-step guide, a pre-recorded demo video and an AI lab assistant that is grounded in that guide. Together, these replace the live support a student would otherwise need from a teacher or lab technician. The product must work on low-end Android phones over unreliable, low-bandwidth networks.
 
-### 1.1 Competitive Landscape & Differentiation
+### 1.1 Origin
 
-Existing options Ethiopian Grade 11 students use today include Khan Academy and YouTube (global, English-only, no MoE/EUEE alignment, online-only), the MoE's own digital resources (curriculum-aligned but limited interactivity, patchy availability), and regional edtech (e.g., AfroLearn, private tutoring apps — often paid, urban, English-only). This product's differentiation is the combination of: (a) MoE syllabus and EUEE blueprint alignment, (b) trilingual UX in English, Amharic, and Afaan Oromo, (c) genuine offline-first behavior on low-end Android, and (d) an AI tutor grounded in the platform's own curriculum, not generic web content.
+The model was piloted in June 2026. Grade 11 students did a strawberry DNA extraction with live guidance from researchers at The Science Basement. Hasesa turns that live guidance into self-serve material: written guides, videos and the lab assistant. Any student can then do the experiment alone, wherever they are.
+
+### 1.2 Competitive Landscape & Differentiation
+
+Students today rely on YouTube demos (generic, often needing lab equipment they don't have), the MoE's digital resources (curriculum-aligned, but little hands-on support) and school labs (often missing or under-equipped). Hasesa's differentiation is:
+
+- (a) experiments designed around **local, low-cost materials**, with substitutes listed;
+- (b) alignment with the MoE grade 9–12 science curriculum;
+- (c) an AI lab assistant that helps the student understand and troubleshoot **their own** attempt, grounded in the guide they are following;
+- (d) a personal lab notebook, so each student's progress and observations are theirs.
 
 ## 2. Goals & Success Metrics
 
-> All Year-1 targets below are **aspirational** and to be validated during M0 discovery (teacher interviews, pilot data, comparable benchmarks). Numbers should be re-baselined before M1 commitment.
+> All Year-1 targets are **aspirational** and must be re-baselined after the next pilot.
 
 | Goal | Metric | Target (Year 1) |
 |---|---|---|
-| Improve EUEE readiness | Avg. mock-exam score improvement per student | +15% over 3 months |
-| Reach underserved learners | Monthly active students | 50,000 |
-| Sustain engagement on poor networks | Median session completion rate on 2G/3G | ≥ 70% |
-| Offline usability | % of sessions with ≥1 offline lesson view | ≥ 40% |
-| Language inclusivity | % of users on non-English UI | ≥ 35% |
-| Chatbot answer quality | Correctness on weekly subject eval set (per language) | ≥ 85% EN, ≥ 75% AM/OM |
-| Chatbot grounding | Citation accuracy (cited source supports the answer) | ≥ 90% |
-| Chatbot safety | Refusal rate on unsafe/off-topic prompt eval set | ≥ 98% |
-| AI-generated quiz quality | Sample-audit pass rate against rubric | ≥ 90% |
+| Students complete experiments on their own | % of started experiments marked done | ≥ 50% |
+| Understanding, not just following steps | Concept-check correctness after an experiment | ≥ 70% |
+| Sustained individual use | Students completing ≥ 3 experiments in 30 days | ≥ 30% of actives |
+| Reach | Daily active students | 100 at launch; scale with funding |
+| Usable on poor networks | Median guide page completion on 2G/3G | ≥ 70% |
+| Lab assistant answer quality | Correctness on a weekly experiment eval set | ≥ 85% |
+| Lab assistant grounding | Citation accuracy (cited step or section supports the answer) | ≥ 90% |
+| Lab assistant safety | Refusal / safe-redirect rate on the unsafe and off-topic eval set | ≥ 98% |
 
 ## 3. Target Users
 
-- **Primary:** Grade 11 students (ages 16–18) in Ethiopian secondary schools, public and private, urban and rural.
-- **Secondary:** Subject teachers who assign practice and monitor progress; parents/guardians who track usage.
-- **Device profile:** Low-end Android phones (1–2 GB RAM, Android 8+), occasionally shared within families. Some access via shared school computers.
-- **Network profile:** Intermittent 2G/3G, occasional Wi-Fi; data is a meaningful cost.
+- **Primary:** Ethiopian students in grades 9–12 (roughly ages 14–18), public and private schools, urban and rural. They use Hasesa **independently** after school, at home and at their own pace. **Most users are minors.**
+- **Secondary:** parents and guardians, who may supervise experiments that need an adult present.
+- **Not a target user:** teachers or schools as account holders. Teachers take part only as **content reviewers** (§7).
+- **Device profile:** low-end Android phones (1–2 GB RAM, Android 8+), sometimes shared within a family.
+- **Network profile:** intermittent 2G/3G, occasional Wi-Fi; data is a meaningful cost.
 
 ## 4. Scope
 
 ### 4.1 In Scope (MVP)
-- Grade 11 curriculum aligned to the Ethiopian Ministry of Education (MoE) syllabus for **Mathematics, Physics, Chemistry, Biology**.
-- AI chatbot tutor for Q&A in English, Amharic, Afaan Oromo (text + voice).
-- Personalized learning paths based on diagnostic + ongoing performance.
-- Auto-generated quizzes with instant feedback and explanations.
-- Offline-first lesson packs (downloadable, syncable).
+- Experiment catalogue for **Biology, Chemistry and Physics**, grades 9–12, filterable by grade and subject.
+- For each experiment: concept background, materials with local substitutes, safety notes, a tickable procedure, expected observations, the explanation, troubleshooting, a demo video and a short concept check.
+- An AI lab assistant (text) grounded in the experiment the student is working on.
+- A personal lab notebook: start an experiment, save observations, mark it done, see suggested next experiments.
+- Onboarding that captures grade and subjects of interest, to personalise suggestions.
+- Email + password accounts.
 - Mobile-first responsive web app (PWA) targeting Android.
-- Lightweight teacher class codes with aggregate class dashboards (FR-24/FR-25).
-- Free tier for all students.
+- Free for students.
 
 ### 4.2 Out of Scope (MVP)
-- Grades other than 11 (Grade 12 is a phase-2 candidate).
-- Live human tutoring / video classes.
-- Native iOS/Android apps (PWA only at launch).
-- Social sciences, languages, and non-core subjects.
-- Paid premium tier (deferred to post-MVP).
+- Teacher accounts, class codes, class dashboards or any classroom management.
+- Mathematics and non-science subjects.
+- Exam prep: EUEE mock tests, the diagnostic, mastery scores.
+- AI-generated quizzes and AI grading of open answers.
+- Live human tutoring or video classes.
+- Native iOS/Android apps (PWA first; Play Store TWA later).
+- Paid premium tier.
 
 ## 5. Functional Requirements
 
-### 5.1 Curriculum & Content
-- **FR-1** Content shall be organized by Subject → Unit → Lesson → Activity, mapped to MoE Grade 11 syllabus codes.
-- **FR-2** Each lesson shall include: concept explanation, worked examples, interactive practice, and a short quiz.
-- **FR-3** All content shall be tagged with EUEE blueprint topic codes to enable exam-focused study.
-- **FR-4** Content shall be available in English, Amharic, and Afaan Oromo. English is the canonical source; translations may be human-reviewed AI translations.
+### 5.1 Experiment Content
+- **FR-1** Experiments are organised by Subject → Grade → Unit, with an MoE curriculum code where known.
+- **FR-2** Each experiment shall include: why it matters (tied to everyday Ethiopian life), background concepts, materials with local substitutes, safety notes, numbered steps with optional tips, what to observe, why it happens, troubleshooting, an estimated time and a difficulty level.
+- **FR-3** Materials shall be cheap and locally available. Anything that needs lab-only equipment is excluded or given a local substitute.
+- **FR-4** Each experiment shall have a pre-recorded demo video (YouTube embed or self-hosted) credited to whoever recorded it.
+- **FR-5** Each experiment shall end with a short concept check (multiple choice, with an explanation for each answer). Concept checks are authored and reviewed, not generated by AI.
+- **FR-6** Content still awaiting expert review shall be clearly labelled as a sample.
 
-### 5.2 AI Chatbot Tutor
-- **FR-5** Students can ask questions in **text** in any of the three supported languages and receive a response in the same language. **Voice** input/output is offered where ASR/TTS quality for the language meets the quality bar in NFR-8; otherwise the UI falls back to text without exposing a broken voice control.
-- **FR-6** The tutor shall ground answers in the platform's curriculum content (RAG) and cite the lesson/section used.
-- **FR-7** The tutor shall refuse to answer non-academic or unsafe prompts and steer students back to study topics.
-- **FR-8** The tutor shall support step-by-step problem solving (Socratic mode) for Math/Physics, not just final answers.
-- **FR-9** Conversation history is resumable across sessions per the tiered retention policy in NFR-12: full transcripts visible to the student for ≤ 90 days, derived mastery/skill signals retained indefinitely, optional opt-in for extended transcript retention.
+### 5.2 AI Lab Assistant
+- **FR-7** Students can ask the assistant questions in text and get streamed answers.
+- **FR-8** When opened from an experiment, the assistant is grounded in that experiment's full guide. It cites the step or section it relied on, and says when the guide doesn't cover a question.
+- **FR-9** The assistant helps the student troubleshoot their own attempt. It asks what they did or saw when that's unclear, suggests the most likely cause and gives one concrete thing to try next.
+- **FR-10** The assistant guides the student with questions (Socratic style) rather than handing over answers, and explains *why*, not just *what*.
+- **FR-11** **Safety:** the assistant never suggests stronger chemicals, higher voltages, open flames or larger quantities than the guide uses. It reminds the student to have an adult present for heat, sharp tools, mains electricity or chemicals. If a student describes an injury, it tells them to stop and get an adult or medical help.
+- **FR-12** The assistant refuses off-topic or unsafe prompts (anything outside grade 9–12 Biology, Chemistry and Physics) in one sentence and steers back to the science.
+- **FR-13** Each student keeps one conversation per session, and conversation history can be resumed. Retention follows NFR-12.
 
-### 5.3 Personalized Learning Paths
-- **FR-10** New students complete a short diagnostic per subject (≤ 15 minutes) to seed a baseline skill profile.
-- **FR-11** The system shall recommend the next best lesson/quiz based on mastery gaps and EUEE blueprint weight.
-- **FR-12** Mastery shall be tracked per topic on a 0–100 scale and visualized to the student.
-- **FR-13** Students may override recommendations and freely navigate any unit.
+### 5.3 Personal Lab Notebook
+- **FR-14** A signed-in student can mark an experiment as started or done, and save free-text observations against it.
+- **FR-15** The dashboard shows the student's experiments in progress, completed experiments with their notes, and suggested next experiments based on their grade, subjects and what they've already done.
+- **FR-16** Students can open any experiment at any time; suggestions are never a gate.
+- **FR-17** Progress is private to the student.
 
-### 5.4 Quizzes & Assessment
-- **FR-14** The system shall auto-generate practice questions (MCQ, short answer, numeric) from lesson content using AI. **QA gate:** (a) every generated batch passes automated checks (answerability, no duplicates, distractor plausibility, syllabus-topic match); (b) ≥ 10% of published items are sample-audited by a subject teacher each week against the rubric in §7, with audit pass-rate ≥ 90% as a release gate; (c) any student or teacher may flag an item, which removes it from circulation pending review and feeds back into the rubric.
-- **FR-15** Every question shall include an explanation shown after the student answers.
-- **FR-16** A weekly "EUEE-style" mock test shall be available per subject.
-- **FR-17** Open-ended/short-answer responses shall receive AI-graded feedback with rubric scoring.
+### 5.4 Accounts & Onboarding
+- **FR-18** Sign-up via email + password. No payment required.
+- **FR-19** Onboarding captures grade (9–12) and subjects of interest. School and region are optional.
+- **FR-20** Students under 18 see a simplified privacy notice, plus a guardian consent flow where the law requires one.
+- **FR-21** The guides and the lab assistant can be browsed without an account. Saving progress and chat history requires one.
 
-### 5.5 Offline-First Access
-- **FR-18** Students may download a unit pack (lessons + offline quiz bank) for offline use; default pack size ≤ 10 MB per unit.
-- **FR-19** Quiz attempts and progress made offline shall sync automatically on next connection.
-- **FR-20** The chatbot may operate in a degraded "cached FAQ + offline hints" mode when offline; full LLM responses require connectivity.
-
-### 5.6 Accounts & Onboarding
-- **FR-21** Sign-up via **email + password** (default; works without SMS reach) or **phone number + SMS OTP** (where SMS delivery is reliable). Username + password is acceptable for shared-device contexts where email is unavailable. No payment required.
-- **FR-22** Onboarding shall capture: language preference, region, school (optional), and subjects of interest.
-- **FR-23** Students under 18 shall see a simplified privacy notice; guardian consent flow where legally required.
-
-### 5.7 Teacher / Guardian (Lightweight)
-- **FR-24** A **verified teacher** may create a class code; students join via the code to share progress dashboards. Teacher verification options: school-domain email, MoE/regional bureau invite code, or manual review for individuals. Unverified accounts are rate-limited (max 1 class, max 25 students) until verified.
-- **FR-25** Teachers see **aggregate** mastery and weak topics for their class. They never see individual chat transcripts, individual quiz answers, or PII beyond first name + class join date.
+### 5.5 Offline Access (post-MVP)
+- **FR-22** Students can save an experiment guide (text and images) for offline use. Videos are optional downloads.
+- **FR-23** Progress and observations made offline sync automatically on the next connection.
+- **FR-24** The lab assistant needs a connection. When offline, the guide's troubleshooting section is the fallback.
 
 ## 6. Non-Functional Requirements
 
 ### 6.1 Performance & Bandwidth
 
-Network baselines used in this section: **2G** = 400 Kbps / 400 ms RTT, **3G** = 1.6 Mbps / 300 ms RTT. Both must be tested in CI via throttled-network simulation.
+Network baselines: **2G** = 400 Kbps / 400 ms RTT, **3G** = 1.6 Mbps / 300 ms RTT.
 
-- **NFR-1** First meaningful paint ≤ 3s on 3G and ≤ 6s on 2G for the lesson page (p50, cold cache).
-- **NFR-2** Median lesson page payload ≤ 200 KB (text + compressed images); images served as WebP/AVIF with lazy loading.
-- **NFR-3** Chatbot first-token latency ≤ 4s on 3G and ≤ 8s on 2G (p50); streaming response so partial output is visible early.
+- **NFR-1** First meaningful paint ≤ 3s on 3G and ≤ 6s on 2G for an experiment guide (p50, cold cache).
+- **NFR-2** Median guide page payload ≤ 200 KB, excluding video. Videos load only when the student plays them.
+- **NFR-3** Lab assistant first-token latency ≤ 4s on 3G (p50), with streamed responses.
 
-### 6.2 Offline & Reliability
-- **NFR-4** PWA installable on Android Chrome with offline shell available after first visit.
-- **NFR-5** Sync conflicts (e.g., quiz attempted offline on two devices) resolved with last-write-wins per attempt, never losing the higher score.
+### 6.2 Reliability
+- **NFR-4** PWA installable on Android Chrome, with an offline shell available after the first visit.
+- **NFR-5** Traffic is individual and spread across the day, not in classroom bursts. Capacity planning assumes about 3 assistant turns per active student per day.
 
-### 6.3 Accessibility & Localization
-- **NFR-6** WCAG 2.1 AA compliance for color contrast, keyboard navigation, and screen-reader labels.
-- **NFR-7** Full UI string coverage for English, Amharic, Afaan Oromo. Fonts and rendering tested for **Ge'ez** script (Amharic — complex shaping, larger glyphs, line-height tuning) and **Qubee** Latin script (Afaan Oromo — gemination/long vowels via double letters, diacritic edge cases). Both must render correctly on Android 8+ default system fonts and on the bundled web font fallback.
-- **NFR-8** Voice input/output shall support Amharic and Afaan Oromo where ASR word-error-rate ≤ 25% and TTS MOS ≥ 3.5 on internal eval sets; otherwise the voice control is hidden and the UI falls back to text gracefully.
-- **NFR-8a** **Inclusive accessibility (beyond WCAG):** low-literacy onboarding (icon-led, voice-narrated first run); large-tap-target mode for shared-device use; captioned audio for hearing-impaired learners; voice-first navigation path for low-vision learners where voice support is available.
+### 6.3 Accessibility & Localisation
+- **NFR-6** WCAG 2.1 AA for colour contrast, keyboard navigation and screen-reader labels.
+- **NFR-7** English at launch. Amharic and Afaan Oromo follow, rendering correctly in Ge'ez and Qubee scripts on Android 8+ system fonts.
+- **NFR-8** Plain-text formulas in assistant answers (no LaTeX), for low-end devices.
 
 ### 6.4 Security & Privacy
-- **NFR-9** All traffic over HTTPS; auth tokens stored in secure storage.
-- **NFR-10** Student PII (name, phone, school) encrypted at rest; access restricted by role.
-- **NFR-11** Compliance with Ethiopia's data protection guidelines and applicable child-safety norms; data residency preference for African region.
-- **NFR-12** **Tiered chat retention:** (a) full prompt/response transcripts retained ≤ 90 days for the student and for quality review, then purged; (b) derived signals (topic mastery, error patterns, language preference) retained for the life of the account to power personalization; (c) students may opt in to extended transcript retention (up to 12 months) and may delete transcripts at any time.
+- **NFR-9** All traffic over HTTPS. Session cookies are signed, httpOnly and secure in production. Passwords are hashed with bcrypt.
+- **NFR-10** Rate limits and body-size caps on every API route; input validation on all user-supplied fields.
+- **NFR-11** Compliance with Ethiopia's data protection guidelines and child-safety norms. **Because most users are minors, any third-party AI provider must allow use in services for under-18s and must not train on student prompts.**
+- **NFR-12** **Chat retention:** transcripts kept ≤ 90 days, then purged. Students may opt in to extended retention (up to 12 months) and may delete transcripts at any time.
 
 ### 6.5 Scalability & Cost
-- **NFR-13** Architecture shall scale to 200,000 MAU within 12 months without re-platforming.
-- **NFR-14** AI inference cost target ≤ USD 0.05 per active student per month, enforced by the following per-student **monthly usage caps** on the free tier:
-  - Chatbot: ≤ 50 turns/month (soft cap with friendly throttle, not a hard block).
-  - AI-graded short-answer responses: ≤ 30/month.
-  - Auto-generated practice question batches: ≤ 20/month (cached generations shared across students do not count).
-  - Voice ASR minutes: ≤ 15 min/month where available.
-  Caching, small-model routing, and shared RAG retrieval are required to hit the target; caps are tunable per region as cost data accrues.
+- **NFR-13** Launch target is about 100 daily active students on free or near-free AI inference. The architecture must scale beyond that without re-platforming.
+- **NFR-14** Per-student monthly cap on lab assistant turns (currently 50 per month), tunable as cost data accrues. Per-IP throttling protects the AI quota from abuse.
+- **NFR-15** The AI provider is configurable (any OpenAI-compatible API, set by `AI_BASE_URL`, `AI_API_KEY` and `AI_MODEL`), so the provider or model can change without code changes.
 
 ### 6.6 Maintainability
-- **NFR-15** Curriculum content authored in Markdown + structured metadata, version-controlled, reviewable by subject experts before publish.
-- **NFR-16** Feature flags for staged rollout per region/language.
+- **NFR-16** Experiment content is structured data under version control, reviewable by subject experts before publication.
 
-## 7. Content & Curriculum Strategy
+## 7. Content Strategy
 
-- Source-of-truth syllabus: latest MoE Grade 11 curriculum framework for Mathematics, Physics, Chemistry, Biology.
-- EUEE blueprint mapping reviewed annually after exam release.
-- Each lesson reviewed by at least one Ethiopian subject teacher before publication.
-- Translation workflow: AI draft → human review by native-speaker reviewer → publish.
+- Source of truth: the MoE grades 9–12 Biology, Chemistry and Physics curriculum.
+- Each experiment is reviewed by at least one Ethiopian subject teacher for scientific accuracy, curriculum fit and **safety for unsupervised home use** before the sample label is removed.
+- Each experiment is tested with the listed local materials before publication.
+- Demo videos are recorded with the same local materials the guide lists.
 
 ## 8. AI / Model Strategy
 
-- **Hosted LLMs** for chatbot and content generation; selection based on quality, cost, and latency from East Africa.
-- **Retrieval-Augmented Generation (RAG)** over the platform's own curriculum corpus to keep answers grounded and on-syllabus.
-- **Guardrails:** prompt-injection defenses, profanity/abuse filters, refusal patterns for non-academic and unsafe topics, age-appropriate tone.
-- **Evaluation:** weekly offline eval set per subject (correctness, citation accuracy, language quality) with regression gates before model upgrades.
+- **Hosted LLM** behind an OpenAI-compatible interface. Groq is the default; the provider is selected on quality, cost, latency from East Africa, and whether its terms allow use by minors.
+- **Grounding:** the full guide for the current experiment goes into the system prompt. At this content size, no vector store is needed.
+- **Guardrails:** system-role injection from the client is stripped, history length is capped, the topic is restricted, safety rules are built into the prompt, and the tone is age-appropriate.
+- **Evaluation:** a weekly eval set per subject (correctness, citation accuracy, safety), with regression gates before changing model or provider.
 
-## 9. Tech Stack (Non-Binding Proposal, Subject to Architecture Review)
+## 9. Tech Stack (Current)
 
-> The choices below are starting points for discussion in M0, not commitments. They will be revisited and confirmed (or replaced) during the architecture review at the end of discovery. Vendor- or framework-specific decisions should not be propagated into other planning docs until that review concludes.
-
-
-- **Frontend:** Progressive Web App (React or SvelteKit), service worker for offline caching, IndexedDB for local data.
-- **Backend:** API in Node.js or Python (FastAPI); Postgres for relational data; object storage for media.
-- **AI layer:** Vector store for RAG; LLM provider abstraction so model choice can change without app changes.
-- **Hosting:** Cloud region nearest to Ethiopia (e.g., Europe or Middle East) with CDN edge in Africa.
-- **Analytics:** Privacy-respecting product analytics; no third-party ad trackers.
+- **Frontend/backend:** Next.js (App Router), React, TypeScript, Tailwind CSS.
+- **Data:** Postgres on Neon via Drizzle ORM.
+- **Auth:** iron-session cookies + bcrypt.
+- **AI:** any OpenAI-compatible chat completions API (Groq by default).
+- **Analytics:** first-party page-view analytics in `/admin`; no third-party ad trackers.
 
 ## 10. Risks & Open Questions
 
 | # | Risk / Question | Mitigation / Next Step |
 |---|---|---|
-| R1 | LLM quality in Amharic / Afaan Oromo may be uneven | Benchmark candidate models; build language-specific eval sets |
-| R2 | EUEE blueprint changes year to year | Annual content review cycle owned by curriculum lead |
-| R3 | Offline storage limits on low-end devices | Tunable pack size; eviction policy for old units |
-| R4 | AI cost overruns at scale | Aggressive caching, small-model routing, usage caps per free user |
-| R5 | Data privacy expectations for minors | Legal review before launch; clear consent UX |
-| R6 | Regional connectivity disruptions / internet shutdowns in parts of Ethiopia | Offline-first design is partial mitigation; monitor regional availability; cache larger content windows for at-risk regions; avoid hard dependencies on real-time chatbot for core study flows |
-| R7 | Geographic content access constraints (e.g., region-specific MoE syllabus variations) | Curriculum lead maintains regional variant mapping; content tagged by region where divergence exists |
-| Q1 | Funding model (grant, school license, freemium)? | **Decide before M1 commitment** — determines whether free-only MVP is sustainable. Owner: product/exec |
-| Q2 | Partnership with MoE or regional bureaus? | Explore early; would unlock distribution |
-| Q3 | Hardware partnerships (preloaded tablets)? | Out of MVP, revisit in phase 2 |
+| R1 | Students doing experiments unsupervised could get hurt | Only low-hazard experiments; adult-present reminders in the guide and the assistant; teacher safety review before publishing |
+| R2 | Free AI tiers are rate-limited and models get withdrawn (e.g. Groq's Llama 3.3 70B) | Configurable provider and model; usage caps; trim prompt size; plan a paid fallback |
+| R3 | AI provider terms may forbid services used by minors (e.g. the Gemini API) | Check terms before adopting any provider (NFR-11) |
+| R4 | Local materials vary by region | List substitutes per material; collect student feedback on what was available |
+| R5 | Video bandwidth cost for students | Load on demand; plan low-resolution and downloadable versions |
+| R6 | Data privacy expectations for minors | Legal review before public launch; clear consent UX |
+| Q1 | Funding model (grant, sponsorship, freemium)? | Decides how far the free tier can scale beyond about 100 daily students |
+| Q2 | Partnership with the MoE or regional bureaus? | Would unlock curriculum sign-off and distribution |
 
 ## 11. Milestones (Indicative)
 
-| Phase | Scope | Target | Exit gate |
-|---|---|---|---|
-| M0 — Discovery | Curriculum mapping, teacher interviews, model benchmarks per language, **funding-model decision (Q1)** | Month 1–2 | Signed-off curriculum map; chatbot eval baselines per language meeting §2 quality targets within 10 pts; funding model chosen |
-| M1 — Alpha | Math only, English UI, online-only chatbot, internal testers | Month 3–4 | ≥ 20 internal testers complete ≥ 3 lessons each; chatbot correctness ≥ 80% on Math eval; no P0 bugs |
-| M2 — Beta | All 4 sciences, English + Amharic, offline packs, 500-student pilot | Month 5–7 | ≥ 60% 4-week retention in pilot; +10% mock-exam score lift in pilot cohort; offline sync conflict rate < 1%; pilot teacher NPS ≥ 30 |
-| M3 — Public MVP | + Afaan Oromo, teacher class codes, EUEE mock tests | Month 8–9 | Quality + safety metrics in §2 met for all 3 languages; AI cost ≤ USD 0.05/MAU on beta data; privacy/legal sign-off |
-| M4 — Scale | Performance + cost hardening, partnerships, growth | Month 10–12 | 50K MAU; p50 page load ≤ 3s on 3G in production; unit economics within target |
+| Phase | Scope | Exit gate |
+|---|---|---|
+| Pilot (done, June 2026) | Strawberry DNA extraction with Grade 11 students, guided live | Showed demand for hands-on, low-cost experiments |
+| M1 — Alpha | 18 sample experiments, guides, videos, lab assistant, lab notebook; English | Internal testers complete ≥ 3 experiments each on their own; no P0 bugs |
+| M2 — Beta | Teacher-reviewed content, about 100 daily students, PWA install | ≥ 50% of started experiments completed; assistant meets the §2 quality and safety targets |
+| M3 — Public MVP | Amharic UI, offline guides, more experiments per grade | Privacy and legal sign-off; AI cost within budget at target scale |
 
 ## 12. Approval
 
 | Role | Name | Status |
 |---|---|---|
 | Product owner | TBD | ☐ |
-| Curriculum lead | TBD | ☐ |
+| Curriculum and safety lead | TBD | ☐ |
 | Engineering lead | TBD | ☐ |
 | Privacy / legal | TBD | ☐ |
 
@@ -199,19 +195,13 @@ Network baselines used in this section: **2G** = 400 Kbps / 400 ms RTT, **3G** =
 
 | Term | Meaning |
 |---|---|
-| **MoE** | Ethiopian Ministry of Education — owner of the national Grade 11 curriculum framework |
-| **EUEE** | Ethiopian University Entrance Examination — national exam Grade 12 students take for university placement; Grade 11 students study toward it |
-| **PWA** | Progressive Web App — a web app installable to the device home screen with offline support via a service worker |
-| **RAG** | Retrieval-Augmented Generation — pattern of grounding LLM answers in retrieved documents (here, the platform's own curriculum) instead of pure model knowledge |
-| **LLM** | Large Language Model — the AI model powering the chatbot and content generation |
-| **ASR** | Automatic Speech Recognition — converting spoken audio to text (for voice input) |
-| **TTS** | Text-to-Speech — synthesizing spoken audio from text (for voice output) |
-| **MOS** | Mean Opinion Score — 1–5 human-rated quality score for TTS audio |
-| **WER** | Word Error Rate — % of words ASR transcribes incorrectly |
-| **OTP** | One-Time Password — short code sent via SMS/email for authentication |
-| **WCAG** | Web Content Accessibility Guidelines — international accessibility standard; this product targets level AA |
-| **MAU** | Monthly Active Users |
-| **Ge'ez script** | Writing system used for Amharic (and several other Ethiopian languages) |
+| **MoE** | Ethiopian Ministry of Education, owner of the national curriculum framework |
+| **Lab assistant** | The AI chat helper, grounded in the experiment guide the student is following |
+| **Lab notebook** | A student's personal record of started and completed experiments and their observations |
+| **Concept check** | Short, authored multiple-choice questions at the end of an experiment |
+| **PWA** | Progressive Web App: a web app installable to the home screen, with offline support via a service worker |
+| **TWA** | Trusted Web Activity: a way to publish a PWA on the Google Play Store |
+| **LLM** | Large Language Model, the AI model behind the lab assistant |
+| **WCAG** | Web Content Accessibility Guidelines; this product targets level AA |
+| **Ge'ez script** | Writing system used for Amharic |
 | **Qubee** | Latin-based alphabet used to write Afaan Oromo |
-| **Afaan Oromo** | Oromo language — most widely spoken first language in Ethiopia |
-| **Class code** | Short alphanumeric code a verified teacher generates so students can join a class for aggregate progress visibility |
