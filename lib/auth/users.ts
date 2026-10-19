@@ -89,7 +89,6 @@ export async function createUserAccount(input: {
     email,
     passwordHash: hash,
     displayName,
-    role: "student",
     language: input.language,
     region: capStr(input.region) ?? null,
     school: capStr(input.school) ?? null,

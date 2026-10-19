@@ -7,9 +7,6 @@ export const users = pgTable(
     email: text("email").notNull(),
     passwordHash: text("password_hash").notNull(),
     displayName: text("display_name").notNull(),
-    // Hasesa is individual and self-paced; every new account is a student.
-    // "teacher" only exists on legacy exam-prep-era rows.
-    role: text("role").notNull().$type<"student" | "teacher">(),
     language: text("language").notNull().$type<"en" | "am" | "om">().default("en"),
     region: text("region"),
     school: text("school"),
@@ -20,50 +17,6 @@ export const users = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [uniqueIndex("users_email_lower_idx").on(t.email)]
-);
-
-// Legacy (exam-prep era): mastery, classes and class_members are no longer read
-// or written. Kept defined so `db:push` doesn't drop existing data; remove them
-// in a deliberate migration.
-export const mastery = pgTable(
-  "mastery",
-  {
-    userId: text("user_id")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    subject: text("subject").notNull(),
-    topic: text("topic").notNull(),
-    value: integer("value").notNull().default(50),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
-  },
-  (t) => [primaryKey({ columns: [t.userId, t.subject, t.topic] })]
-);
-
-export const classes = pgTable(
-  "classes",
-  {
-    code: text("code").primaryKey(),
-    name: text("name").notNull(),
-    teacherId: text("teacher_id")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-  },
-  (t) => [index("classes_teacher_idx").on(t.teacherId)]
-);
-
-export const classMembers = pgTable(
-  "class_members",
-  {
-    classCode: text("class_code")
-      .notNull()
-      .references(() => classes.code, { onDelete: "cascade" }),
-    userId: text("user_id")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    joinedAt: timestamp("joined_at", { withTimezone: true }).notNull().defaultNow(),
-  },
-  (t) => [primaryKey({ columns: [t.classCode, t.userId] })]
 );
 
 // One row per student per experiment they've started or completed.
@@ -139,9 +92,6 @@ export const usage = pgTable(
       .references(() => users.id, { onDelete: "cascade" }),
     yearMonth: text("year_month").notNull(), // e.g. "2026-05"
     chatTurns: integer("chat_turns").notNull().default(0),
-    quizBatches: integer("quiz_batches").notNull().default(0),
-    aiGrades: integer("ai_grades").notNull().default(0),
-    asrMinutes: integer("asr_minutes").notNull().default(0),
   },
   (t) => [primaryKey({ columns: [t.userId, t.yearMonth] })]
 );
