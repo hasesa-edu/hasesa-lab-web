@@ -12,11 +12,7 @@ type TR = (k: Key) => string;
 export default function Home() {
   const { tr } = useLocale();
   const { user, ready } = useUser();
-  const primaryHref = user
-    ? user.role === "teacher"
-      ? "/teacher"
-      : "/dashboard"
-    : "/signup";
+  const primaryHref = user ? "/dashboard" : "/signup";
   const primaryLabel =
     ready && user ? tr("hero.cta.dashboard") : tr("hero.cta.signup");
 

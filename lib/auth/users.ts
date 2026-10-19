@@ -4,9 +4,6 @@ import bcrypt from "bcryptjs";
 import type { Locale } from "@/lib/i18n";
 import { SUBJECTS, isGrade, type Grade, type Subject } from "@/lib/experiments";
 
-// Teacher accounts are legacy; new signups are always students.
-export type Role = "student" | "teacher";
-
 // A valid bcrypt hash compared against when an email is not found, so that
 // verifyCredentials spends the same time whether or not the account exists.
 const DUMMY_HASH = "$2b$10$MJi3uIOk4dm.AKGwE1PsgOw3zxfBwC37qALqpm6yD2V2vIpzWHWBW";
@@ -38,7 +35,6 @@ export type UserDTO = {
   id: string;
   email: string;
   displayName: string;
-  role: Role;
   language: Locale;
   region?: string | null;
   school?: string | null;
@@ -136,7 +132,6 @@ export async function getUserDTO(userId: string): Promise<UserDTO | null> {
     id: u.id,
     email: u.email,
     displayName: u.displayName,
-    role: u.role,
     language: u.language as Locale,
     region: u.region,
     school: u.school,
