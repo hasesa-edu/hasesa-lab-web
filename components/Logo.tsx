@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BRAND, MOTTO } from "@/lib/brand";
 
 export function LogoMark({ size = 28, className = "" }: { size?: number; className?: string }) {
   return (
@@ -40,10 +41,10 @@ export function Logo({ className = "" }: { className?: string }) {
       <LogoMark size={28} className="transition group-hover:scale-105" />
       <span className="flex flex-col leading-none">
         <span className="font-semibold text-[15px] tracking-tight text-ink">
-          Hasesa
+          {BRAND}
         </span>
-        <span className="hidden md:block text-[10px] uppercase tracking-[0.14em] text-ink-subtle mt-0.5">
-          Personal AI Tutor
+        <span className="hidden md:block text-[10.5px] tracking-tight text-ink-subtle mt-0.5">
+          {MOTTO}
         </span>
       </span>
     </Link>

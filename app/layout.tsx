@@ -9,6 +9,7 @@ import { Footer } from "@/components/Footer";
 import { PWARegister } from "@/components/PWARegister";
 import { PageViewTracker } from "@/components/PageViewTracker";
 import { ThemeProvider, themeBootstrapScript } from "@/components/ThemeProvider";
+import { BRAND, MOTTO } from "@/lib/brand";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -16,9 +17,9 @@ const geist = Geist({
   variable: "--font-geist",
 });
 
-const TITLE = "Hasesa — Quality Education for Ethiopian High School Students";
+const TITLE = `${BRAND} · ${MOTTO}`;
 const DESCRIPTION =
-  "Hands-on science for Ethiopian high school students. Curriculum-aligned biology, chemistry and physics experiments for grades 9–12 using local materials, with step-by-step guides, demo videos, and an AI lab assistant.";
+  "Personalized, hands-on learning guided by real scientists. Curriculum-aligned biology, chemistry and physics experiments for grades 9–12 using local materials, with step-by-step guides, demo videos, and an AI lab assistant.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://hasesa.vercel.app"),
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
   // which appends a content-hash to the URL so browsers don't serve a stale icon.
   openGraph: {
     type: "website",
-    siteName: "Hasesa",
+    siteName: BRAND,
     title: TITLE,
     description: DESCRIPTION,
     locale: "en_US",

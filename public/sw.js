@@ -1,8 +1,8 @@
-/* AI-Edu Ethiopia — minimal demo service worker */
-const VERSION = "v2";
-const APP_SHELL = "ai-edu-shell-" + VERSION;
-const STATIC = "ai-edu-static-" + VERSION;
-const PAGES = "ai-edu-pages-" + VERSION;
+/* Hasesa Lab service worker */
+const VERSION = "v3";
+const APP_SHELL = "hasesa-lab-shell-" + VERSION;
+const STATIC = "hasesa-lab-static-" + VERSION;
+const PAGES = "hasesa-lab-pages-" + VERSION;
 
 // Precache only the home shell + essentials. /lessons and /chat are heavier
 // pages; they'll be cached on first visit by the fetch handler rather than

@@ -21,7 +21,7 @@ function getPassword(): string {
 function options(): SessionOptions {
   return {
     password: getPassword(),
-    cookieName: "ai_edu_session",
+    cookieName: "hasesa_lab_session",
     cookieOptions: {
       httpOnly: true,
       sameSite: "lax",
