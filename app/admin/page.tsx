@@ -3,6 +3,7 @@ import { sql } from "drizzle-orm";
 import { getSession } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
 import { AdminSignOutButton } from "./signout-button";
+import { Subscribers } from "./Subscribers";
 
 export const dynamic = "force-dynamic";
 
@@ -255,6 +256,8 @@ export default async function AdminPage() {
           </div>
         </div>
       </section>
+
+      <Subscribers />
 
       <section>
         <h2 className="text-sm font-semibold uppercase tracking-wide text-ink-muted">Traffic</h2>

@@ -1,24 +1,24 @@
-# Hasesa — Hands-on Science Experiments for Ethiopian Students (Grades 9–12) — Requirements
+# Hasesa Lab — Hands-on Science Experiments for Ethiopian Students (Grades 9–12) — Requirements
 
 **Version:** 0.3 (Draft)
 **Date:** 2026-10-19
 **Owner:** TBD
 
-> **v0.3 change:** Hasesa has moved from Grade 11 exam prep to self-paced, hands-on experiments for grades 9–12. Each student uses it **individually, at any time, on their own device**. It is not a classroom or teacher-led product. These parts of v0.2 have been dropped: mathematics, the diagnostic, mastery tracking, AI-generated quizzes and grading, EUEE mock tests, and teacher class codes and dashboards.
+> **v0.3 change:** Hasesa Lab has moved from Grade 11 exam prep to self-paced, hands-on experiments for grades 9–12. Each student uses it **individually, at any time, on their own device**. It is not a classroom or teacher-led product. These parts of v0.2 have been dropped: mathematics, the diagnostic, mastery tracking, AI-generated quizzes and grading, EUEE mock tests, and teacher class codes and dashboards.
 
 ---
 
 ## 1. Purpose
 
-Hasesa helps Ethiopian students in grades 9–12 do real Biology, Chemistry and Physics experiments by themselves, using cheap, locally available materials. Each experiment comes with a step-by-step guide, a pre-recorded demo video and an AI lab assistant that is grounded in that guide. Together, these replace the live support a student would otherwise need from a teacher or lab technician. The product must work on low-end Android phones over unreliable, low-bandwidth networks.
+Hasesa Lab helps Ethiopian students in grades 9–12 do real Biology, Chemistry and Physics experiments by themselves, using cheap, locally available materials. Each experiment comes with a step-by-step guide, a pre-recorded demo video and an AI lab assistant that is grounded in that guide. Together, these replace the live support a student would otherwise need from a teacher or lab technician. The product must work on low-end Android phones over unreliable, low-bandwidth networks.
 
 ### 1.1 Origin
 
-The model was piloted in June 2026. Grade 11 students did a strawberry DNA extraction with live guidance from researchers at The Science Basement. Hasesa turns that live guidance into self-serve material: written guides, videos and the lab assistant. Any student can then do the experiment alone, wherever they are.
+The model was piloted in June 2026. Grade 11 students did a strawberry DNA extraction with live guidance from researchers at The Science Basement. Hasesa Lab turns that live guidance into self-serve material: written guides, videos and the lab assistant. Any student can then do the experiment alone, wherever they are.
 
 ### 1.2 Competitive Landscape & Differentiation
 
-Students today rely on YouTube demos (generic, often needing lab equipment they don't have), the MoE's digital resources (curriculum-aligned, but little hands-on support) and school labs (often missing or under-equipped). Hasesa's differentiation is:
+Students today rely on YouTube demos (generic, often needing lab equipment they don't have), the MoE's digital resources (curriculum-aligned, but little hands-on support) and school labs (often missing or under-equipped). Hasesa Lab's differentiation is:
 
 - (a) experiments designed around **local, low-cost materials**, with substitutes listed;
 - (b) alignment with the MoE grade 9–12 science curriculum;
@@ -42,7 +42,7 @@ Students today rely on YouTube demos (generic, often needing lab equipment they 
 
 ## 3. Target Users
 
-- **Primary:** Ethiopian students in grades 9–12 (roughly ages 14–18), public and private schools, urban and rural. They use Hasesa **independently** after school, at home and at their own pace. **Most users are minors.**
+- **Primary:** Ethiopian students in grades 9–12 (roughly ages 14–18), public and private schools, urban and rural. They use Hasesa Lab **independently** after school, at home and at their own pace. **Most users are minors.**
 - **Secondary:** parents and guardians, who may supervise experiments that need an adult present.
 - **Not a target user:** teachers or schools as account holders. Teachers take part only as **content reviewers** (§7).
 - **Device profile:** low-end Android phones (1–2 GB RAM, Android 8+), sometimes shared within a family.
@@ -95,10 +95,16 @@ Students today rely on YouTube demos (generic, often needing lab equipment they 
 - **FR-17** Progress is private to the student.
 
 ### 5.4 Accounts & Onboarding
-- **FR-18** Sign-up via email + password. No payment required.
+- **FR-18** Sign-up and sign-in via Google only. The first Google sign-in creates the account.
 - **FR-19** Onboarding captures grade (9–12) and subjects of interest. School and region are optional.
 - **FR-20** Students under 18 see a simplified privacy notice, plus a guardian consent flow where the law requires one.
-- **FR-21** The guides and the lab assistant can be browsed without an account. Saving progress and chat history requires one.
+- **FR-21** Anyone can browse the experiment catalogue and read the free sample guides. Every other guide and the lab assistant require an active Hasesa Lab pass.
+
+### 5.4a Pricing & Billing
+- **FR-21a** One plan: a prepaid 30-day pass for 300 ETB, paid through Chapa (Telebirr, CBE Birr, M-Pesa, card). No auto-renewal; each payment stacks 30 days on any remaining time.
+- **FR-21b** A payment only unlocks access after the server verifies it with Chapa. The webhook and the return page both verify, idempotently.
+- **FR-21c** Pass holders get up to 30 lab-assistant messages a day (reset at midnight, Addis Ababa time).
+- **FR-21d** Students see their pass status, payment history and a renew button on their account page, plus an in-app banner when the pass is about to end.
 
 ### 5.5 Offline Access (post-MVP)
 - **FR-22** Students can save an experiment guide (text and images) for offline use. Videos are optional downloads.
@@ -170,7 +176,7 @@ Network baselines: **2G** = 400 Kbps / 400 ms RTT, **3G** = 1.6 Mbps / 300 ms RT
 | R4 | Local materials vary by region | List substitutes per material; collect student feedback on what was available |
 | R5 | Video bandwidth cost for students | Load on demand; plan low-resolution and downloadable versions |
 | R6 | Data privacy expectations for minors | Legal review before public launch; clear consent UX |
-| Q1 | Funding model (grant, sponsorship, freemium)? | Decides how far the free tier can scale beyond about 100 daily students |
+| Q1 | ~~Funding model~~ Decided: 300 ETB/month prepaid pass with 2 free sample guides | Revisit pricing after launch data |
 | Q2 | Partnership with the MoE or regional bureaus? | Would unlock curriculum sign-off and distribution |
 
 ## 11. Milestones (Indicative)
