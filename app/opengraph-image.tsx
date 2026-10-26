@@ -37,11 +37,11 @@ export default async function OG() {
               position: "relative",
             }}
           >
-            {/* Hasesa sprout */}
-            <svg width="56" height="56" viewBox="96 104 320 320" fill="none" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M256 424V250" stroke="#0d9488" strokeWidth="44" />
-              <path d="M256 262C256 184 204 136 128 136C128 214 180 262 256 262Z" stroke="#0d9488" strokeWidth="40" />
-              <path d="M256 262C256 184 308 136 384 136C384 214 332 262 256 262Z" fill="#f59e0b" />
+            {/* Hasesa peek */}
+            <svg width="60" height="25" viewBox="64 194 384 160" fill="none">
+              <path d="M96 330H416" stroke="#0d9488" strokeWidth="48" strokeLinecap="round" />
+              <circle cx="214" cy="270" r="38" fill="#f59e0b" />
+              <circle cx="306" cy="246" r="38" fill="#f59e0b" />
             </svg>
           </div>
           <div style={{ fontSize: 32, fontWeight: 700, letterSpacing: "-0.02em" }}>{BRAND}</div>

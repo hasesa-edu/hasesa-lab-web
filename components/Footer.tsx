@@ -51,7 +51,7 @@ export function Footer() {
         <div className="flex flex-col items-center gap-4 py-8 text-center sm:flex-row sm:justify-between sm:text-left">
           <div className="flex flex-col items-center gap-2 sm:items-start">
             <Link href="/" className="inline-flex min-h-10 items-center gap-2.5">
-              <LogoMark size={28} tone="light" />
+              <LogoMark size={40} tone="light" />
               <span className="font-heading text-lg font-bold tracking-tight">{BRAND}</span>
             </Link>
             <p className="max-w-sm text-sm text-deep-foreground/70">{tr("footer.motto")}</p>
