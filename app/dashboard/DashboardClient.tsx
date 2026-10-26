@@ -54,15 +54,15 @@ export function DashboardClient({ catalog }: { catalog: CatalogItem[] }) {
   }, [user, progress, catalog]);
 
   if (!ready || !user) {
-    return <div className="max-w-3xl mx-auto px-4 py-10 text-ink-subtle">{tr("common.loading")}</div>;
+    return <div className="max-w-3xl mx-auto px-4 py-10 text-subtle-foreground">{tr("common.loading")}</div>;
   }
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-12">
-      <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-ink">
+      <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">
         {tr("dash.greeting")}, {user.displayName} 👋
       </h1>
-      <p className="text-ink-muted mt-1.5 text-sm">
+      <p className="text-muted-foreground mt-1.5 text-sm">
         {tr("dash.title")}
         {user.grade ? ` · ${tr("experiments.grade")} ${user.grade}` : ""}
       </p>
@@ -76,12 +76,12 @@ export function DashboardClient({ catalog }: { catalog: CatalogItem[] }) {
       )}
 
       {loading ? (
-        <p className="mt-10 text-sm text-ink-subtle">{tr("common.loading")}</p>
+        <p className="mt-10 text-sm text-subtle-foreground">{tr("common.loading")}</p>
       ) : (
         <>
           {inProgress.length > 0 && (
             <section className="mt-10">
-              <h2 className="font-semibold text-ink text-lg tracking-tight">{tr("dash.inProgress")}</h2>
+              <h2 className="font-semibold text-foreground text-lg tracking-tight">{tr("dash.inProgress")}</h2>
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {inProgress.map((p) => {
                   const e = getExperiment(p.experimentId);
@@ -93,12 +93,12 @@ export function DashboardClient({ catalog }: { catalog: CatalogItem[] }) {
           )}
 
           <section className="mt-10">
-            <h2 className="font-semibold text-ink text-lg tracking-tight">{tr("dash.next")}</h2>
-            <p className="text-xs text-ink-subtle mt-0.5">
+            <h2 className="font-semibold text-foreground text-lg tracking-tight">{tr("dash.next")}</h2>
+            <p className="text-xs text-subtle-foreground mt-0.5">
               {progress.length === 0 ? tr("dash.nextWhyNew") : tr("dash.nextWhy")}
             </p>
             {suggestions.length === 0 ? (
-              <p className="mt-4 text-sm text-ink-muted">{tr("dash.allDone")}</p>
+              <p className="mt-4 text-sm text-muted-foreground">{tr("dash.allDone")}</p>
             ) : (
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {suggestions.map((e) => (
@@ -109,9 +109,9 @@ export function DashboardClient({ catalog }: { catalog: CatalogItem[] }) {
           </section>
 
           <section className="mt-12">
-            <h2 className="font-semibold text-ink text-lg tracking-tight">{tr("dash.completed")}</h2>
+            <h2 className="font-semibold text-foreground text-lg tracking-tight">{tr("dash.completed")}</h2>
             {completed.length === 0 ? (
-              <p className="mt-3 text-sm text-ink-muted">{tr("dash.noCompleted")}</p>
+              <p className="mt-3 text-sm text-muted-foreground">{tr("dash.noCompleted")}</p>
             ) : (
               <ul className="mt-4 space-y-3">
                 {completed.map((p) => {
@@ -119,20 +119,20 @@ export function DashboardClient({ catalog }: { catalog: CatalogItem[] }) {
                   if (!e) return null;
                   const s = subjectMeta(e.subject);
                   return (
-                    <li key={e.id} className="rounded-xl border border-line bg-surface p-4 shadow-soft">
+                    <li key={e.id} className="rounded-xl border border-border bg-card p-4 shadow-soft">
                       <div className="flex flex-wrap items-baseline justify-between gap-2">
-                        <Link href={`/experiments/${e.id}#notebook`} className="font-semibold text-ink hover:text-brand transition">
+                        <Link href={`/experiments/${e.id}#notebook`} className="font-semibold text-foreground hover:text-primary transition">
                           {e.title}
                         </Link>
-                        <span className="text-xs text-ink-subtle">
+                        <span className="text-xs text-subtle-foreground">
                           {tr("experiments.grade")} {e.grade} · {s.emoji} {s.label}
                           {p.completedAt ? ` · ${new Date(p.completedAt).toLocaleDateString()}` : ""}
                         </span>
                       </div>
                       {p.observations ? (
-                        <p className="mt-2 text-sm text-ink-muted whitespace-pre-line leading-relaxed">{p.observations}</p>
+                        <p className="mt-2 text-sm text-muted-foreground whitespace-pre-line leading-relaxed">{p.observations}</p>
                       ) : (
-                        <p className="mt-2 text-xs text-ink-subtle italic">{tr("dash.noNotes")}</p>
+                        <p className="mt-2 text-xs text-subtle-foreground italic">{tr("dash.noNotes")}</p>
                       )}
                     </li>
                   );
@@ -146,13 +146,13 @@ export function DashboardClient({ catalog }: { catalog: CatalogItem[] }) {
       <div className="mt-12 flex flex-wrap gap-2">
         <Link
           href="/experiments"
-          className="inline-flex items-center px-4 py-2.5 bg-brand text-brand-on rounded-lg hover:bg-brand-hover text-sm font-medium shadow-soft transition"
+          className="inline-flex items-center px-4 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 text-sm font-medium shadow-soft transition"
         >
           {tr("dash.browse")} →
         </Link>
         <Link
           href="/chat"
-          className="inline-flex items-center px-4 py-2.5 rounded-lg border border-line bg-surface text-sm font-medium text-ink hover:border-brand/60 transition"
+          className="inline-flex items-center px-4 py-2.5 rounded-lg border border-border bg-card text-sm font-medium text-foreground hover:border-primary/60 transition"
         >
           {tr("dash.askAssistant")}
         </Link>
@@ -163,9 +163,9 @@ export function DashboardClient({ catalog }: { catalog: CatalogItem[] }) {
 
 function Stat({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-xl border border-line bg-surface px-3 py-2.5 shadow-soft">
-      <dt className="text-[11px] uppercase tracking-wider text-ink-subtle font-semibold">{label}</dt>
-      <dd className="text-2xl font-extrabold text-ink tabular-nums">{value}</dd>
+    <div className="rounded-xl border border-border bg-card px-3 py-2.5 shadow-soft">
+      <dt className="text-[11px] uppercase tracking-wider text-subtle-foreground font-semibold">{label}</dt>
+      <dd className="text-2xl font-extrabold text-foreground tabular-nums">{value}</dd>
     </div>
   );
 }
@@ -175,14 +175,14 @@ function ExperimentCard({ exp, tr, cta }: { exp: CatalogItem; tr: Tr; cta: strin
   return (
     <Link
       href={`/experiments/${exp.id}`}
-      className="flex flex-col rounded-xl border border-brand/30 bg-surface p-4 hover:border-brand hover:shadow-card transition shadow-soft"
+      className="flex flex-col rounded-xl border border-primary/30 bg-card p-4 hover:border-primary hover:shadow-card transition shadow-soft"
     >
-      <div className="text-xs text-brand font-semibold uppercase tracking-wide">
+      <div className="text-xs text-primary font-semibold uppercase tracking-wide">
         {tr("experiments.grade")} {exp.grade} · {s.emoji} {s.label}
       </div>
-      <div className="font-semibold text-ink mt-1 text-sm flex-1">{exp.title}</div>
-      <div className="text-xs text-ink-subtle mt-2">
-        {exp.estimatedMinutes} {tr("experiments.minutes")} · <span className="text-brand">{cta} →</span>
+      <div className="font-semibold text-foreground mt-1 text-sm flex-1">{exp.title}</div>
+      <div className="text-xs text-subtle-foreground mt-2">
+        {exp.estimatedMinutes} {tr("experiments.minutes")} · <span className="text-primary">{cta} →</span>
       </div>
     </Link>
   );

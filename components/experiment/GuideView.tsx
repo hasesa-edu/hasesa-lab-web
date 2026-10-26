@@ -24,15 +24,15 @@ export function GuideView({ exp, prev, next }: { exp: Experiment; prev?: Catalog
 
   return (
     <article className="max-w-3xl mx-auto px-4 py-12">
-      <Link href="/experiments" className="text-sm text-brand hover:underline">{tr("experiments.back")}</Link>
+      <Link href="/experiments" className="text-sm text-primary hover:underline">{tr("experiments.back")}</Link>
 
       <header className="mt-3">
-        <p className="text-xs uppercase tracking-wider text-brand font-semibold">
+        <p className="text-xs uppercase tracking-wider text-primary font-semibold">
           {tr("experiments.grade")} {exp.grade} · {subject.emoji} {subject.label} · {exp.unit}
           {exp.curriculumCode ? ` · ${exp.curriculumCode}` : ""}
         </p>
-        <h1 className="mt-1.5 text-4xl sm:text-5xl font-extrabold tracking-tight text-ink leading-tight">{exp.title}</h1>
-        <p className="mt-3 text-ink-muted leading-relaxed">{exp.summary}</p>
+        <h1 className="mt-1.5 text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground leading-tight">{exp.title}</h1>
+        <p className="mt-3 text-muted-foreground leading-relaxed">{exp.summary}</p>
         <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
           <Chip>⏱ {exp.estimatedMinutes} {tr("experiments.minutes")}</Chip>
           <Chip>
@@ -50,24 +50,24 @@ export function GuideView({ exp, prev, next }: { exp: Experiment; prev?: Catalog
       <ExperimentTOC exp={exp} tr={tr} />
 
       {exp.whyItMatters && (
-        <section id="why" className="mt-8 rounded-2xl border border-brand/25 bg-brand-soft/30 p-5 sm:p-6 scroll-mt-32">
+        <section id="why" className="mt-8 rounded-2xl border border-primary/25 bg-primary-soft/30 p-5 sm:p-6 scroll-mt-32">
           <div className="flex items-center gap-2">
-            <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-brand-soft text-brand-hover dark:text-brand text-lg">
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary-soft text-primary-strong dark:text-primary text-lg">
               🌍
             </span>
-            <p className="text-xs uppercase tracking-[0.16em] font-semibold text-brand-hover dark:text-brand">
+            <p className="text-xs uppercase tracking-[0.16em] font-semibold text-primary-strong dark:text-primary">
               {tr("why.label")}
             </p>
           </div>
-          <p className="mt-3 text-ink leading-relaxed">{exp.whyItMatters}</p>
+          <p className="mt-3 text-foreground leading-relaxed">{exp.whyItMatters}</p>
         </section>
       )}
 
       <section id="video" className="mt-8 scroll-mt-32">
         <div className="flex items-center justify-between gap-3 mb-2">
-          <p className="text-xs uppercase tracking-[0.16em] font-semibold text-brand">{tr("exp.video")}</p>
+          <p className="text-xs uppercase tracking-[0.16em] font-semibold text-primary">{tr("exp.video")}</p>
           {exp.video && (
-            <p className="text-xs text-ink-subtle">
+            <p className="text-xs text-subtle-foreground">
               {tr("video.credit")} {exp.video.credit}
             </p>
           )}
@@ -91,9 +91,9 @@ export function GuideView({ exp, prev, next }: { exp: Experiment; prev?: Catalog
         <SectionTitle icon="🧰">{tr("exp.materials")}</SectionTitle>
         <ul className="mt-3 grid gap-2">
           {exp.materials.map((m, i) => (
-            <li key={i} className="rounded-lg border border-line bg-surface px-4 py-2.5 text-sm shadow-soft">
-              <span className="text-ink">{m.item}</span>
-              {m.localNote && <span className="block text-xs text-ink-subtle mt-0.5">↳ {m.localNote}</span>}
+            <li key={i} className="rounded-lg border border-border bg-card px-4 py-2.5 text-sm shadow-soft">
+              <span className="text-foreground">{m.item}</span>
+              {m.localNote && <span className="block text-xs text-subtle-foreground mt-0.5">↳ {m.localNote}</span>}
             </li>
           ))}
         </ul>
@@ -106,7 +106,7 @@ export function GuideView({ exp, prev, next }: { exp: Experiment; prev?: Catalog
         <h2 className="font-semibold text-red-800 dark:text-red-300 flex items-center gap-2">
           <span aria-hidden>⚠️</span> {tr("exp.safety")}
         </h2>
-        <ul className="mt-2 space-y-1.5 text-sm text-ink">
+        <ul className="mt-2 space-y-1.5 text-sm text-foreground">
           {exp.safety.map((s, i) => (
             <li key={i} className="flex gap-2">
               <span className="mt-2 h-1 w-1 rounded-full bg-red-500 shrink-0" />
@@ -119,7 +119,7 @@ export function GuideView({ exp, prev, next }: { exp: Experiment; prev?: Catalog
       <section id="steps" className="mt-10 scroll-mt-32">
         <div className="flex items-baseline justify-between gap-3">
           <SectionTitle icon="🧪">{tr("exp.steps")}</SectionTitle>
-          <span className="text-xs text-ink-subtle tabular-nums">
+          <span className="text-xs text-subtle-foreground tabular-nums">
             {doneSteps}/{exp.steps.length} {tr("exp.stepsDone")}
           </span>
         </div>
@@ -131,7 +131,7 @@ export function GuideView({ exp, prev, next }: { exp: Experiment; prev?: Catalog
                   "flex gap-3 rounded-xl border p-4 cursor-pointer transition shadow-soft " +
                   (checked[i]
                     ? "border-emerald-300 bg-emerald-50/60 dark:border-emerald-800 dark:bg-emerald-950/30"
-                    : "border-line bg-surface hover:border-brand/50")
+                    : "border-border bg-card hover:border-primary/50")
                 }
               >
                 <input
@@ -141,10 +141,10 @@ export function GuideView({ exp, prev, next }: { exp: Experiment; prev?: Catalog
                   className="mt-1 h-4 w-4 shrink-0 accent-emerald-600"
                 />
                 <span className="flex-1">
-                  <span className="text-xs font-semibold text-ink-subtle">
+                  <span className="text-xs font-semibold text-subtle-foreground">
                     {tr("exp.step")} {i + 1}
                   </span>
-                  <span className={"block text-sm leading-relaxed " + (checked[i] ? "text-ink-muted" : "text-ink")}>
+                  <span className={"block text-sm leading-relaxed " + (checked[i] ? "text-muted-foreground" : "text-foreground")}>
                     {s.text}
                   </span>
                   {s.tip && <span className="block mt-1 text-xs text-amber-800 dark:text-amber-300">💡 {s.tip}</span>}
@@ -155,29 +155,29 @@ export function GuideView({ exp, prev, next }: { exp: Experiment; prev?: Catalog
         </ol>
       </section>
 
-      <section id="results" className="mt-10 rounded-2xl border border-line bg-surface p-6 shadow-soft scroll-mt-32">
-        <h2 className="text-xs uppercase tracking-wider font-semibold text-ink-subtle">{tr("exp.observe")}</h2>
-        <p className="mt-1.5 text-sm text-ink leading-relaxed">{exp.observe}</p>
-        <h2 className="mt-5 text-xs uppercase tracking-wider font-semibold text-ink-subtle">{tr("exp.explanation")}</h2>
-        <p className="mt-1.5 text-sm text-ink leading-relaxed">{renderInline(exp.explanation)}</p>
+      <section id="results" className="mt-10 rounded-2xl border border-border bg-card p-6 shadow-soft scroll-mt-32">
+        <h2 className="text-xs uppercase tracking-wider font-semibold text-subtle-foreground">{tr("exp.observe")}</h2>
+        <p className="mt-1.5 text-sm text-foreground leading-relaxed">{exp.observe}</p>
+        <h2 className="mt-5 text-xs uppercase tracking-wider font-semibold text-subtle-foreground">{tr("exp.explanation")}</h2>
+        <p className="mt-1.5 text-sm text-foreground leading-relaxed">{renderInline(exp.explanation)}</p>
       </section>
 
       <section id="troubleshooting" className="mt-10 scroll-mt-32">
         <SectionTitle icon="🛠️">{tr("exp.troubleshooting")}</SectionTitle>
         <div className="mt-3 space-y-2">
           {exp.troubleshooting.map((t, i) => (
-            <details key={i} className="group rounded-xl border border-line bg-surface px-4 py-3 shadow-soft">
-              <summary className="cursor-pointer text-sm font-medium text-ink list-none flex items-center justify-between gap-3">
+            <details key={i} className="group rounded-xl border border-border bg-card px-4 py-3 shadow-soft">
+              <summary className="cursor-pointer text-sm font-medium text-foreground list-none flex items-center justify-between gap-3">
                 <span>{t.problem}</span>
-                <span className="text-ink-subtle transition group-open:rotate-90" aria-hidden>›</span>
+                <span className="text-subtle-foreground transition group-open:rotate-90" aria-hidden>›</span>
               </summary>
-              <p className="mt-2 text-sm text-ink-muted leading-relaxed">{t.fix}</p>
+              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{t.fix}</p>
             </details>
           ))}
         </div>
-        <p className="mt-3 text-sm text-ink-muted">
+        <p className="mt-3 text-sm text-muted-foreground">
           {tr("exp.stillStuck")}{" "}
-          <Link href={`/chat?experiment=${exp.id}`} className="text-brand underline">
+          <Link href={`/chat?experiment=${exp.id}`} className="text-primary underline">
             {tr("exp.askAssistant")}
           </Link>
         </p>
@@ -194,10 +194,10 @@ export function GuideView({ exp, prev, next }: { exp: Experiment; prev?: Catalog
 
       <NotebookCard exp={exp} tr={tr} />
 
-      <div id="ask" className="mt-10 border-t border-line pt-6 scroll-mt-32">
+      <div id="ask" className="mt-10 border-t border-border pt-6 scroll-mt-32">
         <Link
           href={`/chat?experiment=${exp.id}`}
-          className="inline-flex items-center px-4 py-2.5 bg-brand text-brand-on rounded-lg hover:bg-brand-hover text-sm font-medium shadow-soft transition"
+          className="inline-flex items-center px-4 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 text-sm font-medium shadow-soft transition"
         >
           {tr("exp.askAbout")} →
         </Link>
@@ -208,12 +208,12 @@ export function GuideView({ exp, prev, next }: { exp: Experiment; prev?: Catalog
           {prev ? (
             <Link
               href={`/experiments/${prev.id}`}
-              className="group rounded-xl border border-line bg-surface p-4 hover:border-brand/60 hover:shadow-card transition"
+              className="group rounded-xl border border-border bg-card p-4 hover:border-primary/60 hover:shadow-card transition"
             >
-              <div className="text-[11px] uppercase tracking-[0.14em] font-semibold text-ink-subtle">
+              <div className="text-[11px] uppercase tracking-[0.14em] font-semibold text-subtle-foreground">
                 ← {tr("experiments.nav.previous")} · {tr("experiments.grade")} {prev.grade}
               </div>
-              <div className="mt-1 font-semibold text-ink group-hover:text-brand transition leading-snug">{prev.title}</div>
+              <div className="mt-1 font-semibold text-foreground group-hover:text-primary transition leading-snug">{prev.title}</div>
             </Link>
           ) : (
             <div className="hidden sm:block" />
@@ -221,12 +221,12 @@ export function GuideView({ exp, prev, next }: { exp: Experiment; prev?: Catalog
           {next ? (
             <Link
               href={`/experiments/${next.id}`}
-              className="group rounded-xl border border-line bg-surface p-4 hover:border-brand/60 hover:shadow-card transition sm:text-right"
+              className="group rounded-xl border border-border bg-card p-4 hover:border-primary/60 hover:shadow-card transition sm:text-right"
             >
-              <div className="text-[11px] uppercase tracking-[0.14em] font-semibold text-ink-subtle">
+              <div className="text-[11px] uppercase tracking-[0.14em] font-semibold text-subtle-foreground">
                 {tr("experiments.nav.next")} · {tr("experiments.grade")} {next.grade} →
               </div>
-              <div className="mt-1 font-semibold text-ink group-hover:text-brand transition leading-snug">{next.title}</div>
+              <div className="mt-1 font-semibold text-foreground group-hover:text-primary transition leading-snug">{next.title}</div>
             </Link>
           ) : (
             <div className="hidden sm:block" />
@@ -238,7 +238,7 @@ export function GuideView({ exp, prev, next }: { exp: Experiment; prev?: Catalog
 }
 
 function ExperimentVideo({ exp, tr }: { exp: Experiment; tr: Tr }) {
-  const frame = "relative overflow-hidden rounded-2xl border border-line bg-canvas shadow-card aspect-video";
+  const frame = "relative overflow-hidden rounded-2xl border border-border bg-background shadow-card aspect-video";
   if (exp.video?.src) {
     return (
       <div className={frame}>
@@ -264,8 +264,8 @@ function ExperimentVideo({ exp, tr }: { exp: Experiment; tr: Tr }) {
   return (
     <div className={frame + " flex flex-col items-center justify-center text-center px-6"}>
       <span className="text-3xl" aria-hidden>🎬</span>
-      <p className="mt-2 font-semibold text-ink">{tr("exp.videoSoon")}</p>
-      <p className="mt-1 text-sm text-ink-muted max-w-sm">{tr("exp.videoSoonBody")}</p>
+      <p className="mt-2 font-semibold text-foreground">{tr("exp.videoSoon")}</p>
+      <p className="mt-1 text-sm text-muted-foreground max-w-sm">{tr("exp.videoSoonBody")}</p>
     </div>
   );
 }
@@ -304,7 +304,7 @@ function NotebookCard({ exp, tr }: { exp: Experiment; tr: Tr }) {
   }
 
   return (
-    <section id="notebook" className="mt-10 rounded-2xl border border-brand/30 bg-brand-soft/20 p-6 scroll-mt-32">
+    <section id="notebook" className="mt-10 rounded-2xl border border-primary/30 bg-primary-soft/20 p-6 scroll-mt-32">
       <div className="flex items-center justify-between gap-3">
         <SectionTitle icon="📓">{tr("notebook.cardTitle")}</SectionTitle>
         {progress?.status === "done" && (
@@ -312,15 +312,15 @@ function NotebookCard({ exp, tr }: { exp: Experiment; tr: Tr }) {
         )}
       </div>
       {!ready ? (
-        <p className="mt-2 text-sm text-ink-subtle">{tr("common.loading")}</p>
+        <p className="mt-2 text-sm text-subtle-foreground">{tr("common.loading")}</p>
       ) : !user ? (
-        <p className="mt-2 text-sm text-ink-muted">
+        <p className="mt-2 text-sm text-muted-foreground">
           {tr("notebook.signinPrompt")}{" "}
-          <Link href="/login" className="text-brand underline">{tr("common.signinCTA")}</Link>
+          <Link href="/login" className="text-primary underline">{tr("common.signinCTA")}</Link>
         </p>
       ) : (
         <>
-          <label htmlFor="observations" className="mt-2 block text-sm text-ink-muted">
+          <label htmlFor="observations" className="mt-2 block text-sm text-muted-foreground">
             {tr("notebook.prompt")}
           </label>
           <textarea
@@ -330,14 +330,14 @@ function NotebookCard({ exp, tr }: { exp: Experiment; tr: Tr }) {
             maxLength={4000}
             rows={4}
             placeholder={tr("notebook.placeholder")}
-            className="mt-2 w-full px-3 py-2 rounded-lg border border-line bg-surface text-sm text-ink focus:outline-hidden focus:border-brand focus:ring-2 focus:ring-brand/30"
+            className="mt-2 w-full px-3 py-2 rounded-lg border border-border bg-card text-sm text-foreground focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/30"
           />
           <div className="mt-3 flex flex-wrap items-center gap-2">
             {progress?.status !== "done" && (
               <button
                 onClick={() => save("done")}
                 disabled={saving}
-                className="px-4 py-2 bg-brand text-brand-on rounded-lg hover:bg-brand-hover text-sm font-medium shadow-soft transition disabled:opacity-50"
+                className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 text-sm font-medium shadow-soft transition disabled:opacity-50"
               >
                 ✓ {tr("notebook.markDone")}
               </button>
@@ -345,7 +345,7 @@ function NotebookCard({ exp, tr }: { exp: Experiment; tr: Tr }) {
             <button
               onClick={() => save(progress ? undefined : "started")}
               disabled={saving}
-              className="px-4 py-2 rounded-lg border border-line bg-surface text-sm font-medium text-ink hover:border-brand/60 transition disabled:opacity-50"
+              className="px-4 py-2 rounded-lg border border-border bg-card text-sm font-medium text-foreground hover:border-primary/60 transition disabled:opacity-50"
             >
               {tr("notebook.saveNotes")}
             </button>
@@ -353,12 +353,12 @@ function NotebookCard({ exp, tr }: { exp: Experiment; tr: Tr }) {
               <button
                 onClick={() => save("started")}
                 disabled={saving}
-                className="text-xs text-ink-subtle underline hover:text-ink"
+                className="text-xs text-subtle-foreground underline hover:text-foreground"
               >
                 {tr("notebook.markNotDone")}
               </button>
             )}
-            {message && <span className="text-xs text-ink-muted" role="status">{message}</span>}
+            {message && <span className="text-xs text-muted-foreground" role="status">{message}</span>}
           </div>
         </>
       )}
@@ -368,7 +368,7 @@ function NotebookCard({ exp, tr }: { exp: Experiment; tr: Tr }) {
 
 function SectionTitle({ icon, children }: { icon: string; children: React.ReactNode }) {
   return (
-    <h2 className="font-semibold text-ink text-lg tracking-tight flex items-center gap-2">
+    <h2 className="font-semibold text-foreground text-lg tracking-tight flex items-center gap-2">
       <span aria-hidden>{icon}</span>
       {children}
     </h2>
@@ -380,7 +380,7 @@ function Chip({ children, tone }: { children: React.ReactNode; tone?: "sun" }) {
     <span
       className={
         "px-2 py-0.5 rounded-sm font-medium " +
-        (tone === "sun" ? "bg-sun-soft text-amber-800 dark:text-amber-200" : "bg-surface-2 text-ink-muted border border-line")
+        (tone === "sun" ? "bg-sun-soft text-amber-800 dark:text-amber-200" : "bg-muted text-muted-foreground border border-border")
       }
     >
       {children}
@@ -391,8 +391,8 @@ function Chip({ children, tone }: { children: React.ReactNode; tone?: "sun" }) {
 function QuizItem({ question, index, tr }: { question: ConceptCheckItem; index: number; tr: Tr }) {
   const [picked, setPicked] = useState<number | null>(null);
   return (
-    <li className="rounded-xl border border-line bg-surface p-4 shadow-soft">
-      <p className="font-medium text-ink">
+    <li className="rounded-xl border border-border bg-card p-4 shadow-soft">
+      <p className="font-medium text-foreground">
         {index + 1}. {question.q}
       </p>
       <div className="mt-3 grid gap-2">
@@ -400,9 +400,9 @@ function QuizItem({ question, index, tr }: { question: ConceptCheckItem; index: 
           const isPicked = picked === i;
           const isAnswer = i === question.answerIndex;
           const show = picked !== null;
-          let cls = "border-line hover:border-brand/60 text-ink";
-          if (show && isAnswer) cls = "border-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 dark:border-emerald-700 text-ink";
-          else if (show && isPicked && !isAnswer) cls = "border-red-300 bg-red-50 dark:bg-red-950/40 dark:border-red-800 text-ink";
+          let cls = "border-border hover:border-primary/60 text-foreground";
+          if (show && isAnswer) cls = "border-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 dark:border-emerald-700 text-foreground";
+          else if (show && isPicked && !isAnswer) cls = "border-red-300 bg-red-50 dark:bg-red-950/40 dark:border-red-800 text-foreground";
           return (
             <button
               key={i}
@@ -417,7 +417,7 @@ function QuizItem({ question, index, tr }: { question: ConceptCheckItem; index: 
       </div>
       {picked !== null && (
         <div className="mt-3 flex items-start justify-between gap-3">
-          <p className="text-sm text-ink-muted flex-1">
+          <p className="text-sm text-muted-foreground flex-1">
             <span
               className={
                 picked === question.answerIndex
@@ -432,7 +432,7 @@ function QuizItem({ question, index, tr }: { question: ConceptCheckItem; index: 
           <button
             type="button"
             onClick={() => setPicked(null)}
-            className="shrink-0 text-xs px-2.5 py-1 rounded-md border border-line bg-surface text-ink-muted hover:text-brand hover:border-brand/60 transition"
+            className="shrink-0 text-xs px-2.5 py-1 rounded-md border border-border bg-card text-muted-foreground hover:text-primary hover:border-primary/60 transition"
           >
             {tr("quiz.tryAgain")}
           </button>
@@ -459,13 +459,13 @@ function ExperimentTOC({ exp, tr }: { exp: Experiment; tr: Tr }) {
 
   return (
     <nav aria-label="On this page" className="sticky top-16 z-10 mt-6 -mx-4 px-4 sm:mx-0 sm:px-0">
-      <div className="overflow-x-auto rounded-full border border-line bg-surface/80 backdrop-blur-sm shadow-soft">
+      <div className="overflow-x-auto rounded-full border border-border bg-card/80 backdrop-blur-sm shadow-soft">
         <ul className="flex items-center gap-1 px-1.5 py-1 whitespace-nowrap">
           {items.map((it) => (
             <li key={it.href}>
               <a
                 href={it.href}
-                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-ink-muted hover:text-brand hover:bg-brand-soft/40 transition"
+                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-primary hover:bg-primary-soft/40 transition"
               >
                 <span aria-hidden>{it.icon}</span>
                 <span>{it.label}</span>

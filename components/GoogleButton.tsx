@@ -23,7 +23,7 @@ export function GoogleButton({ next, label = "Continue with Google", className =
     <a
       href={googleSignInHref(next)}
       className={
-        "inline-flex items-center justify-center gap-3 px-4 py-2.5 rounded-lg border border-line bg-white text-[#1f1f1f] font-medium shadow-soft hover:border-brand/60 transition " +
+        "inline-flex items-center justify-center gap-3 px-4 py-2.5 rounded-lg border border-border bg-white text-[#1f1f1f] font-medium shadow-soft hover:border-primary/60 transition " +
         className
       }
     >

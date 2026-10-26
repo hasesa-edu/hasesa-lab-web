@@ -56,7 +56,7 @@ export async function Subscribers() {
 
   return (
     <section>
-      <h2 className="text-sm font-semibold uppercase tracking-wide text-ink-muted">Subscribers</h2>
+      <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Subscribers</h2>
       <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card label="Active passes" value={s.active} />
         <Card label="Ending in 3 days" value={s.endingSoon} />
@@ -64,21 +64,21 @@ export async function Subscribers() {
         <Card label="Revenue all time (ETB)" value={r.total} sub={`${s.everPaid} students ever paid`} />
       </div>
 
-      <div className="mt-4 rounded-xl border border-line bg-surface shadow-card p-4">
-        <h3 className="text-sm font-semibold text-ink">Add days to a pass</h3>
-        <p className="mt-1 text-xs text-ink-muted">For gifts, or payments made outside Chapa. Adds days on top of what the student has left.</p>
+      <div className="mt-4 rounded-xl border border-border bg-card shadow-card p-4">
+        <h3 className="text-sm font-semibold text-foreground">Add days to a pass</h3>
+        <p className="mt-1 text-xs text-muted-foreground">For gifts, or payments made outside Chapa. Adds days on top of what the student has left.</p>
         <div className="mt-3">
           <GrantForm />
         </div>
       </div>
 
-      <div className="mt-4 rounded-xl border border-line bg-surface shadow-card overflow-hidden">
-        <div className="px-4 py-3 border-b border-line">
-          <h3 className="text-sm font-semibold text-ink">Recent payments</h3>
+      <div className="mt-4 rounded-xl border border-border bg-card shadow-card overflow-hidden">
+        <div className="px-4 py-3 border-b border-border">
+          <h3 className="text-sm font-semibold text-foreground">Recent payments</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-canvas text-xs uppercase tracking-wide text-ink-muted">
+            <thead className="bg-background text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
                 <th className="text-left px-3 py-2">When</th>
                 <th className="text-left px-3 py-2">Student</th>
@@ -92,22 +92,22 @@ export async function Subscribers() {
             <tbody>
               {list.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-3 py-4 text-ink-muted">
+                  <td colSpan={7} className="px-3 py-4 text-muted-foreground">
                     No payments yet.
                   </td>
                 </tr>
               ) : (
                 list.map((p) => (
-                  <tr key={p.txRef} className="border-t border-line">
-                    <td className="px-3 py-2 text-ink-muted whitespace-nowrap">{new Date(p.createdAt).toLocaleString()}</td>
-                    <td className="px-3 py-2 text-ink">{p.email}</td>
-                    <td className="px-3 py-2 text-ink tabular-nums">{p.source === "admin" ? "grant" : `${p.amountEtb} ETB`}</td>
-                    <td className="px-3 py-2 text-ink tabular-nums">{p.days}</td>
-                    <td className="px-3 py-2 text-ink">{p.status}</td>
-                    <td className="px-3 py-2 text-ink-muted whitespace-nowrap">
+                  <tr key={p.txRef} className="border-t border-border">
+                    <td className="px-3 py-2 text-muted-foreground whitespace-nowrap">{new Date(p.createdAt).toLocaleString()}</td>
+                    <td className="px-3 py-2 text-foreground">{p.email}</td>
+                    <td className="px-3 py-2 text-foreground tabular-nums">{p.source === "admin" ? "grant" : `${p.amountEtb} ETB`}</td>
+                    <td className="px-3 py-2 text-foreground tabular-nums">{p.days}</td>
+                    <td className="px-3 py-2 text-foreground">{p.status}</td>
+                    <td className="px-3 py-2 text-muted-foreground whitespace-nowrap">
                       {p.paidUntil ? new Date(p.paidUntil).toLocaleDateString() : "—"}
                     </td>
-                    <td className="px-3 py-2 text-xs text-ink-subtle font-mono">{p.note ?? p.txRef}</td>
+                    <td className="px-3 py-2 text-xs text-subtle-foreground font-mono">{p.note ?? p.txRef}</td>
                   </tr>
                 ))
               )}
@@ -121,10 +121,10 @@ export async function Subscribers() {
 
 function Card({ label, value, sub }: { label: string; value: number; sub?: string }) {
   return (
-    <div className="rounded-xl border border-line bg-surface p-4 shadow-soft">
-      <div className="text-xs text-ink-muted">{label}</div>
-      <div className="mt-1 text-2xl font-bold text-ink tabular-nums">{value.toLocaleString()}</div>
-      {sub && <div className="mt-0.5 text-xs text-ink-subtle">{sub}</div>}
+    <div className="rounded-xl border border-border bg-card p-4 shadow-soft">
+      <div className="text-xs text-muted-foreground">{label}</div>
+      <div className="mt-1 text-2xl font-bold text-foreground tabular-nums">{value.toLocaleString()}</div>
+      {sub && <div className="mt-0.5 text-xs text-subtle-foreground">{sub}</div>}
     </div>
   );
 }

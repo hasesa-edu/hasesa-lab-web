@@ -27,8 +27,8 @@ export default async function ExperimentPage({ params }: Props) {
   if (!exp) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-10">
-        <p className="text-ink-muted">Experiment not found.</p>
-        <Link href="/experiments" className="text-brand mt-3 inline-block">
+        <p className="text-muted-foreground">Experiment not found.</p>
+        <Link href="/experiments" className="text-primary mt-3 inline-block">
           ← All experiments
         </Link>
       </div>

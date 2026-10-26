@@ -28,14 +28,14 @@ export default async function ChatPage({ searchParams }: { searchParams: Promise
         <div className="text-5xl" aria-hidden>
           🤖
         </div>
-        <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-ink">The Lab Assistant is for subscribers</h1>
-        <p className="mt-3 text-ink-muted leading-relaxed">
+        <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">The Lab Assistant is for subscribers</h1>
+        <p className="mt-3 text-muted-foreground leading-relaxed">
           Stuck on an experiment, or not sure why it worked? The assistant knows every {BRAND} guide and explains it step by
           step. Up to {PLAN.dailyChatCap} questions a day, as part of the {PLAN.priceEtb} ETB monthly pass.
         </p>
         <div className="mt-6 flex flex-col items-center gap-3">
           <CheckoutButton signedIn label={`Get ${BRAND} · ${PLAN.priceEtb} ETB / month`} />
-          <Link href="/#pricing" className="text-sm text-brand hover:underline">
+          <Link href="/#pricing" className="text-sm text-primary hover:underline">
             See what's included
           </Link>
         </div>
