@@ -64,7 +64,7 @@ export function CheckoutButton({
         onClick={start}
         disabled={busy}
         className={
-          "inline-flex items-center justify-center px-5 py-2.5 rounded-lg bg-brand text-brand-on hover:bg-brand-hover disabled:opacity-60 font-semibold shadow-soft transition " +
+          "inline-flex items-center justify-center px-5 py-2.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-60 font-semibold shadow-soft transition " +
           className
         }
       >

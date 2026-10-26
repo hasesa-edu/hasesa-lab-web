@@ -58,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
       </head>
-      <body className="min-h-screen flex flex-col bg-canvas text-ink antialiased font-sans">
+      <body className="min-h-screen flex flex-col bg-background text-foreground antialiased font-sans">
         <ThemeProvider>
           <LocaleProvider>
             <UserProvider>

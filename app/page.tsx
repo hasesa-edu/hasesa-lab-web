@@ -52,12 +52,12 @@ export default function Home() {
 
         <div className="relative w-full max-w-3xl mx-auto px-4 py-16 text-center text-white">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 backdrop-blur-sm px-3 py-1 text-xs font-semibold text-white">
-            <span className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
             {tr("hero.tag")}
           </div>
           <h1 className="mt-6 text-5xl sm:text-6xl md:text-[4rem] font-extrabold leading-[0.95] tracking-tight text-white">
             {tr("hero.title.before")}{" "}
-            <span className="text-brand-soft">{tr("hero.title.highlight")}</span>
+            <span className="text-primary-soft">{tr("hero.title.highlight")}</span>
           </h1>
           <p className="mt-6 text-lg text-white/90 max-w-xl mx-auto leading-relaxed">
             {tr("hero.sub")}
@@ -65,7 +65,7 @@ export default function Home() {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <a
               href={primaryHref}
-              className="inline-flex items-center px-6 py-3 bg-brand text-brand-on rounded-xl hover:bg-brand-hover font-semibold shadow-card transition"
+              className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 font-semibold shadow-card transition"
             >
               {primaryLabel} →
             </a>
@@ -78,7 +78,7 @@ export default function Home() {
           </div>
           <p className="mt-5 text-xs text-white/80">
             <span className="inline-flex items-center gap-1 font-semibold text-white">
-              <span className="w-1.5 h-1.5 rounded-full bg-brand" />
+              <span className="w-1.5 h-1.5 rounded-full bg-primary" />
               {tr("hero.price")}
             </span>
             <span className="mx-2">·</span>
@@ -88,13 +88,13 @@ export default function Home() {
       </section>
 
       {/* PILLARS — on a brand-soft tint for visual rhythm */}
-      <div className="bg-brand-soft/30">
+      <div className="bg-primary-soft/30">
         <section className="max-w-5xl mx-auto px-4 pt-20 sm:pt-24 pb-20 sm:pb-24">
           <div className="max-w-2xl mx-auto text-center">
-            <p className="text-xs uppercase tracking-[0.18em] font-bold text-brand">
+            <p className="text-xs uppercase tracking-[0.18em] font-bold text-primary">
               {tr("pillars.eyebrow")}
             </p>
-            <h2 className="mt-2 text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-ink leading-[1.05]">
+            <h2 className="mt-2 text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground leading-[1.05]">
               {tr("pillars.title")}
             </h2>
           </div>
@@ -107,7 +107,7 @@ export default function Home() {
 
       {/* PARTNERS */}
       <section className="max-w-5xl mx-auto px-4 pt-20 sm:pt-24 pb-20">
-        <p className="text-center text-xs uppercase tracking-[0.18em] font-semibold text-brand">
+        <p className="text-center text-xs uppercase tracking-[0.18em] font-semibold text-primary">
           {tr("partners.eyebrow")}
         </p>
         <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -130,15 +130,15 @@ export default function Home() {
 
       {/* FINAL CTA */}
       <section className="max-w-5xl mx-auto px-4 pb-24">
-        <div className="relative rounded-3xl overflow-hidden border border-brand/30 bg-linear-to-br from-brand-soft via-sun-soft/30 to-surface p-8 sm:p-12 text-center shadow-card">
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-ink">
+        <div className="relative rounded-3xl overflow-hidden border border-primary/30 bg-linear-to-br from-primary-soft via-sun-soft/30 to-card p-8 sm:p-12 text-center shadow-card">
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
             {tr("cta.title")}
           </h2>
-          <p className="mt-3 text-ink-muted max-w-xl mx-auto">{tr("cta.sub")}</p>
+          <p className="mt-3 text-muted-foreground max-w-xl mx-auto">{tr("cta.sub")}</p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
             <a
               href={primaryHref}
-              className="inline-flex items-center px-6 py-3 bg-brand text-brand-on rounded-xl hover:bg-brand-hover font-semibold shadow-card transition"
+              className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 font-semibold shadow-card transition"
             >
               {primaryLabel} →
             </a>
@@ -146,7 +146,7 @@ export default function Home() {
               <Link
                 href="/experiments"
                 prefetch={false}
-                className="inline-flex items-center px-6 py-3 bg-surface text-ink border border-line rounded-xl hover:border-brand/60 hover:text-brand font-medium transition"
+                className="inline-flex items-center px-6 py-3 bg-card text-foreground border border-border rounded-xl hover:border-primary/60 hover:text-primary font-medium transition"
               >
                 {tr("hero.cta.lessons")}
               </Link>
@@ -173,24 +173,24 @@ function Pricing({ tr }: { tr: TR }) {
   return (
     <section id="pricing" className="max-w-5xl mx-auto px-4 pb-20 scroll-mt-20">
       <div className="max-w-2xl mx-auto text-center">
-        <p className="text-xs uppercase tracking-[0.18em] font-bold text-brand">{tr("pricing.eyebrow")}</p>
-        <h2 className="mt-2 text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-ink leading-[1.05]">
+        <p className="text-xs uppercase tracking-[0.18em] font-bold text-primary">{tr("pricing.eyebrow")}</p>
+        <h2 className="mt-2 text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground leading-[1.05]">
           {tr("pricing.title")}
         </h2>
-        <p className="mt-3 text-ink-muted">{tr("footer.motto")}.</p>
+        <p className="mt-3 text-muted-foreground">{tr("footer.motto")}.</p>
       </div>
 
-      <div className="mt-10 max-w-md mx-auto rounded-3xl border-2 border-brand/40 bg-surface p-7 sm:p-8 shadow-card">
-        <p className="text-sm font-semibold text-brand uppercase tracking-wide">{tr("pricing.plan")}</p>
+      <div className="mt-10 max-w-md mx-auto rounded-3xl border-2 border-primary/40 bg-card p-7 sm:p-8 shadow-card">
+        <p className="text-sm font-semibold text-primary uppercase tracking-wide">{tr("pricing.plan")}</p>
         <p className="mt-2 flex items-baseline gap-2">
-          <span className="text-5xl font-extrabold tracking-tight text-ink tabular-nums">{PLAN.priceEtb}</span>
-          <span className="text-lg font-semibold text-ink">ETB</span>
-          <span className="text-ink-muted">{tr("pricing.per")}</span>
+          <span className="text-5xl font-extrabold tracking-tight text-foreground tabular-nums">{PLAN.priceEtb}</span>
+          <span className="text-lg font-semibold text-foreground">ETB</span>
+          <span className="text-muted-foreground">{tr("pricing.per")}</span>
         </p>
         <ul className="mt-6 space-y-2.5">
           {features.map((k) => (
-            <li key={k} className="flex gap-2.5 text-sm text-ink">
-              <span aria-hidden className="mt-0.5 text-brand font-bold">✓</span>
+            <li key={k} className="flex gap-2.5 text-sm text-foreground">
+              <span aria-hidden className="mt-0.5 text-primary font-bold">✓</span>
               <span>{tr(k)}</span>
             </li>
           ))}
@@ -207,14 +207,14 @@ function Pricing({ tr }: { tr: TR }) {
             className="w-full py-3"
           />
         </div>
-        <p className="mt-4 text-xs text-ink-subtle leading-relaxed">
+        <p className="mt-4 text-xs text-subtle-foreground leading-relaxed">
           {tr("pricing.pay")}{" "}
-          <Link href="/refund" className="underline hover:text-brand">
+          <Link href="/refund" className="underline hover:text-primary">
             {tr("footer.refund")}
           </Link>
         </p>
         {!active && (
-          <a href={user ? "/experiments" : googleSignInHref("/experiments")} className="mt-4 block text-center text-sm text-brand font-medium hover:underline">
+          <a href={user ? "/experiments" : googleSignInHref("/experiments")} className="mt-4 block text-center text-sm text-primary font-medium hover:underline">
             {tr("pricing.free")} →
           </a>
         )}
@@ -230,7 +230,7 @@ function Backdrop() {
       className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[800px] opacity-70 dark:opacity-40"
       style={{
         background:
-          "radial-gradient(ellipse 70% 50% at 50% 0%, rgb(var(--brand) / 0.18), transparent 70%)",
+          "radial-gradient(ellipse 70% 50% at 50% 0%, color-mix(in oklab, var(--primary) 18%, transparent), transparent 70%)",
       }}
     />
   );
@@ -239,30 +239,30 @@ function Backdrop() {
 /* Pillar 1: experiment, with at-home-recipe visual mock. */
 function PillarExperiment({ tr }: { tr: TR }) {
   return (
-    <div className="rounded-3xl border border-line bg-surface p-7 sm:p-8 shadow-card hover:shadow-pop transition flex flex-col">
+    <div className="rounded-3xl border border-border bg-card p-7 sm:p-8 shadow-card hover:shadow-pop transition flex flex-col">
       <div className="flex items-center gap-2">
         <span className="text-2xl">🧪</span>
-        <p className="text-[11px] uppercase tracking-[0.18em] font-bold text-brand">
+        <p className="text-[11px] uppercase tracking-[0.18em] font-bold text-primary">
           {tr("pillars.exp.eyebrow")}
         </p>
       </div>
-      <h3 className="mt-3 text-2xl sm:text-3xl font-extrabold tracking-tight text-ink leading-tight">
+      <h3 className="mt-3 text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground leading-tight">
         {tr("pillars.exp.title")}
       </h3>
-      <p className="mt-3 text-ink-muted leading-relaxed">
+      <p className="mt-3 text-muted-foreground leading-relaxed">
         {tr("pillars.exp.body")}
       </p>
 
-      <div className="mt-6 rounded-2xl border-2 border-dashed border-brand/30 bg-sun-soft/30 p-5">
+      <div className="mt-6 rounded-2xl border-2 border-dashed border-primary/30 bg-sun-soft/30 p-5">
         <p className="text-[10px] uppercase tracking-[0.18em] font-bold text-amber-700 dark:text-amber-300">
           {tr("pillars.exp.mock.label")}
         </p>
-        <h4 className="mt-1.5 text-lg font-bold tracking-tight text-ink leading-snug">
+        <h4 className="mt-1.5 text-lg font-bold tracking-tight text-foreground leading-snug">
           {tr("pillars.exp.mock.title")}
         </h4>
-        <ol className="mt-4 space-y-2.5 text-sm text-ink">
+        <ol className="mt-4 space-y-2.5 text-sm text-foreground">
           <li className="flex items-start gap-2.5">
-            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand text-brand-on text-[11px] font-bold">
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-[11px] font-bold">
               1
             </span>
             <span className="leading-relaxed">
@@ -270,7 +270,7 @@ function PillarExperiment({ tr }: { tr: TR }) {
             </span>
           </li>
           <li className="flex items-start gap-2.5">
-            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand text-brand-on text-[11px] font-bold">
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-[11px] font-bold">
               2
             </span>
             <span className="leading-relaxed">
@@ -278,7 +278,7 @@ function PillarExperiment({ tr }: { tr: TR }) {
             </span>
           </li>
           <li className="flex items-start gap-2.5">
-            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand text-brand-on text-[11px] font-bold">
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-[11px] font-bold">
               3
             </span>
             <span className="leading-relaxed">
@@ -294,36 +294,36 @@ function PillarExperiment({ tr }: { tr: TR }) {
 /* Pillar 2: AI tutor, with chat-exchange visual mock. */
 function PillarAITutor({ tr }: { tr: TR }) {
   return (
-    <div className="rounded-3xl border border-line bg-surface p-7 sm:p-8 shadow-card hover:shadow-pop transition flex flex-col">
+    <div className="rounded-3xl border border-border bg-card p-7 sm:p-8 shadow-card hover:shadow-pop transition flex flex-col">
       <div className="flex items-center gap-2">
         <span className="text-2xl">💬</span>
-        <p className="text-[11px] uppercase tracking-[0.18em] font-bold text-brand">
+        <p className="text-[11px] uppercase tracking-[0.18em] font-bold text-primary">
           {tr("pillars.ai.eyebrow")}
         </p>
       </div>
-      <h3 className="mt-3 text-2xl sm:text-3xl font-extrabold tracking-tight text-ink leading-tight">
+      <h3 className="mt-3 text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground leading-tight">
         {tr("pillars.ai.title")}
       </h3>
-      <p className="mt-3 text-ink-muted leading-relaxed">
+      <p className="mt-3 text-muted-foreground leading-relaxed">
         {tr("pillars.ai.body")}
       </p>
 
-      <div className="mt-6 rounded-2xl border border-line bg-surface-2 p-4 space-y-3">
+      <div className="mt-6 rounded-2xl border border-border bg-muted p-4 space-y-3">
         <div className="flex justify-end">
-          <div className="max-w-[85%] bg-brand text-brand-on px-3.5 py-2 rounded-2xl rounded-br-md text-sm shadow-soft">
+          <div className="max-w-[85%] bg-primary text-primary-foreground px-3.5 py-2 rounded-2xl rounded-br-md text-sm shadow-soft">
             {tr("pillars.ai.mock.user")}
           </div>
         </div>
         <div className="max-w-[88%]">
-          <div className="bg-surface border border-line px-3.5 py-3 rounded-2xl rounded-bl-md text-sm shadow-soft space-y-2">
-            <div className="text-center font-mono text-brand-hover font-bold py-1.5 bg-brand-soft/50 rounded-sm">
+          <div className="bg-card border border-border px-3.5 py-3 rounded-2xl rounded-bl-md text-sm shadow-soft space-y-2">
+            <div className="text-center font-mono text-primary-strong font-bold py-1.5 bg-primary-soft/50 rounded-sm">
               F = m · a
             </div>
-            <p className="text-ink leading-relaxed">
+            <p className="text-foreground leading-relaxed">
               {tr("pillars.ai.mock.assistant1")}
             </p>
           </div>
-          <p className="mt-2 text-[11px] text-ink-subtle flex items-center gap-1 ml-1">
+          <p className="mt-2 text-[11px] text-subtle-foreground flex items-center gap-1 ml-1">
             <span>📖</span>
             <span>{tr("pillars.ai.mock.source")}</span>
           </p>
@@ -350,9 +350,9 @@ function PartnerCard({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="group flex items-center gap-4 rounded-xl border border-line bg-surface p-4 sm:p-5 shadow-soft hover:border-brand/40 hover:shadow-card transition"
+        className="group flex items-center gap-4 rounded-xl border border-border bg-card p-4 sm:p-5 shadow-soft hover:border-primary/40 hover:shadow-card transition"
       >
-        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-surface-2 border border-line overflow-hidden">
+        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-muted border border-border overflow-hidden">
           <Image
             src={logo}
             alt={`${name} logo`}
@@ -367,10 +367,10 @@ function PartnerCard({
           />
         </div>
         <div className="min-w-0">
-          <h3 className="font-semibold text-ink tracking-tight group-hover:text-brand transition">
+          <h3 className="font-semibold text-foreground tracking-tight group-hover:text-primary transition">
             {name}
           </h3>
-          <p className="mt-0.5 text-sm text-ink-muted leading-relaxed">{tag}</p>
+          <p className="mt-0.5 text-sm text-muted-foreground leading-relaxed">{tag}</p>
         </div>
       </a>
     </li>

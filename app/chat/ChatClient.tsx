@@ -38,7 +38,7 @@ export function ChatClient({ catalog, remainingToday, dailyCap }: { catalog: Cat
 
 function ChatLoading() {
   const { tr } = useLocale();
-  return <div className="max-w-3xl mx-auto px-4 py-10 text-ink-subtle">{tr("common.loading")}</div>;
+  return <div className="max-w-3xl mx-auto px-4 py-10 text-subtle-foreground">{tr("common.loading")}</div>;
 }
 
 function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogItem[]; initialRemaining: number; dailyCap: number }) {
@@ -159,10 +159,10 @@ function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogIt
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
       <header>
-        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-ink">{tr("chat.title")}</h1>
-        <p className="text-ink-muted mt-1.5 text-sm">{tr("chat.subtitle")}</p>
+        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">{tr("chat.title")}</h1>
+        <p className="text-muted-foreground mt-1.5 text-sm">{tr("chat.subtitle")}</p>
         <div className="mt-4 flex flex-wrap items-center gap-2">
-          <label htmlFor="experiment-picker" className="text-xs font-medium text-ink-subtle">
+          <label htmlFor="experiment-picker" className="text-xs font-medium text-subtle-foreground">
             {tr("chat.pickLabel")}
           </label>
           <select
@@ -170,7 +170,7 @@ function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogIt
             value={experimentId ?? ""}
             onChange={(e) => pickExperiment(e.target.value)}
             disabled={busy}
-            className="max-w-full text-sm px-3 py-1.5 rounded-lg border border-line bg-surface text-ink focus:outline-hidden focus:border-brand focus:ring-2 focus:ring-brand/30"
+            className="max-w-full text-sm px-3 py-1.5 rounded-lg border border-border bg-card text-foreground focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/30"
           >
             <option value="">{tr("chat.pickNone")}</option>
             {catalog.map((e) => (
@@ -180,7 +180,7 @@ function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogIt
             ))}
           </select>
           {experiment && (
-            <Link href={`/experiments/${experiment.id}`} className="text-xs text-brand underline">
+            <Link href={`/experiments/${experiment.id}`} className="text-xs text-primary underline">
               {tr("chat.viewExperiment")}
             </Link>
           )}
@@ -189,21 +189,21 @@ function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogIt
 
       <div className="mt-6 min-h-[280px]">
         {messages.length === 0 ? (
-          <div className="rounded-2xl border border-line bg-surface p-6 sm:p-7 shadow-soft">
-            <p className="text-xl sm:text-2xl font-bold tracking-tight text-ink">
+          <div className="rounded-2xl border border-border bg-card p-6 sm:p-7 shadow-soft">
+            <p className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
               {tr("chat.empty.title")}
             </p>
-            <p className="text-sm text-ink-muted mt-1.5">{tr("chat.empty.body")}</p>
+            <p className="text-sm text-muted-foreground mt-1.5">{tr("chat.empty.body")}</p>
             <div className="mt-5 grid gap-2.5">
               {suggestions.map((s, i) => (
                 <button
                   key={i}
                   onClick={() => send(s.text)}
-                  className="group flex items-start gap-3 text-left text-sm px-4 py-3 rounded-xl border border-line bg-surface hover:border-brand/60 hover:bg-brand-soft/30 hover:shadow-soft transition text-ink"
+                  className="group flex items-start gap-3 text-left text-sm px-4 py-3 rounded-xl border border-border bg-card hover:border-primary/60 hover:bg-primary-soft/30 hover:shadow-soft transition text-foreground"
                 >
                   <span className="text-lg leading-none mt-0.5">{s.emoji}</span>
                   <span className="flex-1 leading-relaxed">{s.text}</span>
-                  <span className="text-brand opacity-0 group-hover:opacity-100 transition" aria-hidden>
+                  <span className="text-primary opacity-0 group-hover:opacity-100 transition" aria-hidden>
                     →
                   </span>
                 </button>
@@ -220,14 +220,14 @@ function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogIt
                   key={i}
                   className={
                     isUser
-                      ? "ml-auto max-w-[85%] bg-brand text-brand-on px-4 py-2.5 rounded-2xl rounded-br-md shadow-soft whitespace-pre-wrap"
-                      : "mr-auto max-w-[90%] bg-surface border border-line px-4 py-3 rounded-2xl rounded-bl-md text-ink shadow-soft"
+                      ? "ml-auto max-w-[85%] bg-primary text-primary-foreground px-4 py-2.5 rounded-2xl rounded-br-md shadow-soft whitespace-pre-wrap"
+                      : "mr-auto max-w-[90%] bg-card border border-border px-4 py-3 rounded-2xl rounded-bl-md text-foreground shadow-soft"
                   }
                 >
                   {isUser ? (
                     m.content
                   ) : m.content ? (
-                    <div className="chat-prose text-ink">
+                    <div className="chat-prose text-foreground">
                       <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
                         {m.content}
                       </ReactMarkdown>
@@ -257,7 +257,7 @@ function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogIt
         <button
           type="button"
           onClick={jumpToBottom}
-          className="fixed left-1/2 -translate-x-1/2 bottom-24 z-30 px-3.5 py-1.5 rounded-full bg-brand text-brand-on shadow-pop text-xs font-medium hover:bg-brand-hover transition flex items-center gap-1.5"
+          className="fixed left-1/2 -translate-x-1/2 bottom-24 z-30 px-3.5 py-1.5 rounded-full bg-primary text-primary-foreground shadow-pop text-xs font-medium hover:bg-primary/90 transition flex items-center gap-1.5"
           aria-label={tr("chat.newMessage")}
         >
           <span aria-hidden>↓</span>
@@ -277,19 +277,19 @@ function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogIt
           maxLength={2000}
           onChange={(e) => setInput(e.target.value)}
           placeholder={tr("chat.placeholder")}
-          className="flex-1 px-4 py-2.5 rounded-lg border border-line bg-surface text-ink focus:outline-hidden focus:border-brand focus:ring-2 focus:ring-brand/30"
+          className="flex-1 px-4 py-2.5 rounded-lg border border-border bg-card text-foreground focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/30"
           disabled={busy || remaining <= 0}
         />
         <button
           type="submit"
           disabled={busy || !input.trim() || remaining <= 0}
-          className="px-5 py-2.5 bg-brand text-brand-on rounded-lg hover:bg-brand-hover disabled:opacity-40 disabled:cursor-not-allowed font-medium shadow-soft transition"
+          className="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed font-medium shadow-soft transition"
         >
           {busy ? tr("chat.thinking") : tr("chat.send")}
         </button>
       </form>
 
-      <p className="mt-3 text-xs text-ink-subtle">
+      <p className="mt-3 text-xs text-subtle-foreground">
         <span className={remaining <= 5 ? "font-semibold text-amber-700 dark:text-amber-300" : ""}>
           {remaining > 0 ? `${remaining} of ${dailyCap} messages left today.` : `You've used all ${dailyCap} messages for today. They reset at midnight.`}
         </span>{" "}

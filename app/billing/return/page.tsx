@@ -33,16 +33,16 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
       {state === "paid" ? (
         <>
           <div className="text-5xl">🎉</div>
-          <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-ink">You're in!</h1>
-          <p className="mt-2 text-ink-muted">
+          <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-foreground">You're in!</h1>
+          <p className="mt-2 text-muted-foreground">
             Your {BRAND} pass is active{ent?.paidUntil ? ` until ${formatDate(ent.paidUntil)}` : ""}. Every guide and the lab
             assistant are unlocked.
           </p>
           <div className="mt-6 flex justify-center gap-3">
-            <Link href="/experiments" className="px-5 py-2.5 bg-brand text-brand-on rounded-lg hover:bg-brand-hover font-medium shadow-soft transition">
+            <Link href="/experiments" className="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 font-medium shadow-soft transition">
               Browse experiments
             </Link>
-            <Link href="/chat" className="px-5 py-2.5 border border-line rounded-lg text-ink hover:border-brand/60 font-medium transition">
+            <Link href="/chat" className="px-5 py-2.5 border border-border rounded-lg text-foreground hover:border-primary/60 font-medium transition">
               Ask the assistant
             </Link>
           </div>
@@ -50,15 +50,15 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
       ) : state === "pending" ? (
         <>
           <div className="text-5xl">⏳</div>
-          <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-ink">Confirming your payment…</h1>
-          <p className="mt-2 text-ink-muted">
+          <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-foreground">Confirming your payment…</h1>
+          <p className="mt-2 text-muted-foreground">
             Chapa hasn't confirmed it yet. This usually takes a few seconds. Refresh this page, or check your account in a minute.
           </p>
           <div className="mt-6 flex justify-center gap-3">
-            <Link href={`/billing/return?tx_ref=${encodeURIComponent(txRef ?? "")}`} className="px-5 py-2.5 bg-brand text-brand-on rounded-lg hover:bg-brand-hover font-medium shadow-soft transition">
+            <Link href={`/billing/return?tx_ref=${encodeURIComponent(txRef ?? "")}`} className="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 font-medium shadow-soft transition">
               Check again
             </Link>
-            <Link href="/account" className="px-5 py-2.5 border border-line rounded-lg text-ink hover:border-brand/60 font-medium transition">
+            <Link href="/account" className="px-5 py-2.5 border border-border rounded-lg text-foreground hover:border-primary/60 font-medium transition">
               My account
             </Link>
           </div>
@@ -66,15 +66,15 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
       ) : (
         <>
           <div className="text-5xl">😕</div>
-          <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-ink">Payment not completed</h1>
-          <p className="mt-2 text-ink-muted">
+          <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-foreground">Payment not completed</h1>
+          <p className="mt-2 text-muted-foreground">
             {state === "failed"
               ? "The payment didn't go through, and you haven't been charged for a pass."
               : state === "review"
                 ? "Chapa received a payment, but not the amount we expected, so we couldn't activate your pass automatically. Please contact us and we'll sort it out."
                 : "We couldn't find this payment. If money left your account, contact us with the time you paid."}
           </p>
-          <Link href="/account" className="mt-6 inline-block px-5 py-2.5 bg-brand text-brand-on rounded-lg hover:bg-brand-hover font-medium shadow-soft transition">
+          <Link href="/account" className="mt-6 inline-block px-5 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 font-medium shadow-soft transition">
             Try again
           </Link>
         </>

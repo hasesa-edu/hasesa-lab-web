@@ -25,19 +25,19 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
 
   return (
     <div className="max-w-md mx-auto px-4 py-14">
-      <div className="rounded-2xl border border-line bg-surface p-7 shadow-card text-center">
-        <h1 className="text-3xl font-extrabold tracking-tight text-ink">Welcome to {BRAND}</h1>
-        <p className="mt-2 text-sm text-ink-muted">{MOTTO}</p>
+      <div className="rounded-2xl border border-border bg-card p-7 shadow-card text-center">
+        <h1 className="text-3xl font-extrabold tracking-tight text-foreground">Welcome to {BRAND}</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{MOTTO}</p>
         {error && (
           <div role="alert" className="mt-5 text-sm text-red-700 dark:text-red-300">
             {error}
           </div>
         )}
         <GoogleButton next={next} className="mt-6 w-full" />
-        <p className="mt-5 text-xs text-ink-subtle leading-relaxed">
+        <p className="mt-5 text-xs text-subtle-foreground leading-relaxed">
           New here? Continuing with Google creates your account. By continuing you agree to our{" "}
-          <Link href="/terms" className="underline hover:text-brand">Terms</Link> and{" "}
-          <Link href="/privacy" className="underline hover:text-brand">Privacy Policy</Link>.
+          <Link href="/terms" className="underline hover:text-primary">Terms</Link> and{" "}
+          <Link href="/privacy" className="underline hover:text-primary">Privacy Policy</Link>.
         </p>
       </div>
     </div>
