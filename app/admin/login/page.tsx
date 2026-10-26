@@ -2,6 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { LogIn, ShieldCheck } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -34,44 +39,58 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto px-4 py-14">
-      <div className="rounded-2xl border border-line bg-surface p-7 shadow-card">
-        <h1 className="text-2xl font-bold tracking-tight text-ink">Admin sign in</h1>
-        <p className="mt-2 text-sm text-ink-muted">Restricted area — analytics and operations.</p>
+    <div className="relative isolate flex min-h-[calc(100svh-4rem)] items-center justify-center overflow-hidden bg-deep px-4 py-14 text-deep-foreground">
+      <div aria-hidden className="absolute inset-0 -z-10 bg-grid text-primary-soft opacity-50" />
+      <div aria-hidden className="absolute -top-32 -left-24 -z-10 size-96 rounded-full bg-primary/50 blur-3xl" />
+      <div aria-hidden className="absolute -right-24 -bottom-24 -z-10 size-80 rounded-full bg-sun/20 blur-3xl" />
 
-        <form onSubmit={onSubmit} className="mt-6 space-y-4">
-          <div>
-            <label className="text-sm font-medium text-ink block">Username</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              autoComplete="username"
-              autoFocus
-              required
-              className="mt-1.5 w-full px-3.5 py-2.5 border border-line rounded-lg focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/30 bg-canvas text-ink"
-            />
-          </div>
-          <div>
-            <label className="text-sm font-medium text-ink block">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-              required
-              className="mt-1.5 w-full px-3.5 py-2.5 border border-line rounded-lg focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/30 bg-canvas text-ink"
-            />
-          </div>
-          {error && <div className="text-sm text-red-700 dark:text-red-300">{error}</div>}
-          <button
-            type="submit"
-            disabled={busy}
-            className="w-full px-4 py-2.5 bg-brand text-brand-on rounded-lg hover:bg-brand-hover disabled:opacity-50 font-medium shadow-soft transition"
-          >
-            {busy ? "…" : "Sign in"}
-          </button>
-        </form>
+      <div className="w-full max-w-sm">
+        <div className="mb-6 text-center">
+          <span className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-sun text-deep shadow-pop">
+            <ShieldCheck className="size-7" aria-hidden />
+          </span>
+          <p className="mt-4 text-xs font-bold tracking-[0.18em] text-sun uppercase">Admin</p>
+        </div>
+
+        <div className="rounded-[1.5rem] bg-card p-6 text-card-foreground shadow-pop ring-1 ring-white/10 sm:p-7">
+          <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Admin sign in</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Restricted area — analytics and operations.</p>
+
+          <form onSubmit={onSubmit} className="mt-6 space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="admin-username" className="text-foreground">Username</Label>
+              <Input
+                id="admin-username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                autoComplete="username"
+                autoFocus
+                required
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="admin-password" className="text-foreground">Password</Label>
+              <Input
+                id="admin-password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+                required
+              />
+            </div>
+            {error && (
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            <Button type="submit" size="lg" disabled={busy} className="w-full font-semibold">
+              <LogIn aria-hidden />
+              {busy ? "…" : "Sign in"}
+            </Button>
+          </form>
+        </div>
       </div>
     </div>
   );

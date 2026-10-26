@@ -2,11 +2,17 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { GRADES, SUBJECTS, subjectMeta, type CatalogItem, type Grade, type Subject } from "@/lib/subjects";
+import { ArrowRight, Check, CircleDashed, Clock, Gift, Lock, Package, CirclePlay } from "lucide-react";
+import { GRADES, SUBJECTS, type CatalogItem, type Grade, type Subject } from "@/lib/subjects";
 import { isPlanActive } from "@/lib/billing/plan";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
 import { apiGetProgress, type ProgressDTO } from "@/lib/api";
+import { cn } from "@/lib/utils";
+import { PageHeader } from "@/components/PageHeader";
+import { SUBJECT_STYLES, SubjectIcon, SubjectTile } from "@/components/Subject";
+import { Badge } from "@/components/ui/badge";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 export function ExperimentsClient({ catalog }: { catalog: CatalogItem[] }) {
   const { tr } = useLocale();
@@ -36,145 +42,150 @@ export function ExperimentsClient({ catalog }: { catalog: CatalogItem[] }) {
   );
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-12">
-      <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-ink">{tr("experiments.title")}</h1>
-      <p className="text-ink-muted mt-2 max-w-2xl">{tr("experiments.subtitle")}</p>
-
-      <div className="mt-6 space-y-3">
-        <div className="flex flex-wrap gap-2" role="group" aria-label={tr("experiments.filter.grade")}>
-          <FilterPill active={grade === "all"} onClick={() => setGrade("all")}>
-            {tr("experiments.allGrades")}
-          </FilterPill>
-          {GRADES.map((g) => (
-            <FilterPill key={g} active={grade === g} onClick={() => setGrade(g)}>
-              {tr("experiments.grade")} {g}
-            </FilterPill>
-          ))}
+    <div>
+      <PageHeader title={tr("experiments.title")} description={tr("experiments.subtitle")}>
+        <div className="space-y-2.5">
+          <ToggleGroup
+            type="single"
+            value={String(grade)}
+            onValueChange={(v) => v && setGrade(v === "all" ? "all" : (Number(v) as Grade))}
+            aria-label={tr("experiments.filter.grade")}
+            className={filterRow}
+          >
+            <FilterPill value="all">{tr("experiments.allGrades")}</FilterPill>
+            {GRADES.map((g) => (
+              <FilterPill key={g} value={String(g)}>
+                {tr("experiments.grade")} {g}
+              </FilterPill>
+            ))}
+          </ToggleGroup>
+          <ToggleGroup
+            type="single"
+            value={subject}
+            onValueChange={(v) => v && setSubject(v as Subject | "all")}
+            aria-label={tr("experiments.filter.subject")}
+            className={filterRow}
+          >
+            <FilterPill value="all">{tr("experiments.allSubjects")}</FilterPill>
+            {SUBJECTS.map((s) => (
+              <FilterPill key={s.id} value={s.id}>
+                <SubjectIcon subject={s.id} />
+                {s.label}
+              </FilterPill>
+            ))}
+          </ToggleGroup>
         </div>
-        <div className="flex flex-wrap gap-2" role="group" aria-label={tr("experiments.filter.subject")}>
-          <FilterPill active={subject === "all"} onClick={() => setSubject("all")}>
-            {tr("experiments.allSubjects")}
-          </FilterPill>
-          {SUBJECTS.map((s) => (
-            <FilterPill key={s.id} active={subject === s.id} onClick={() => setSubject(s.id)}>
-              <span className="mr-1">{s.emoji}</span>
-              {s.label}
-            </FilterPill>
-          ))}
+      </PageHeader>
+
+      <div className="relative">
+        <div aria-hidden className="absolute inset-x-0 top-0 h-72 bg-dots text-primary opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+        <div className="relative mx-auto max-w-5xl px-4 py-8 sm:py-10">
+          {filtered.length === 0 ? (
+            <div className="rounded-2xl bg-card p-8 text-center shadow-card ring-1 ring-border">
+              <span className="mx-auto inline-flex size-12 items-center justify-center rounded-2xl bg-primary-soft text-primary-strong">
+                <CircleDashed className="size-6" aria-hidden />
+              </span>
+              <p className="mt-3 text-muted-foreground">{tr("experiments.none")}</p>
+            </div>
+          ) : (
+            <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {filtered.map((exp) => {
+                const st = SUBJECT_STYLES[exp.subject];
+                const status = progress[exp.id]?.status;
+                return (
+                  <li key={exp.id}>
+                    <Link
+                      href={`/experiments/${exp.id}`}
+                      className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-card p-5 pt-6 shadow-card ring-1 ring-border transition hover:-translate-y-1 hover:shadow-pop focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+                    >
+                      <span aria-hidden className={cn("absolute inset-x-0 top-0 h-1.5", st.bg)} />
+                      <div className="flex items-start justify-between gap-3">
+                        <SubjectTile subject={exp.subject} />
+                        <div className="flex flex-wrap justify-end gap-1.5">
+                          {status === "done" && (
+                            <Badge variant="success">
+                              <Check aria-hidden />
+                              {tr("experiments.badge.done")}
+                            </Badge>
+                          )}
+                          {status === "started" && (
+                            <Badge variant="warning">
+                              <CircleDashed aria-hidden />
+                              {tr("experiments.badge.started")}
+                            </Badge>
+                          )}
+                          {exp.free && !active && (
+                            <Badge variant="success">
+                              <Gift aria-hidden />
+                              {tr("experiments.free")}
+                            </Badge>
+                          )}
+                          {!exp.free && !active && (
+                            <Badge variant="outline" className="text-muted-foreground">
+                              <Lock aria-hidden />
+                              {tr("experiments.locked")}
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+
+                      <p className="mt-4 text-xs font-semibold text-subtle-foreground">
+                        <span className={st.text}>
+                          {tr("experiments.grade")} {exp.grade}
+                        </span>{" "}
+                        · {exp.unit}
+                      </p>
+                      <h2 className="mt-1 text-lg leading-snug font-bold text-foreground group-hover:text-primary-strong">
+                        {exp.title}
+                      </h2>
+                      <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted-foreground">{exp.summary}</p>
+
+                      <div className="mt-auto flex items-center justify-between gap-3 pt-4 text-xs text-muted-foreground">
+                        <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                          <span className="flex items-center gap-1">
+                            <Clock aria-hidden className="size-3.5" /> {exp.estimatedMinutes} {tr("experiments.minutes")}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Package aria-hidden className="size-3.5" /> {exp.materialsCount} {tr("experiments.badge.materials")}
+                          </span>
+                          {exp.hasVideo && (
+                            <span className="flex items-center gap-1 text-primary-strong">
+                              <CirclePlay aria-hidden className="size-3.5" /> {tr("experiments.badge.video")}
+                            </span>
+                          )}
+                          <span className="flex items-center gap-1">
+                            <span
+                              aria-hidden
+                              className={cn("size-2 rounded-full", exp.difficulty === "easy" ? "bg-emerald-500" : "bg-amber-500")}
+                            />
+                            {tr(exp.difficulty === "easy" ? "experiments.easy" : "experiments.medium")}
+                          </span>
+                        </span>
+                        <ArrowRight aria-hidden className={cn("size-4 shrink-0 transition group-hover:translate-x-1", st.text)} />
+                      </div>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
       </div>
-
-      {filtered.length === 0 ? (
-        <p className="mt-8 text-ink-muted">{tr("experiments.none")}</p>
-      ) : (
-        <ul className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {filtered.map((exp) => {
-            const s = subjectMeta(exp.subject);
-            const status = progress[exp.id]?.status;
-            return (
-              <li key={exp.id}>
-                <Link
-                  href={`/experiments/${exp.id}`}
-                  className="block rounded-xl border border-line bg-surface p-5 hover:border-brand/60 hover:shadow-card transition h-full shadow-soft"
-                >
-                  <div className="flex items-center justify-between gap-3 text-xs text-ink-subtle">
-                    <span className="uppercase tracking-wide font-semibold text-brand">
-                      {tr("experiments.grade")} {exp.grade} · {s.emoji} {s.label}
-                    </span>
-                    <span className="shrink-0">
-                      {exp.estimatedMinutes} {tr("experiments.minutes")}
-                    </span>
-                  </div>
-                  <h2 className="mt-2 text-lg font-semibold text-ink tracking-tight">{exp.title}</h2>
-                  <p className="mt-1 text-sm text-ink-muted leading-relaxed line-clamp-3">{exp.summary}</p>
-
-                  <div className="mt-3 flex flex-wrap items-center gap-1.5">
-                    {status === "done" && (
-                      <Badge tone="done">
-                        <span>✓</span>
-                        <span>{tr("experiments.badge.done")}</span>
-                      </Badge>
-                    )}
-                    {status === "started" && (
-                      <Badge tone="started">
-                        <span>◐</span>
-                        <span>{tr("experiments.badge.started")}</span>
-                      </Badge>
-                    )}
-                    {exp.free && !active && (
-                      <Badge tone="done">
-                        <span>🎁</span>
-                        <span>{tr("experiments.free")}</span>
-                      </Badge>
-                    )}
-                    {!exp.free && !active && (
-                      <Badge>
-                        <span>🔒</span>
-                        <span>{tr("experiments.locked")}</span>
-                      </Badge>
-                    )}
-                    {exp.hasVideo && (
-                      <Badge>
-                        <span>🎥</span>
-                        <span>{tr("experiments.badge.video")}</span>
-                      </Badge>
-                    )}
-                    <Badge>
-                      <span>{exp.difficulty === "easy" ? "🟢" : "🟠"}</span>
-                      <span>{tr(exp.difficulty === "easy" ? "experiments.easy" : "experiments.medium")}</span>
-                    </Badge>
-                    <Badge>
-                      <span>🧰</span>
-                      <span>
-                        {exp.materialsCount} {tr("experiments.badge.materials")}
-                      </span>
-                    </Badge>
-                  </div>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      )}
     </div>
   );
 }
 
-function Badge({ children, tone }: { children: React.ReactNode; tone?: "done" | "started" }) {
-  const cls =
-    tone === "done"
-      ? "border-emerald-300 bg-emerald-50 text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300"
-      : tone === "started"
-        ? "border-amber-300 bg-sun-soft text-amber-800 dark:border-amber-800 dark:text-amber-200"
-        : "border-line bg-surface-2 text-ink-muted";
+function FilterPill({ value, children }: { value: string; children: React.ReactNode }) {
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium ${cls}`}>
+    <ToggleGroupItem
+      value={value}
+      className="h-10 gap-1.5 rounded-full bg-white/10 px-4 text-deep-foreground ring-1 ring-white/15 hover:bg-white/20 hover:text-deep-foreground data-[state=on]:bg-sun data-[state=on]:font-semibold data-[state=on]:text-deep data-[state=on]:shadow-pop data-[state=on]:ring-sun data-[state=on]:hover:bg-sun/90 data-[state=on]:hover:text-deep"
+    >
       {children}
-    </span>
+    </ToggleGroupItem>
   );
 }
 
-function FilterPill({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      aria-pressed={active}
-      className={
-        "px-3.5 py-1.5 text-sm rounded-full border transition font-medium " +
-        (active
-          ? "bg-brand text-brand-on border-brand shadow-soft"
-          : "bg-surface text-ink-muted border-line hover:border-brand/60 hover:text-ink")
-      }
-    >
-      {children}
-    </button>
-  );
-}
+// Phones: one swipeable row per filter. Wider screens: wrap.
+const filterRow =
+  "-mx-4 w-auto flex-nowrap overflow-x-auto px-4 py-1 [scrollbar-width:none] sm:mx-0 sm:w-fit sm:flex-wrap sm:overflow-visible sm:px-0 after:w-2 after:shrink-0 after:content-[''] sm:after:hidden";
