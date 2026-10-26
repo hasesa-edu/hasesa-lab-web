@@ -2,45 +2,44 @@ import Link from "next/link";
 import { BRAND } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 
-export function LogoMark({ size = 28, className = "" }: { size?: number; className?: string }) {
+/**
+ * The Hasesa sprout: a teal stem with an outlined leaf and an amber leaf.
+ * `tone="light"` swaps the teal for a pale mint so it reads on deep-teal backgrounds.
+ */
+export function LogoMark({
+  size = 28,
+  tone = "brand",
+  className = "",
+}: {
+  size?: number;
+  tone?: "brand" | "light";
+  className?: string;
+}) {
+  const ink = tone === "light" ? "var(--primary-soft)" : "var(--primary)";
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 40 40"
+      viewBox="96 104 320 320"
       fill="none"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       aria-hidden="true"
     >
-      <rect x="1.5" y="1.5" width="37" height="37" rx="10" fill="var(--primary)" />
-      {/* Open book — two pages meeting at the spine */}
-      <path
-        d="M8 13.5c3.2-1.2 6.8-1.2 10 0v15.5c-3.2-1.2-6.8-1.2-10 0V13.5Z"
-        fill="var(--primary-foreground)"
-        fillOpacity="0.95"
-      />
-      <path
-        d="M22 13.5c3.2-1.2 6.8-1.2 10 0v15.5c-3.2-1.2-6.8-1.2-10 0V13.5Z"
-        fill="var(--primary-foreground)"
-        fillOpacity="0.95"
-      />
-      {/* Spine */}
-      <rect x="19.4" y="13" width="1.2" height="16.6" rx="0.6" fill="var(--primary-foreground)" fillOpacity="0.55" />
-      {/* Amber spark above */}
-      <path
-        d="M20 4.4l1.05 2.55L23.6 8l-2.55 1.05L20 11.6l-1.05-2.55L16.4 8l2.55-1.05L20 4.4Z"
-        fill="#f59e0b"
-      />
+      <path d="M256 424V250" stroke={ink} strokeWidth="44" />
+      <path d="M256 262C256 184 204 136 128 136C128 214 180 262 256 262Z" stroke={ink} strokeWidth="40" />
+      <path d="M256 262C256 184 308 136 384 136C384 214 332 262 256 262Z" fill="var(--sun)" />
     </svg>
   );
 }
 
 export function Logo({ className = "" }: { className?: string }) {
   return (
-    <Link href="/" className={cn("inline-flex min-h-10 items-center gap-2.5 group", className)}>
-      <LogoMark size={28} className="transition group-hover:scale-105" />
-      <span className="font-semibold text-[15px] leading-none tracking-tight text-foreground">{BRAND}</span>
+    <Link href="/" className={cn("inline-flex min-h-10 items-center gap-2 group", className)}>
+      <LogoMark size={28} className="transition group-hover:-rotate-6" />
+      <span className="font-heading text-lg leading-none font-extrabold tracking-tight text-foreground">{BRAND}</span>
     </Link>
   );
 }
