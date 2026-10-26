@@ -4,16 +4,19 @@ import { PLAN } from "@/lib/billing/plan";
 import { BRAND } from "@/lib/brand";
 import { GoogleButton } from "@/components/GoogleButton";
 import { CheckoutButton } from "@/components/CheckoutButton";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 /** What a student without a plan sees instead of a paid guide. */
 export function LockedGuide({ item, signedIn }: { item: CatalogItem; signedIn: boolean }) {
   const subject = subjectMeta(item.subject);
   return (
     <article className="max-w-3xl mx-auto px-4 py-12">
-      <Link href="/experiments" className="text-sm text-primary hover:underline">
-        ← All experiments
-      </Link>
-      <header className="mt-3">
+      <Button asChild variant="link" className="px-0">
+        <Link href="/experiments">← All experiments</Link>
+      </Button>
+      <header className="mt-1">
         <p className="text-xs uppercase tracking-wider text-primary font-semibold">
           Grade {item.grade} · {subject.emoji} {subject.label} · {item.unit}
         </p>
@@ -24,14 +27,16 @@ export function LockedGuide({ item, signedIn }: { item: CatalogItem; signedIn: b
         </p>
       </header>
 
-      <div className="relative mt-8 rounded-2xl border border-border bg-card overflow-hidden shadow-card">
+      {/* py-0 gap-0: the blurred preview and overlay fill the card edge to edge. */}
+      <Card className="relative mt-8 gap-0 rounded-2xl py-0 shadow-card">
+        {/* Static, blurred stand-in for the guide; animate-none keeps low-end phones from repainting it. */}
         <div aria-hidden className="p-6 space-y-3 blur-[3px] select-none opacity-60">
-          <div className="h-4 w-1/3 rounded-sm bg-muted" />
-          <div className="h-3 w-full rounded-sm bg-muted" />
-          <div className="h-3 w-5/6 rounded-sm bg-muted" />
-          <div className="h-3 w-2/3 rounded-sm bg-muted" />
-          <div className="h-16 w-full rounded-xl bg-muted" />
-          <div className="h-16 w-full rounded-xl bg-muted" />
+          <Skeleton className="h-4 w-1/3 animate-none rounded-sm" />
+          <Skeleton className="h-3 w-full animate-none rounded-sm" />
+          <Skeleton className="h-3 w-5/6 animate-none rounded-sm" />
+          <Skeleton className="h-3 w-2/3 animate-none rounded-sm" />
+          <Skeleton className="h-16 w-full animate-none rounded-xl" />
+          <Skeleton className="h-16 w-full animate-none rounded-xl" />
         </div>
         <div className="absolute inset-0 flex items-center justify-center p-6 bg-background/60">
           <div className="max-w-sm text-center">
@@ -48,13 +53,13 @@ export function LockedGuide({ item, signedIn }: { item: CatalogItem; signedIn: b
               ) : (
                 <GoogleButton next={`/experiments/${item.id}`} label="Continue with Google" />
               )}
-              <Link href="/#pricing" className="text-sm text-primary hover:underline">
-                See what's included
-              </Link>
+              <Button asChild variant="link">
+                <Link href="/#pricing">See what's included</Link>
+              </Button>
             </div>
           </div>
         </div>
-      </div>
+      </Card>
     </article>
   );
 }

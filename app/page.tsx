@@ -9,6 +9,11 @@ import type { t as Dict } from "@/lib/i18n";
 import { CheckoutButton } from "@/components/CheckoutButton";
 import { PLAN, isPlanActive } from "@/lib/billing/plan";
 import { formatDate } from "@/lib/format";
+import { cn } from "@/lib/utils";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 type Key = keyof typeof Dict;
 type TR = (k: Key) => string;
@@ -51,10 +56,13 @@ export default function Home() {
         />
 
         <div className="relative w-full max-w-3xl mx-auto px-4 py-16 text-center text-white">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 backdrop-blur-sm px-3 py-1 text-xs font-semibold text-white">
+          <Badge
+            variant="outline"
+            className="h-auto gap-2 whitespace-normal border-white/30 bg-white/10 px-3 py-1 font-semibold text-white backdrop-blur-sm"
+          >
             <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
             {tr("hero.tag")}
-          </div>
+          </Badge>
           <h1 className="mt-6 text-5xl sm:text-6xl md:text-[4rem] font-extrabold leading-[0.95] tracking-tight text-white">
             {tr("hero.title.before")}{" "}
             <span className="text-primary-soft">{tr("hero.title.highlight")}</span>
@@ -63,18 +71,18 @@ export default function Home() {
             {tr("hero.sub")}
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <a
-              href={primaryHref}
-              className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 font-semibold shadow-card transition"
-            >
+            {/* Plain <a>: the signed-out target is the Google OAuth route, which needs a full-page navigation. */}
+            <a href={primaryHref} className={primaryCta}>
               {primaryLabel} →
             </a>
-            <a
-              href="#pricing"
-              className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-sm text-white border border-white/40 rounded-xl hover:bg-white/20 hover:border-white/70 font-medium transition"
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="border-white/40 bg-white/10 text-white backdrop-blur-sm hover:border-white/70 hover:bg-white/20 hover:text-white dark:border-white/40 dark:bg-white/10 dark:hover:bg-white/20"
             >
-              {tr("hero.cta.pricing")}
-            </a>
+              <a href="#pricing">{tr("hero.cta.pricing")}</a>
+            </Button>
           </div>
           <p className="mt-5 text-xs text-white/80">
             <span className="inline-flex items-center gap-1 font-semibold text-white">
@@ -130,35 +138,37 @@ export default function Home() {
 
       {/* FINAL CTA */}
       <section className="max-w-5xl mx-auto px-4 pb-24">
-        <div className="relative rounded-3xl overflow-hidden border border-primary/30 bg-linear-to-br from-primary-soft via-sun-soft/30 to-card p-8 sm:p-12 text-center shadow-card">
+        <Card className="relative gap-0 rounded-3xl text-base bg-linear-to-br from-primary-soft via-sun-soft/30 to-card p-8 text-center shadow-card ring-primary/30 sm:p-12">
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
             {tr("cta.title")}
           </h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">{tr("cta.sub")}</p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-            <a
-              href={primaryHref}
-              className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 font-semibold shadow-card transition"
-            >
+            <a href={primaryHref} className={primaryCta}>
               {primaryLabel} →
             </a>
             {user && (
-              <Link
-                href="/experiments"
-                prefetch={false}
-                className="inline-flex items-center px-6 py-3 bg-card text-foreground border border-border rounded-xl hover:border-primary/60 hover:text-primary font-medium transition"
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="bg-card hover:border-primary/60 hover:bg-card hover:text-primary"
               >
-                {tr("hero.cta.lessons")}
-              </Link>
+                <Link href="/experiments" prefetch={false}>
+                  {tr("hero.cta.lessons")}
+                </Link>
+              </Button>
             )}
           </div>
-        </div>
+        </Card>
       </section>
     </div>
   );
 }
 
 /* ────────────────────────  PIECES  ──────────────────────── */
+
+const primaryCta = cn(buttonVariants({ size: "lg" }), "font-semibold shadow-card");
 
 function Pricing({ tr }: { tr: TR }) {
   const { user } = useUser();
@@ -180,7 +190,7 @@ function Pricing({ tr }: { tr: TR }) {
         <p className="mt-3 text-muted-foreground">{tr("footer.motto")}.</p>
       </div>
 
-      <div className="mt-10 max-w-md mx-auto rounded-3xl border-2 border-primary/40 bg-card p-7 sm:p-8 shadow-card">
+      <Card className="mt-10 mx-auto max-w-md gap-0 rounded-3xl p-7 text-base shadow-card ring-2 ring-primary/40 sm:p-8">
         <p className="text-sm font-semibold text-primary uppercase tracking-wide">{tr("pricing.plan")}</p>
         <p className="mt-2 flex items-baseline gap-2">
           <span className="text-5xl font-extrabold tracking-tight text-foreground tabular-nums">{PLAN.priceEtb}</span>
@@ -197,9 +207,15 @@ function Pricing({ tr }: { tr: TR }) {
         </ul>
         <div className="mt-7">
           {active && user?.paidUntil && (
-            <p className="mb-3 text-sm text-emerald-700 dark:text-emerald-300 font-medium">
-              {tr("pricing.active")} {formatDate(user.paidUntil)}.
-            </p>
+            // role reset: this is a static status line, not something to announce on page load.
+            <Alert
+              role={undefined}
+              className="mb-3 border-emerald-300 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-950/40"
+            >
+              <AlertDescription className="font-medium text-emerald-700 dark:text-emerald-300">
+                {tr("pricing.active")} {formatDate(user.paidUntil)}.
+              </AlertDescription>
+            </Alert>
           )}
           <CheckoutButton
             signedIn={!!user}
@@ -214,11 +230,14 @@ function Pricing({ tr }: { tr: TR }) {
           </Link>
         </p>
         {!active && (
-          <a href={user ? "/experiments" : googleSignInHref("/experiments")} className="mt-4 block text-center text-sm text-primary font-medium hover:underline">
+          <a
+            href={user ? "/experiments" : googleSignInHref("/experiments")}
+            className={cn(buttonVariants({ variant: "link" }), "mt-2 h-auto min-h-10 w-full whitespace-normal")}
+          >
             {tr("pricing.free")} →
           </a>
         )}
-      </div>
+      </Card>
     </section>
   );
 }
@@ -236,10 +255,12 @@ function Backdrop() {
   );
 }
 
+const pillarCard = "gap-0 rounded-3xl p-7 text-base shadow-card transition hover:shadow-pop sm:p-8";
+
 /* Pillar 1: experiment, with at-home-recipe visual mock. */
 function PillarExperiment({ tr }: { tr: TR }) {
   return (
-    <div className="rounded-3xl border border-border bg-card p-7 sm:p-8 shadow-card hover:shadow-pop transition flex flex-col">
+    <Card className={pillarCard}>
       <div className="flex items-center gap-2">
         <span className="text-2xl">🧪</span>
         <p className="text-[11px] uppercase tracking-[0.18em] font-bold text-primary">
@@ -287,14 +308,14 @@ function PillarExperiment({ tr }: { tr: TR }) {
           </li>
         </ol>
       </div>
-    </div>
+    </Card>
   );
 }
 
 /* Pillar 2: AI tutor, with chat-exchange visual mock. */
 function PillarAITutor({ tr }: { tr: TR }) {
   return (
-    <div className="rounded-3xl border border-border bg-card p-7 sm:p-8 shadow-card hover:shadow-pop transition flex flex-col">
+    <Card className={pillarCard}>
       <div className="flex items-center gap-2">
         <span className="text-2xl">💬</span>
         <p className="text-[11px] uppercase tracking-[0.18em] font-bold text-primary">
@@ -329,7 +350,7 @@ function PillarAITutor({ tr }: { tr: TR }) {
           </p>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -350,8 +371,9 @@ function PartnerCard({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="group flex items-center gap-4 rounded-xl border border-border bg-card p-4 sm:p-5 shadow-soft hover:border-primary/40 hover:shadow-card transition"
+        className="group block h-full rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
       >
+        <Card className="h-full flex-row items-center gap-4 p-4 text-base shadow-soft transition group-hover:shadow-card group-hover:ring-primary/40 sm:p-5">
         <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-muted border border-border overflow-hidden">
           <Image
             src={logo}
@@ -372,6 +394,7 @@ function PartnerCard({
           </h3>
           <p className="mt-0.5 text-sm text-muted-foreground leading-relaxed">{tag}</p>
         </div>
+        </Card>
       </a>
     </li>
   );

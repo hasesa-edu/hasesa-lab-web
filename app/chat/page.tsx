@@ -8,6 +8,7 @@ import { CAPS, getCurrentUsage } from "@/lib/usage";
 import { PLAN } from "@/lib/billing/plan";
 import { BRAND } from "@/lib/brand";
 import { CheckoutButton } from "@/components/CheckoutButton";
+import { Button } from "@/components/ui/button";
 import { ChatClient } from "./ChatClient";
 
 export const metadata: Metadata = { title: `Lab Assistant · ${BRAND}` };
@@ -35,9 +36,9 @@ export default async function ChatPage({ searchParams }: { searchParams: Promise
         </p>
         <div className="mt-6 flex flex-col items-center gap-3">
           <CheckoutButton signedIn label={`Get ${BRAND} · ${PLAN.priceEtb} ETB / month`} />
-          <Link href="/#pricing" className="text-sm text-primary hover:underline">
-            See what's included
-          </Link>
+          <Button asChild variant="link">
+            <Link href="/#pricing">See what's included</Link>
+          </Button>
         </div>
       </div>
     );

@@ -7,6 +7,7 @@ import { canReadGuide, getEntitlement } from "@/lib/billing/entitlement";
 import { GuideView } from "@/components/experiment/GuideView";
 import { LockedGuide } from "@/components/experiment/LockedGuide";
 import { BRAND } from "@/lib/brand";
+import { Button } from "@/components/ui/button";
 
 export const dynamic = "force-dynamic";
 
@@ -28,9 +29,9 @@ export default async function ExperimentPage({ params }: Props) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-10">
         <p className="text-muted-foreground">Experiment not found.</p>
-        <Link href="/experiments" className="text-primary mt-3 inline-block">
-          ← All experiments
-        </Link>
+        <Button asChild variant="link" className="mt-1 px-0 text-base">
+          <Link href="/experiments">← All experiments</Link>
+        </Button>
       </div>
     );
   }

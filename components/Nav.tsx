@@ -2,13 +2,34 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import { MenuIcon, XIcon } from "lucide-react";
 import { useLocale } from "./LocaleProvider";
 import { useUser } from "./UserProvider";
 import { apiSignout } from "@/lib/api";
+import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
 import { GoogleIcon, googleSignInHref } from "./GoogleButton";
 import { ThemeToggle } from "./ThemeToggle";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Separator } from "@/components/ui/separator";
 
 export function Nav() {
   const { tr } = useLocale();
@@ -17,46 +38,6 @@ export function Nav() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  const userMenuRef = useRef<HTMLDivElement>(null);
-  const mobilePanelRef = useRef<HTMLDivElement>(null);
-  const hamburgerBtnRef = useRef<HTMLButtonElement>(null);
-
-  // Close menus on outside-click and on Escape.
-  useEffect(() => {
-    if (!menuOpen && !mobileOpen) return;
-    function onPointerDown(e: MouseEvent) {
-      const target = e.target as Node;
-      if (
-        menuOpen &&
-        userMenuRef.current &&
-        !userMenuRef.current.contains(target)
-      ) {
-        setMenuOpen(false);
-      }
-      if (
-        mobileOpen &&
-        mobilePanelRef.current &&
-        !mobilePanelRef.current.contains(target) &&
-        hamburgerBtnRef.current &&
-        !hamburgerBtnRef.current.contains(target)
-      ) {
-        setMobileOpen(false);
-      }
-    }
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        setMenuOpen(false);
-        setMobileOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", onPointerDown);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onPointerDown);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [menuOpen, mobileOpen]);
 
   async function handleSignOut() {
     await apiSignout();
@@ -82,14 +63,33 @@ export function Nav() {
     href.includes("#") ? false : href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   const navLinkClass = (href: string) =>
-    "transition-colors text-sm font-medium " +
-    (isActive(href) ? "text-primary" : "text-muted-foreground hover:text-primary");
+    cn(
+      "transition-colors text-sm font-medium",
+      isActive(href) ? "text-primary" : "text-muted-foreground hover:text-primary"
+    );
 
   const mobileLinkClass = (href: string) =>
-    "block px-3 py-3 rounded-md text-base font-medium " +
-    (isActive(href)
-      ? "text-primary bg-primary-soft/40"
-      : "text-foreground hover:bg-muted");
+    cn(
+      buttonVariants({ variant: "ghost", size: "lg" }),
+      "w-full justify-start px-3",
+      isActive(href) ? "text-primary bg-primary-soft/40 hover:bg-primary-soft/60 hover:text-primary" : "text-foreground"
+    );
+
+  const signInClass = cn(
+    buttonVariants({ variant: "outline" }),
+    "bg-white text-[#1f1f1f] hover:bg-white hover:text-[#1f1f1f] hover:border-primary/60 shadow-soft dark:bg-white dark:hover:bg-white"
+  );
+
+  const initial = user ? user.displayName.slice(0, 1).toUpperCase() : "";
+
+  const mobileLinks: { href: string; label: string }[] = [
+    { href: "/", label: tr("nav.home") },
+    { href: "/experiments", label: tr("nav.experiments") },
+    { href: "/chat", label: tr("nav.assistant") },
+    { href: "/dashboard", label: tr("nav.dashboard") },
+    { href: "/account", label: tr("nav.account") },
+    { href: "/onboarding", label: tr("nav.settings") },
+  ];
 
   return (
     <header className="sticky top-0 z-20 border-b border-border bg-background">
@@ -134,54 +134,49 @@ export function Nav() {
           <ThemeToggle className="hidden" />
 
           {user ? (
-            <div className="relative" ref={userMenuRef}>
-              <button
-                onClick={() => setMenuOpen((o) => !o)}
-                className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full border border-border bg-card hover:border-primary/60 text-sm transition"
-              >
-                <span className="w-7 h-7 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center">
-                  {user.displayName.slice(0, 1).toUpperCase()}
-                </span>
-                <span className="text-foreground">{user.displayName}</span>
-              </button>
-              {menuOpen && (
-                <div className="absolute right-0 mt-2 bg-card border border-border rounded-lg shadow-pop py-1 text-sm min-w-[200px] overflow-hidden">
-                  <div className="px-3 py-2 text-xs text-subtle-foreground border-b border-border">
-                    <div className="text-muted-foreground truncate">{user.email}</div>
-                    {user.grade && (
-                      <div className="mt-0.5">
-                        {tr("experiments.grade")} {user.grade}
-                      </div>
-                    )}
-                  </div>
-                  <Link
-                    href="/account"
-                    onClick={() => setMenuOpen(false)}
-                    className="block px-3 py-2 hover:bg-muted text-foreground"
-                  >
-                    {tr("nav.account")}
-                  </Link>
-                  <Link
-                    href="/onboarding"
-                    onClick={() => setMenuOpen(false)}
-                    className="block px-3 py-2 hover:bg-muted text-foreground"
-                  >
-                    {tr("nav.settings")}
-                  </Link>
-                  <button
-                    onClick={handleSignOut}
-                    className="block w-full text-left px-3 py-2 hover:bg-muted text-red-600 dark:text-red-400"
-                  >
-                    {tr("nav.signout")}
-                  </button>
-                </div>
-              )}
-            </div>
+            <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="rounded-full bg-card pl-1 pr-3 hover:border-primary/60 hover:bg-card"
+                >
+                  <Avatar size="sm" className="size-7">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">
+                      {initial}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="text-foreground">{user.displayName}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-auto min-w-[200px] shadow-pop">
+                <DropdownMenuLabel className="font-normal text-subtle-foreground">
+                  <div className="text-muted-foreground truncate">{user.email}</div>
+                  {user.grade && (
+                    <div className="mt-0.5">
+                      {tr("experiments.grade")} {user.grade}
+                    </div>
+                  )}
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/account">{tr("nav.account")}</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/onboarding">{tr("nav.settings")}</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  variant="destructive"
+                  onSelect={() => {
+                    void handleSignOut();
+                  }}
+                >
+                  {tr("nav.signout")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
-            <a
-              href={signInHref}
-              className="inline-flex items-center gap-2 text-sm px-3.5 py-1.5 rounded-md border border-border bg-white text-[#1f1f1f] hover:border-primary/60 font-medium shadow-soft transition"
-            >
+            <a href={signInHref} className={signInClass}>
               <GoogleIcon size={16} />
               {tr("nav.signin")}
             </a>
@@ -192,78 +187,66 @@ export function Nav() {
           {/* TEMP: theme toggle hidden — light-only for now */}
           <ThemeToggle className="hidden" />
           {!user && (
-            <a
-              href={signInHref}
-              className="inline-flex items-center gap-2 text-sm px-3 py-1.5 rounded-md border border-border bg-white text-[#1f1f1f] hover:border-primary/60 font-medium shadow-soft transition"
-            >
+            <a href={signInHref} className={cn(signInClass, "px-3")}>
               <GoogleIcon size={16} />
               {tr("nav.signin")}
             </a>
           )}
           {user && (
-            <button
-              ref={hamburgerBtnRef}
-              type="button"
-              onClick={() => setMobileOpen((o) => !o)}
-              aria-label={mobileOpen ? "Close menu" : "Open menu"}
-              aria-expanded={mobileOpen}
-              aria-controls="mobile-nav-panel"
-              className="w-11 h-11 inline-flex items-center justify-center rounded-md border border-border bg-card text-foreground hover:border-primary/60 transition"
-            >
-              {mobileOpen ? (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              ) : (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <line x1="3" y1="6" x2="21" y2="6" />
-                  <line x1="3" y1="12" x2="21" y2="12" />
-                  <line x1="3" y1="18" x2="21" y2="18" />
-                </svg>
-              )}
-            </button>
+            <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+              <SheetTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon-lg"
+                  aria-label={mobileOpen ? "Close menu" : "Open menu"}
+                  className="bg-card hover:border-primary/60"
+                >
+                  {mobileOpen ? <XIcon className="size-5" /> : <MenuIcon className="size-5" />}
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="gap-0 bg-background">
+                <SheetHeader className="flex-row items-center gap-3 pr-12">
+                  <Avatar size="lg" className="size-9">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-sm font-bold">
+                      {initial}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="min-w-0 flex-1">
+                    <SheetTitle className="text-sm truncate">{user.displayName}</SheetTitle>
+                    <SheetDescription className="text-xs truncate">{user.email}</SheetDescription>
+                  </div>
+                </SheetHeader>
+                <Separator />
+
+                <nav className="flex flex-col gap-0.5 p-2">
+                  {mobileLinks.map((l) => (
+                    <Link
+                      key={l.href}
+                      href={l.href}
+                      onClick={closeMobile}
+                      className={mobileLinkClass(l.href)}
+                      aria-current={isActive(l.href) ? "page" : undefined}
+                    >
+                      {l.label}
+                    </Link>
+                  ))}
+                </nav>
+
+                <div className="mt-auto p-4">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    onClick={handleSignOut}
+                    className="w-full text-destructive hover:text-destructive"
+                  >
+                    {tr("nav.signout")}
+                  </Button>
+                </div>
+              </SheetContent>
+            </Sheet>
           )}
         </div>
       </div>
-
-      {user && mobileOpen && (
-        <div
-          id="mobile-nav-panel"
-          ref={mobilePanelRef}
-          className="sm:hidden border-t border-border bg-background"
-        >
-          <div className="max-w-5xl mx-auto px-4 py-3 space-y-3">
-            <div className="flex items-center gap-3 px-1 pb-2 border-b border-border">
-              <span className="w-9 h-9 rounded-full bg-primary text-primary-foreground text-sm font-bold flex items-center justify-center">
-                {user.displayName.slice(0, 1).toUpperCase()}
-              </span>
-              <div className="min-w-0 flex-1">
-                <div className="text-sm font-medium text-foreground truncate">{user.displayName}</div>
-                <div className="text-xs text-muted-foreground truncate">{user.email}</div>
-              </div>
-            </div>
-
-            <nav className="flex flex-col">
-              <Link href="/" onClick={closeMobile} className={mobileLinkClass("/")} aria-current={isActive("/") ? "page" : undefined}>{tr("nav.home")}</Link>
-              <Link href="/experiments" onClick={closeMobile} className={mobileLinkClass("/experiments")} aria-current={isActive("/experiments") ? "page" : undefined}>{tr("nav.experiments")}</Link>
-              <Link href="/chat" onClick={closeMobile} className={mobileLinkClass("/chat")} aria-current={isActive("/chat") ? "page" : undefined}>{tr("nav.assistant")}</Link>
-              <Link href="/dashboard" onClick={closeMobile} className={mobileLinkClass("/dashboard")} aria-current={isActive("/dashboard") ? "page" : undefined}>{tr("nav.dashboard")}</Link>
-              <Link href="/account" onClick={closeMobile} className={mobileLinkClass("/account")} aria-current={isActive("/account") ? "page" : undefined}>{tr("nav.account")}</Link>
-              <Link href="/onboarding" onClick={closeMobile} className={mobileLinkClass("/onboarding")} aria-current={isActive("/onboarding") ? "page" : undefined}>{tr("nav.settings")}</Link>
-            </nav>
-
-            <div className="pt-1">
-              <button
-                onClick={handleSignOut}
-                className="block w-full text-center px-3 py-2.5 rounded-md border border-border text-red-600 dark:text-red-400 font-medium hover:bg-muted transition"
-              >
-                {tr("nav.signout")}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </header>
   );
 }

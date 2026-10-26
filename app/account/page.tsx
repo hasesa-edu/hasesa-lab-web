@@ -9,6 +9,9 @@ import { PLAN } from "@/lib/billing/plan";
 import { BRAND } from "@/lib/brand";
 import { formatDate } from "@/lib/format";
 import { CheckoutButton } from "@/components/CheckoutButton";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export const metadata: Metadata = { title: `Account & billing · ${BRAND}`, robots: { index: false } };
 export const dynamic = "force-dynamic";
@@ -27,72 +30,74 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         {user.displayName} · {user.email} (Google)
       </p>
 
-      <section className="mt-8 rounded-2xl border border-border bg-card p-6 shadow-card">
-        <p className="text-xs uppercase tracking-[0.16em] font-semibold text-primary">{BRAND} pass</p>
-        {ent.active && ent.paidUntil ? (
-          <>
-            <p className="mt-2 text-2xl font-bold text-foreground">Active until {formatDate(ent.paidUntil)}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {ent.daysLeft} {ent.daysLeft === 1 ? "day" : "days"} left. Renewing adds {PLAN.days} days on top of what you have.
-            </p>
-          </>
-        ) : (
-          <>
-            <p className="mt-2 text-2xl font-bold text-foreground">No active pass</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {ent.paidUntil ? `Your last pass ended on ${formatDate(ent.paidUntil)}. ` : ""}
-              Unlock every guide and the lab assistant for {PLAN.priceEtb} ETB for {PLAN.days} days.
-            </p>
-          </>
-        )}
-        <div className="mt-5">
+      <Card className="mt-8 gap-5 py-6 shadow-card">
+        <CardHeader className="px-6">
+          <p className="text-xs uppercase tracking-[0.16em] font-semibold text-primary">{BRAND} pass</p>
+          {ent.active && ent.paidUntil ? (
+            <>
+              <CardTitle className="mt-1 text-2xl font-bold text-foreground">Active until {formatDate(ent.paidUntil)}</CardTitle>
+              <CardDescription>
+                {ent.daysLeft} {ent.daysLeft === 1 ? "day" : "days"} left. Renewing adds {PLAN.days} days on top of what you have.
+              </CardDescription>
+            </>
+          ) : (
+            <>
+              <CardTitle className="mt-1 text-2xl font-bold text-foreground">No active pass</CardTitle>
+              <CardDescription>
+                {ent.paidUntil ? `Your last pass ended on ${formatDate(ent.paidUntil)}. ` : ""}
+                Unlock every guide and the lab assistant for {PLAN.priceEtb} ETB for {PLAN.days} days.
+              </CardDescription>
+            </>
+          )}
+        </CardHeader>
+        <CardContent className="px-6">
           <CheckoutButton
             signedIn
             auto={sp.buy === "1"}
             label={ent.active ? `Add ${PLAN.days} days · ${PLAN.priceEtb} ETB` : `Get ${BRAND} · ${PLAN.priceEtb} ETB`}
           />
-        </div>
-        <p className="mt-3 text-xs text-subtle-foreground">
-          Paid securely through Chapa (Telebirr, CBE Birr, M-Pesa or card). No automatic charges.{" "}
-          <Link href="/refund" className="underline hover:text-primary">
-            Refund policy
-          </Link>
-        </p>
-      </section>
+          <p className="mt-3 text-xs text-subtle-foreground">
+            Paid securely through Chapa (Telebirr, CBE Birr, M-Pesa or card). No automatic charges.{" "}
+            <Link href="/refund" className="underline hover:text-primary">
+              Refund policy
+            </Link>
+          </p>
+        </CardContent>
+      </Card>
 
       <section className="mt-8">
         <h2 className="text-lg font-semibold text-foreground">Payment history</h2>
         {payments.length === 0 ? (
           <p className="mt-2 text-sm text-muted-foreground">No payments yet.</p>
         ) : (
-          <div className="mt-3 overflow-x-auto rounded-xl border border-border">
-            <table className="w-full text-sm">
-              <thead className="bg-muted text-left text-muted-foreground">
-                <tr>
-                  <th className="px-4 py-2 font-medium">Date</th>
-                  <th className="px-4 py-2 font-medium">Amount</th>
-                  <th className="px-4 py-2 font-medium">Days</th>
-                  <th className="px-4 py-2 font-medium">Status</th>
-                  <th className="px-4 py-2 font-medium">Reference</th>
-                </tr>
-              </thead>
-              <tbody>
+          <Card className="mt-3 py-0 gap-0">
+            <Table>
+              <TableHeader className="bg-muted">
+                <TableRow className="hover:bg-transparent">
+                  <TableHead className="px-4 text-muted-foreground">Date</TableHead>
+                  <TableHead className="px-4 text-muted-foreground">Amount</TableHead>
+                  <TableHead className="px-4 text-muted-foreground">Days</TableHead>
+                  <TableHead className="px-4 text-muted-foreground">Status</TableHead>
+                  <TableHead className="px-4 text-muted-foreground">Reference</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {payments.map((p) => (
-                  <tr key={p.txRef} className="border-t border-border">
-                    <td className="px-4 py-2 text-foreground whitespace-nowrap">{formatDate(p.createdAt)}</td>
-                    <td className="px-4 py-2 text-foreground whitespace-nowrap">
+                  <TableRow key={p.txRef}>
+                    <TableCell className="px-4 text-foreground">{formatDate(p.createdAt)}</TableCell>
+                    <TableCell className="px-4 text-foreground">
                       {p.source === "admin" ? "Gift" : `${p.amountEtb} ${p.currency}`}
-                    </td>
-                    <td className="px-4 py-2 text-foreground">{p.days}</td>
-                    <td className="px-4 py-2">
+                    </TableCell>
+                    <TableCell className="px-4 text-foreground">{p.days}</TableCell>
+                    <TableCell className="px-4">
                       <StatusPill status={p.status} txRef={p.txRef} source={p.source} />
-                    </td>
-                    <td className="px-4 py-2 text-xs text-subtle-foreground font-mono">{p.chapaRef ?? "—"}</td>
-                  </tr>
+                    </TableCell>
+                    <TableCell className="px-4 text-xs text-subtle-foreground font-mono">{p.chapaRef ?? "—"}</TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
-          </div>
+              </TableBody>
+            </Table>
+          </Card>
         )}
       </section>
 
@@ -106,14 +111,14 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
 }
 
 function StatusPill({ status, txRef, source }: { status: string; txRef: string; source: string }) {
-  if (status === "success") return <span className="text-emerald-700 dark:text-emerald-300 font-medium">Paid</span>;
-  if (status === "failed") return <span className="text-red-700 dark:text-red-300">Failed</span>;
-  if (status === "review") return <span className="text-amber-700 dark:text-amber-300">Needs review · contact us</span>;
+  if (status === "success") return <Badge variant="success">Paid</Badge>;
+  if (status === "failed") return <Badge variant="destructive">Failed</Badge>;
+  if (status === "review") return <Badge variant="warning">Needs review · contact us</Badge>;
   return source === "chapa" ? (
-    <Link href={`/billing/return?tx_ref=${encodeURIComponent(txRef)}`} className="text-amber-700 dark:text-amber-300 underline">
-      Pending · check
-    </Link>
+    <Badge asChild variant="warning" className="underline">
+      <Link href={`/billing/return?tx_ref=${encodeURIComponent(txRef)}`}>Pending · check</Link>
+    </Badge>
   ) : (
-    <span className="text-muted-foreground">Pending</span>
+    <Badge variant="secondary">Pending</Badge>
   );
 }

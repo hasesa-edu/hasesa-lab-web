@@ -26,7 +26,7 @@ export function RenewBanner() {
   if (!text) return null;
 
   return (
-    <div className="bg-sun-soft border-b border-amber-300 dark:border-amber-800">
+    <div className="bg-sun-soft border-b border-sun/50">
       <div className="max-w-5xl mx-auto px-4 py-2 text-sm text-amber-900 dark:text-amber-100 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center">
         <span>{text}</span>
         <Link href="/account" className="font-semibold underline">

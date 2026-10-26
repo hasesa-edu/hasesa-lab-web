@@ -8,6 +8,13 @@ import { useUser } from "@/components/UserProvider";
 import { GRADES, SUBJECTS, type Grade, type Subject } from "@/lib/subjects";
 import { safeNext } from "@/lib/safe-next";
 import { apiPatchMe } from "@/lib/api";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const ALL_SUBJECTS: Subject[] = SUBJECTS.map((s) => s.id);
 
@@ -60,81 +67,99 @@ export default function OnboardingPage() {
         <div className="text-5xl">🎉</div>
         <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-foreground">{tr("onboard.done.title")}</h1>
         <p className="mt-2 text-muted-foreground">{tr("onboard.done.body")}</p>
-        <button
-          onClick={() => router.push("/dashboard")}
-          className="mt-6 inline-block px-5 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 font-medium shadow-soft transition"
-        >
+        <Button size="lg" onClick={() => router.push("/dashboard")} className="mt-6 px-5">
           {tr("nav.dashboard")} →
-        </button>
+        </Button>
       </div>
     );
   }
 
   return (
     <div className="max-w-md mx-auto px-4 py-14">
-      <div className="rounded-2xl border border-border bg-card p-7 shadow-card">
-        <h1 className="text-3xl font-extrabold tracking-tight text-foreground">{tr("onboard.welcome")}</h1>
+      <Card className="rounded-2xl shadow-card [--card-spacing:--spacing(7)]">
+        <CardHeader>
+          <CardTitle>
+            <h1 className="text-3xl font-extrabold tracking-tight text-foreground">{tr("onboard.welcome")}</h1>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="-mt-1">
+          <h2 id="onboard-grade" className="font-medium text-foreground">{tr("onboard.pickGrade")}</h2>
+          <ToggleGroup
+            type="single"
+            variant="outline"
+            aria-labelledby="onboard-grade"
+            value={grade ? String(grade) : ""}
+            // Tapping the selected grade again keeps it selected (a grade is required).
+            onValueChange={(v) => {
+              if (v) setGrade(Number(v) as Grade);
+            }}
+            className="mt-3 grid w-full grid-cols-4 gap-2"
+          >
+            {GRADES.map((g) => (
+              <ToggleGroupItem
+                key={g}
+                value={String(g)}
+                className="h-11 w-full border-border bg-background text-foreground hover:border-primary/60 hover:bg-background data-[state=on]:border-primary data-[state=on]:bg-primary-soft/40"
+              >
+                {g}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
 
-        <h2 className="mt-6 font-medium text-foreground">{tr("onboard.pickGrade")}</h2>
-        <div className="mt-3 grid grid-cols-4 gap-2">
-          {GRADES.map((g) => (
-            <button
-              key={g}
-              type="button"
-              onClick={() => setGrade(g)}
-              aria-pressed={grade === g}
-              className={
-                "px-3 py-2.5 rounded-lg border text-sm font-medium transition " +
-                (grade === g ? "border-primary bg-primary-soft/40 text-foreground" : "border-border bg-background text-foreground hover:border-primary/60")
-              }
-            >
-              {g}
-            </button>
-          ))}
-        </div>
+          <h2 className="mt-6 font-medium text-foreground">{tr("onboard.pickSubjects")}</h2>
+          <div className="mt-3 grid grid-cols-1 gap-2">
+            {SUBJECTS.map((s) => {
+              const checked = chosen.includes(s.id);
+              const id = `subject-${s.id}`;
+              return (
+                <Label
+                  key={s.id}
+                  htmlFor={id}
+                  className={cn(
+                    "min-h-11 px-3 py-2.5 rounded-lg border cursor-pointer font-normal leading-normal transition",
+                    checked
+                      ? "border-primary bg-primary-soft/40 text-foreground"
+                      : "border-border bg-background text-foreground hover:border-primary/60"
+                  )}
+                >
+                  <Checkbox
+                    id={id}
+                    checked={checked}
+                    onCheckedChange={() =>
+                      setChosen((c) => (c.includes(s.id) ? c.filter((x) => x !== s.id) : [...c, s.id]))
+                    }
+                  />
+                  <span>
+                    {s.emoji} {s.label}
+                  </span>
+                </Label>
+              );
+            })}
+          </div>
 
-        <h2 className="mt-6 font-medium text-foreground">{tr("onboard.pickSubjects")}</h2>
-        <div className="mt-3 grid grid-cols-1 gap-2">
-          {SUBJECTS.map((s) => (
-            <label
-              key={s.id}
-              className={
-                "flex items-center gap-2 px-3 py-2.5 rounded-lg border cursor-pointer text-sm transition " +
-                (chosen.includes(s.id)
-                  ? "border-primary bg-primary-soft/40 text-foreground"
-                  : "border-border bg-background text-foreground hover:border-primary/60")
-              }
-            >
-              <input
-                type="checkbox"
-                checked={chosen.includes(s.id)}
-                onChange={() => setChosen((c) => (c.includes(s.id) ? c.filter((x) => x !== s.id) : [...c, s.id]))}
-                className="accent-primary"
-              />
-              <span>
-                {s.emoji} {s.label}
-              </span>
-            </label>
-          ))}
-        </div>
+          {error && (
+            <Alert variant="destructive" className="mt-4">
+              <AlertDescription className="text-destructive">{error}</AlertDescription>
+            </Alert>
+          )}
 
-        {error && <p className="mt-4 text-sm text-red-700 dark:text-red-300">{error}</p>}
-
-        <button
-          onClick={save}
-          disabled={!grade || chosen.length === 0 || busy}
-          className="mt-6 w-full px-4 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 font-medium disabled:opacity-40 shadow-soft transition"
-        >
-          {busy ? "…" : tr("onboard.continue")}
-        </button>
-        {!user.grade && (
-          <p className="mt-4 text-xs text-subtle-foreground leading-relaxed text-center">
-            By continuing you agree to our{" "}
-            <Link href="/terms" className="underline hover:text-primary">Terms</Link> and{" "}
-            <Link href="/privacy" className="underline hover:text-primary">Privacy Policy</Link>.
-          </p>
-        )}
-      </div>
+          <Button
+            size="lg"
+            onClick={save}
+            disabled={!grade || chosen.length === 0 || busy}
+            className="mt-6 w-full disabled:opacity-40"
+          >
+            {busy ? "…" : tr("onboard.continue")}
+          </Button>
+          {!user.grade && (
+            <p className="mt-4 text-xs text-subtle-foreground leading-relaxed text-center">
+              By continuing you agree to our{" "}
+              <Link href="/terms" className="underline hover:text-primary">Terms</Link> and{" "}
+              <Link href="/privacy" className="underline hover:text-primary">Privacy Policy</Link>.
+            </p>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

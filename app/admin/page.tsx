@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import { sql } from "drizzle-orm";
 import { getSession } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AdminSignOutButton } from "./signout-button";
 import { Subscribers } from "./Subscribers";
 
@@ -143,39 +145,47 @@ async function loadStats() {
 
 function StatCard({ label, value, sub }: { label: string; value: number | string; sub?: string }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-4 shadow-card">
-      <div className="text-xs uppercase tracking-wide text-muted-foreground">{label}</div>
-      <div className="mt-1 text-2xl font-bold text-foreground tabular-nums">{value}</div>
-      {sub && <div className="mt-0.5 text-xs text-muted-foreground">{sub}</div>}
-    </div>
+    <Card className="gap-0 shadow-card">
+      <CardContent>
+        <div className="text-xs uppercase tracking-wide text-muted-foreground">{label}</div>
+        <div className="mt-1 text-2xl font-bold text-foreground tabular-nums">{value}</div>
+        {sub && <div className="mt-0.5 text-xs text-muted-foreground">{sub}</div>}
+      </CardContent>
+    </Card>
   );
 }
 
 function TopList({ title, rows }: { title: string; rows: LabelCountRow[] }) {
   const max = Math.max(1, ...rows.map((r) => r.count));
   return (
-    <div className="rounded-xl border border-border bg-card p-4 shadow-card">
-      <h3 className="text-sm font-semibold text-foreground">{title}</h3>
-      {rows.length === 0 ? (
-        <p className="mt-2 text-sm text-muted-foreground">No data yet.</p>
-      ) : (
-        <ul className="mt-3 space-y-2">
-          {rows.map((r) => (
-            <li key={r.label ?? "—"} className="text-sm">
-              <div className="flex justify-between gap-3">
-                <span className="truncate text-foreground" title={r.label ?? ""}>
-                  {r.label ?? "—"}
-                </span>
-                <span className="tabular-nums text-muted-foreground">{r.count}</span>
-              </div>
-              <div className="mt-1 h-1.5 rounded-sm bg-background">
-                <div className="h-full rounded-sm bg-primary" style={{ width: `${(r.count / max) * 100}%` }} />
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <Card className="gap-3 shadow-card">
+      <CardHeader>
+        <CardTitle className="text-sm font-semibold text-foreground">
+          <h3>{title}</h3>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        {rows.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No data yet.</p>
+        ) : (
+          <ul className="space-y-2">
+            {rows.map((r) => (
+              <li key={r.label ?? "—"} className="text-sm">
+                <div className="flex justify-between gap-3">
+                  <span className="truncate text-foreground" title={r.label ?? ""}>
+                    {r.label ?? "—"}
+                  </span>
+                  <span className="tabular-nums text-muted-foreground">{r.count}</span>
+                </div>
+                <div className="mt-1 h-1.5 rounded-sm bg-background">
+                  <div className="h-full rounded-sm bg-primary" style={{ width: `${(r.count / max) * 100}%` }} />
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 
@@ -204,57 +214,55 @@ export default async function AdminPage() {
           <StatCard label="New in 30d" value={s.users30d} />
         </div>
 
-        <div className="mt-4 rounded-xl border border-border bg-card shadow-card overflow-hidden">
-          <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+        <Card className="mt-4 gap-0 py-0 shadow-card">
+          <div className="px-4 py-3 border-b border-border flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
             <h3 className="text-sm font-semibold text-foreground">Registered users</h3>
             <span className="text-xs text-muted-foreground">
               Showing {s.users.length}
               {s.usersTotal > s.users.length ? ` of ${s.usersTotal} (most recent 200)` : ""}
             </span>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-background text-xs uppercase tracking-wide text-muted-foreground">
-                <tr>
-                  <th className="text-left px-3 py-2">Name</th>
-                  <th className="text-left px-3 py-2">Email</th>
-                  <th className="text-left px-3 py-2">Grade</th>
-                  <th className="text-left px-3 py-2">Lang</th>
-                  <th className="text-left px-3 py-2">Region</th>
-                  <th className="text-left px-3 py-2">School</th>
-                  <th className="text-left px-3 py-2">Subjects</th>
-                  <th className="text-left px-3 py-2">Joined</th>
-                </tr>
-              </thead>
-              <tbody>
-                {s.users.length === 0 ? (
-                  <tr>
-                    <td colSpan={8} className="px-3 py-4 text-muted-foreground">
-                      No registered users yet.
-                    </td>
-                  </tr>
-                ) : (
-                  s.users.map((u) => (
-                    <tr key={u.id} className="border-t border-border align-top">
-                      <td className="px-3 py-2 text-foreground font-medium">{u.displayName}</td>
-                      <td className="px-3 py-2 text-foreground">{u.email}</td>
-                      <td className="px-3 py-2 text-foreground tabular-nums">{u.grade ?? "—"}</td>
-                      <td className="px-3 py-2 text-muted-foreground uppercase">{u.language}</td>
-                      <td className="px-3 py-2 text-foreground">{u.region || "—"}</td>
-                      <td className="px-3 py-2 text-foreground">{u.school || "—"}</td>
-                      <td className="px-3 py-2 text-muted-foreground">
-                        {(u.subjects ?? []).length ? (u.subjects ?? []).join(", ") : "—"}
-                      </td>
-                      <td className="px-3 py-2 text-muted-foreground whitespace-nowrap">
-                        {new Date(u.createdAt).toLocaleDateString()}
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+          <Table>
+            <TableHeader className="bg-background text-xs uppercase tracking-wide">
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="px-3 text-muted-foreground">Name</TableHead>
+                <TableHead className="px-3 text-muted-foreground">Email</TableHead>
+                <TableHead className="px-3 text-muted-foreground">Grade</TableHead>
+                <TableHead className="px-3 text-muted-foreground">Lang</TableHead>
+                <TableHead className="px-3 text-muted-foreground">Region</TableHead>
+                <TableHead className="px-3 text-muted-foreground">School</TableHead>
+                <TableHead className="px-3 text-muted-foreground">Subjects</TableHead>
+                <TableHead className="px-3 text-muted-foreground">Joined</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {s.users.length === 0 ? (
+                <TableRow className="hover:bg-transparent">
+                  <TableCell colSpan={8} className="px-3 py-4 text-muted-foreground">
+                    No registered users yet.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                s.users.map((u) => (
+                  <TableRow key={u.id} className="align-top">
+                    <TableCell className="px-3 align-top text-foreground font-medium">{u.displayName}</TableCell>
+                    <TableCell className="px-3 align-top text-foreground">{u.email}</TableCell>
+                    <TableCell className="px-3 align-top text-foreground tabular-nums">{u.grade ?? "—"}</TableCell>
+                    <TableCell className="px-3 align-top text-muted-foreground uppercase">{u.language}</TableCell>
+                    <TableCell className="px-3 align-top text-foreground">{u.region || "—"}</TableCell>
+                    <TableCell className="px-3 align-top text-foreground">{u.school || "—"}</TableCell>
+                    <TableCell className="px-3 align-top min-w-40 whitespace-normal text-muted-foreground">
+                      {(u.subjects ?? []).length ? (u.subjects ?? []).join(", ") : "—"}
+                    </TableCell>
+                    <TableCell className="px-3 align-top text-muted-foreground">
+                      {new Date(u.createdAt).toLocaleDateString()}
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </Card>
       </section>
 
       <Subscribers />
@@ -288,42 +296,40 @@ export default async function AdminPage() {
 
       <section>
         <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Recent page views</h2>
-        <div className="mt-3 rounded-xl border border-border bg-card shadow-card overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-background text-xs uppercase tracking-wide text-muted-foreground">
-              <tr>
-                <th className="text-left px-3 py-2">When</th>
-                <th className="text-left px-3 py-2">Path</th>
-                <th className="text-left px-3 py-2">Country</th>
-                <th className="text-left px-3 py-2">City</th>
-                <th className="text-left px-3 py-2">Referrer</th>
-              </tr>
-            </thead>
-            <tbody>
+        <Card className="mt-3 gap-0 py-0 shadow-card">
+          <Table>
+            <TableHeader className="bg-background text-xs uppercase tracking-wide">
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="px-3 text-muted-foreground">When</TableHead>
+                <TableHead className="px-3 text-muted-foreground">Path</TableHead>
+                <TableHead className="px-3 text-muted-foreground">Country</TableHead>
+                <TableHead className="px-3 text-muted-foreground">City</TableHead>
+                <TableHead className="px-3 text-muted-foreground">Referrer</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {s.recentViews.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="px-3 py-4 text-muted-foreground">
+                <TableRow className="hover:bg-transparent">
+                  <TableCell colSpan={5} className="px-3 py-4 whitespace-normal text-muted-foreground">
                     No page views yet. Traffic will appear here as people visit the site.
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ) : (
                 s.recentViews.map((v, i) => (
-                  <tr key={i} className="border-t border-border">
-                    <td className="px-3 py-2 text-muted-foreground whitespace-nowrap">
-                      {new Date(v.createdAt).toLocaleString()}
-                    </td>
-                    <td className="px-3 py-2 text-foreground font-mono">{v.path}</td>
-                    <td className="px-3 py-2 text-foreground">{v.country ?? "—"}</td>
-                    <td className="px-3 py-2 text-foreground">{v.city ?? "—"}</td>
-                    <td className="px-3 py-2 text-muted-foreground truncate max-w-[16rem]" title={v.referrer ?? ""}>
+                  <TableRow key={i}>
+                    <TableCell className="px-3 text-muted-foreground">{new Date(v.createdAt).toLocaleString()}</TableCell>
+                    <TableCell className="px-3 text-foreground font-mono">{v.path}</TableCell>
+                    <TableCell className="px-3 text-foreground">{v.country ?? "—"}</TableCell>
+                    <TableCell className="px-3 text-foreground">{v.city ?? "—"}</TableCell>
+                    <TableCell className="px-3 text-muted-foreground truncate max-w-[16rem]" title={v.referrer ?? ""}>
                       {v.referrer || "—"}
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ))
               )}
-            </tbody>
-          </table>
-        </div>
+            </TableBody>
+          </Table>
+        </Card>
       </section>
     </div>
   );

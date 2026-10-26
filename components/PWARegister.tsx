@@ -3,6 +3,8 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BRAND } from "@/lib/brand";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -47,7 +49,7 @@ export function PWARegister() {
   if (pathname !== "/" || !installEvent || dismissed) return null;
 
   return (
-    <div className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-4 sm:bottom-4 sm:max-w-sm z-30 bg-card border border-primary/30 rounded-xl shadow-pop p-3 flex items-start gap-3">
+    <Card className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-4 sm:bottom-4 sm:max-w-sm z-30 ring-primary/30 shadow-pop p-3 flex-row items-start gap-3">
       <div className="text-2xl">📱</div>
       <div className="flex-1">
         <div className="font-medium text-sm text-foreground">Install {BRAND}</div>
@@ -55,26 +57,26 @@ export function PWARegister() {
           Add to your home screen for faster, offline-capable access.
         </div>
         <div className="mt-2 flex gap-2">
-          <button
+          <Button
             onClick={async () => {
               await installEvent.prompt();
               setInstallEvent(null);
             }}
-            className="text-xs px-3 py-1 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
           >
             Install
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
+            className="text-muted-foreground"
             onClick={() => {
               localStorage.setItem("pwa-install-dismissed", "1");
               setDismissed(true);
             }}
-            className="text-xs px-3 py-1 rounded-lg text-muted-foreground hover:text-foreground"
           >
             Not now
-          </button>
+          </Button>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
