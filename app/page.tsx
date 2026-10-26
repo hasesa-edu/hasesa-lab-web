@@ -143,13 +143,15 @@ export default function Home() {
             >
               {primaryLabel} →
             </Link>
-            <Link
-              href="/experiments"
-              prefetch={false}
-              className="inline-flex items-center px-6 py-3 bg-surface text-ink border border-line rounded-xl hover:border-brand/60 hover:text-brand font-medium transition"
-            >
-              {tr("hero.cta.lessons")}
-            </Link>
+            {user && (
+              <Link
+                href="/experiments"
+                prefetch={false}
+                className="inline-flex items-center px-6 py-3 bg-surface text-ink border border-line rounded-xl hover:border-brand/60 hover:text-brand font-medium transition"
+              >
+                {tr("hero.cta.lessons")}
+              </Link>
+            )}
           </div>
         </div>
       </section>
@@ -213,7 +215,7 @@ function Pricing({ tr }: { tr: TR }) {
           </Link>
         </p>
         {!active && (
-          <Link href="/experiments" className="mt-4 block text-center text-sm text-brand font-medium hover:underline">
+          <Link href={user ? "/experiments" : "/login?next=/experiments"} className="mt-4 block text-center text-sm text-brand font-medium hover:underline">
             {tr("pricing.free")} →
           </Link>
         )}

@@ -98,7 +98,7 @@ Students today rely on YouTube demos (generic, often needing lab equipment they 
 - **FR-18** Sign-up and sign-in via Google only. The first Google sign-in creates the account.
 - **FR-19** Onboarding captures grade (9–12) and subjects of interest. School and region are optional.
 - **FR-20** Students under 18 see a simplified privacy notice, plus a guardian consent flow where the law requires one.
-- **FR-21** Anyone can browse the experiment catalogue and read the free sample guides. Every other guide and the lab assistant require an active Hasesa pass.
+- **FR-21** The experiment catalogue, guides and lab assistant require sign-in. Signed-in students can read the free sample guides. Every other guide and the lab assistant require an active Hasesa pass.
 
 ### 5.4a Pricing & Billing
 - **FR-21a** One plan: a prepaid 30-day pass for 300 ETB, paid through Chapa (Telebirr, CBE Birr, M-Pesa, card). No auto-renewal; each payment stacks 30 days on any remaining time.
