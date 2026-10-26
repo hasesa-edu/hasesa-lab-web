@@ -1,5 +1,5 @@
 import { db, schema } from "@/lib/db/client";
-import { eq } from "drizzle-orm";
+import { and, eq, isNull, ne } from "drizzle-orm";
 import type { Locale } from "@/lib/i18n";
 import { SUBJECTS, isGrade, type Grade, type Subject } from "@/lib/subjects";
 
@@ -43,8 +43,10 @@ export type UserDTO = {
 
 /**
  * Find or create the account for a verified Google identity. Matches on the
- * Google account ID first, then on email (so a changed Google email doesn't
- * fork the account). Returns whether this is a brand-new account.
+ * Google account ID first. An email match only links an account that has no
+ * Google ID yet (created before Google sign-in), so a second Google account
+ * with the same email can't take over an existing one. Returns whether this
+ * is a brand-new account.
  */
 export async function upsertGoogleUser(profile: {
   sub: string;
@@ -56,29 +58,52 @@ export async function upsertGoogleUser(profile: {
   const displayName = (capStr(profile.name, 100) || email.split("@")[0]).slice(0, 100);
   const avatarUrl = typeof profile.picture === "string" && profile.picture.startsWith("https://") ? profile.picture : null;
 
-  const bySub = await db
-    .select({ id: schema.users.id })
-    .from(schema.users)
-    .where(eq(schema.users.googleSub, profile.sub))
-    .limit(1);
-  if (bySub.length) {
-    await db.update(schema.users).set({ email, avatarUrl }).where(eq(schema.users.id, bySub[0].id));
-    return { userId: bySub[0].id, isNew: false };
+  const bySub = await findBySub(profile.sub);
+  if (bySub) {
+    // Keep the email in sync with Google, unless another account already holds it.
+    const taken = await db
+      .select({ id: schema.users.id })
+      .from(schema.users)
+      .where(and(eq(schema.users.email, email), ne(schema.users.id, bySub)))
+      .limit(1);
+    await db
+      .update(schema.users)
+      .set(taken.length ? { avatarUrl } : { email, avatarUrl })
+      .where(eq(schema.users.id, bySub));
+    return { userId: bySub, isNew: false };
   }
 
-  const byEmail = await db
-    .select({ id: schema.users.id })
-    .from(schema.users)
-    .where(eq(schema.users.email, email))
-    .limit(1);
-  if (byEmail.length) {
-    await db.update(schema.users).set({ googleSub: profile.sub, avatarUrl }).where(eq(schema.users.id, byEmail[0].id));
-    return { userId: byEmail[0].id, isNew: false };
-  }
+  const linked = await db
+    .update(schema.users)
+    .set({ googleSub: profile.sub, avatarUrl })
+    .where(and(eq(schema.users.email, email), isNull(schema.users.googleSub)))
+    .returning({ id: schema.users.id });
+  if (linked.length) return { userId: linked[0].id, isNew: false };
 
   const id = crypto.randomUUID();
-  await db.insert(schema.users).values({ id, email, googleSub: profile.sub, displayName, avatarUrl });
-  return { userId: id, isNew: true };
+  const inserted = await db
+    .insert(schema.users)
+    .values({ id, email, googleSub: profile.sub, displayName, avatarUrl })
+    .onConflictDoNothing()
+    .returning({ id: schema.users.id });
+  if (inserted.length) return { userId: id, isNew: true };
+
+  // Lost a race with a parallel sign-in for the same Google account.
+  const raced = await findBySub(profile.sub);
+  if (raced) return { userId: raced, isNew: false };
+  // The email belongs to an account linked to a different Google ID.
+  throw new EmailTakenError();
+}
+
+export class EmailTakenError extends Error {
+  constructor() {
+    super("email already linked to another Google account");
+  }
+}
+
+async function findBySub(sub: string): Promise<string | null> {
+  const rows = await db.select({ id: schema.users.id }).from(schema.users).where(eq(schema.users.googleSub, sub)).limit(1);
+  return rows[0]?.id ?? null;
 }
 
 export async function getUserDTO(userId: string): Promise<UserDTO | null> {

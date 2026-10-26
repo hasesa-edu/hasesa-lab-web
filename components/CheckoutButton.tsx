@@ -47,6 +47,11 @@ export function CheckoutButton({
   useEffect(() => {
     if (auto && signedIn && !started.current) {
       started.current = true;
+      // Replace /account?buy=1 in history so pressing Back from Chapa
+      // doesn't start another checkout.
+      const url = new URL(window.location.href);
+      url.searchParams.delete("buy");
+      window.history.replaceState(window.history.state, "", url.pathname + url.search + url.hash);
       start();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

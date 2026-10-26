@@ -14,6 +14,7 @@ const ERRORS: Record<string, string> = {
   google: "We couldn't reach Google. Please try again.",
   email: "Your Google account needs a verified email address.",
   config: "Google sign-in isn't set up yet. Please try again later.",
+  taken: "This email is already linked to a different Google account. Sign in with that account instead.",
 };
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string; error?: string }> }) {

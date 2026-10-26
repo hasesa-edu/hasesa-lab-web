@@ -4,7 +4,7 @@ import type { Locale } from "@/lib/i18n";
 import { getSession } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
 import { and, eq } from "drizzle-orm";
-import { checkAndIncrement } from "@/lib/usage";
+import { checkAndIncrement, refundUsage } from "@/lib/usage";
 import { getEntitlement } from "@/lib/billing/entitlement";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { readJsonLimited, BODY_LIMIT } from "@/lib/http";
@@ -166,21 +166,9 @@ export async function POST(req: NextRequest) {
     return new Response(JSON.stringify({ error: "messages required" }), { status: 400 });
   }
 
-  const cap = await checkAndIncrement(userId, "chatTurns", 1);
-  if (!cap.ok) {
-    return jsonError(
-      429,
-      `You've used all ${cap.cap} messages for today. They reset at midnight (Addis Ababa time).`,
-      "daily_cap"
-    );
-  }
-
-  // Ensure conversation exists and belongs to this user (prevents writing
-  // into another user's conversation via a supplied conversationId).
-  if (!conversationId) {
-    conversationId = uid();
-    await db.insert(schema.conversations).values({ id: conversationId, userId, lessonId: experimentId ?? null });
-  } else {
+  // A supplied conversationId must belong to this user (prevents writing
+  // into another user's conversation).
+  if (conversationId) {
     const owned = await db
       .select({ id: schema.conversations.id })
       .from(schema.conversations)
@@ -192,11 +180,28 @@ export async function POST(req: NextRequest) {
         headers: { "content-type": "application/json" },
       });
     }
+  }
+
+  // Count the message only once the request is known to be valid.
+  const cap = await checkAndIncrement(userId, "chatTurns", 1);
+  if (!cap.ok) {
+    return jsonError(
+      429,
+      `You've used all ${cap.cap} messages for today. They reset at midnight (Addis Ababa time).`,
+      "daily_cap"
+    );
+  }
+
+  if (!conversationId) {
+    conversationId = uid();
+    await db.insert(schema.conversations).values({ id: conversationId, userId, lessonId: experimentId ?? null });
+  } else {
     await db
       .update(schema.conversations)
       .set({ updatedAt: new Date() })
       .where(and(eq(schema.conversations.id, conversationId), eq(schema.conversations.userId, userId)));
   }
+
   // Persist user's last message
   const lastUser = [...safeMessages].reverse().find((m) => m.role === "user");
   if (lastUser) {
@@ -210,23 +215,32 @@ export async function POST(req: NextRequest) {
 
   const systemPrompt = buildSystemPrompt(locale as Locale, experimentId);
 
-  const aiRes = await fetch(`${AI_BASE_URL}/chat/completions`, {
-    method: "POST",
-    headers: { "content-type": "application/json", authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify({
-      model: AI_MODEL,
-      stream: true,
-      temperature: 0.4,
-      max_tokens: 800,
-      ...(AI_REASONING_EFFORT ? { reasoning_effort: AI_REASONING_EFFORT } : {}),
-      messages: [{ role: "system", content: systemPrompt }, ...safeMessages],
-    }),
-  });
+  let aiRes: Response | null = null;
+  try {
+    aiRes = await fetch(`${AI_BASE_URL}/chat/completions`, {
+      method: "POST",
+      headers: { "content-type": "application/json", authorization: `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        model: AI_MODEL,
+        stream: true,
+        temperature: 0.4,
+        max_tokens: 800,
+        ...(AI_REASONING_EFFORT ? { reasoning_effort: AI_REASONING_EFFORT } : {}),
+        messages: [{ role: "system", content: systemPrompt }, ...safeMessages],
+      }),
+    });
+  } catch (e) {
+    console.error("AI provider request failed:", e);
+  }
 
-  if (!aiRes.ok || !aiRes.body) {
+  if (!aiRes || !aiRes.ok || !aiRes.body) {
     // Log upstream detail server-side; don't relay it to the client.
-    const text = await aiRes.text().catch(() => "");
-    console.error(`AI provider error ${aiRes.status}: ${text.slice(0, 300)}`);
+    if (aiRes) {
+      const text = await aiRes.text().catch(() => "");
+      console.error(`AI provider error ${aiRes.status}: ${text.slice(0, 300)}`);
+    }
+    // The student got no answer, so don't count it against today's messages.
+    await refundUsage(userId, "chatTurns", 1).catch(() => {});
     return new Response(
       JSON.stringify({ error: "The lab assistant is temporarily unavailable. Please try again." }),
       { status: 502, headers: { "content-type": "application/json" } }

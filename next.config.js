@@ -54,13 +54,6 @@ const nextConfig = {
         headers: securityHeaders,
       },
       {
-        // Hashed Next.js build assets are immutable; cache for a year.
-        source: "/_next/static/:path*",
-        headers: [
-          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
-        ],
-      },
-      {
         // Partner logos and the hero video / poster rarely change.
         source: "/:asset(partners/.*|hero-demo\\..*|icon\\..*|manifest\\.json)",
         headers: [

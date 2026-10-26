@@ -17,7 +17,7 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
   const { tx_ref: txRef } = await searchParams;
   const sess = await requireSession();
 
-  let state: "paid" | "pending" | "failed" | "unknown" = "unknown";
+  let state: "paid" | "pending" | "failed" | "review" | "unknown" = "unknown";
   if (txRef && sess) {
     const owner = await db
       .select({ userId: schema.payments.userId })
@@ -70,7 +70,9 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
           <p className="mt-2 text-ink-muted">
             {state === "failed"
               ? "The payment didn't go through, and you haven't been charged for a pass."
-              : "We couldn't find this payment. If money left your account, contact us with the time you paid."}
+              : state === "review"
+                ? "Chapa received a payment, but not the amount we expected, so we couldn't activate your pass automatically. Please contact us and we'll sort it out."
+                : "We couldn't find this payment. If money left your account, contact us with the time you paid."}
           </p>
           <Link href="/account" className="mt-6 inline-block px-5 py-2.5 bg-brand text-brand-on rounded-lg hover:bg-brand-hover font-medium shadow-soft transition">
             Try again

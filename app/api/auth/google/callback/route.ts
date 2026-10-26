@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { decodeIdToken } from "arctic";
 import { googleClient, safeNext, OAUTH_NEXT_COOKIE, OAUTH_STATE_COOKIE, OAUTH_VERIFIER_COOKIE } from "@/lib/auth/google";
-import { upsertGoogleUser } from "@/lib/auth/users";
+import { EmailTakenError, upsertGoogleUser } from "@/lib/auth/users";
 import { getSession } from "@/lib/auth/session";
 
 export const runtime = "nodejs";
@@ -41,12 +41,20 @@ export async function GET(req: NextRequest) {
   }
   if (!claims.sub || !claims.email || claims.email_verified !== true) return fail("email");
 
-  const { userId, isNew } = await upsertGoogleUser({
-    sub: claims.sub,
-    email: claims.email,
-    name: claims.name,
-    picture: claims.picture,
-  });
+  let account: { userId: string; isNew: boolean };
+  try {
+    account = await upsertGoogleUser({
+      sub: claims.sub,
+      email: claims.email,
+      name: claims.name,
+      picture: claims.picture,
+    });
+  } catch (e) {
+    if (e instanceof EmailTakenError) return fail("taken");
+    console.error("google sign-in: account upsert failed:", e);
+    return fail("google");
+  }
+  const { userId, isNew } = account;
 
   const session = await getSession();
   session.userId = userId;
