@@ -35,7 +35,7 @@ export default function OnboardingPage() {
     try {
       await apiPatchMe({ subjects: chosen, grade });
       await refresh();
-      // Coming from "Get Hasesa Lab" (or a guide): carry on to where they were going.
+      // Coming from "Get Hasesa" (or a guide): carry on to where they were going.
       const next = safeNext(new URLSearchParams(window.location.search).get("next"));
       if (next) {
         router.push(next);

@@ -17,14 +17,13 @@ export const t: Dict = {
   "nav.settings": { en: "Grade & subjects" },
   "nav.signin": { en: "Sign in" },
   "nav.signup": { en: "Get started" },
-  "nav.pricing": { en: "Pricing" },
   "nav.account": { en: "Account & billing" },
   "nav.signout": { en: "Sign out" },
   "nav.language": { en: "Language" },
 
   // Hero
   "hero.tag": {
-    en: "Personalized, Hands-On Learning Guided by Real Scientists",
+    en: "Hands-on Learning",
   },
   "hero.title.before": {
     en: "Don't memorize. Do it.",
@@ -129,7 +128,7 @@ export const t: Dict = {
   "pricing.f.notebook": { en: "Your lab notebook: progress and observations" },
   "pricing.f.scientists": { en: "Guides reviewed by real scientists" },
   "pricing.pay": { en: "Pay with Telebirr, CBE Birr, M-Pesa or card through Chapa. Each payment adds 30 days. No auto-charge, renew when you want." },
-  "pricing.cta": { en: "Get Hasesa Lab" },
+  "pricing.cta": { en: "Get Hasesa" },
   "pricing.cta.renew": { en: "Add 30 more days" },
   "pricing.free": { en: "Try 2 free guides first" },
   "pricing.active": { en: "Your pass is active until" },
@@ -266,7 +265,7 @@ export const t: Dict = {
   "common.tryAgain": { en: "Try again" },
 
   "footer.motto": {
-    en: "Personalized, Hands-On Learning Guided by Real Scientists",
+    en: "Hands-on Learning",
   },
   "footer.terms": { en: "Terms" },
   "footer.privacy": { en: "Privacy" },

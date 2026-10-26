@@ -1,5 +1,5 @@
-export const BRAND = "Hasesa Lab";
-export const MOTTO = "Personalized, Hands-On Learning Guided by Real Scientists";
+export const BRAND = "Hasesa";
+export const MOTTO = "Hands-on Learning";
 
 // Legal pages. Fill these in before launch.
 export const COMPANY = "Hasesa";
