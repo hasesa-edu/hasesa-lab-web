@@ -47,11 +47,11 @@ export default function Home() {
         {/* Dark overlay for headline readability */}
         <div
           aria-hidden
-          className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/45 to-black/75"
+          className="absolute inset-0 bg-linear-to-b from-black/60 via-black/45 to-black/75"
         />
 
         <div className="relative w-full max-w-3xl mx-auto px-4 py-16 text-center text-white">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 backdrop-blur px-3 py-1 text-xs font-semibold text-white">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 backdrop-blur-sm px-3 py-1 text-xs font-semibold text-white">
             <span className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse" />
             {tr("hero.tag")}
           </div>
@@ -71,7 +71,7 @@ export default function Home() {
             </a>
             <a
               href="#pricing"
-              className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur text-white border border-white/40 rounded-xl hover:bg-white/20 hover:border-white/70 font-medium transition"
+              className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-sm text-white border border-white/40 rounded-xl hover:bg-white/20 hover:border-white/70 font-medium transition"
             >
               {tr("hero.cta.pricing")}
             </a>
@@ -130,7 +130,7 @@ export default function Home() {
 
       {/* FINAL CTA */}
       <section className="max-w-5xl mx-auto px-4 pb-24">
-        <div className="relative rounded-3xl overflow-hidden border border-brand/30 bg-gradient-to-br from-brand-soft via-sun-soft/30 to-surface p-8 sm:p-12 text-center shadow-card">
+        <div className="relative rounded-3xl overflow-hidden border border-brand/30 bg-linear-to-br from-brand-soft via-sun-soft/30 to-surface p-8 sm:p-12 text-center shadow-card">
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-ink">
             {tr("cta.title")}
           </h2>
@@ -316,7 +316,7 @@ function PillarAITutor({ tr }: { tr: TR }) {
         </div>
         <div className="max-w-[88%]">
           <div className="bg-surface border border-line px-3.5 py-3 rounded-2xl rounded-bl-md text-sm shadow-soft space-y-2">
-            <div className="text-center font-mono text-brand-hover font-bold py-1.5 bg-brand-soft/50 rounded">
+            <div className="text-center font-mono text-brand-hover font-bold py-1.5 bg-brand-soft/50 rounded-sm">
               F = m · a
             </div>
             <p className="text-ink leading-relaxed">

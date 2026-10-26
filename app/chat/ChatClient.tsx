@@ -170,7 +170,7 @@ function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogIt
             value={experimentId ?? ""}
             onChange={(e) => pickExperiment(e.target.value)}
             disabled={busy}
-            className="max-w-full text-sm px-3 py-1.5 rounded-lg border border-line bg-surface text-ink focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/30"
+            className="max-w-full text-sm px-3 py-1.5 rounded-lg border border-line bg-surface text-ink focus:outline-hidden focus:border-brand focus:ring-2 focus:ring-brand/30"
           >
             <option value="">{tr("chat.pickNone")}</option>
             {catalog.map((e) => (
@@ -277,7 +277,7 @@ function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogIt
           maxLength={2000}
           onChange={(e) => setInput(e.target.value)}
           placeholder={tr("chat.placeholder")}
-          className="flex-1 px-4 py-2.5 rounded-lg border border-line bg-surface text-ink focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/30"
+          className="flex-1 px-4 py-2.5 rounded-lg border border-line bg-surface text-ink focus:outline-hidden focus:border-brand focus:ring-2 focus:ring-brand/30"
           disabled={busy || remaining <= 0}
         />
         <button

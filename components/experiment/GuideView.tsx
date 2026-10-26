@@ -330,7 +330,7 @@ function NotebookCard({ exp, tr }: { exp: Experiment; tr: Tr }) {
             maxLength={4000}
             rows={4}
             placeholder={tr("notebook.placeholder")}
-            className="mt-2 w-full px-3 py-2 rounded-lg border border-line bg-surface text-sm text-ink focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/30"
+            className="mt-2 w-full px-3 py-2 rounded-lg border border-line bg-surface text-sm text-ink focus:outline-hidden focus:border-brand focus:ring-2 focus:ring-brand/30"
           />
           <div className="mt-3 flex flex-wrap items-center gap-2">
             {progress?.status !== "done" && (
@@ -379,7 +379,7 @@ function Chip({ children, tone }: { children: React.ReactNode; tone?: "sun" }) {
   return (
     <span
       className={
-        "px-2 py-0.5 rounded font-medium " +
+        "px-2 py-0.5 rounded-sm font-medium " +
         (tone === "sun" ? "bg-sun-soft text-amber-800 dark:text-amber-200" : "bg-surface-2 text-ink-muted border border-line")
       }
     >
@@ -459,7 +459,7 @@ function ExperimentTOC({ exp, tr }: { exp: Experiment; tr: Tr }) {
 
   return (
     <nav aria-label="On this page" className="sticky top-16 z-10 mt-6 -mx-4 px-4 sm:mx-0 sm:px-0">
-      <div className="overflow-x-auto rounded-full border border-line bg-surface/80 backdrop-blur shadow-soft">
+      <div className="overflow-x-auto rounded-full border border-line bg-surface/80 backdrop-blur-sm shadow-soft">
         <ul className="flex items-center gap-1 px-1.5 py-1 whitespace-nowrap">
           {items.map((it) => (
             <li key={it.href}>

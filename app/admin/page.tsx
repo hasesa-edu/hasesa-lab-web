@@ -168,8 +168,8 @@ function TopList({ title, rows }: { title: string; rows: LabelCountRow[] }) {
                 </span>
                 <span className="tabular-nums text-ink-muted">{r.count}</span>
               </div>
-              <div className="mt-1 h-1.5 rounded bg-canvas">
-                <div className="h-full rounded bg-brand" style={{ width: `${(r.count / max) * 100}%` }} />
+              <div className="mt-1 h-1.5 rounded-sm bg-canvas">
+                <div className="h-full rounded-sm bg-brand" style={{ width: `${(r.count / max) * 100}%` }} />
               </div>
             </li>
           ))}
