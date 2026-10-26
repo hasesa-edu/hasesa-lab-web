@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useLocale } from "@/components/LocaleProvider";
@@ -126,6 +127,13 @@ export default function OnboardingPage() {
         >
           {busy ? "…" : tr("onboard.continue")}
         </button>
+        {!user.grade && (
+          <p className="mt-4 text-xs text-ink-subtle leading-relaxed text-center">
+            By continuing you agree to our{" "}
+            <Link href="/terms" className="underline hover:text-brand">Terms</Link> and{" "}
+            <Link href="/privacy" className="underline hover:text-brand">Privacy Policy</Link>.
+          </p>
+        )}
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
+import { googleSignInHref } from "@/components/GoogleButton";
 import type { t as Dict } from "@/lib/i18n";
 import { CheckoutButton } from "@/components/CheckoutButton";
 import { PLAN, isPlanActive } from "@/lib/billing/plan";
@@ -15,7 +16,7 @@ type TR = (k: Key) => string;
 export default function Home() {
   const { tr } = useLocale();
   const { user, ready } = useUser();
-  const primaryHref = user ? "/dashboard" : "/login";
+  const primaryHref = user ? "/dashboard" : googleSignInHref();
   const primaryLabel =
     ready && user ? tr("hero.cta.dashboard") : tr("hero.cta.signup");
 
@@ -62,13 +63,12 @@ export default function Home() {
             {tr("hero.sub")}
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Link
+            <a
               href={primaryHref}
-              prefetch={false}
               className="inline-flex items-center px-6 py-3 bg-brand text-brand-on rounded-xl hover:bg-brand-hover font-semibold shadow-card transition"
             >
               {primaryLabel} →
-            </Link>
+            </a>
             <a
               href="#pricing"
               className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur text-white border border-white/40 rounded-xl hover:bg-white/20 hover:border-white/70 font-medium transition"
@@ -136,13 +136,12 @@ export default function Home() {
           </h2>
           <p className="mt-3 text-ink-muted max-w-xl mx-auto">{tr("cta.sub")}</p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-            <Link
+            <a
               href={primaryHref}
-              prefetch={false}
               className="inline-flex items-center px-6 py-3 bg-brand text-brand-on rounded-xl hover:bg-brand-hover font-semibold shadow-card transition"
             >
               {primaryLabel} →
-            </Link>
+            </a>
             {user && (
               <Link
                 href="/experiments"
@@ -215,9 +214,9 @@ function Pricing({ tr }: { tr: TR }) {
           </Link>
         </p>
         {!active && (
-          <Link href={user ? "/experiments" : "/login?next=/experiments"} className="mt-4 block text-center text-sm text-brand font-medium hover:underline">
+          <a href={user ? "/experiments" : googleSignInHref("/experiments")} className="mt-4 block text-center text-sm text-brand font-medium hover:underline">
             {tr("pricing.free")} →
-          </Link>
+          </a>
         )}
       </div>
     </section>

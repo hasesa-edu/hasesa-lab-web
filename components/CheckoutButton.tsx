@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { googleSignInHref } from "./GoogleButton";
 
 /**
  * Starts a Chapa checkout. Signed-out visitors are sent to Google sign-in
@@ -23,7 +24,7 @@ export function CheckoutButton({
 
   async function start() {
     if (!signedIn) {
-      window.location.href = "/login?next=" + encodeURIComponent("/account?buy=1");
+      window.location.href = googleSignInHref("/account?buy=1");
       return;
     }
     setBusy(true);
@@ -32,7 +33,7 @@ export function CheckoutButton({
       const res = await fetch("/api/billing/checkout", { method: "POST" });
       const data = await res.json().catch(() => null);
       if (res.status === 401) {
-        window.location.href = "/login?next=" + encodeURIComponent("/account?buy=1");
+        window.location.href = googleSignInHref("/account?buy=1");
         return;
       }
       if (!res.ok || !data?.checkoutUrl) throw new Error(data?.error || "Couldn't start the payment.");

@@ -15,7 +15,7 @@ export const t: Dict = {
   "nav.assistant": { en: "Lab Assistant" },
   "nav.dashboard": { en: "My lab notebook" },
   "nav.settings": { en: "Grade & subjects" },
-  "nav.signin": { en: "Sign in" },
+  "nav.signin": { en: "Continue with Google" },
   "nav.signup": { en: "Get started" },
   "nav.account": { en: "Account & billing" },
   "nav.signout": { en: "Sign out" },
