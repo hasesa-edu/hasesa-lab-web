@@ -15,8 +15,9 @@ export const t: Dict = {
   "nav.assistant": { en: "Lab Assistant" },
   "nav.dashboard": { en: "My lab notebook" },
   "nav.settings": { en: "Grade & subjects" },
-  "nav.signin": { en: "Sign in" },
-  "nav.signup": { en: "Sign up" },
+  "nav.signin": { en: "Continue with Google" },
+  "nav.signup": { en: "Get started" },
+  "nav.account": { en: "Account & billing" },
   "nav.signout": { en: "Sign out" },
   "nav.language": { en: "Language" },
 
@@ -33,15 +34,15 @@ export const t: Dict = {
   "hero.sub": {
     en: "An at-home experiment for every lesson, plus a tutor that learns at your pace.",
   },
-  "hero.cta.lessons": { en: "Browse lessons" },
-  "hero.cta.chat": { en: "Try the AI tutor" },
-  "hero.cta.signup": { en: "Get started" },
+  "hero.cta.lessons": { en: "Browse experiments" },
+  "hero.cta.pricing": { en: "See pricing" },
+  "hero.cta.signup": { en: "Continue with Google" },
   "hero.cta.dashboard": { en: "Go to my dashboard" },
-  "hero.pilot": {
-    en: "Free during pilot",
+  "hero.price": {
+    en: "300 ETB / month",
   },
-  "hero.pilot.note": {
-    en: "Create a free account in under a minute. No SMS needed.",
+  "hero.price.note": {
+    en: "Try 2 guides free. Pay with Telebirr, CBE Birr or card.",
   },
   "hero.video.alt": {
     en: "Short demo of the AI tutor answering a question with worked steps",
@@ -113,8 +114,24 @@ export const t: Dict = {
   // CTA strip
   "cta.title": { en: "Ready to start learning?" },
   "cta.sub": {
-    en: "Create a free pilot account in under a minute. No SMS required.",
+    en: "Sign in with Google in seconds, try two guides for free, and unlock everything for 300 ETB a month.",
   },
+
+  // Pricing
+  "pricing.eyebrow": { en: "Pricing" },
+  "pricing.title": { en: "One simple pass" },
+  "pricing.plan": { en: "Monthly pass" },
+  "pricing.per": { en: "/ month" },
+  "pricing.f.guides": { en: "Every step-by-step experiment guide, grades 9–12" },
+  "pricing.f.videos": { en: "Demo videos and local-material substitutes" },
+  "pricing.f.assistant": { en: "AI lab assistant, up to 30 questions a day" },
+  "pricing.f.notebook": { en: "Your lab notebook: progress and observations" },
+  "pricing.f.scientists": { en: "Guides reviewed by real scientists" },
+  "pricing.pay": { en: "Pay with Telebirr, CBE Birr, M-Pesa or card through Chapa. Each payment adds 30 days. No auto-charge, renew when you want." },
+  "pricing.cta": { en: "Get Hasesa" },
+  "pricing.cta.renew": { en: "Add 30 more days" },
+  "pricing.free": { en: "Try 2 free guides first" },
+  "pricing.active": { en: "Your pass is active until" },
 
   // Experiments catalogue + guide
   "experiments.title": { en: "Experiments" },
@@ -130,7 +147,9 @@ export const t: Dict = {
   "experiments.minutes": { en: "min" },
   "experiments.easy": { en: "Easy" },
   "experiments.medium": { en: "Medium" },
-  "experiments.sample": { en: "Sample guide · pending teacher review" },
+  "experiments.reviewedBy": { en: "Reviewed by" },
+  "experiments.free": { en: "Free sample" },
+  "experiments.locked": { en: "Subscribers" },
   "experiments.badge.video": { en: "Video" },
   "experiments.badge.materials": { en: "materials" },
   "experiments.badge.done": { en: "Done" },
@@ -151,40 +170,12 @@ export const t: Dict = {
   "chat.thinking": { en: "Thinking…" },
   "chat.empty.title": { en: "How can I help with your experiment?" },
   "chat.empty.body": { en: "Pick the experiment you're doing for better answers, or just ask." },
-  "chat.disclaimer": { en: "Demo build. AI can make mistakes — always follow the safety notes in the guide." },
+  "chat.disclaimer": { en: "AI can make mistakes. Always follow the safety notes in the guide." },
   "chat.error": { en: "Couldn't reach the lab assistant. Try again." },
   "chat.pickLabel": { en: "Experiment:" },
   "chat.pickNone": { en: "None (general question)" },
   "chat.viewExperiment": { en: "Open guide" },
   "chat.newMessage": { en: "New message" },
-
-  // Auth
-  "auth.signin.title": { en: "Sign in" },
-  "auth.signup.title": { en: "Create your account" },
-  "auth.signup.tagline": { en: "Free to get started. No SMS required." },
-  "auth.username": { en: "Username" },
-  "auth.email": { en: "Email" },
-  "auth.displayName": { en: "Display name (optional)" },
-  "auth.password": { en: "Password" },
-  "auth.passwordRule": { en: "Minimum 8 characters." },
-  "auth.grade": { en: "Grade (optional)" },
-  "auth.grade.none": { en: "Choose your grade" },
-  "auth.region": { en: "Region (optional)" },
-  "auth.school": { en: "School (optional)" },
-  "auth.under18": {
-    en: "I am under 18. (We'll show a simplified privacy notice.)",
-  },
-  "auth.under18.notice": {
-    en: "We collect only your email, grade, and experiment progress and notes. Demo notice — a production version would meet Ethiopia's data protection guidelines.",
-  },
-  "auth.err.signup": { en: "Sign-up failed. Try again." },
-  "auth.signin.cta": { en: "Sign in" },
-  "auth.signup.cta": { en: "Create account" },
-  "auth.signin.alt": { en: "Already have an account?" },
-  "auth.signup.alt": { en: "Don't have one yet?" },
-  "auth.err.takenUsername": { en: "That username is already taken." },
-  "auth.err.wrong": { en: "Wrong username or password." },
-  "auth.err.required": { en: "Username and password are required." },
 
   // Onboarding
   "onboard.welcome": { en: "Welcome — let's set up your lab." },
@@ -273,9 +264,12 @@ export const t: Dict = {
   "common.signinCTA": { en: "Sign in" },
   "common.tryAgain": { en: "Try again" },
 
-  "footer.demo": {
-    en: "Free during pilot · feedback welcome",
+  "footer.motto": {
+    en: "Quality Education for Ethiopian High School Students",
   },
+  "footer.terms": { en: "Terms" },
+  "footer.privacy": { en: "Privacy" },
+  "footer.refund": { en: "Refunds" },
 };
 
 export function tr(key: keyof typeof t, locale: Locale): string {

@@ -1,7 +1,8 @@
 import { ImageResponse } from "next/og";
+import { BRAND, MOTTO } from "@/lib/brand";
 
 export const runtime = "edge";
-export const alt = "Hasesa — Quality Education for Ethiopian High School Students";
+export const alt = `${BRAND} · ${MOTTO}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -53,22 +54,7 @@ export default async function OG() {
               />
             </svg>
           </div>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 32, fontWeight: 700, letterSpacing: "-0.02em" }}>
-              Hasesa
-            </div>
-            <div
-              style={{
-                fontSize: 16,
-                opacity: 0.8,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                marginTop: 4,
-              }}
-            >
-              Personal AI Tutor
-            </div>
-          </div>
+          <div style={{ fontSize: 32, fontWeight: 700, letterSpacing: "-0.02em" }}>{BRAND}</div>
         </div>
 
         {/* Headline */}
@@ -126,7 +112,7 @@ export default async function OG() {
             }}
           >
             <div style={{ width: 8, height: 8, borderRadius: 999, background: "#f59e0b" }} />
-            Free during pilot
+            300 ETB / month · 2 free guides
           </div>
         </div>
       </div>

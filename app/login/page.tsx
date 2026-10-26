@@ -1,81 +1,44 @@
-"use client";
-
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { GoogleButton } from "@/components/GoogleButton";
+import { requireSession } from "@/lib/auth/session";
+import { safeNext } from "@/lib/safe-next";
+import { BRAND, MOTTO } from "@/lib/brand";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useLocale } from "@/components/LocaleProvider";
-import { useUser } from "@/components/UserProvider";
-import { apiSignin } from "@/lib/api";
 
-export default function LoginPage() {
-  const { tr } = useLocale();
-  const { refresh } = useUser();
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
+export const metadata: Metadata = { title: `Sign in · ${BRAND}` };
 
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setBusy(true);
-    try {
-      await apiSignin(email, password);
-      await refresh();
-      router.push("/dashboard");
-    } catch (e: any) {
-      console.error("signin failed:", e);
-      setError(tr("auth.err.wrong"));
-    } finally {
-      setBusy(false);
-    }
-  }
+const ERRORS: Record<string, string> = {
+  cancelled: "Google sign-in was cancelled. Try again when you're ready.",
+  state: "Your sign-in session expired. Please try again.",
+  google: "We couldn't reach Google. Please try again.",
+  email: "Your Google account needs a verified email address.",
+  config: "Google sign-in isn't set up yet. Please try again later.",
+  taken: "This email is already linked to a different Google account. Sign in with that account instead.",
+};
+
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string; error?: string }> }) {
+  const sp = await searchParams;
+  const next = safeNext(sp.next) ?? undefined;
+  if (await requireSession()) redirect(next ?? "/dashboard");
+  const error = sp.error ? ERRORS[sp.error] ?? ERRORS.google : null;
 
   return (
     <div className="max-w-md mx-auto px-4 py-14">
-      <div className="rounded-2xl border border-line bg-surface p-7 shadow-card">
-        <h1 className="text-3xl font-extrabold tracking-tight text-ink">{tr("auth.signin.title")}</h1>
-
-        <form onSubmit={onSubmit} className="mt-6 space-y-4">
-          <div>
-            <label className="text-sm font-medium text-ink block">{tr("auth.email")}</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              autoFocus
-              required
-              className="mt-1.5 w-full px-3.5 py-2.5 border border-line rounded-lg focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/30 bg-canvas text-ink"
-            />
+      <div className="rounded-2xl border border-line bg-surface p-7 shadow-card text-center">
+        <h1 className="text-3xl font-extrabold tracking-tight text-ink">Welcome to {BRAND}</h1>
+        <p className="mt-2 text-sm text-ink-muted">{MOTTO}</p>
+        {error && (
+          <div role="alert" className="mt-5 text-sm text-red-700 dark:text-red-300">
+            {error}
           </div>
-          <div>
-            <label className="text-sm font-medium text-ink block">{tr("auth.password")}</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-              required
-              className="mt-1.5 w-full px-3.5 py-2.5 border border-line rounded-lg focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/30 bg-canvas text-ink"
-            />
-          </div>
-          {error && <div className="text-sm text-red-700 dark:text-red-300">{error}</div>}
-          <button
-            type="submit"
-            disabled={busy}
-            className="w-full px-4 py-2.5 bg-brand text-brand-on rounded-lg hover:bg-brand-hover disabled:opacity-50 font-medium shadow-soft transition"
-          >
-            {busy ? "…" : tr("auth.signin.cta")}
-          </button>
-          <p className="text-sm text-ink-muted text-center">
-            {tr("auth.signup.alt")}{" "}
-            <Link href="/signup" className="text-brand hover:underline font-medium">
-              {tr("auth.signup.cta")}
-            </Link>
-          </p>
-        </form>
+        )}
+        <GoogleButton next={next} className="mt-6 w-full" />
+        <p className="mt-5 text-xs text-ink-subtle leading-relaxed">
+          New here? Continuing with Google creates your account. By continuing you agree to our{" "}
+          <Link href="/terms" className="underline hover:text-brand">Terms</Link> and{" "}
+          <Link href="/privacy" className="underline hover:text-brand">Privacy Policy</Link>.
+        </p>
       </div>
     </div>
   );

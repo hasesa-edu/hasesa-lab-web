@@ -1,4 +1,4 @@
-# Hasesa — Hands-on science for Ethiopian high school students
+# Hasesa — Quality Education for Ethiopian High School Students
 
 Hasesa helps students in grades 9–12 do real biology, chemistry and physics experiments on their own, using cheap, locally available materials. Each experiment has:
 

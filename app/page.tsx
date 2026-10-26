@@ -4,7 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
+import { googleSignInHref } from "@/components/GoogleButton";
 import type { t as Dict } from "@/lib/i18n";
+import { CheckoutButton } from "@/components/CheckoutButton";
+import { PLAN, isPlanActive } from "@/lib/billing/plan";
+import { formatDate } from "@/lib/format";
 
 type Key = keyof typeof Dict;
 type TR = (k: Key) => string;
@@ -12,7 +16,7 @@ type TR = (k: Key) => string;
 export default function Home() {
   const { tr } = useLocale();
   const { user, ready } = useUser();
-  const primaryHref = user ? "/dashboard" : "/signup";
+  const primaryHref = user ? "/dashboard" : googleSignInHref();
   const primaryLabel =
     ready && user ? tr("hero.cta.dashboard") : tr("hero.cta.signup");
 
@@ -59,28 +63,26 @@ export default function Home() {
             {tr("hero.sub")}
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Link
+            <a
               href={primaryHref}
-              prefetch={false}
               className="inline-flex items-center px-6 py-3 bg-brand text-brand-on rounded-xl hover:bg-brand-hover font-semibold shadow-card transition"
             >
               {primaryLabel} →
-            </Link>
-            <Link
-              href="/chat"
-              prefetch={false}
+            </a>
+            <a
+              href="#pricing"
               className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur text-white border border-white/40 rounded-xl hover:bg-white/20 hover:border-white/70 font-medium transition"
             >
-              {tr("hero.cta.chat")}
-            </Link>
+              {tr("hero.cta.pricing")}
+            </a>
           </div>
           <p className="mt-5 text-xs text-white/80">
             <span className="inline-flex items-center gap-1 font-semibold text-white">
               <span className="w-1.5 h-1.5 rounded-full bg-brand" />
-              {tr("hero.pilot")}
+              {tr("hero.price")}
             </span>
             <span className="mx-2">·</span>
-            {tr("hero.pilot.note")}
+            {tr("hero.price.note")}
           </p>
         </div>
       </section>
@@ -124,6 +126,8 @@ export default function Home() {
         </ul>
       </section>
 
+      <Pricing tr={tr} />
+
       {/* FINAL CTA */}
       <section className="max-w-5xl mx-auto px-4 pb-24">
         <div className="relative rounded-3xl overflow-hidden border border-brand/30 bg-gradient-to-br from-brand-soft via-sun-soft/30 to-surface p-8 sm:p-12 text-center shadow-card">
@@ -132,20 +136,21 @@ export default function Home() {
           </h2>
           <p className="mt-3 text-ink-muted max-w-xl mx-auto">{tr("cta.sub")}</p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-            <Link
+            <a
               href={primaryHref}
-              prefetch={false}
               className="inline-flex items-center px-6 py-3 bg-brand text-brand-on rounded-xl hover:bg-brand-hover font-semibold shadow-card transition"
             >
               {primaryLabel} →
-            </Link>
-            <Link
-              href="/lessons"
-              prefetch={false}
-              className="inline-flex items-center px-6 py-3 bg-surface text-ink border border-line rounded-xl hover:border-brand/60 hover:text-brand font-medium transition"
-            >
-              {tr("hero.cta.lessons")}
-            </Link>
+            </a>
+            {user && (
+              <Link
+                href="/experiments"
+                prefetch={false}
+                className="inline-flex items-center px-6 py-3 bg-surface text-ink border border-line rounded-xl hover:border-brand/60 hover:text-brand font-medium transition"
+              >
+                {tr("hero.cta.lessons")}
+              </Link>
+            )}
           </div>
         </div>
       </section>
@@ -154,6 +159,69 @@ export default function Home() {
 }
 
 /* ────────────────────────  PIECES  ──────────────────────── */
+
+function Pricing({ tr }: { tr: TR }) {
+  const { user } = useUser();
+  const active = isPlanActive(user?.paidUntil);
+  const features: Key[] = [
+    "pricing.f.guides",
+    "pricing.f.videos",
+    "pricing.f.assistant",
+    "pricing.f.notebook",
+    "pricing.f.scientists",
+  ];
+  return (
+    <section id="pricing" className="max-w-5xl mx-auto px-4 pb-20 scroll-mt-20">
+      <div className="max-w-2xl mx-auto text-center">
+        <p className="text-xs uppercase tracking-[0.18em] font-bold text-brand">{tr("pricing.eyebrow")}</p>
+        <h2 className="mt-2 text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-ink leading-[1.05]">
+          {tr("pricing.title")}
+        </h2>
+        <p className="mt-3 text-ink-muted">{tr("footer.motto")}.</p>
+      </div>
+
+      <div className="mt-10 max-w-md mx-auto rounded-3xl border-2 border-brand/40 bg-surface p-7 sm:p-8 shadow-card">
+        <p className="text-sm font-semibold text-brand uppercase tracking-wide">{tr("pricing.plan")}</p>
+        <p className="mt-2 flex items-baseline gap-2">
+          <span className="text-5xl font-extrabold tracking-tight text-ink tabular-nums">{PLAN.priceEtb}</span>
+          <span className="text-lg font-semibold text-ink">ETB</span>
+          <span className="text-ink-muted">{tr("pricing.per")}</span>
+        </p>
+        <ul className="mt-6 space-y-2.5">
+          {features.map((k) => (
+            <li key={k} className="flex gap-2.5 text-sm text-ink">
+              <span aria-hidden className="mt-0.5 text-brand font-bold">✓</span>
+              <span>{tr(k)}</span>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-7">
+          {active && user?.paidUntil && (
+            <p className="mb-3 text-sm text-emerald-700 dark:text-emerald-300 font-medium">
+              {tr("pricing.active")} {formatDate(user.paidUntil)}.
+            </p>
+          )}
+          <CheckoutButton
+            signedIn={!!user}
+            label={active ? tr("pricing.cta.renew") : tr("pricing.cta")}
+            className="w-full py-3"
+          />
+        </div>
+        <p className="mt-4 text-xs text-ink-subtle leading-relaxed">
+          {tr("pricing.pay")}{" "}
+          <Link href="/refund" className="underline hover:text-brand">
+            {tr("footer.refund")}
+          </Link>
+        </p>
+        {!active && (
+          <a href={user ? "/experiments" : googleSignInHref("/experiments")} className="mt-4 block text-center text-sm text-brand font-medium hover:underline">
+            {tr("pricing.free")} →
+          </a>
+        )}
+      </div>
+    </section>
+  );
+}
 
 function Backdrop() {
   return (
