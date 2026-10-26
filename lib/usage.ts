@@ -63,3 +63,12 @@ export async function checkAndIncrement(
   }
   return { ok: true, current: (updated[0] as any).value, cap };
 }
+
+/** Gives back usage counted for a request that then failed (e.g. the AI provider errored). */
+export async function refundUsage(userId: string, field: UsageField, amount = 1) {
+  const col = FIELD_MAP[field];
+  await db
+    .update(schema.usage)
+    .set({ [field]: sql`greatest(${col} - ${amount}, 0)` })
+    .where(and(eq(schema.usage.userId, userId), eq(schema.usage.period, currentPeriod())));
+}

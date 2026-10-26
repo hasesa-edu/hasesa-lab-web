@@ -6,7 +6,9 @@ export const users = pgTable(
     id: text("id").primaryKey(),
     email: text("email").notNull(),
     // Google account ID ("sub" claim). Google is the only sign-in method.
-    googleSub: text("google_sub").notNull(),
+    // Nullable so accounts created before Google sign-in can be linked by
+    // email on their first Google sign-in.
+    googleSub: text("google_sub"),
     avatarUrl: text("avatar_url"),
     displayName: text("display_name").notNull(),
     language: text("language").notNull().$type<"en" | "am" | "om">().default("en"),
@@ -111,7 +113,8 @@ export const payments = pgTable(
     amountEtb: integer("amount_etb").notNull(),
     currency: text("currency").notNull().default("ETB"),
     days: integer("days").notNull(),
-    status: text("status").notNull().$type<"pending" | "success" | "failed">(),
+    // "review": Chapa says paid, but the amount or currency didn't match. Needs a human.
+    status: text("status").notNull().$type<"pending" | "success" | "failed" | "review">(),
     source: text("source").notNull().$type<"chapa" | "admin">(),
     chapaRef: text("chapa_ref"),
     note: text("note"),

@@ -108,6 +108,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
 function StatusPill({ status, txRef, source }: { status: string; txRef: string; source: string }) {
   if (status === "success") return <span className="text-emerald-700 dark:text-emerald-300 font-medium">Paid</span>;
   if (status === "failed") return <span className="text-red-700 dark:text-red-300">Failed</span>;
+  if (status === "review") return <span className="text-amber-700 dark:text-amber-300">Needs review · contact us</span>;
   return source === "chapa" ? (
     <Link href={`/billing/return?tx_ref=${encodeURIComponent(txRef)}`} className="text-amber-700 dark:text-amber-300 underline">
       Pending · check

@@ -35,6 +35,7 @@ export type ApplyResult =
   | { state: "paid"; paidUntil: Date | null } // paidUntil null = was already applied earlier
   | { state: "pending" }
   | { state: "failed" }
+  | { state: "review" } // Chapa says paid, but not the amount we expected
   | { state: "unknown" };
 
 /** Verifies a Chapa transaction and, if it's a successful 300 ETB payment, extends the pass. */
@@ -43,6 +44,7 @@ export async function verifyAndApply(txRef: string): Promise<ApplyResult> {
   const payment = rows[0];
   if (!payment || payment.source !== "chapa") return { state: "unknown" };
   if (payment.status === "success") return { state: "paid", paidUntil: null };
+  if (payment.status === "review") return { state: "review" };
 
   const tx = await verifyTransaction(txRef);
   if (!tx || tx.status === "pending") return { state: "pending" };
@@ -55,7 +57,11 @@ export async function verifyAndApply(txRef: string): Promise<ApplyResult> {
   }
   if (tx.currency !== payment.currency || !(tx.amount >= payment.amountEtb)) {
     console.error(`chapa amount mismatch for ${txRef}: got ${tx.amount} ${tx.currency}`);
-    return { state: "failed" };
+    await db
+      .update(schema.payments)
+      .set({ status: "review", verifiedAt: new Date(), chapaRef: tx.reference, note: `Chapa reported ${tx.amount} ${tx.currency}` })
+      .where(and(eq(schema.payments.txRef, txRef), eq(schema.payments.status, "pending")));
+    return { state: "review" };
   }
   const paidUntil = await claimAndExtend(txRef, tx.reference);
   return { state: "paid", paidUntil };

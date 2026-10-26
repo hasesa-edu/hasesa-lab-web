@@ -18,23 +18,30 @@ export async function initializeCheckout(input: {
   returnUrl: string;
   callbackUrl: string;
 }): Promise<{ ok: true; checkoutUrl: string } | { ok: false; error: string }> {
-  const res = await fetch(`${CHAPA_API}/transaction/initialize`, {
-    method: "POST",
-    headers: { authorization: `Bearer ${secretKey()}`, "content-type": "application/json" },
-    body: JSON.stringify({
-      amount: String(input.amountEtb),
-      currency: "ETB",
-      email: input.email,
-      first_name: input.firstName,
-      last_name: input.lastName,
-      tx_ref: input.txRef,
-      return_url: input.returnUrl,
-      callback_url: input.callbackUrl,
-      // Chapa only allows letters, numbers, spaces, dots, hyphens and underscores here.
-      customization: { title: BRAND, description: "30 day pass" },
-      meta: { payment_reason: `${BRAND} 30 day pass` },
-    }),
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${CHAPA_API}/transaction/initialize`, {
+      method: "POST",
+      headers: { authorization: `Bearer ${secretKey()}`, "content-type": "application/json" },
+      body: JSON.stringify({
+        amount: String(input.amountEtb),
+        currency: "ETB",
+        email: input.email,
+        first_name: input.firstName,
+        last_name: input.lastName,
+        tx_ref: input.txRef,
+        return_url: input.returnUrl,
+        callback_url: input.callbackUrl,
+        // Chapa only allows letters, numbers, spaces, dots, hyphens and underscores here.
+        customization: { title: BRAND, description: "30 day pass" },
+        meta: { payment_reason: `${BRAND} 30 day pass` },
+      }),
+      signal: AbortSignal.timeout(15_000),
+    });
+  } catch (e) {
+    console.error("chapa initialize unreachable:", e);
+    return { ok: false, error: "Couldn't reach the payment provider. Please try again." };
+  }
   const data = await res.json().catch(() => null);
   const url = data?.data?.checkout_url;
   if (!res.ok || data?.status !== "success" || typeof url !== "string") {
@@ -48,10 +55,18 @@ export type VerifiedTx = { status: "success" | "failed" | "pending"; amount: num
 
 /** Asks Chapa for the real status of a transaction. The only thing we trust to mark a payment paid. */
 export async function verifyTransaction(txRef: string): Promise<VerifiedTx | null> {
-  const res = await fetch(`${CHAPA_API}/transaction/verify/${encodeURIComponent(txRef)}`, {
-    headers: { authorization: `Bearer ${secretKey()}` },
-    cache: "no-store",
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${CHAPA_API}/transaction/verify/${encodeURIComponent(txRef)}`, {
+      headers: { authorization: `Bearer ${secretKey()}` },
+      cache: "no-store",
+      signal: AbortSignal.timeout(15_000),
+    });
+  } catch (e) {
+    // Network error or timeout: treat as "not confirmed yet" so callers retry later.
+    console.error("chapa verify unreachable:", e);
+    return null;
+  }
   const data = await res.json().catch(() => null);
   const tx = data?.data;
   if (!res.ok || !tx) {

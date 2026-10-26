@@ -60,6 +60,11 @@ export function Nav() {
 
   async function handleSignOut() {
     await apiSignout();
+    // Older versions of the service worker cached signed-in pages; drop them.
+    if (typeof caches !== "undefined") {
+      const keys = await caches.keys().catch(() => [] as string[]);
+      await Promise.all(keys.filter((k) => k.includes("-pages-")).map((k) => caches.delete(k)));
+    }
     await refresh();
     setMenuOpen(false);
     setMobileOpen(false);
