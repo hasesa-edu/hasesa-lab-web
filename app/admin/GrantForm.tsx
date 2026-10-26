@@ -5,7 +5,7 @@ import { grantPassAction, type GrantState } from "./actions";
 
 export function GrantForm() {
   const [state, action, pending] = useActionState<GrantState, FormData>(grantPassAction, null);
-  const input = "px-3 py-2 rounded-lg border border-line bg-canvas text-ink text-sm focus:outline-none focus:border-brand";
+  const input = "px-3 py-2 rounded-lg border border-line bg-canvas text-ink text-sm focus:outline-hidden focus:border-brand";
   return (
     <form action={action} className="flex flex-wrap items-end gap-2">
       <label className="flex flex-col gap-1 text-xs text-ink-muted">

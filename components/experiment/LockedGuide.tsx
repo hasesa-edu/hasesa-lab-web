@@ -26,10 +26,10 @@ export function LockedGuide({ item, signedIn }: { item: CatalogItem; signedIn: b
 
       <div className="relative mt-8 rounded-2xl border border-line bg-surface overflow-hidden shadow-card">
         <div aria-hidden className="p-6 space-y-3 blur-[3px] select-none opacity-60">
-          <div className="h-4 w-1/3 rounded bg-surface-2" />
-          <div className="h-3 w-full rounded bg-surface-2" />
-          <div className="h-3 w-5/6 rounded bg-surface-2" />
-          <div className="h-3 w-2/3 rounded bg-surface-2" />
+          <div className="h-4 w-1/3 rounded-sm bg-surface-2" />
+          <div className="h-3 w-full rounded-sm bg-surface-2" />
+          <div className="h-3 w-5/6 rounded-sm bg-surface-2" />
+          <div className="h-3 w-2/3 rounded-sm bg-surface-2" />
           <div className="h-16 w-full rounded-xl bg-surface-2" />
           <div className="h-16 w-full rounded-xl bg-surface-2" />
         </div>
