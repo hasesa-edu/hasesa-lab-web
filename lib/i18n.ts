@@ -23,7 +23,7 @@ export const t: Dict = {
 
   // Hero
   "hero.tag": {
-    en: "Hands-on Learning",
+    en: "Quality Education for Ethiopian High School Students",
   },
   "hero.title.before": {
     en: "Don't memorize. Do it.",
@@ -265,7 +265,7 @@ export const t: Dict = {
   "common.tryAgain": { en: "Try again" },
 
   "footer.motto": {
-    en: "Hands-on Learning",
+    en: "Quality Education for Ethiopian High School Students",
   },
   "footer.terms": { en: "Terms" },
   "footer.privacy": { en: "Privacy" },
