@@ -1,7 +1,7 @@
 {
   "name": "Hasesa",
   "short_name": "Hasesa",
-  "description": "Hands-on Learning. Science experiments for Ethiopian grades 9–12, with step-by-step guides, videos and an AI lab assistant.",
+  "description": "Quality Education for Ethiopian High School Students. Science experiments for Ethiopian grades 9–12, with step-by-step guides, videos and an AI lab assistant.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

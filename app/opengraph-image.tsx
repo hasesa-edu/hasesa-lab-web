@@ -54,21 +54,7 @@ export default async function OG() {
               />
             </svg>
           </div>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 32, fontWeight: 700, letterSpacing: "-0.02em" }}>
-              {BRAND}
-            </div>
-            <div
-              style={{
-                fontSize: 16,
-                opacity: 0.8,
-                letterSpacing: "0.02em",
-                marginTop: 4,
-              }}
-            >
-              {MOTTO}
-            </div>
-          </div>
+          <div style={{ fontSize: 32, fontWeight: 700, letterSpacing: "-0.02em" }}>{BRAND}</div>
         </div>
 
         {/* Headline */}

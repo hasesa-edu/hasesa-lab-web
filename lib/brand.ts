@@ -1,5 +1,5 @@
 export const BRAND = "Hasesa";
-export const MOTTO = "Hands-on Learning";
+export const MOTTO = "Quality Education for Ethiopian High School Students";
 
 // Legal pages. Fill these in before launch.
 export const COMPANY = "Hasesa";
