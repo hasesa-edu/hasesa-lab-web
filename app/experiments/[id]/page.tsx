@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { adjacentExperiments, getExperiment, toCatalogItem } from "@/lib/experiments";
 import { requireSession } from "@/lib/auth/session";
 import { canReadGuide, getEntitlement } from "@/lib/billing/entitlement";
@@ -18,7 +19,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ExperimentPage({ params }: Props) {
-  const exp = getExperiment((await params).id);
+  const { id } = await params;
+  const sess = await requireSession();
+  if (!sess) redirect(`/login?next=${encodeURIComponent(`/experiments/${id}`)}`);
+
+  const exp = getExperiment(id);
   if (!exp) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-10">
@@ -30,9 +35,8 @@ export default async function ExperimentPage({ params }: Props) {
     );
   }
 
-  const sess = await requireSession();
-  const ent = await getEntitlement(sess?.userId);
-  if (!canReadGuide(exp.id, ent)) return <LockedGuide item={toCatalogItem(exp)} signedIn={!!sess} />;
+  const ent = await getEntitlement(sess.userId);
+  if (!canReadGuide(exp.id, ent)) return <LockedGuide item={toCatalogItem(exp)} signedIn />;
 
   const { prev, next } = adjacentExperiments(exp.id);
   return <GuideView exp={exp} prev={prev && toCatalogItem(prev)} next={next && toCatalogItem(next)} />;

@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { getCatalog } from "@/lib/experiments";
 import { requireSession } from "@/lib/auth/session";
 import { getEntitlement } from "@/lib/billing/entitlement";
 import { CAPS, getCurrentUsage } from "@/lib/usage";
 import { PLAN } from "@/lib/billing/plan";
 import { BRAND } from "@/lib/brand";
-import { GoogleButton } from "@/components/GoogleButton";
 import { CheckoutButton } from "@/components/CheckoutButton";
 import { ChatClient } from "./ChatClient";
 
@@ -15,11 +15,14 @@ export const dynamic = "force-dynamic";
 
 export default async function ChatPage({ searchParams }: { searchParams: Promise<{ experiment?: string }> }) {
   const sess = await requireSession();
-  const ent = await getEntitlement(sess?.userId);
-
-  if (!sess || !ent.active) {
+  if (!sess) {
     const { experiment } = await searchParams;
     const next = experiment ? `/chat?experiment=${encodeURIComponent(experiment)}` : "/chat";
+    redirect(`/login?next=${encodeURIComponent(next)}`);
+  }
+  const ent = await getEntitlement(sess.userId);
+
+  if (!ent.active) {
     return (
       <div className="max-w-xl mx-auto px-4 py-16 text-center">
         <div className="text-5xl" aria-hidden>
@@ -31,11 +34,7 @@ export default async function ChatPage({ searchParams }: { searchParams: Promise
           step. Up to {PLAN.dailyChatCap} questions a day, as part of the {PLAN.priceEtb} ETB monthly pass.
         </p>
         <div className="mt-6 flex flex-col items-center gap-3">
-          {sess ? (
-            <CheckoutButton signedIn label={`Get ${BRAND} · ${PLAN.priceEtb} ETB / month`} />
-          ) : (
-            <GoogleButton next={next} />
-          )}
+          <CheckoutButton signedIn label={`Get ${BRAND} · ${PLAN.priceEtb} ETB / month`} />
           <Link href="/#pricing" className="text-sm text-brand hover:underline">
             See what's included
           </Link>
