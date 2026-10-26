@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BRAND, COMPANY, MOTTO } from "@/lib/brand";
+import { BRAND, COMPANY } from "@/lib/brand";
 import { PLAN } from "@/lib/billing/plan";
 import { Contact, LegalPage } from "@/components/legal/LegalPage";
 
@@ -10,7 +10,7 @@ export default function TermsPage() {
   return (
     <LegalPage title="Terms of Service">
       <p>
-        {BRAND} is a product of {COMPANY}: {MOTTO.toLowerCase()}. By signing in, you agree to these terms. If you are under 18, a
+        {BRAND} is a hands-on learning service for students. By signing in, you agree to these terms. If you are under 18, a
         parent or guardian must agree to them for you, and should make any payment.
       </p>
 

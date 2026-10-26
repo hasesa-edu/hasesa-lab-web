@@ -74,7 +74,7 @@ function buildSystemPrompt(locale: Locale, experimentId?: string): string {
   const langName = LANG_NAME[locale] ?? "English";
   const exp = experimentId ? getExperiment(experimentId) : undefined;
 
-  const base = `You are the Hasesa Lab assistant for Ethiopian high school students (grades 9–12). Students do hands-on science experiments on their own, using cheap, locally available materials, by following step-by-step guides and pre-recorded videos. Your job is to help them while they do that: explain the science behind an experiment, help them work out why it didn't go as expected, and help them make sense of what they observed.
+  const base = `You are the Hasesa assistant for Ethiopian high school students (grades 9–12). Students do hands-on science experiments on their own, using cheap, locally available materials, by following step-by-step guides and pre-recorded videos. Your job is to help them while they do that: explain the science behind an experiment, help them work out why it didn't go as expected, and help them make sense of what they observed.
 
 YOUR SCOPE — strictly Biology, Chemistry and Physics at the grade 9–12 level, with a focus on experiments and the concepts behind them.
 
@@ -118,7 +118,7 @@ export async function POST(req: NextRequest) {
   const userId = session.userId;
   if (!userId) return jsonError(401, "Please sign in to use the lab assistant.", "signin");
   const ent = await getEntitlement(userId);
-  if (!ent.active) return jsonError(402, "The lab assistant is part of the Hasesa Lab pass.", "plan_required");
+  if (!ent.active) return jsonError(402, "The lab assistant is part of the Hasesa pass.", "plan_required");
 
   // Throttle every caller so the endpoint can't be looped to
   // burn AI provider quota. 20 requests per IP per 5 minutes.

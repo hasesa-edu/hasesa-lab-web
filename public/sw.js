@@ -1,4 +1,4 @@
-/* Hasesa Lab service worker */
+/* Hasesa service worker */
 const VERSION = "v3";
 const APP_SHELL = "hasesa-lab-shell-" + VERSION;
 const STATIC = "hasesa-lab-static-" + VERSION;

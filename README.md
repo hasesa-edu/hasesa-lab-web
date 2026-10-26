@@ -1,12 +1,12 @@
-# Hasesa Lab — Personalized, Hands-On Learning Guided by Real Scientists
+# Hasesa — Hands-on Learning
 
-Hasesa Lab helps students in grades 9–12 do real biology, chemistry and physics experiments on their own, using cheap, locally available materials. Each experiment has:
+Hasesa helps students in grades 9–12 do real biology, chemistry and physics experiments on their own, using cheap, locally available materials. Each experiment has:
 
 - **A step-by-step guide**: concept background, materials (with local substitutes), safety notes, a tickable procedure, expected results and why they happen, and troubleshooting.
 - **A pre-recorded demo video**: YouTube embeds for now. Self-hosted recordings are supported through `video.src`.
 - **An AI lab assistant** grounded in that guide. It explains the concepts, helps troubleshoot experiments that didn't work, and cites the step it relied on.
 
-The model was piloted in June 2026: a strawberry DNA extraction with Grade 11 students at Magic Carpet School, guided live by researchers from The Science Basement. Hasesa Lab replaces that live support with guides, videos and the lab assistant so any student can do the experiments on their own, wherever they are.
+The model was piloted in June 2026: a strawberry DNA extraction with Grade 11 students at Magic Carpet School, guided live by researchers from The Science Basement. Hasesa replaces that live support with guides, videos and the lab assistant so any student can do the experiments on their own, wherever they are.
 
 ## What's in the app
 

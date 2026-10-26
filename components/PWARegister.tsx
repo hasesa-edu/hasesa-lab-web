@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { BRAND } from "@/lib/brand";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -49,7 +50,7 @@ export function PWARegister() {
     <div className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-4 sm:bottom-4 sm:max-w-sm z-30 bg-surface border border-brand/30 rounded-xl shadow-pop p-3 flex items-start gap-3">
       <div className="text-2xl">📱</div>
       <div className="flex-1">
-        <div className="font-medium text-sm text-ink">Install Hasesa Lab</div>
+        <div className="font-medium text-sm text-ink">Install {BRAND}</div>
         <div className="text-xs text-ink-muted mt-0.5">
           Add to your home screen for faster, offline-capable access.
         </div>

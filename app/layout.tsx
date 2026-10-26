@@ -20,7 +20,7 @@ const geist = Geist({
 
 const TITLE = `${BRAND} · ${MOTTO}`;
 const DESCRIPTION =
-  "Personalized, hands-on learning guided by real scientists. Curriculum-aligned biology, chemistry and physics experiments for grades 9–12 using local materials, with step-by-step guides, demo videos, and an AI lab assistant.";
+  "Hands-on learning for grades 9–12: curriculum-aligned biology, chemistry and physics experiments using local materials, with step-by-step guides, demo videos, and an AI lab assistant.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://hasesa.vercel.app"),
