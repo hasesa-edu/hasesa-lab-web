@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { Bricolage_Grotesque, Geist } from "next/font/google";
 import "./globals.css";
 // KaTeX CSS (~200KB) is loaded only on the page that renders math, /chat.
 import { LocaleProvider } from "@/components/LocaleProvider";
@@ -16,6 +16,13 @@ const geist = Geist({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-geist",
+});
+
+// Display face for headings: warm and a little playful, to suit a hands-on science brand.
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-bricolage",
 });
 
 const TITLE = `${BRAND} · ${MOTTO}`;
@@ -54,7 +61,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={geist.variable} suppressHydrationWarning>
+    <html lang="en" className={`${geist.variable} ${bricolage.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
       </head>

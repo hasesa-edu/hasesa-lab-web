@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function AdminSignOutButton() {
@@ -20,7 +21,13 @@ export function AdminSignOutButton() {
   }
 
   return (
-    <Button variant="outline" onClick={onClick} disabled={busy}>
+    <Button
+      variant="ghost"
+      onClick={onClick}
+      disabled={busy}
+      className="bg-white/10 text-deep-foreground ring-1 ring-white/15 hover:bg-white/20 hover:text-deep-foreground dark:hover:bg-white/20"
+    >
+      <LogOut aria-hidden />
       {busy ? "…" : "Sign out"}
     </Button>
   );

@@ -1,65 +1,107 @@
 import Link from "next/link";
-import { subjectMeta, type CatalogItem } from "@/lib/subjects";
+import { CirclePlay, Clock, ListChecks, Lock, MessageCircle, NotebookPen, Package, type LucideIcon } from "lucide-react";
+import type { CatalogItem } from "@/lib/subjects";
 import { PLAN } from "@/lib/billing/plan";
 import { BRAND } from "@/lib/brand";
+import { cn } from "@/lib/utils";
 import { GoogleButton } from "@/components/GoogleButton";
 import { CheckoutButton } from "@/components/CheckoutButton";
+import { SUBJECT_STYLES, SubjectLabel } from "@/components/Subject";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 
 /** What a student without a plan sees instead of a paid guide. */
 export function LockedGuide({ item, signedIn }: { item: CatalogItem; signedIn: boolean }) {
-  const subject = subjectMeta(item.subject);
-  return (
-    <article className="max-w-3xl mx-auto px-4 py-12">
-      <Button asChild variant="link" className="px-0">
-        <Link href="/experiments">← All experiments</Link>
-      </Button>
-      <header className="mt-1">
-        <p className="text-xs uppercase tracking-wider text-primary font-semibold">
-          Grade {item.grade} · {subject.emoji} {subject.label} · {item.unit}
-        </p>
-        <h1 className="mt-1.5 text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground leading-tight">{item.title}</h1>
-        <p className="mt-3 text-muted-foreground leading-relaxed">{item.summary}</p>
-        <p className="mt-3 text-sm text-subtle-foreground">
-          ⏱ {item.estimatedMinutes} min · 🧰 {item.materialsCount} materials{item.hasVideo ? " · ▶ demo video" : ""}
-        </p>
-      </header>
+  const st = SUBJECT_STYLES[item.subject];
+  const inside: { icon: LucideIcon; text: string }[] = [
+    { icon: ListChecks, text: "Step-by-step guide with tips" },
+    { icon: Package, text: `${item.materialsCount} materials from home or the market` },
+    ...(item.hasVideo ? [{ icon: CirclePlay, text: "Demo video" }] : []),
+    { icon: MessageCircle, text: "AI lab assistant" },
+    { icon: NotebookPen, text: "Quiz and lab notebook" },
+  ];
 
-      {/* py-0 gap-0: the blurred preview and overlay fill the card edge to edge. */}
-      <Card className="relative mt-8 gap-0 rounded-2xl py-0 shadow-card">
-        {/* Static, blurred stand-in for the guide; animate-none keeps low-end phones from repainting it. */}
-        <div aria-hidden className="p-6 space-y-3 blur-[3px] select-none opacity-60">
-          <Skeleton className="h-4 w-1/3 animate-none rounded-sm" />
-          <Skeleton className="h-3 w-full animate-none rounded-sm" />
-          <Skeleton className="h-3 w-5/6 animate-none rounded-sm" />
-          <Skeleton className="h-3 w-2/3 animate-none rounded-sm" />
-          <Skeleton className="h-16 w-full animate-none rounded-xl" />
-          <Skeleton className="h-16 w-full animate-none rounded-xl" />
-        </div>
-        <div className="absolute inset-0 flex items-center justify-center p-6 bg-background/60">
-          <div className="max-w-sm text-center">
-            <div className="text-3xl" aria-hidden>
-              🔒
-            </div>
-            <h2 className="mt-2 text-xl font-bold text-foreground">This guide is for {BRAND} subscribers</h2>
-            <p className="mt-1.5 text-sm text-muted-foreground">
-              Get every step-by-step guide, demo video and the AI lab assistant for {PLAN.priceEtb} ETB a month.
-            </p>
-            <div className="mt-4 flex flex-col items-center gap-2">
-              {signedIn ? (
-                <CheckoutButton signedIn label={`Unlock for ${PLAN.priceEtb} ETB / month`} />
-              ) : (
-                <GoogleButton next={`/experiments/${item.id}`} label="Continue with Google" />
-              )}
-              <Button asChild variant="link">
-                <Link href="/#pricing">See what's included</Link>
-              </Button>
-            </div>
+  return (
+    <article className="relative">
+      <div aria-hidden className="absolute inset-x-0 top-0 h-80 bg-dots text-primary opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+      <div className="relative mx-auto max-w-3xl px-4 py-8 sm:py-12">
+        <Link
+          href="/experiments"
+          className="inline-flex h-10 items-center text-sm font-medium text-muted-foreground outline-none hover:text-primary focus-visible:ring-3 focus-visible:ring-ring/50"
+        >
+          ← All experiments
+        </Link>
+
+        <header className="mt-3">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <span className={cn("inline-flex h-7 items-center rounded-full px-3", st.soft)}>
+              <SubjectLabel subject={item.subject} />
+            </span>
+            <span className="text-xs font-semibold tracking-wide text-subtle-foreground uppercase">
+              Grade {item.grade} · {item.unit}
+            </span>
           </div>
-        </div>
-      </Card>
+          <h1 className="mt-3 text-4xl leading-[1.05] font-extrabold tracking-tight text-balance text-foreground sm:text-5xl">
+            {item.title}
+          </h1>
+          <p className="mt-4 leading-relaxed text-muted-foreground sm:text-lg">{item.summary}</p>
+          <div className="mt-5 flex flex-wrap gap-2 text-sm">
+            <Chip icon={Clock}>{item.estimatedMinutes} min</Chip>
+            <Chip icon={Package}>{item.materialsCount} materials</Chip>
+            {item.hasVideo && <Chip icon={CirclePlay}>demo video</Chip>}
+          </div>
+        </header>
+
+        <section className="relative isolate mt-8 overflow-hidden rounded-[2rem] bg-deep p-6 text-deep-foreground shadow-pop sm:p-8">
+          <div aria-hidden className="absolute inset-0 -z-10 bg-grid text-primary-soft opacity-50" />
+          <div aria-hidden className="absolute -top-24 -right-20 -z-10 size-72 rounded-full bg-primary/50 blur-3xl" />
+          <div aria-hidden className="absolute -bottom-28 -left-16 -z-10 size-64 rounded-full bg-sun/20 blur-3xl" />
+
+          <div className="grid gap-8 sm:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] sm:items-center">
+            <div>
+              <span className="inline-flex size-14 items-center justify-center rounded-2xl bg-sun text-deep shadow-pop">
+                <Lock aria-hidden className="size-7" />
+              </span>
+              <h2 className="mt-4 text-2xl leading-tight font-bold sm:text-3xl">This guide is for {BRAND} subscribers</h2>
+              <p className="mt-2 text-sm leading-relaxed text-deep-foreground/80 sm:text-base">
+                Get every step-by-step guide, demo video and the AI lab assistant for {PLAN.priceEtb} ETB a month.
+              </p>
+              <div className="mt-6 flex flex-col items-start gap-1">
+                {signedIn ? (
+                  <CheckoutButton
+                    signedIn
+                    label={`Unlock for ${PLAN.priceEtb} ETB / month`}
+                    className="bg-sun text-deep hover:bg-sun/90"
+                  />
+                ) : (
+                  <GoogleButton next={`/experiments/${item.id}`} label="Continue with Google" />
+                )}
+                <Button asChild variant="link" className="px-0 text-deep-foreground/85 hover:text-deep-foreground">
+                  <Link href="/#pricing">See what's included</Link>
+                </Button>
+              </div>
+            </div>
+
+            <ul className="space-y-2">
+              {inside.map(({ icon: Icon, text }) => (
+                <li key={text} className="flex items-center gap-3 rounded-xl bg-white/10 px-3.5 py-3 text-sm ring-1 ring-white/10">
+                  <Icon aria-hidden className="size-5 shrink-0 text-sun" />
+                  <span className="flex-1">{text}</span>
+                  <Lock aria-hidden className="size-3.5 shrink-0 text-deep-foreground/50" />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      </div>
     </article>
+  );
+}
+
+function Chip({ icon: Icon, children }: { icon: LucideIcon; children: React.ReactNode }) {
+  return (
+    <span className="inline-flex min-h-8 items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1 text-primary-strong dark:text-primary">
+      <Icon aria-hidden className="size-4" />
+      {children}
+    </span>
   );
 }

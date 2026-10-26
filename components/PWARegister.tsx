@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { BRAND } from "@/lib/brand";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { SmartphoneIcon } from "lucide-react";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -50,14 +51,17 @@ export function PWARegister() {
 
   return (
     <Card className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-4 sm:bottom-4 sm:max-w-sm z-30 ring-primary/30 shadow-pop p-3 flex-row items-start gap-3">
-      <div className="text-2xl">📱</div>
+      <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary-strong dark:text-primary">
+        <SmartphoneIcon aria-hidden className="size-5" />
+      </span>
       <div className="flex-1">
-        <div className="font-medium text-sm text-foreground">Install {BRAND}</div>
+        <div className="font-heading font-bold text-foreground">Install {BRAND}</div>
         <div className="text-xs text-muted-foreground mt-0.5">
           Add to your home screen for faster, offline-capable access.
         </div>
         <div className="mt-2 flex gap-2">
           <Button
+            className="font-semibold"
             onClick={async () => {
               await installEvent.prompt();
               setInstallEvent(null);

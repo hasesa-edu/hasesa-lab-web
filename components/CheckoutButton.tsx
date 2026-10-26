@@ -67,7 +67,7 @@ export function CheckoutButton({
         size="lg"
         onClick={start}
         disabled={busy}
-        className={cn("px-5 font-semibold disabled:opacity-60", className)}
+        className={cn("px-5 font-semibold shadow-pop disabled:opacity-60 disabled:shadow-none", className)}
       >
         {busy ? "Opening Chapa…" : label}
       </Button>

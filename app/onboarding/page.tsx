@@ -15,6 +15,27 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ArrowRightIcon, PartyPopperIcon } from "lucide-react";
+import { SUBJECT_STYLES, SubjectTile } from "@/components/Subject";
+
+// Checkbox tint per subject (full class names so Tailwind picks them up).
+const CHECK_STYLES: Record<Subject, string> = {
+  physics: "data-checked:border-physics data-checked:bg-physics dark:data-checked:bg-physics",
+  chemistry: "data-checked:border-chemistry data-checked:bg-chemistry dark:data-checked:bg-chemistry",
+  biology: "data-checked:border-biology data-checked:bg-biology dark:data-checked:bg-biology",
+};
+
+/** Full-height deep-teal backdrop (lab grid + glows) with the content centered on top. */
+function Backdrop({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="relative isolate flex min-h-[calc(100svh-61px)] items-center justify-center overflow-hidden bg-deep px-4 py-12 text-deep-foreground sm:py-16">
+      <div aria-hidden className="absolute inset-0 -z-10 bg-grid text-primary-soft opacity-50" />
+      <div aria-hidden className="absolute -top-40 -left-32 -z-10 size-[28rem] rounded-full bg-primary/50 blur-3xl" />
+      <div aria-hidden className="absolute -right-24 -bottom-24 -z-10 size-80 rounded-full bg-sun/25 blur-3xl" />
+      <div className="w-full max-w-lg">{children}</div>
+    </div>
+  );
+}
 
 const ALL_SUBJECTS: Subject[] = SUBJECTS.map((s) => s.id);
 
@@ -58,68 +79,87 @@ export default function OnboardingPage() {
   }
 
   if (!ready || !user) {
-    return <div className="max-w-md mx-auto px-4 py-10 text-subtle-foreground">{tr("common.loading")}</div>;
+    return (
+      <Backdrop>
+        <p className="text-center text-deep-foreground/70">{tr("common.loading")}</p>
+      </Backdrop>
+    );
   }
 
   if (done) {
     return (
-      <div className="max-w-md mx-auto px-4 py-16 text-center">
-        <div className="text-5xl">🎉</div>
-        <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-foreground">{tr("onboard.done.title")}</h1>
-        <p className="mt-2 text-muted-foreground">{tr("onboard.done.body")}</p>
-        <Button size="lg" onClick={() => router.push("/dashboard")} className="mt-6 px-5">
-          {tr("nav.dashboard")} →
-        </Button>
-      </div>
+      <Backdrop>
+        <Card className="relative overflow-hidden rounded-[1.75rem] bg-card text-center shadow-pop ring-1 ring-white/10 [--card-spacing:--spacing(8)]">
+          <div aria-hidden className="absolute inset-0 bg-dots text-primary opacity-30" />
+          <CardContent className="relative flex flex-col items-center">
+            <span className="inline-flex size-16 items-center justify-center rounded-2xl bg-sun-soft text-sun [&_svg]:size-8">
+              <PartyPopperIcon aria-hidden />
+            </span>
+            <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">{tr("onboard.done.title")}</h1>
+            <p className="mt-2 text-muted-foreground">{tr("onboard.done.body")}</p>
+            <Button size="lg" onClick={() => router.push("/dashboard")} className="mt-6 px-5 font-semibold">
+              {tr("nav.dashboard")}
+              <ArrowRightIcon />
+            </Button>
+          </CardContent>
+        </Card>
+      </Backdrop>
     );
   }
 
   return (
-    <div className="max-w-md mx-auto px-4 py-14">
-      <Card className="rounded-2xl shadow-card [--card-spacing:--spacing(7)]">
-        <CardHeader>
+    <Backdrop>
+      <Card className="relative overflow-hidden rounded-[1.75rem] bg-card shadow-pop ring-1 ring-white/10 [--card-spacing:--spacing(6)] sm:[--card-spacing:--spacing(8)]">
+        {/* Notebook page: subject-colored binding along the top. */}
+        <div aria-hidden className="absolute inset-x-0 top-0 flex h-1.5">
+          <span className="flex-1 bg-physics" />
+          <span className="flex-1 bg-chemistry" />
+          <span className="flex-1 bg-biology" />
+        </div>
+        <CardHeader className="pt-3">
           <CardTitle>
-            <h1 className="text-3xl font-extrabold tracking-tight text-foreground">{tr("onboard.welcome")}</h1>
+            <h1 className="text-3xl leading-tight font-extrabold tracking-tight text-foreground">{tr("onboard.welcome")}</h1>
           </CardTitle>
         </CardHeader>
-        <CardContent className="-mt-1">
-          <h2 id="onboard-grade" className="font-medium text-foreground">{tr("onboard.pickGrade")}</h2>
+        <CardContent>
+          <h2 id="onboard-grade" className="text-lg font-bold text-foreground">{tr("onboard.pickGrade")}</h2>
           <ToggleGroup
             type="single"
-            variant="outline"
             aria-labelledby="onboard-grade"
             value={grade ? String(grade) : ""}
             // Tapping the selected grade again keeps it selected (a grade is required).
             onValueChange={(v) => {
               if (v) setGrade(Number(v) as Grade);
             }}
-            className="mt-3 grid w-full grid-cols-4 gap-2"
+            className="mt-3 grid w-full grid-cols-4 gap-2 sm:gap-3"
           >
             {GRADES.map((g) => (
               <ToggleGroupItem
                 key={g}
                 value={String(g)}
-                className="h-11 w-full border-border bg-background text-foreground hover:border-primary/60 hover:bg-background data-[state=on]:border-primary data-[state=on]:bg-primary-soft/40"
+                className="flex h-20 w-full flex-col gap-0.5 rounded-2xl border-2 border-border bg-background text-foreground shadow-card transition hover:-translate-y-0.5 hover:border-primary/60 hover:bg-primary-soft/40 data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-pop"
               >
-                {g}
+                <span className="text-[0.65rem] font-bold tracking-[0.14em] uppercase opacity-70">{tr("experiments.grade")}</span>
+                <span className="font-heading text-3xl leading-none font-extrabold tabular-nums">{g}</span>
               </ToggleGroupItem>
             ))}
           </ToggleGroup>
 
-          <h2 className="mt-6 font-medium text-foreground">{tr("onboard.pickSubjects")}</h2>
-          <div className="mt-3 grid grid-cols-1 gap-2">
+          <h2 className="mt-8 text-lg font-bold text-foreground">{tr("onboard.pickSubjects")}</h2>
+          <div className="mt-3 grid grid-cols-3 gap-2 sm:gap-3">
             {SUBJECTS.map((s) => {
               const checked = chosen.includes(s.id);
               const id = `subject-${s.id}`;
+              const st = SUBJECT_STYLES[s.id];
               return (
                 <Label
                   key={s.id}
                   htmlFor={id}
                   className={cn(
-                    "min-h-11 px-3 py-2.5 rounded-lg border cursor-pointer font-normal leading-normal transition",
+                    "relative flex min-h-28 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 px-2 py-4 text-center font-semibold leading-tight transition hover:-translate-y-0.5",
                     checked
-                      ? "border-primary bg-primary-soft/40 text-foreground"
-                      : "border-border bg-background text-foreground hover:border-primary/60"
+                      ? cn(st.border, st.soft, "text-foreground shadow-card")
+                      : "border-border bg-background text-muted-foreground hover:border-primary/40"
                   )}
                 >
                   <Checkbox
@@ -128,10 +168,14 @@ export default function OnboardingPage() {
                     onCheckedChange={() =>
                       setChosen((c) => (c.includes(s.id) ? c.filter((x) => x !== s.id) : [...c, s.id]))
                     }
+                    className={cn("absolute top-2.5 right-2.5 size-5 bg-card", CHECK_STYLES[s.id])}
                   />
-                  <span>
-                    {s.emoji} {s.label}
-                  </span>
+                  <SubjectTile
+                    subject={s.id}
+                    size="lg"
+                    className={cn("transition", checked ? "bg-card shadow-card" : "opacity-70 grayscale-[40%]")}
+                  />
+                  <span className={cn("text-sm", checked && st.text)}>{s.label}</span>
                 </Label>
               );
             })}
@@ -147,7 +191,7 @@ export default function OnboardingPage() {
             size="lg"
             onClick={save}
             disabled={!grade || chosen.length === 0 || busy}
-            className="mt-6 w-full disabled:opacity-40"
+            className="mt-8 w-full font-semibold shadow-pop disabled:opacity-40 disabled:shadow-none"
           >
             {busy ? "…" : tr("onboard.continue")}
           </Button>
@@ -160,6 +204,6 @@ export default function OnboardingPage() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </Backdrop>
   );
 }
