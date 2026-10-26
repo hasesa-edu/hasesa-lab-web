@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { LogOut } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function AdminSignOutButton() {
   const router = useRouter();
@@ -19,12 +21,14 @@ export function AdminSignOutButton() {
   }
 
   return (
-    <button
+    <Button
+      variant="ghost"
       onClick={onClick}
       disabled={busy}
-      className="px-3 py-1.5 rounded-lg border border-line bg-surface text-ink hover:bg-canvas text-sm disabled:opacity-50"
+      className="bg-white/10 text-deep-foreground ring-1 ring-white/15 hover:bg-white/20 hover:text-deep-foreground dark:hover:bg-white/20"
     >
+      <LogOut aria-hidden />
       {busy ? "…" : "Sign out"}
-    </button>
+    </Button>
   );
 }

@@ -2,8 +2,11 @@ import { redirect } from "next/navigation";
 import { sql } from "drizzle-orm";
 import { getSession } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
+import { BarChart3, Eye, FlaskConical, ShieldCheck, Users } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AdminSignOutButton } from "./signout-button";
-import { Subscribers } from "./Subscribers";
+import { SectionTitle, StatCard, Subscribers, TABLE_HEAD, TH, TablePanel } from "./Subscribers";
 
 export const dynamic = "force-dynamic";
 
@@ -141,40 +144,32 @@ async function loadStats() {
   };
 }
 
-function StatCard({ label, value, sub }: { label: string; value: number | string; sub?: string }) {
-  return (
-    <div className="rounded-xl border border-line bg-surface p-4 shadow-card">
-      <div className="text-xs uppercase tracking-wide text-ink-muted">{label}</div>
-      <div className="mt-1 text-2xl font-bold text-ink tabular-nums">{value}</div>
-      {sub && <div className="mt-0.5 text-xs text-ink-muted">{sub}</div>}
-    </div>
-  );
-}
-
 function TopList({ title, rows }: { title: string; rows: LabelCountRow[] }) {
   const max = Math.max(1, ...rows.map((r) => r.count));
   return (
-    <div className="rounded-xl border border-line bg-surface p-4 shadow-card">
-      <h3 className="text-sm font-semibold text-ink">{title}</h3>
-      {rows.length === 0 ? (
-        <p className="mt-2 text-sm text-ink-muted">No data yet.</p>
-      ) : (
-        <ul className="mt-3 space-y-2">
-          {rows.map((r) => (
-            <li key={r.label ?? "—"} className="text-sm">
-              <div className="flex justify-between gap-3">
-                <span className="truncate text-ink" title={r.label ?? ""}>
-                  {r.label ?? "—"}
-                </span>
-                <span className="tabular-nums text-ink-muted">{r.count}</span>
-              </div>
-              <div className="mt-1 h-1.5 rounded bg-canvas">
-                <div className="h-full rounded bg-brand" style={{ width: `${(r.count / max) * 100}%` }} />
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+    <div className="rounded-2xl bg-card p-5 shadow-card ring-1 ring-border">
+      <h3 className="text-sm font-bold text-foreground">{title}</h3>
+      <div className="mt-3">
+        {rows.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No data yet.</p>
+        ) : (
+          <ul className="space-y-2.5">
+            {rows.map((r) => (
+              <li key={r.label ?? "—"} className="text-sm">
+                <div className="flex justify-between gap-3">
+                  <span className="truncate text-foreground" title={r.label ?? ""}>
+                    {r.label ?? "—"}
+                  </span>
+                  <span className="font-semibold text-primary-strong tabular-nums">{r.count}</span>
+                </div>
+                <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-primary-soft">
+                  <div className="h-full rounded-full bg-primary" style={{ width: `${(r.count / max) * 100}%` }} />
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
@@ -186,145 +181,149 @@ export default async function AdminPage() {
   const s = await loadStats();
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10 space-y-8">
-      <header className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-ink">Admin analytics</h1>
-          <p className="mt-1 text-sm text-ink-muted">User signups, traffic, and content engagement.</p>
-        </div>
+    <div>
+      <PageHeader
+        eyebrow={
+          <span className="inline-flex items-center gap-1.5">
+            <ShieldCheck className="size-3.5" /> Admin
+          </span>
+        }
+        title="Admin analytics"
+        description="User signups, traffic, and content engagement."
+      >
         <AdminSignOutButton />
-      </header>
+      </PageHeader>
 
+      <div className="mx-auto max-w-5xl space-y-10 px-4 py-10">
       <section>
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-ink-muted">Users</h2>
-        <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
-          <StatCard label="Total users" value={s.usersTotal} />
-          <StatCard label="New in 24h" value={s.users1d} />
+        <SectionTitle icon={<Users className="size-4" />}>Users</SectionTitle>
+        <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
+          <StatCard label="Total users" value={s.usersTotal} tone="teal" />
+          <StatCard label="New in 24h" value={s.users1d} tone="sun" />
           <StatCard label="New in 7d" value={s.users7d} />
           <StatCard label="New in 30d" value={s.users30d} />
         </div>
 
-        <div className="mt-4 rounded-xl border border-line bg-surface shadow-card overflow-hidden">
-          <div className="px-4 py-3 border-b border-line flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-ink">Registered users</h3>
-            <span className="text-xs text-ink-muted">
+        <TablePanel
+          title="Registered users"
+          className="mt-4"
+          aside={
+            <span className="text-xs text-muted-foreground">
               Showing {s.users.length}
               {s.usersTotal > s.users.length ? ` of ${s.usersTotal} (most recent 200)` : ""}
             </span>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-canvas text-xs uppercase tracking-wide text-ink-muted">
-                <tr>
-                  <th className="text-left px-3 py-2">Name</th>
-                  <th className="text-left px-3 py-2">Email</th>
-                  <th className="text-left px-3 py-2">Grade</th>
-                  <th className="text-left px-3 py-2">Lang</th>
-                  <th className="text-left px-3 py-2">Region</th>
-                  <th className="text-left px-3 py-2">School</th>
-                  <th className="text-left px-3 py-2">Subjects</th>
-                  <th className="text-left px-3 py-2">Joined</th>
-                </tr>
-              </thead>
-              <tbody>
-                {s.users.length === 0 ? (
-                  <tr>
-                    <td colSpan={8} className="px-3 py-4 text-ink-muted">
-                      No registered users yet.
-                    </td>
-                  </tr>
-                ) : (
-                  s.users.map((u) => (
-                    <tr key={u.id} className="border-t border-line align-top">
-                      <td className="px-3 py-2 text-ink font-medium">{u.displayName}</td>
-                      <td className="px-3 py-2 text-ink">{u.email}</td>
-                      <td className="px-3 py-2 text-ink tabular-nums">{u.grade ?? "—"}</td>
-                      <td className="px-3 py-2 text-ink-muted uppercase">{u.language}</td>
-                      <td className="px-3 py-2 text-ink">{u.region || "—"}</td>
-                      <td className="px-3 py-2 text-ink">{u.school || "—"}</td>
-                      <td className="px-3 py-2 text-ink-muted">
-                        {(u.subjects ?? []).length ? (u.subjects ?? []).join(", ") : "—"}
-                      </td>
-                      <td className="px-3 py-2 text-ink-muted whitespace-nowrap">
-                        {new Date(u.createdAt).toLocaleDateString()}
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+          }
+        >
+          <Table>
+            <TableHeader className={TABLE_HEAD}>
+              <TableRow className="hover:bg-transparent">
+                <TableHead className={TH}>Name</TableHead>
+                <TableHead className={TH}>Email</TableHead>
+                <TableHead className={TH}>Grade</TableHead>
+                <TableHead className={TH}>Lang</TableHead>
+                <TableHead className={TH}>Region</TableHead>
+                <TableHead className={TH}>School</TableHead>
+                <TableHead className={TH}>Subjects</TableHead>
+                <TableHead className={TH}>Joined</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {s.users.length === 0 ? (
+                <TableRow className="hover:bg-transparent">
+                  <TableCell colSpan={8} className="px-3 py-4 text-muted-foreground">
+                    No registered users yet.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                s.users.map((u) => (
+                  <TableRow key={u.id} className="align-top">
+                    <TableCell className="px-3 align-top text-foreground font-medium">{u.displayName}</TableCell>
+                    <TableCell className="px-3 align-top text-foreground">{u.email}</TableCell>
+                    <TableCell className="px-3 align-top text-foreground tabular-nums">{u.grade ?? "—"}</TableCell>
+                    <TableCell className="px-3 align-top text-muted-foreground uppercase">{u.language}</TableCell>
+                    <TableCell className="px-3 align-top text-foreground">{u.region || "—"}</TableCell>
+                    <TableCell className="px-3 align-top text-foreground">{u.school || "—"}</TableCell>
+                    <TableCell className="px-3 align-top min-w-40 whitespace-normal text-muted-foreground">
+                      {(u.subjects ?? []).length ? (u.subjects ?? []).join(", ") : "—"}
+                    </TableCell>
+                    <TableCell className="px-3 align-top text-muted-foreground">
+                      {new Date(u.createdAt).toLocaleDateString()}
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </TablePanel>
       </section>
 
       <Subscribers />
 
       <section>
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-ink-muted">Traffic</h2>
-        <div className="mt-3 grid grid-cols-2 md:grid-cols-5 gap-3">
-          <StatCard label="Page views (all-time)" value={s.pvTotal} />
-          <StatCard label="Views in 24h" value={s.pv1d} />
+        <SectionTitle icon={<BarChart3 className="size-4" />}>Traffic</SectionTitle>
+        <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-5">
+          <StatCard label="Page views (all-time)" value={s.pvTotal} tone="teal" />
+          <StatCard label="Views in 24h" value={s.pv1d} tone="sun" />
           <StatCard label="Views in 7d" value={s.pv7d} />
           <StatCard label="Views in 30d" value={s.pv30d} />
           <StatCard label="Unique visitors (7d)" value={s.uniqueVisitors7d} sub="distinct user / user-agent" />
         </div>
       </section>
 
-      <section className="grid md:grid-cols-3 gap-4">
+      <section className="grid gap-4 md:grid-cols-3">
         <TopList title="Top pages" rows={s.topPaths} />
         <TopList title="Top countries" rows={s.topCountries} />
         <TopList title="Top referrers" rows={s.topReferrers} />
       </section>
 
       <section>
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-ink-muted">Engagement</h2>
-        <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
-          <StatCard label="Conversations" value={s.convosTotal} />
+        <SectionTitle icon={<FlaskConical className="size-4" />}>Engagement</SectionTitle>
+        <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
+          <StatCard label="Conversations" value={s.convosTotal} tone="teal" />
           <StatCard label="Chat messages" value={s.messagesTotal} />
           <StatCard label="Experiments started" value={s.experimentsStarted} sub="student × experiment" />
-          <StatCard label="Experiments completed" value={s.experimentsDone} />
+          <StatCard label="Experiments completed" value={s.experimentsDone} tone="sun" />
         </div>
       </section>
 
       <section>
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-ink-muted">Recent page views</h2>
-        <div className="mt-3 rounded-xl border border-line bg-surface shadow-card overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-canvas text-xs uppercase tracking-wide text-ink-muted">
-              <tr>
-                <th className="text-left px-3 py-2">When</th>
-                <th className="text-left px-3 py-2">Path</th>
-                <th className="text-left px-3 py-2">Country</th>
-                <th className="text-left px-3 py-2">City</th>
-                <th className="text-left px-3 py-2">Referrer</th>
-              </tr>
-            </thead>
-            <tbody>
+        <SectionTitle icon={<Eye className="size-4" />}>Recent page views</SectionTitle>
+        <TablePanel title="Last 25 views" className="mt-3">
+          <Table>
+            <TableHeader className={TABLE_HEAD}>
+              <TableRow className="hover:bg-transparent">
+                <TableHead className={TH}>When</TableHead>
+                <TableHead className={TH}>Path</TableHead>
+                <TableHead className={TH}>Country</TableHead>
+                <TableHead className={TH}>City</TableHead>
+                <TableHead className={TH}>Referrer</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {s.recentViews.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="px-3 py-4 text-ink-muted">
+                <TableRow className="hover:bg-transparent">
+                  <TableCell colSpan={5} className="px-3 py-4 whitespace-normal text-muted-foreground">
                     No page views yet. Traffic will appear here as people visit the site.
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ) : (
                 s.recentViews.map((v, i) => (
-                  <tr key={i} className="border-t border-line">
-                    <td className="px-3 py-2 text-ink-muted whitespace-nowrap">
-                      {new Date(v.createdAt).toLocaleString()}
-                    </td>
-                    <td className="px-3 py-2 text-ink font-mono">{v.path}</td>
-                    <td className="px-3 py-2 text-ink">{v.country ?? "—"}</td>
-                    <td className="px-3 py-2 text-ink">{v.city ?? "—"}</td>
-                    <td className="px-3 py-2 text-ink-muted truncate max-w-[16rem]" title={v.referrer ?? ""}>
+                  <TableRow key={i}>
+                    <TableCell className="px-3 text-muted-foreground">{new Date(v.createdAt).toLocaleString()}</TableCell>
+                    <TableCell className="px-3 text-foreground font-mono">{v.path}</TableCell>
+                    <TableCell className="px-3 text-foreground">{v.country ?? "—"}</TableCell>
+                    <TableCell className="px-3 text-foreground">{v.city ?? "—"}</TableCell>
+                    <TableCell className="px-3 text-muted-foreground truncate max-w-[16rem]" title={v.referrer ?? ""}>
                       {v.referrer || "—"}
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ))
               )}
-            </tbody>
-          </table>
-        </div>
+            </TableBody>
+          </Table>
+        </TablePanel>
       </section>
+      </div>
     </div>
   );
 }

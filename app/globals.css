@@ -1,112 +1,284 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
+@custom-variant dark (&:is(.dark *));
+
+/*
+  Theme: shadcn/ui tokens carrying the Hasesa palette (teal brand, amber
+  accent, warm stone neutrals). Components use the shadcn names
+  (bg-background, text-muted-foreground, bg-primary, border-border ...).
+  Hasesa-only extras: primary-soft / primary-strong, sun / sun-soft and
+  subtle-foreground (a third, lighter text level).
+*/
 :root {
   color-scheme: light;
 
-  --canvas: 250 250 249;
-  --surface: 255 255 255;
-  --surface-2: 245 245 244;
-  --line: 231 229 228;
-  --line-strong: 214 211 209;
-  --ink: 28 25 23;
-  --ink-muted: 87 83 78;
-  --ink-subtle: 168 162 158;
+  --background: rgb(250 250 249);
+  --foreground: rgb(28 25 23);
+  --card: rgb(255 255 255);
+  --card-foreground: rgb(28 25 23);
+  --popover: rgb(255 255 255);
+  --popover-foreground: rgb(28 25 23);
+  --primary: rgb(13 148 136);
+  --primary-foreground: rgb(255 255 255);
+  --secondary: rgb(245 245 244);
+  --secondary-foreground: rgb(28 25 23);
+  --muted: rgb(245 245 244);
+  --muted-foreground: rgb(87 83 78);
+  --accent: rgb(240 253 250);
+  --accent-foreground: rgb(15 118 110);
+  --destructive: rgb(220 38 38);
+  --border: rgb(231 229 228);
+  --input: rgb(214 211 209);
+  --ring: rgb(13 148 136);
+  --radius: 0.625rem;
 
-  --brand: 13 148 136;
-  --brand-hover: 15 118 110;
-  --brand-soft: 204 251 241;
-  --brand-on: 255 255 255;
+  --chart-1: rgb(13 148 136);
+  --chart-2: rgb(245 158 11);
+  --chart-3: rgb(45 212 191);
+  --chart-4: rgb(15 118 110);
+  --chart-5: rgb(168 162 158);
 
-  --sun-soft: 254 243 199;
+  --primary-soft: rgb(204 251 241);
+  --primary-strong: rgb(15 118 110);
+  --sun: rgb(245 158 11);
+  --sun-soft: rgb(254 243 199);
+  --subtle-foreground: rgb(168 162 158);
+
+  /* Deep teal for bold bands (page headers, pricing, hero panels). */
+  --deep: rgb(9 61 57);
+  --deep-foreground: rgb(240 253 250);
+
+  /* One color per subject, used for icon tiles, chips and card accents. */
+  --physics: rgb(79 70 229);
+  --physics-soft: rgb(238 242 255);
+  --chemistry: rgb(217 119 6);
+  --chemistry-soft: rgb(255 247 237);
+  --biology: rgb(5 150 105);
+  --biology-soft: rgb(236 253 245);
+
+  --sidebar: rgb(250 250 249);
+  --sidebar-foreground: rgb(28 25 23);
+  --sidebar-primary: rgb(13 148 136);
+  --sidebar-primary-foreground: rgb(255 255 255);
+  --sidebar-accent: rgb(240 253 250);
+  --sidebar-accent-foreground: rgb(15 118 110);
+  --sidebar-border: rgb(231 229 228);
+  --sidebar-ring: rgb(13 148 136);
 }
 
 .dark {
   color-scheme: dark;
 
-  --canvas: 10 14 13;
-  --surface: 18 24 23;
-  --surface-2: 28 36 34;
-  --line: 42 51 49;
-  --line-strong: 59 71 68;
-  --ink: 241 245 244;
-  --ink-muted: 168 179 177;
-  --ink-subtle: 107 117 114;
+  --background: rgb(10 14 13);
+  --foreground: rgb(241 245 244);
+  --card: rgb(18 24 23);
+  --card-foreground: rgb(241 245 244);
+  --popover: rgb(18 24 23);
+  --popover-foreground: rgb(241 245 244);
+  --primary: rgb(45 212 191);
+  --primary-foreground: rgb(4 47 46);
+  --secondary: rgb(28 36 34);
+  --secondary-foreground: rgb(241 245 244);
+  --muted: rgb(28 36 34);
+  --muted-foreground: rgb(168 179 177);
+  --accent: rgb(19 78 74);
+  --accent-foreground: rgb(204 251 241);
+  --destructive: rgb(248 113 113);
+  --border: rgb(42 51 49);
+  --input: rgb(59 71 68);
+  --ring: rgb(45 212 191);
 
-  --brand: 45 212 191;
-  --brand-hover: 94 234 212;
-  --brand-soft: 19 78 74;
-  --brand-on: 4 47 46;
+  --chart-1: rgb(45 212 191);
+  --chart-2: rgb(251 191 36);
+  --chart-3: rgb(13 148 136);
+  --chart-4: rgb(94 234 212);
+  --chart-5: rgb(107 117 114);
 
-  --sun-soft: 69 26 3;
+  --primary-soft: rgb(19 78 74);
+  --primary-strong: rgb(94 234 212);
+  --sun: rgb(251 191 36);
+  --sun-soft: rgb(69 26 3);
+  --subtle-foreground: rgb(107 117 114);
+
+  --deep: rgb(6 40 38);
+  --deep-foreground: rgb(240 253 250);
+
+  --physics: rgb(129 140 248);
+  --physics-soft: rgb(30 27 75);
+  --chemistry: rgb(251 191 36);
+  --chemistry-soft: rgb(69 26 3);
+  --biology: rgb(52 211 153);
+  --biology-soft: rgb(6 78 59);
+
+  --sidebar: rgb(18 24 23);
+  --sidebar-foreground: rgb(241 245 244);
+  --sidebar-primary: rgb(45 212 191);
+  --sidebar-primary-foreground: rgb(4 47 46);
+  --sidebar-accent: rgb(19 78 74);
+  --sidebar-accent-foreground: rgb(204 251 241);
+  --sidebar-border: rgb(42 51 49);
+  --sidebar-ring: rgb(45 212 191);
 }
 
-html,
-body {
-  background: rgb(var(--canvas));
-  color: rgb(var(--ink));
-  font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
+@theme inline {
+  --font-sans:
+    var(--font-geist), Geist, system-ui, -apple-system, Segoe UI, Roboto,
+    Noto Sans Ethiopic, sans-serif;
+  --font-heading:
+    var(--font-bricolage), var(--font-geist), system-ui, -apple-system,
+    Segoe UI, Roboto, Noto Sans Ethiopic, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-strong: var(--primary-strong);
+  --color-sun: var(--sun);
+  --color-sun-soft: var(--sun-soft);
+  --color-subtle-foreground: var(--subtle-foreground);
+  --color-deep: var(--deep);
+  --color-deep-foreground: var(--deep-foreground);
+  --color-physics: var(--physics);
+  --color-physics-soft: var(--physics-soft);
+  --color-chemistry: var(--chemistry);
+  --color-chemistry-soft: var(--chemistry-soft);
+  --color-biology: var(--biology);
+  --color-biology-soft: var(--biology-soft);
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.04), 0 1px 1px rgb(0 0 0 / 0.03);
+  --shadow-card: 0 1px 3px rgb(0 0 0 / 0.06), 0 1px 2px rgb(0 0 0 / 0.04);
+  --shadow-pop: 0 8px 24px -8px rgb(0 0 0 / 0.18), 0 2px 6px rgb(0 0 0 / 0.06);
 }
 
-::selection {
-  background: rgb(var(--brand) / 0.25);
-  color: rgb(var(--ink));
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(var(--tilt, 0deg)); }
+  50% { transform: translateY(-8px) rotate(var(--tilt, 0deg)); }
 }
 
-input,
-textarea,
-select,
-button {
-  font-family: inherit;
+/* Lab-notebook grid. Color comes from currentColor, so set text-* on the element. */
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, currentColor 12%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, currentColor 12%, transparent) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+@utility bg-dots {
+  background-image: radial-gradient(color-mix(in oklab, currentColor 18%, transparent) 1px, transparent 1px);
+  background-size: 18px 18px;
 }
 
-input::placeholder,
-textarea::placeholder {
-  color: rgb(var(--ink-subtle));
-}
-
-/* Themed focus ring for interactive elements */
-.focus-ring:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible,
-button:focus-visible {
-  outline: 2px solid rgb(var(--brand));
-  outline-offset: 2px;
+@layer base {
+  h1, h2, h3 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 25%, transparent);
+    color: var(--foreground);
+  }
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--subtle-foreground);
+  }
 }
 
 .prose-edu p {
   margin: 0.6rem 0;
   line-height: 1.7;
-  color: rgb(var(--ink-muted));
+  color: var(--muted-foreground);
 }
 .prose-edu h3 {
   font-size: 1.05rem;
   font-weight: 600;
   margin-top: 1.5rem;
   margin-bottom: 0.4rem;
-  color: rgb(var(--ink));
+  color: var(--foreground);
   letter-spacing: -0.01em;
 }
 .prose-edu ul {
   list-style: disc;
   padding-left: 1.25rem;
-  color: rgb(var(--ink-muted));
+  color: var(--muted-foreground);
 }
 .prose-edu code {
-  background: rgb(var(--brand-soft) / 0.5);
-  color: rgb(var(--brand-hover));
+  background: color-mix(in oklab, var(--primary-soft) 50%, transparent);
+  color: var(--primary-strong);
   padding: 0.1rem 0.35rem;
   border-radius: 0.3rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.9em;
 }
 .dark .prose-edu code {
-  color: rgb(var(--brand));
+  color: var(--primary);
 }
 
 /* Chat assistant markdown */
@@ -118,7 +290,7 @@ button:focus-visible {
 }
 .chat-prose strong {
   font-weight: 600;
-  color: rgb(var(--ink));
+  color: var(--foreground);
 }
 .chat-prose em {
   font-style: italic;
@@ -140,16 +312,16 @@ button:focus-visible {
   margin: 0;
 }
 .chat-prose code {
-  background: rgb(var(--surface-2));
-  color: rgb(var(--ink));
+  background: var(--muted);
+  color: var(--foreground);
   padding: 0.08rem 0.32rem;
   border-radius: 0.3rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.88em;
 }
 .chat-prose pre {
-  background: rgb(var(--surface-2));
-  border: 1px solid rgb(var(--line));
+  background: var(--muted);
+  border: 1px solid var(--border);
   border-radius: 0.5rem;
   padding: 0.75rem 0.9rem;
   overflow-x: auto;
@@ -166,7 +338,7 @@ button:focus-visible {
 .chat-prose h3,
 .chat-prose h4 {
   font-weight: 600;
-  color: rgb(var(--ink));
+  color: var(--foreground);
   letter-spacing: -0.01em;
 }
 .chat-prose h1 { font-size: 1.15rem; margin-top: 1rem; }
@@ -174,19 +346,19 @@ button:focus-visible {
 .chat-prose h3 { font-size: 1rem; margin-top: 0.8rem; }
 .chat-prose h4 { font-size: 0.95rem; margin-top: 0.7rem; }
 .chat-prose blockquote {
-  border-left: 3px solid rgb(var(--line-strong));
+  border-left: 3px solid var(--input);
   padding-left: 0.75rem;
-  color: rgb(var(--ink-muted));
+  color: var(--muted-foreground);
   font-style: italic;
 }
 .chat-prose a {
-  color: rgb(var(--brand));
+  color: var(--primary);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 .chat-prose hr {
   border: 0;
-  border-top: 1px solid rgb(var(--line));
+  border-top: 1px solid var(--border);
   margin: 0.9rem 0;
 }
 /* KaTeX display blocks shouldn't overflow narrow bubbles */
@@ -205,7 +377,7 @@ button:focus-visible {
   width: 6px;
   height: 6px;
   margin: 0 2px;
-  background: rgb(var(--ink-subtle));
+  background: var(--subtle-foreground);
   border-radius: 50%;
   animation: chat-typing-bounce 1.4s infinite ease-in-out both;
 }

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useUser } from "./UserProvider";
 import { PLAN, daysLeft } from "@/lib/billing/plan";
 import { BRAND } from "@/lib/brand";
+import { ArrowRightIcon, ClockIcon } from "lucide-react";
 
 const WARN_DAYS = 3;
 const EXPIRED_GRACE_DAYS = 14;
@@ -26,11 +27,18 @@ export function RenewBanner() {
   if (!text) return null;
 
   return (
-    <div className="bg-sun-soft border-b border-amber-300 dark:border-amber-800">
-      <div className="max-w-5xl mx-auto px-4 py-2 text-sm text-amber-900 dark:text-amber-100 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center">
-        <span>{text}</span>
-        <Link href="/account" className="font-semibold underline">
+    <div className="bg-sun-soft border-b border-sun/50">
+      <div className="max-w-5xl mx-auto px-4 py-1.5 text-sm text-amber-900 dark:text-amber-100 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-center">
+        <span className="inline-flex items-center gap-1.5 font-medium">
+          <ClockIcon aria-hidden className="size-4 text-sun" />
+          {text}
+        </span>
+        <Link
+          href="/account"
+          className="inline-flex min-h-9 items-center gap-1 rounded-full bg-sun px-3.5 font-semibold text-deep shadow-soft transition hover:bg-sun/90"
+        >
           Renew for {PLAN.priceEtb} ETB
+          <ArrowRightIcon aria-hidden className="size-3.5" />
         </Link>
       </div>
     </div>

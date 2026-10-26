@@ -3,6 +3,9 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BRAND } from "@/lib/brand";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { SmartphoneIcon } from "lucide-react";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -47,34 +50,37 @@ export function PWARegister() {
   if (pathname !== "/" || !installEvent || dismissed) return null;
 
   return (
-    <div className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-4 sm:bottom-4 sm:max-w-sm z-30 bg-surface border border-brand/30 rounded-xl shadow-pop p-3 flex items-start gap-3">
-      <div className="text-2xl">📱</div>
+    <Card className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-4 sm:bottom-4 sm:max-w-sm z-30 ring-primary/30 shadow-pop p-3 flex-row items-start gap-3">
+      <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary-strong dark:text-primary">
+        <SmartphoneIcon aria-hidden className="size-5" />
+      </span>
       <div className="flex-1">
-        <div className="font-medium text-sm text-ink">Install {BRAND}</div>
-        <div className="text-xs text-ink-muted mt-0.5">
+        <div className="font-heading font-bold text-foreground">Install {BRAND}</div>
+        <div className="text-xs text-muted-foreground mt-0.5">
           Add to your home screen for faster, offline-capable access.
         </div>
         <div className="mt-2 flex gap-2">
-          <button
+          <Button
+            className="font-semibold"
             onClick={async () => {
               await installEvent.prompt();
               setInstallEvent(null);
             }}
-            className="text-xs px-3 py-1 rounded-lg bg-brand text-brand-on hover:bg-brand-hover font-medium"
           >
             Install
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
+            className="text-muted-foreground"
             onClick={() => {
               localStorage.setItem("pwa-install-dismissed", "1");
               setDismissed(true);
             }}
-            className="text-xs px-3 py-1 rounded-lg text-ink-muted hover:text-ink"
           >
             Not now
-          </button>
+          </Button>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
