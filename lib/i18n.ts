@@ -48,6 +48,28 @@ export const t: Dict = {
     en: "Short demo of the AI tutor answering a question with worked steps",
   },
 
+  // Landing: marquee, how it works, showcase
+  "landing.strip.label": { en: "Experiments you can do this week" },
+  "how.eyebrow": { en: "How it works" },
+  "how.title": { en: "Three steps. Real science." },
+  "how.1.title": { en: "Pick an experiment" },
+  "how.1.body": { en: "Choose your grade and subject. Every experiment matches a lesson from your textbook." },
+  "how.2.title": { en: "Gather what you have" },
+  "how.2.body": { en: "Cabbage, lemons, salt, a glass of water. Things from home or the market, never a fancy lab." },
+  "how.3.title": { en: "Do it, then make sense of it" },
+  "how.3.body": { en: "Follow the steps and the video, note what you saw, and ask the lab assistant when you're stuck." },
+  "showcase.eyebrow": { en: "The lab" },
+  "showcase.title": { en: "Try these this week" },
+  "showcase.sub": { en: "Biology, chemistry and physics for grades 9 to 12. Start with the free ones." },
+  "showcase.stat.experiments": { en: "experiments" },
+  "showcase.stat.subjects": { en: "subjects" },
+  "showcase.stat.grades": { en: "grades 9–12" },
+  "showcase.stat.minutes": { en: "min on average" },
+  "showcase.free": { en: "Free" },
+  "showcase.min": { en: "min" },
+  "showcase.all": { en: "See all experiments" },
+  "showcase.grade": { en: "Grade" },
+
   // Two pillars
   "pillars.eyebrow": {
     en: "Two things in every lesson",
@@ -108,7 +130,7 @@ export const t: Dict = {
     en: "Give the pupils something to do, not something to learn; and the doing is of such a nature as to demand thinking; learning naturally results.",
   },
   "dewey.attribution": {
-    en: "— John Dewey",
+    en: "John Dewey",
   },
 
   // CTA strip

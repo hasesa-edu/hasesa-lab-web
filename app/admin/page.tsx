@@ -2,10 +2,11 @@ import { redirect } from "next/navigation";
 import { sql } from "drizzle-orm";
 import { getSession } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BarChart3, Eye, FlaskConical, ShieldCheck, Users } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AdminSignOutButton } from "./signout-button";
-import { Subscribers } from "./Subscribers";
+import { SectionTitle, StatCard, Subscribers, TABLE_HEAD, TH, TablePanel } from "./Subscribers";
 
 export const dynamic = "force-dynamic";
 
@@ -143,49 +144,33 @@ async function loadStats() {
   };
 }
 
-function StatCard({ label, value, sub }: { label: string; value: number | string; sub?: string }) {
-  return (
-    <Card className="gap-0 shadow-card">
-      <CardContent>
-        <div className="text-xs uppercase tracking-wide text-muted-foreground">{label}</div>
-        <div className="mt-1 text-2xl font-bold text-foreground tabular-nums">{value}</div>
-        {sub && <div className="mt-0.5 text-xs text-muted-foreground">{sub}</div>}
-      </CardContent>
-    </Card>
-  );
-}
-
 function TopList({ title, rows }: { title: string; rows: LabelCountRow[] }) {
   const max = Math.max(1, ...rows.map((r) => r.count));
   return (
-    <Card className="gap-3 shadow-card">
-      <CardHeader>
-        <CardTitle className="text-sm font-semibold text-foreground">
-          <h3>{title}</h3>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="rounded-2xl bg-card p-5 shadow-card ring-1 ring-border">
+      <h3 className="text-sm font-bold text-foreground">{title}</h3>
+      <div className="mt-3">
         {rows.length === 0 ? (
           <p className="text-sm text-muted-foreground">No data yet.</p>
         ) : (
-          <ul className="space-y-2">
+          <ul className="space-y-2.5">
             {rows.map((r) => (
               <li key={r.label ?? "—"} className="text-sm">
                 <div className="flex justify-between gap-3">
                   <span className="truncate text-foreground" title={r.label ?? ""}>
                     {r.label ?? "—"}
                   </span>
-                  <span className="tabular-nums text-muted-foreground">{r.count}</span>
+                  <span className="font-semibold text-primary-strong tabular-nums">{r.count}</span>
                 </div>
-                <div className="mt-1 h-1.5 rounded-sm bg-background">
-                  <div className="h-full rounded-sm bg-primary" style={{ width: `${(r.count / max) * 100}%` }} />
+                <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-primary-soft">
+                  <div className="h-full rounded-full bg-primary" style={{ width: `${(r.count / max) * 100}%` }} />
                 </div>
               </li>
             ))}
           </ul>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 
@@ -196,43 +181,50 @@ export default async function AdminPage() {
   const s = await loadStats();
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10 space-y-8">
-      <header className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">Admin analytics</h1>
-          <p className="mt-1 text-sm text-muted-foreground">User signups, traffic, and content engagement.</p>
-        </div>
+    <div>
+      <PageHeader
+        eyebrow={
+          <span className="inline-flex items-center gap-1.5">
+            <ShieldCheck className="size-3.5" /> Admin
+          </span>
+        }
+        title="Admin analytics"
+        description="User signups, traffic, and content engagement."
+      >
         <AdminSignOutButton />
-      </header>
+      </PageHeader>
 
+      <div className="mx-auto max-w-5xl space-y-10 px-4 py-10">
       <section>
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Users</h2>
-        <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
-          <StatCard label="Total users" value={s.usersTotal} />
-          <StatCard label="New in 24h" value={s.users1d} />
+        <SectionTitle icon={<Users className="size-4" />}>Users</SectionTitle>
+        <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
+          <StatCard label="Total users" value={s.usersTotal} tone="teal" />
+          <StatCard label="New in 24h" value={s.users1d} tone="sun" />
           <StatCard label="New in 7d" value={s.users7d} />
           <StatCard label="New in 30d" value={s.users30d} />
         </div>
 
-        <Card className="mt-4 gap-0 py-0 shadow-card">
-          <div className="px-4 py-3 border-b border-border flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-            <h3 className="text-sm font-semibold text-foreground">Registered users</h3>
+        <TablePanel
+          title="Registered users"
+          className="mt-4"
+          aside={
             <span className="text-xs text-muted-foreground">
               Showing {s.users.length}
               {s.usersTotal > s.users.length ? ` of ${s.usersTotal} (most recent 200)` : ""}
             </span>
-          </div>
+          }
+        >
           <Table>
-            <TableHeader className="bg-background text-xs uppercase tracking-wide">
+            <TableHeader className={TABLE_HEAD}>
               <TableRow className="hover:bg-transparent">
-                <TableHead className="px-3 text-muted-foreground">Name</TableHead>
-                <TableHead className="px-3 text-muted-foreground">Email</TableHead>
-                <TableHead className="px-3 text-muted-foreground">Grade</TableHead>
-                <TableHead className="px-3 text-muted-foreground">Lang</TableHead>
-                <TableHead className="px-3 text-muted-foreground">Region</TableHead>
-                <TableHead className="px-3 text-muted-foreground">School</TableHead>
-                <TableHead className="px-3 text-muted-foreground">Subjects</TableHead>
-                <TableHead className="px-3 text-muted-foreground">Joined</TableHead>
+                <TableHead className={TH}>Name</TableHead>
+                <TableHead className={TH}>Email</TableHead>
+                <TableHead className={TH}>Grade</TableHead>
+                <TableHead className={TH}>Lang</TableHead>
+                <TableHead className={TH}>Region</TableHead>
+                <TableHead className={TH}>School</TableHead>
+                <TableHead className={TH}>Subjects</TableHead>
+                <TableHead className={TH}>Joined</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -262,49 +254,49 @@ export default async function AdminPage() {
               )}
             </TableBody>
           </Table>
-        </Card>
+        </TablePanel>
       </section>
 
       <Subscribers />
 
       <section>
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Traffic</h2>
-        <div className="mt-3 grid grid-cols-2 md:grid-cols-5 gap-3">
-          <StatCard label="Page views (all-time)" value={s.pvTotal} />
-          <StatCard label="Views in 24h" value={s.pv1d} />
+        <SectionTitle icon={<BarChart3 className="size-4" />}>Traffic</SectionTitle>
+        <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-5">
+          <StatCard label="Page views (all-time)" value={s.pvTotal} tone="teal" />
+          <StatCard label="Views in 24h" value={s.pv1d} tone="sun" />
           <StatCard label="Views in 7d" value={s.pv7d} />
           <StatCard label="Views in 30d" value={s.pv30d} />
           <StatCard label="Unique visitors (7d)" value={s.uniqueVisitors7d} sub="distinct user / user-agent" />
         </div>
       </section>
 
-      <section className="grid md:grid-cols-3 gap-4">
+      <section className="grid gap-4 md:grid-cols-3">
         <TopList title="Top pages" rows={s.topPaths} />
         <TopList title="Top countries" rows={s.topCountries} />
         <TopList title="Top referrers" rows={s.topReferrers} />
       </section>
 
       <section>
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Engagement</h2>
-        <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
-          <StatCard label="Conversations" value={s.convosTotal} />
+        <SectionTitle icon={<FlaskConical className="size-4" />}>Engagement</SectionTitle>
+        <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
+          <StatCard label="Conversations" value={s.convosTotal} tone="teal" />
           <StatCard label="Chat messages" value={s.messagesTotal} />
           <StatCard label="Experiments started" value={s.experimentsStarted} sub="student × experiment" />
-          <StatCard label="Experiments completed" value={s.experimentsDone} />
+          <StatCard label="Experiments completed" value={s.experimentsDone} tone="sun" />
         </div>
       </section>
 
       <section>
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Recent page views</h2>
-        <Card className="mt-3 gap-0 py-0 shadow-card">
+        <SectionTitle icon={<Eye className="size-4" />}>Recent page views</SectionTitle>
+        <TablePanel title="Last 25 views" className="mt-3">
           <Table>
-            <TableHeader className="bg-background text-xs uppercase tracking-wide">
+            <TableHeader className={TABLE_HEAD}>
               <TableRow className="hover:bg-transparent">
-                <TableHead className="px-3 text-muted-foreground">When</TableHead>
-                <TableHead className="px-3 text-muted-foreground">Path</TableHead>
-                <TableHead className="px-3 text-muted-foreground">Country</TableHead>
-                <TableHead className="px-3 text-muted-foreground">City</TableHead>
-                <TableHead className="px-3 text-muted-foreground">Referrer</TableHead>
+                <TableHead className={TH}>When</TableHead>
+                <TableHead className={TH}>Path</TableHead>
+                <TableHead className={TH}>Country</TableHead>
+                <TableHead className={TH}>City</TableHead>
+                <TableHead className={TH}>Referrer</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -329,8 +321,9 @@ export default async function AdminPage() {
               )}
             </TableBody>
           </Table>
-        </Card>
+        </TablePanel>
       </section>
+      </div>
     </div>
   );
 }

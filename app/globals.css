@@ -46,6 +46,18 @@
   --sun-soft: rgb(254 243 199);
   --subtle-foreground: rgb(168 162 158);
 
+  /* Deep teal for bold bands (page headers, pricing, hero panels). */
+  --deep: rgb(9 61 57);
+  --deep-foreground: rgb(240 253 250);
+
+  /* One color per subject, used for icon tiles, chips and card accents. */
+  --physics: rgb(79 70 229);
+  --physics-soft: rgb(238 242 255);
+  --chemistry: rgb(217 119 6);
+  --chemistry-soft: rgb(255 247 237);
+  --biology: rgb(5 150 105);
+  --biology-soft: rgb(236 253 245);
+
   --sidebar: rgb(250 250 249);
   --sidebar-foreground: rgb(28 25 23);
   --sidebar-primary: rgb(13 148 136);
@@ -90,6 +102,16 @@
   --sun-soft: rgb(69 26 3);
   --subtle-foreground: rgb(107 117 114);
 
+  --deep: rgb(6 40 38);
+  --deep-foreground: rgb(240 253 250);
+
+  --physics: rgb(129 140 248);
+  --physics-soft: rgb(30 27 75);
+  --chemistry: rgb(251 191 36);
+  --chemistry-soft: rgb(69 26 3);
+  --biology: rgb(52 211 153);
+  --biology-soft: rgb(6 78 59);
+
   --sidebar: rgb(18 24 23);
   --sidebar-foreground: rgb(241 245 244);
   --sidebar-primary: rgb(45 212 191);
@@ -104,7 +126,9 @@
   --font-sans:
     var(--font-geist), Geist, system-ui, -apple-system, Segoe UI, Roboto,
     Noto Sans Ethiopic, sans-serif;
-  --font-heading: var(--font-sans);
+  --font-heading:
+    var(--font-bricolage), var(--font-geist), system-ui, -apple-system,
+    Segoe UI, Roboto, Noto Sans Ethiopic, sans-serif;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -143,6 +167,17 @@
   --color-sun: var(--sun);
   --color-sun-soft: var(--sun-soft);
   --color-subtle-foreground: var(--subtle-foreground);
+  --color-deep: var(--deep);
+  --color-deep-foreground: var(--deep-foreground);
+  --color-physics: var(--physics);
+  --color-physics-soft: var(--physics-soft);
+  --color-chemistry: var(--chemistry);
+  --color-chemistry-soft: var(--chemistry-soft);
+  --color-biology: var(--biology);
+  --color-biology-soft: var(--biology-soft);
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -157,7 +192,38 @@
   --shadow-pop: 0 8px 24px -8px rgb(0 0 0 / 0.18), 0 2px 6px rgb(0 0 0 / 0.06);
 }
 
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(var(--tilt, 0deg)); }
+  50% { transform: translateY(-8px) rotate(var(--tilt, 0deg)); }
+}
+
+/* Lab-notebook grid. Color comes from currentColor, so set text-* on the element. */
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, currentColor 12%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, currentColor 12%, transparent) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+@utility bg-dots {
+  background-image: radial-gradient(color-mix(in oklab, currentColor 18%, transparent) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
 @layer base {
+  h1, h2, h3 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
   * {
     @apply border-border outline-ring/50;
   }

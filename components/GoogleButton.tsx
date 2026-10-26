@@ -27,7 +27,7 @@ export function GoogleButton({ next, label = "Continue with Google", className =
       href={googleSignInHref(next)}
       className={cn(
         buttonVariants({ variant: "outline", size: "lg" }),
-        "gap-3 rounded-lg bg-white text-[#1f1f1f] shadow-soft hover:border-primary/60 hover:bg-white hover:text-[#1f1f1f] dark:bg-white dark:hover:bg-white",
+        "gap-3 bg-white font-semibold text-[#1f1f1f] shadow-soft hover:border-primary/60 hover:bg-white hover:text-[#1f1f1f] dark:bg-white dark:hover:bg-white",
         className
       )}
     >

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { LogIn, ShieldCheck } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -39,17 +39,24 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto px-4 py-14">
-      <Card className="gap-6 py-7 shadow-card">
-        <CardHeader className="px-7 gap-2">
-          <CardTitle className="text-2xl font-bold tracking-tight text-foreground">
-            <h1>Admin sign in</h1>
-          </CardTitle>
-          <CardDescription>Restricted area — analytics and operations.</CardDescription>
-        </CardHeader>
+    <div className="relative isolate flex min-h-[calc(100svh-4rem)] items-center justify-center overflow-hidden bg-deep px-4 py-14 text-deep-foreground">
+      <div aria-hidden className="absolute inset-0 -z-10 bg-grid text-primary-soft opacity-50" />
+      <div aria-hidden className="absolute -top-32 -left-24 -z-10 size-96 rounded-full bg-primary/50 blur-3xl" />
+      <div aria-hidden className="absolute -right-24 -bottom-24 -z-10 size-80 rounded-full bg-sun/20 blur-3xl" />
 
-        <CardContent className="px-7">
-          <form onSubmit={onSubmit} className="space-y-4">
+      <div className="w-full max-w-sm">
+        <div className="mb-6 text-center">
+          <span className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-sun text-deep shadow-pop">
+            <ShieldCheck className="size-7" aria-hidden />
+          </span>
+          <p className="mt-4 text-xs font-bold tracking-[0.18em] text-sun uppercase">Admin</p>
+        </div>
+
+        <div className="rounded-[1.5rem] bg-card p-6 text-card-foreground shadow-pop ring-1 ring-white/10 sm:p-7">
+          <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Admin sign in</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Restricted area — analytics and operations.</p>
+
+          <form onSubmit={onSubmit} className="mt-6 space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="admin-username" className="text-foreground">Username</Label>
               <Input
@@ -78,12 +85,13 @@ export default function AdminLoginPage() {
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
-            <Button type="submit" disabled={busy} className="w-full">
+            <Button type="submit" size="lg" disabled={busy} className="w-full font-semibold">
+              <LogIn aria-hidden />
               {busy ? "…" : "Sign in"}
             </Button>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
