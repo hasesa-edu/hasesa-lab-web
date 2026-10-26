@@ -1,13 +1,16 @@
-/* AI-Edu Ethiopia — minimal demo service worker */
-const VERSION = "v2";
-const APP_SHELL = "ai-edu-shell-" + VERSION;
-const STATIC = "ai-edu-static-" + VERSION;
-const PAGES = "ai-edu-pages-" + VERSION;
+/* Hasesa service worker */
+const VERSION = "v4";
+const APP_SHELL = "hasesa-shell-" + VERSION;
+const STATIC = "hasesa-static-" + VERSION;
+const PAGES = "hasesa-pages-" + VERSION;
 
-// Precache only the home shell + essentials. /lessons and /chat are heavier
-// pages; they'll be cached on first visit by the fetch handler rather than
-// downloaded eagerly when the SW installs.
+// Precache only the home shell + essentials.
 const PRECACHE_URLS = ["/", "/manifest.json", "/icon.svg"];
+
+// Only public pages are kept for offline use. Signed-in pages (guides,
+// dashboard, account, chat) are never cached, so paid content and personal
+// details don't stay on a shared phone after sign-out or after a pass ends.
+const PUBLIC_PAGES = ["/", "/terms", "/privacy", "/refund"];
 
 // Bump VERSION when this list changes so old caches get evicted on activate.
 
@@ -58,13 +61,14 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // HTML / navigation — network-first, fall back to cache
+  // HTML / navigation — network-first, fall back to cache (public pages only)
+  if (!PUBLIC_PAGES.includes(url.pathname)) return;
   if (req.mode === "navigate" || req.headers.get("accept")?.includes("text/html")) {
     event.respondWith(
       (async () => {
         try {
           const res = await fetch(req);
-          if (res.ok) {
+          if (res.ok && !res.redirected) {
             const copy = res.clone();
             caches.open(PAGES).then((c) => c.put(req, copy));
           }

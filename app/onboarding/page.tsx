@@ -1,10 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
-import { GRADES, SUBJECTS, type Grade, type Subject } from "@/lib/experiments";
+import { GRADES, SUBJECTS, type Grade, type Subject } from "@/lib/subjects";
+import { safeNext } from "@/lib/safe-next";
 import { apiPatchMe } from "@/lib/api";
 
 const ALL_SUBJECTS: Subject[] = SUBJECTS.map((s) => s.id);
@@ -34,6 +36,12 @@ export default function OnboardingPage() {
     try {
       await apiPatchMe({ subjects: chosen, grade });
       await refresh();
+      // Coming from "Get Hasesa" (or a guide): carry on to where they were going.
+      const next = safeNext(new URLSearchParams(window.location.search).get("next"));
+      if (next) {
+        router.push(next);
+        return;
+      }
       setDone(true);
     } catch {
       setError(tr("common.tryAgain"));
@@ -119,6 +127,13 @@ export default function OnboardingPage() {
         >
           {busy ? "…" : tr("onboard.continue")}
         </button>
+        {!user.grade && (
+          <p className="mt-4 text-xs text-ink-subtle leading-relaxed text-center">
+            By continuing you agree to our{" "}
+            <Link href="/terms" className="underline hover:text-brand">Terms</Link> and{" "}
+            <Link href="/privacy" className="underline hover:text-brand">Privacy Policy</Link>.
+          </p>
+        )}
       </div>
     </div>
   );

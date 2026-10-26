@@ -4,7 +4,8 @@ import type { Locale } from "@/lib/i18n";
 import { getSession } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
 import { and, eq } from "drizzle-orm";
-import { CAPS, checkAndIncrement, getCurrentUsage } from "@/lib/usage";
+import { checkAndIncrement, refundUsage } from "@/lib/usage";
+import { getEntitlement } from "@/lib/billing/entitlement";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { readJsonLimited, BODY_LIMIT } from "@/lib/http";
 
@@ -27,7 +28,14 @@ const LANG_NAME: Record<Locale, string> = {
 };
 
 function uid(): string {
-  return Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+  return crypto.randomUUID();
+}
+
+function jsonError(status: number, error: string, code?: string, extra: Record<string, string> = {}) {
+  return new Response(JSON.stringify({ error, code }), {
+    status,
+    headers: { "content-type": "application/json", ...extra },
+  });
 }
 
 function experimentContext(exp: Experiment): string {
@@ -66,7 +74,7 @@ function buildSystemPrompt(locale: Locale, experimentId?: string): string {
   const langName = LANG_NAME[locale] ?? "English";
   const exp = experimentId ? getExperiment(experimentId) : undefined;
 
-  const base = `You are the Hasesa lab assistant for Ethiopian high school students (grades 9–12). Students do hands-on science experiments on their own, using cheap, locally available materials, by following step-by-step guides and pre-recorded videos. Your job is to help them while they do that: explain the science behind an experiment, help them work out why it didn't go as expected, and help them make sense of what they observed.
+  const base = `You are the Hasesa assistant for Ethiopian high school students (grades 9–12). Students do hands-on science experiments on their own, using cheap, locally available materials, by following step-by-step guides and pre-recorded videos. Your job is to help them while they do that: explain the science behind an experiment, help them work out why it didn't go as expected, and help them make sense of what they observed.
 
 YOUR SCOPE — strictly Biology, Chemistry and Physics at the grade 9–12 level, with a focus on experiments and the concepts behind them.
 
@@ -105,7 +113,14 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  // Throttle every caller (esp. anonymous) so the endpoint can't be looped to
+  // The assistant is for students with an active pass only.
+  const session = await getSession();
+  const userId = session.userId;
+  if (!userId) return jsonError(401, "Please sign in to use the lab assistant.", "signin");
+  const ent = await getEntitlement(userId);
+  if (!ent.active) return jsonError(402, "The lab assistant is part of the Hasesa pass.", "plan_required");
+
+  // Throttle every caller so the endpoint can't be looped to
   // burn AI provider quota. 20 requests per IP per 5 minutes.
   const limit = rateLimit(`chat:${clientIp(req)}`, 20, 5 * 60 * 1000);
   if (!limit.ok) {
@@ -151,74 +166,81 @@ export async function POST(req: NextRequest) {
     return new Response(JSON.stringify({ error: "messages required" }), { status: 400 });
   }
 
-  // Auth: if signed in, persist + enforce caps. Anonymous: just stream, no persistence.
-  const session = await getSession();
-  const userId = session.userId;
-
-  if (userId) {
-    const cap = await checkAndIncrement(userId, "chatTurns", 1);
-    if (!cap.ok) {
-      return new Response(
-        JSON.stringify({
-          error: `Monthly chat turn cap reached (${cap.current}/${cap.cap}). Resets next month.`,
-        }),
-        { status: 429, headers: { "content-type": "application/json" } }
-      );
-    }
-
-    // Ensure conversation exists and belongs to this user (prevents writing
-    // into another user's conversation via a supplied conversationId).
-    if (!conversationId) {
-      conversationId = uid();
-      await db.insert(schema.conversations).values({ id: conversationId, userId, lessonId: experimentId ?? null });
-    } else {
-      const owned = await db
-        .select({ id: schema.conversations.id })
-        .from(schema.conversations)
-        .where(and(eq(schema.conversations.id, conversationId), eq(schema.conversations.userId, userId)))
-        .limit(1);
-      if (!owned.length) {
-        return new Response(JSON.stringify({ error: "Conversation not found" }), {
-          status: 404,
-          headers: { "content-type": "application/json" },
-        });
-      }
-      await db
-        .update(schema.conversations)
-        .set({ updatedAt: new Date() })
-        .where(and(eq(schema.conversations.id, conversationId), eq(schema.conversations.userId, userId)));
-    }
-    // Persist user's last message
-    const lastUser = [...safeMessages].reverse().find((m) => m.role === "user");
-    if (lastUser) {
-      await db.insert(schema.messages).values({
-        id: uid(),
-        conversationId,
-        role: "user",
-        content: lastUser.content,
+  // A supplied conversationId must belong to this user (prevents writing
+  // into another user's conversation).
+  if (conversationId) {
+    const owned = await db
+      .select({ id: schema.conversations.id })
+      .from(schema.conversations)
+      .where(and(eq(schema.conversations.id, conversationId), eq(schema.conversations.userId, userId)))
+      .limit(1);
+    if (!owned.length) {
+      return new Response(JSON.stringify({ error: "Conversation not found" }), {
+        status: 404,
+        headers: { "content-type": "application/json" },
       });
     }
   }
 
+  // Count the message only once the request is known to be valid.
+  const cap = await checkAndIncrement(userId, "chatTurns", 1);
+  if (!cap.ok) {
+    return jsonError(
+      429,
+      `You've used all ${cap.cap} messages for today. They reset at midnight (Addis Ababa time).`,
+      "daily_cap"
+    );
+  }
+
+  if (!conversationId) {
+    conversationId = uid();
+    await db.insert(schema.conversations).values({ id: conversationId, userId, lessonId: experimentId ?? null });
+  } else {
+    await db
+      .update(schema.conversations)
+      .set({ updatedAt: new Date() })
+      .where(and(eq(schema.conversations.id, conversationId), eq(schema.conversations.userId, userId)));
+  }
+
+  // Persist user's last message
+  const lastUser = [...safeMessages].reverse().find((m) => m.role === "user");
+  if (lastUser) {
+    await db.insert(schema.messages).values({
+      id: uid(),
+      conversationId,
+      role: "user",
+      content: lastUser.content,
+    });
+  }
+
   const systemPrompt = buildSystemPrompt(locale as Locale, experimentId);
 
-  const aiRes = await fetch(`${AI_BASE_URL}/chat/completions`, {
-    method: "POST",
-    headers: { "content-type": "application/json", authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify({
-      model: AI_MODEL,
-      stream: true,
-      temperature: 0.4,
-      max_tokens: 800,
-      ...(AI_REASONING_EFFORT ? { reasoning_effort: AI_REASONING_EFFORT } : {}),
-      messages: [{ role: "system", content: systemPrompt }, ...safeMessages],
-    }),
-  });
+  let aiRes: Response | null = null;
+  try {
+    aiRes = await fetch(`${AI_BASE_URL}/chat/completions`, {
+      method: "POST",
+      headers: { "content-type": "application/json", authorization: `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        model: AI_MODEL,
+        stream: true,
+        temperature: 0.4,
+        max_tokens: 800,
+        ...(AI_REASONING_EFFORT ? { reasoning_effort: AI_REASONING_EFFORT } : {}),
+        messages: [{ role: "system", content: systemPrompt }, ...safeMessages],
+      }),
+    });
+  } catch (e) {
+    console.error("AI provider request failed:", e);
+  }
 
-  if (!aiRes.ok || !aiRes.body) {
+  if (!aiRes || !aiRes.ok || !aiRes.body) {
     // Log upstream detail server-side; don't relay it to the client.
-    const text = await aiRes.text().catch(() => "");
-    console.error(`AI provider error ${aiRes.status}: ${text.slice(0, 300)}`);
+    if (aiRes) {
+      const text = await aiRes.text().catch(() => "");
+      console.error(`AI provider error ${aiRes.status}: ${text.slice(0, 300)}`);
+    }
+    // The student got no answer, so don't count it against today's messages.
+    await refundUsage(userId, "chatTurns", 1).catch(() => {});
     return new Response(
       JSON.stringify({ error: "The lab assistant is temporarily unavailable. Please try again." }),
       { status: 502, headers: { "content-type": "application/json" } }
@@ -283,5 +305,6 @@ export async function POST(req: NextRequest) {
     "cache-control": "no-cache",
   };
   if (conversationId) headers["x-conversation-id"] = conversationId;
+  headers["x-chat-remaining"] = String(Math.max(0, cap.cap - cap.current));
   return new Response(stream, { headers });
 }
