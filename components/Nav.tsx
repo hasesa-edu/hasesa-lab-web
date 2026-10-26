@@ -7,6 +7,7 @@ import { useLocale } from "./LocaleProvider";
 import { useUser } from "./UserProvider";
 import { apiSignout } from "@/lib/api";
 import { Logo } from "./Logo";
+import { GoogleIcon, googleSignInHref } from "./GoogleButton";
 import { ThemeToggle } from "./ThemeToggle";
 
 export function Nav() {
@@ -68,6 +69,9 @@ export function Nav() {
   function closeMobile() {
     setMobileOpen(false);
   }
+
+  // Signing in from the header returns the visitor to the page they were on.
+  const signInHref = googleSignInHref(pathname === "/" ? null : pathname);
 
   const isActive = (href: string) =>
     href.includes("#") ? false : href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -169,14 +173,13 @@ export function Nav() {
               )}
             </div>
           ) : (
-            <>
-              <Link
-                href="/login"
-                className="text-sm px-3.5 py-1.5 rounded-md bg-brand text-brand-on hover:bg-brand-hover font-medium shadow-soft transition"
-              >
-                {tr("nav.signin")}
-              </Link>
-            </>
+            <a
+              href={signInHref}
+              className="inline-flex items-center gap-2 text-sm px-3.5 py-1.5 rounded-md border border-line bg-white text-[#1f1f1f] hover:border-brand/60 font-medium shadow-soft transition"
+            >
+              <GoogleIcon size={16} />
+              {tr("nav.signin")}
+            </a>
           )}
         </div>
 
@@ -184,12 +187,13 @@ export function Nav() {
           {/* TEMP: theme toggle hidden — light-only for now */}
           <ThemeToggle className="hidden" />
           {!user && (
-            <Link
-              href="/login"
-              className="text-sm px-3 py-1.5 rounded-md bg-brand text-brand-on hover:bg-brand-hover font-semibold shadow-soft transition"
+            <a
+              href={signInHref}
+              className="inline-flex items-center gap-2 text-sm px-3 py-1.5 rounded-md border border-line bg-white text-[#1f1f1f] hover:border-brand/60 font-medium shadow-soft transition"
             >
+              <GoogleIcon size={16} />
               {tr("nav.signin")}
-            </Link>
+            </a>
           )}
           {user && (
             <button
