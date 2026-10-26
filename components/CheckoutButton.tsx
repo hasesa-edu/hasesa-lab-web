@@ -2,6 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { googleSignInHref } from "./GoogleButton";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { cn } from "@/lib/utils";
 
 /**
  * Starts a Chapa checkout. Signed-out visitors are sent to Google sign-in
@@ -59,21 +62,19 @@ export function CheckoutButton({
 
   return (
     <div>
-      <button
+      <Button
         type="button"
+        size="lg"
         onClick={start}
         disabled={busy}
-        className={
-          "inline-flex items-center justify-center px-5 py-2.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-60 font-semibold shadow-soft transition " +
-          className
-        }
+        className={cn("px-5 font-semibold disabled:opacity-60", className)}
       >
         {busy ? "Opening Chapa…" : label}
-      </button>
+      </Button>
       {error && (
-        <p role="alert" className="mt-2 text-sm text-red-700 dark:text-red-300">
-          {error}
-        </p>
+        <Alert variant="destructive" className="mt-2">
+          <AlertDescription className="text-destructive">{error}</AlertDescription>
+        </Alert>
       )}
     </div>
   );

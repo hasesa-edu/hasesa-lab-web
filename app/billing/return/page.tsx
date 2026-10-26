@@ -7,6 +7,7 @@ import { verifyAndApply } from "@/lib/billing/payments";
 import { getEntitlement } from "@/lib/billing/entitlement";
 import { BRAND } from "@/lib/brand";
 import { formatDate } from "@/lib/format";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = { title: `Payment · ${BRAND}`, robots: { index: false } };
 export const dynamic = "force-dynamic";
@@ -38,13 +39,13 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
             Your {BRAND} pass is active{ent?.paidUntil ? ` until ${formatDate(ent.paidUntil)}` : ""}. Every guide and the lab
             assistant are unlocked.
           </p>
-          <div className="mt-6 flex justify-center gap-3">
-            <Link href="/experiments" className="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 font-medium shadow-soft transition">
-              Browse experiments
-            </Link>
-            <Link href="/chat" className="px-5 py-2.5 border border-border rounded-lg text-foreground hover:border-primary/60 font-medium transition">
-              Ask the assistant
-            </Link>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Button asChild size="lg">
+              <Link href="/experiments">Browse experiments</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <Link href="/chat">Ask the assistant</Link>
+            </Button>
           </div>
         </>
       ) : state === "pending" ? (
@@ -54,13 +55,13 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
           <p className="mt-2 text-muted-foreground">
             Chapa hasn't confirmed it yet. This usually takes a few seconds. Refresh this page, or check your account in a minute.
           </p>
-          <div className="mt-6 flex justify-center gap-3">
-            <Link href={`/billing/return?tx_ref=${encodeURIComponent(txRef ?? "")}`} className="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 font-medium shadow-soft transition">
-              Check again
-            </Link>
-            <Link href="/account" className="px-5 py-2.5 border border-border rounded-lg text-foreground hover:border-primary/60 font-medium transition">
-              My account
-            </Link>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Button asChild size="lg">
+              <Link href={`/billing/return?tx_ref=${encodeURIComponent(txRef ?? "")}`}>Check again</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <Link href="/account">My account</Link>
+            </Button>
           </div>
         </>
       ) : (
@@ -74,9 +75,9 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
                 ? "Chapa received a payment, but not the amount we expected, so we couldn't activate your pass automatically. Please contact us and we'll sort it out."
                 : "We couldn't find this payment. If money left your account, contact us with the time you paid."}
           </p>
-          <Link href="/account" className="mt-6 inline-block px-5 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 font-medium shadow-soft transition">
-            Try again
-          </Link>
+          <Button asChild size="lg" className="mt-6">
+            <Link href="/account">Try again</Link>
+          </Button>
         </>
       )}
     </div>

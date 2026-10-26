@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
+import { cn } from "@/lib/utils";
 
 export function LogoMark({ size = 28, className = "" }: { size?: number; className?: string }) {
   return (
@@ -37,7 +38,7 @@ export function LogoMark({ size = 28, className = "" }: { size?: number; classNa
 
 export function Logo({ className = "" }: { className?: string }) {
   return (
-    <Link href="/" className={"inline-flex items-center gap-2.5 group " + className}>
+    <Link href="/" className={cn("inline-flex min-h-10 items-center gap-2.5 group", className)}>
       <LogoMark size={28} className="transition group-hover:scale-105" />
       <span className="font-semibold text-[15px] leading-none tracking-tight text-foreground">{BRAND}</span>
     </Link>

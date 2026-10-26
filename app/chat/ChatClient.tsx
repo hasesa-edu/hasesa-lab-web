@@ -9,6 +9,13 @@ import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import { useLocale } from "@/components/LocaleProvider";
 import type { CatalogItem } from "@/lib/subjects";
+import { ArrowDown, ArrowRight } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -162,54 +169,55 @@ function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogIt
         <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">{tr("chat.title")}</h1>
         <p className="text-muted-foreground mt-1.5 text-sm">{tr("chat.subtitle")}</p>
         <div className="mt-4 flex flex-wrap items-center gap-2">
-          <label htmlFor="experiment-picker" className="text-xs font-medium text-subtle-foreground">
+          <Label htmlFor="experiment-picker" className="text-xs text-subtle-foreground">
             {tr("chat.pickLabel")}
-          </label>
-          <select
+          </Label>
+          <NativeSelect
             id="experiment-picker"
             value={experimentId ?? ""}
             onChange={(e) => pickExperiment(e.target.value)}
             disabled={busy}
-            className="max-w-full text-sm px-3 py-1.5 rounded-lg border border-border bg-card text-foreground focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/30"
+            className="max-w-full"
           >
-            <option value="">{tr("chat.pickNone")}</option>
+            <NativeSelectOption value="">{tr("chat.pickNone")}</NativeSelectOption>
             {catalog.map((e) => (
-              <option key={e.id} value={e.id}>
+              <NativeSelectOption key={e.id} value={e.id}>
                 G{e.grade} · {e.title}
-              </option>
+              </NativeSelectOption>
             ))}
-          </select>
+          </NativeSelect>
           {experiment && (
-            <Link href={`/experiments/${experiment.id}`} className="text-xs text-primary underline">
-              {tr("chat.viewExperiment")}
-            </Link>
+            <Button asChild variant="link" className="px-1 text-xs underline">
+              <Link href={`/experiments/${experiment.id}`}>{tr("chat.viewExperiment")}</Link>
+            </Button>
           )}
         </div>
       </header>
 
       <div className="mt-6 min-h-[280px]">
         {messages.length === 0 ? (
-          <div className="rounded-2xl border border-border bg-card p-6 sm:p-7 shadow-soft">
-            <p className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-              {tr("chat.empty.title")}
-            </p>
-            <p className="text-sm text-muted-foreground mt-1.5">{tr("chat.empty.body")}</p>
-            <div className="mt-5 grid gap-2.5">
+          <Card className="gap-5 py-6 sm:py-7 shadow-soft">
+            <CardHeader className="px-6 sm:px-7 gap-1.5">
+              <CardTitle className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+                {tr("chat.empty.title")}
+              </CardTitle>
+              <CardDescription>{tr("chat.empty.body")}</CardDescription>
+            </CardHeader>
+            <CardContent className="px-6 sm:px-7 grid gap-2.5">
               {suggestions.map((s, i) => (
-                <button
+                <Button
                   key={i}
+                  variant="outline"
                   onClick={() => send(s.text)}
-                  className="group flex items-start gap-3 text-left text-sm px-4 py-3 rounded-xl border border-border bg-card hover:border-primary/60 hover:bg-primary-soft/30 hover:shadow-soft transition text-foreground"
+                  className="group h-auto items-start justify-start gap-3 whitespace-normal text-left font-normal px-4 py-3 rounded-xl bg-card text-foreground hover:border-primary/60 hover:bg-primary-soft/30 hover:shadow-soft"
                 >
                   <span className="text-lg leading-none mt-0.5">{s.emoji}</span>
                   <span className="flex-1 leading-relaxed">{s.text}</span>
-                  <span className="text-primary opacity-0 group-hover:opacity-100 transition" aria-hidden>
-                    →
-                  </span>
-                </button>
+                  <ArrowRight className="mt-0.5 text-primary opacity-0 group-hover:opacity-100 transition" aria-hidden />
+                </Button>
               ))}
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         ) : (
           <ul className="space-y-4">
             {messages.map((m, i) => {
@@ -248,21 +256,21 @@ function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogIt
       </div>
 
       {error && (
-        <div className="mt-4 text-sm text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 px-3 py-2 rounded-lg">
-          {error}
-        </div>
+        <Alert variant="destructive" className="mt-4">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       )}
 
       {showNewPill && (
-        <button
+        <Button
           type="button"
           onClick={jumpToBottom}
-          className="fixed left-1/2 -translate-x-1/2 bottom-24 z-30 px-3.5 py-1.5 rounded-full bg-primary text-primary-foreground shadow-pop text-xs font-medium hover:bg-primary/90 transition flex items-center gap-1.5"
+          className="fixed left-1/2 -translate-x-1/2 bottom-24 z-30 rounded-full shadow-pop text-xs"
           aria-label={tr("chat.newMessage")}
         >
-          <span aria-hidden>↓</span>
+          <ArrowDown aria-hidden />
           <span>{tr("chat.newMessage")}</span>
-        </button>
+        </Button>
       )}
 
       <form
@@ -272,21 +280,17 @@ function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogIt
         }}
         className="mt-6 flex gap-2"
       >
-        <input
+        <Input
           value={input}
           maxLength={2000}
           onChange={(e) => setInput(e.target.value)}
           placeholder={tr("chat.placeholder")}
-          className="flex-1 px-4 py-2.5 rounded-lg border border-border bg-card text-foreground focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/30"
+          className="flex-1"
           disabled={busy || remaining <= 0}
         />
-        <button
-          type="submit"
-          disabled={busy || !input.trim() || remaining <= 0}
-          className="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed font-medium shadow-soft transition"
-        >
+        <Button type="submit" disabled={busy || !input.trim() || remaining <= 0}>
           {busy ? tr("chat.thinking") : tr("chat.send")}
-        </button>
+        </Button>
       </form>
 
       <p className="mt-3 text-xs text-subtle-foreground">

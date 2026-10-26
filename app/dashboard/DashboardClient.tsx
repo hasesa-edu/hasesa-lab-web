@@ -7,6 +7,9 @@ import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
 import { subjectMeta, type CatalogItem } from "@/lib/subjects";
 import { apiGetProgress, type ProgressDTO } from "@/lib/api";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Tr = (k: any) => string;
 
@@ -54,7 +57,14 @@ export function DashboardClient({ catalog }: { catalog: CatalogItem[] }) {
   }, [user, progress, catalog]);
 
   if (!ready || !user) {
-    return <div className="max-w-3xl mx-auto px-4 py-10 text-subtle-foreground">{tr("common.loading")}</div>;
+    return (
+      <div className="max-w-5xl mx-auto px-4 py-12">
+        <span className="sr-only">{tr("common.loading")}</span>
+        <Skeleton className="h-10 w-3/4 max-w-md sm:h-12" />
+        <Skeleton className="mt-3 h-4 w-40" />
+        <DashboardSkeleton />
+      </div>
+    );
   }
 
   return (
@@ -76,7 +86,10 @@ export function DashboardClient({ catalog }: { catalog: CatalogItem[] }) {
       )}
 
       {loading ? (
-        <p className="mt-10 text-sm text-subtle-foreground">{tr("common.loading")}</p>
+        <>
+          <span className="sr-only">{tr("common.loading")}</span>
+          <DashboardSkeleton />
+        </>
       ) : (
         <>
           {inProgress.length > 0 && (
@@ -119,7 +132,9 @@ export function DashboardClient({ catalog }: { catalog: CatalogItem[] }) {
                   if (!e) return null;
                   const s = subjectMeta(e.subject);
                   return (
-                    <li key={e.id} className="rounded-xl border border-border bg-card p-4 shadow-soft">
+                    <li key={e.id}>
+                      <Card className="shadow-soft">
+                      <CardContent>
                       <div className="flex flex-wrap items-baseline justify-between gap-2">
                         <Link href={`/experiments/${e.id}#notebook`} className="font-semibold text-foreground hover:text-primary transition">
                           {e.title}
@@ -134,6 +149,8 @@ export function DashboardClient({ catalog }: { catalog: CatalogItem[] }) {
                       ) : (
                         <p className="mt-2 text-xs text-subtle-foreground italic">{tr("dash.noNotes")}</p>
                       )}
+                      </CardContent>
+                      </Card>
                     </li>
                   );
                 })}
@@ -144,18 +161,12 @@ export function DashboardClient({ catalog }: { catalog: CatalogItem[] }) {
       )}
 
       <div className="mt-12 flex flex-wrap gap-2">
-        <Link
-          href="/experiments"
-          className="inline-flex items-center px-4 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 text-sm font-medium shadow-soft transition"
-        >
-          {tr("dash.browse")} →
-        </Link>
-        <Link
-          href="/chat"
-          className="inline-flex items-center px-4 py-2.5 rounded-lg border border-border bg-card text-sm font-medium text-foreground hover:border-primary/60 transition"
-        >
-          {tr("dash.askAssistant")}
-        </Link>
+        <Button asChild>
+          <Link href="/experiments">{tr("dash.browse")} →</Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link href="/chat">{tr("dash.askAssistant")}</Link>
+        </Button>
       </div>
     </div>
   );
@@ -163,9 +174,29 @@ export function DashboardClient({ catalog }: { catalog: CatalogItem[] }) {
 
 function Stat({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-xl border border-border bg-card px-3 py-2.5 shadow-soft">
+    // dt/dd sit directly in the Card's div so the <dl> markup stays valid (dl > div > dt + dd).
+    <Card size="sm" className="gap-0 px-3 py-2.5 shadow-soft">
       <dt className="text-[11px] uppercase tracking-wider text-subtle-foreground font-semibold">{label}</dt>
       <dd className="text-2xl font-extrabold text-foreground tabular-nums">{value}</dd>
+    </Card>
+  );
+}
+
+/** Placeholder layout while progress loads: stat tiles + a row of cards. */
+function DashboardSkeleton() {
+  return (
+    <div aria-hidden>
+      <div className="mt-6 grid grid-cols-3 gap-3 max-w-md">
+        {[0, 1, 2].map((i) => (
+          <Skeleton key={i} className="h-16 rounded-xl" />
+        ))}
+      </div>
+      <Skeleton className="mt-10 h-5 w-32" />
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {[0, 1, 2].map((i) => (
+          <Skeleton key={i} className="h-28 rounded-xl" />
+        ))}
+      </div>
     </div>
   );
 }
@@ -175,15 +206,19 @@ function ExperimentCard({ exp, tr, cta }: { exp: CatalogItem; tr: Tr; cta: strin
   return (
     <Link
       href={`/experiments/${exp.id}`}
-      className="flex flex-col rounded-xl border border-primary/30 bg-card p-4 hover:border-primary hover:shadow-card transition shadow-soft"
+      className="group block rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
     >
-      <div className="text-xs text-primary font-semibold uppercase tracking-wide">
-        {tr("experiments.grade")} {exp.grade} · {s.emoji} {s.label}
-      </div>
-      <div className="font-semibold text-foreground mt-1 text-sm flex-1">{exp.title}</div>
-      <div className="text-xs text-subtle-foreground mt-2">
-        {exp.estimatedMinutes} {tr("experiments.minutes")} · <span className="text-primary">{cta} →</span>
-      </div>
+      <Card className="h-full shadow-soft ring-primary/30 transition group-hover:shadow-card group-hover:ring-primary">
+        <CardContent className="flex flex-1 flex-col">
+          <div className="text-xs text-primary font-semibold uppercase tracking-wide">
+            {tr("experiments.grade")} {exp.grade} · {s.emoji} {s.label}
+          </div>
+          <div className="font-semibold text-foreground mt-1 text-sm flex-1">{exp.title}</div>
+          <div className="text-xs text-subtle-foreground mt-2">
+            {exp.estimatedMinutes} {tr("experiments.minutes")} · <span className="text-primary">{cta} →</span>
+          </div>
+        </CardContent>
+      </Card>
     </Link>
   );
 }

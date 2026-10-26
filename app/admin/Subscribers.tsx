@@ -1,5 +1,8 @@
 import { sql } from "drizzle-orm";
 import { db } from "@/lib/db/client";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { GrantForm } from "./GrantForm";
 
 type SubStats = { active: number; endingSoon: number; everPaid: number };
@@ -58,73 +61,91 @@ export async function Subscribers() {
     <section>
       <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Subscribers</h2>
       <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
-        <Card label="Active passes" value={s.active} />
-        <Card label="Ending in 3 days" value={s.endingSoon} />
-        <Card label="Revenue this month (ETB)" value={r.month} sub={`${r.paymentsMonth} payments`} />
-        <Card label="Revenue all time (ETB)" value={r.total} sub={`${s.everPaid} students ever paid`} />
+        <StatCard label="Active passes" value={s.active} />
+        <StatCard label="Ending in 3 days" value={s.endingSoon} />
+        <StatCard label="Revenue this month (ETB)" value={r.month} sub={`${r.paymentsMonth} payments`} />
+        <StatCard label="Revenue all time (ETB)" value={r.total} sub={`${s.everPaid} students ever paid`} />
       </div>
 
-      <div className="mt-4 rounded-xl border border-border bg-card shadow-card p-4">
-        <h3 className="text-sm font-semibold text-foreground">Add days to a pass</h3>
-        <p className="mt-1 text-xs text-muted-foreground">For gifts, or payments made outside Chapa. Adds days on top of what the student has left.</p>
-        <div className="mt-3">
+      <Card className="mt-4 gap-3 shadow-card">
+        <CardHeader>
+          <CardTitle className="text-sm font-semibold text-foreground">
+            <h3>Add days to a pass</h3>
+          </CardTitle>
+          <CardDescription className="text-xs">
+            For gifts, or payments made outside Chapa. Adds days on top of what the student has left.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
           <GrantForm />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
-      <div className="mt-4 rounded-xl border border-border bg-card shadow-card overflow-hidden">
+      <Card className="mt-4 gap-0 py-0 shadow-card">
         <div className="px-4 py-3 border-b border-border">
           <h3 className="text-sm font-semibold text-foreground">Recent payments</h3>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-background text-xs uppercase tracking-wide text-muted-foreground">
-              <tr>
-                <th className="text-left px-3 py-2">When</th>
-                <th className="text-left px-3 py-2">Student</th>
-                <th className="text-left px-3 py-2">Amount</th>
-                <th className="text-left px-3 py-2">Days</th>
-                <th className="text-left px-3 py-2">Status</th>
-                <th className="text-left px-3 py-2">Pass ends</th>
-                <th className="text-left px-3 py-2">Ref / note</th>
-              </tr>
-            </thead>
-            <tbody>
-              {list.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="px-3 py-4 text-muted-foreground">
-                    No payments yet.
-                  </td>
-                </tr>
-              ) : (
-                list.map((p) => (
-                  <tr key={p.txRef} className="border-t border-border">
-                    <td className="px-3 py-2 text-muted-foreground whitespace-nowrap">{new Date(p.createdAt).toLocaleString()}</td>
-                    <td className="px-3 py-2 text-foreground">{p.email}</td>
-                    <td className="px-3 py-2 text-foreground tabular-nums">{p.source === "admin" ? "grant" : `${p.amountEtb} ETB`}</td>
-                    <td className="px-3 py-2 text-foreground tabular-nums">{p.days}</td>
-                    <td className="px-3 py-2 text-foreground">{p.status}</td>
-                    <td className="px-3 py-2 text-muted-foreground whitespace-nowrap">
-                      {p.paidUntil ? new Date(p.paidUntil).toLocaleDateString() : "—"}
-                    </td>
-                    <td className="px-3 py-2 text-xs text-subtle-foreground font-mono">{p.note ?? p.txRef}</td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+        <Table>
+          <TableHeader className="bg-background text-xs uppercase tracking-wide">
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="px-3 text-muted-foreground">When</TableHead>
+              <TableHead className="px-3 text-muted-foreground">Student</TableHead>
+              <TableHead className="px-3 text-muted-foreground">Amount</TableHead>
+              <TableHead className="px-3 text-muted-foreground">Days</TableHead>
+              <TableHead className="px-3 text-muted-foreground">Status</TableHead>
+              <TableHead className="px-3 text-muted-foreground">Pass ends</TableHead>
+              <TableHead className="px-3 text-muted-foreground">Ref / note</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {list.length === 0 ? (
+              <TableRow className="hover:bg-transparent">
+                <TableCell colSpan={7} className="px-3 py-4 text-muted-foreground">
+                  No payments yet.
+                </TableCell>
+              </TableRow>
+            ) : (
+              list.map((p) => (
+                <TableRow key={p.txRef}>
+                  <TableCell className="px-3 text-muted-foreground">{new Date(p.createdAt).toLocaleString()}</TableCell>
+                  <TableCell className="px-3 text-foreground">{p.email}</TableCell>
+                  <TableCell className="px-3 text-foreground tabular-nums">{p.source === "admin" ? "grant" : `${p.amountEtb} ETB`}</TableCell>
+                  <TableCell className="px-3 text-foreground tabular-nums">{p.days}</TableCell>
+                  <TableCell className="px-3">
+                    <StatusBadge status={p.status} />
+                  </TableCell>
+                  <TableCell className="px-3 text-muted-foreground">
+                    {p.paidUntil ? new Date(p.paidUntil).toLocaleDateString() : "—"}
+                  </TableCell>
+                  <TableCell className="px-3 text-xs text-subtle-foreground font-mono">{p.note ?? p.txRef}</TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </Card>
     </section>
   );
 }
 
-function Card({ label, value, sub }: { label: string; value: number; sub?: string }) {
+function StatCard({ label, value, sub }: { label: string; value: number; sub?: string }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-4 shadow-soft">
-      <div className="text-xs text-muted-foreground">{label}</div>
-      <div className="mt-1 text-2xl font-bold text-foreground tabular-nums">{value.toLocaleString()}</div>
-      {sub && <div className="mt-0.5 text-xs text-subtle-foreground">{sub}</div>}
-    </div>
+    <Card className="gap-0 shadow-soft">
+      <CardContent>
+        <div className="text-xs text-muted-foreground">{label}</div>
+        <div className="mt-1 text-2xl font-bold text-foreground tabular-nums">{value.toLocaleString()}</div>
+        {sub && <div className="mt-0.5 text-xs text-subtle-foreground">{sub}</div>}
+      </CardContent>
+    </Card>
   );
+}
+
+// Shows the raw status value; tone only tells success / failure / needs-attention apart.
+function StatusBadge({ status }: { status: string }) {
+  if (status === "success")
+    return <Badge variant="success">{status}</Badge>;
+  if (status === "failed") return <Badge variant="destructive">{status}</Badge>;
+  if (status === "review")
+    return <Badge variant="warning">{status}</Badge>;
+  return <Badge variant="secondary">{status}</Badge>;
 }

@@ -2,6 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -35,44 +40,50 @@ export default function AdminLoginPage() {
 
   return (
     <div className="max-w-md mx-auto px-4 py-14">
-      <div className="rounded-2xl border border-border bg-card p-7 shadow-card">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">Admin sign in</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Restricted area — analytics and operations.</p>
+      <Card className="gap-6 py-7 shadow-card">
+        <CardHeader className="px-7 gap-2">
+          <CardTitle className="text-2xl font-bold tracking-tight text-foreground">
+            <h1>Admin sign in</h1>
+          </CardTitle>
+          <CardDescription>Restricted area — analytics and operations.</CardDescription>
+        </CardHeader>
 
-        <form onSubmit={onSubmit} className="mt-6 space-y-4">
-          <div>
-            <label className="text-sm font-medium text-foreground block">Username</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              autoComplete="username"
-              autoFocus
-              required
-              className="mt-1.5 w-full px-3.5 py-2.5 border border-border rounded-lg focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/30 bg-background text-foreground"
-            />
-          </div>
-          <div>
-            <label className="text-sm font-medium text-foreground block">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-              required
-              className="mt-1.5 w-full px-3.5 py-2.5 border border-border rounded-lg focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/30 bg-background text-foreground"
-            />
-          </div>
-          {error && <div className="text-sm text-red-700 dark:text-red-300">{error}</div>}
-          <button
-            type="submit"
-            disabled={busy}
-            className="w-full px-4 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 font-medium shadow-soft transition"
-          >
-            {busy ? "…" : "Sign in"}
-          </button>
-        </form>
-      </div>
+        <CardContent className="px-7">
+          <form onSubmit={onSubmit} className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="admin-username" className="text-foreground">Username</Label>
+              <Input
+                id="admin-username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                autoComplete="username"
+                autoFocus
+                required
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="admin-password" className="text-foreground">Password</Label>
+              <Input
+                id="admin-password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+                required
+              />
+            </div>
+            {error && (
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            <Button type="submit" disabled={busy} className="w-full">
+              {busy ? "…" : "Sign in"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

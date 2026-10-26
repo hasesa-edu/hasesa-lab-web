@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export function AdminSignOutButton() {
   const router = useRouter();
@@ -19,12 +20,8 @@ export function AdminSignOutButton() {
   }
 
   return (
-    <button
-      onClick={onClick}
-      disabled={busy}
-      className="px-3 py-1.5 rounded-lg border border-border bg-card text-foreground hover:bg-background text-sm disabled:opacity-50"
-    >
+    <Button variant="outline" onClick={onClick} disabled={busy}>
       {busy ? "…" : "Sign out"}
-    </button>
+    </Button>
   );
 }

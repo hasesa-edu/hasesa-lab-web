@@ -5,6 +5,8 @@ import { requireSession } from "@/lib/auth/session";
 import { safeNext } from "@/lib/safe-next";
 import { BRAND, MOTTO } from "@/lib/brand";
 import Link from "next/link";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const metadata: Metadata = { title: `Sign in · ${BRAND}` };
 
@@ -25,21 +27,27 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
 
   return (
     <div className="max-w-md mx-auto px-4 py-14">
-      <div className="rounded-2xl border border-border bg-card p-7 shadow-card text-center">
-        <h1 className="text-3xl font-extrabold tracking-tight text-foreground">Welcome to {BRAND}</h1>
-        <p className="mt-2 text-sm text-muted-foreground">{MOTTO}</p>
-        {error && (
-          <div role="alert" className="mt-5 text-sm text-red-700 dark:text-red-300">
-            {error}
-          </div>
-        )}
-        <GoogleButton next={next} className="mt-6 w-full" />
-        <p className="mt-5 text-xs text-subtle-foreground leading-relaxed">
-          New here? Continuing with Google creates your account. By continuing you agree to our{" "}
-          <Link href="/terms" className="underline hover:text-primary">Terms</Link> and{" "}
-          <Link href="/privacy" className="underline hover:text-primary">Privacy Policy</Link>.
-        </p>
-      </div>
+      <Card className="rounded-2xl shadow-card text-center [--card-spacing:--spacing(7)]">
+        <CardHeader className="gap-2">
+          <CardTitle>
+            <h1 className="text-3xl font-extrabold tracking-tight text-foreground">Welcome to {BRAND}</h1>
+          </CardTitle>
+          <CardDescription>{MOTTO}</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-5">
+          {error && (
+            <Alert variant="destructive" className="text-center">
+              <AlertDescription className="text-destructive">{error}</AlertDescription>
+            </Alert>
+          )}
+          <GoogleButton next={next} className="w-full" />
+          <p className="text-xs text-subtle-foreground leading-relaxed">
+            New here? Continuing with Google creates your account. By continuing you agree to our{" "}
+            <Link href="/terms" className="underline hover:text-primary">Terms</Link> and{" "}
+            <Link href="/privacy" className="underline hover:text-primary">Privacy Policy</Link>.
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 }
