@@ -37,21 +37,11 @@ export default async function OG() {
               position: "relative",
             }}
           >
-            {/* book + spark mark, simplified */}
-            <svg width="56" height="56" viewBox="0 0 40 40" fill="none">
-              <path
-                d="M8 13.5c3.2-1.2 6.8-1.2 10 0v15.5c-3.2-1.2-6.8-1.2-10 0V13.5Z"
-                fill="#0d9488"
-              />
-              <path
-                d="M22 13.5c3.2-1.2 6.8-1.2 10 0v15.5c-3.2-1.2-6.8-1.2-10 0V13.5Z"
-                fill="#0d9488"
-              />
-              <rect x="19.4" y="13" width="1.2" height="16.6" rx="0.6" fill="#0d9488" opacity="0.55" />
-              <path
-                d="M20 4.4l1.05 2.55L23.6 8l-2.55 1.05L20 11.6l-1.05-2.55L16.4 8l2.55-1.05L20 4.4Z"
-                fill="#f59e0b"
-              />
+            {/* Hasesa sprout */}
+            <svg width="56" height="56" viewBox="96 104 320 320" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M256 424V250" stroke="#0d9488" strokeWidth="44" />
+              <path d="M256 262C256 184 204 136 128 136C128 214 180 262 256 262Z" stroke="#0d9488" strokeWidth="40" />
+              <path d="M256 262C256 184 308 136 384 136C384 214 332 262 256 262Z" fill="#f59e0b" />
             </svg>
           </div>
           <div style={{ fontSize: 32, fontWeight: 700, letterSpacing: "-0.02em" }}>{BRAND}</div>
