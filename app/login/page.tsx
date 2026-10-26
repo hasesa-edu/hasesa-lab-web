@@ -44,7 +44,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           </div>
           <div aria-hidden className="absolute inset-0 bg-dots text-primary opacity-30" />
           <CardHeader className="relative gap-2 pt-3">
-            <LogoMark size={52} className="mx-auto mb-2" />
+            <LogoMark size={88} className="mx-auto mb-3" />
             <CardTitle>
               <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">Welcome to {BRAND}</h1>
             </CardTitle>
