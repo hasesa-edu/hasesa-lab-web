@@ -4,6 +4,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
@@ -27,6 +28,15 @@ const GENERAL_SUGGESTIONS: { emoji: string; text: string }[] = [
   { emoji: "🔋", text: "Why does a lemon battery need two different metals?" },
   { emoji: "🧪", text: "What household things can I safely use as a pH indicator?" },
 ];
+
+// Wide tables scroll sideways inside the bubble instead of stretching it.
+const MD_COMPONENTS = {
+  table: ({ node: _node, ...props }: React.ComponentProps<"table"> & { node?: unknown }) => (
+    <div className="chat-table-wrap">
+      <table {...props} />
+    </div>
+  ),
+};
 
 function experimentSuggestions(title: string): { emoji: string; text: string }[] {
   return [
@@ -284,7 +294,7 @@ function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogIt
                   <div className="min-w-0 bg-card ring-1 ring-border px-4 py-3 rounded-2xl rounded-tl-md text-foreground shadow-card">
                     {m.content ? (
                       <div className="chat-prose text-foreground">
-                        <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                        <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]} components={MD_COMPONENTS}>
                           {m.content}
                         </ReactMarkdown>
                       </div>

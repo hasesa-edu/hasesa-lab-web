@@ -333,6 +333,32 @@
   padding: 0;
   font-size: inherit;
 }
+.chat-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+}
+.chat-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.chat-prose th,
+.chat-prose td {
+  padding: 0.45rem 0.7rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+.chat-prose th {
+  background: var(--muted);
+  font-weight: 600;
+  color: var(--foreground);
+  white-space: nowrap;
+}
+.chat-prose tr:last-child td {
+  border-bottom: 0;
+}
 .chat-prose h1,
 .chat-prose h2,
 .chat-prose h3,
