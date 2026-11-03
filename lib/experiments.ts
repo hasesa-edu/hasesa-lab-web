@@ -91,6 +91,7 @@ export const EXPERIMENTS: Experiment[] = [
       { problem: "The water and honey mixed into one cloudy layer.", fix: "You poured too fast. Start again and pour the water very slowly down the back of a spoon held against the glass." },
       { problem: "I can't see the line between water and oil.", fix: "Add more food colouring (or tea) to the water so it contrasts with the yellow oil." },
     ],
+    video: { youtubeId: "KgZ7JtmOgHI", credit: "BeardedScienceGuy" },
     conceptCheck: [
       { q: "Oil floats on water. What does this tell you?", choices: ["Oil is heavier than water", "Oil is less dense than water", "Oil has more mass", "Oil is a solid"], answerIndex: 1, explanation: "Floating depends on density, not total mass. A litre of oil has less mass than a litre of water." },
       { q: "A 20 g object has a volume of 10 cm³. Will it sink or float in water (1 g/cm³)?", choices: ["Float", "Sink", "Stay exactly in the middle", "Can't tell"], answerIndex: 1, explanation: "ρ = 20 / 10 = 2 g/cm³, which is greater than water's 1 g/cm³, so it sinks." },
@@ -135,6 +136,7 @@ export const EXPERIMENTS: Experiment[] = [
       { problem: "The filtered water is still cloudy.", fix: "Fine soil particles got through. Filter it a second time, or let it stand for 10 minutes and pour off the clear top part." },
       { problem: "No crystals appeared.", fix: "The water hasn't fully evaporated yet. Leave it longer in a warm, sunny spot, using a wide shallow plate." },
     ],
+    video: { youtubeId: "GKH-x3kwyxQ", credit: "Helen Rogerson" },
     conceptCheck: [
       { q: "Why does the salt pass through the filter but the sand doesn't?", choices: ["Salt is lighter", "Dissolved salt particles are far smaller than the filter holes", "The filter is magnetic", "Sand dissolves faster"], answerIndex: 1, explanation: "Dissolved salt exists as tiny ions spread through the water, small enough to pass through the filter." },
       { q: "Which method removes water and leaves dissolved salt behind?", choices: ["Filtration", "Decanting", "Evaporation", "Magnetism"], answerIndex: 2, explanation: "Evaporation turns the water into vapour; the salt doesn't evaporate, so it stays." },
@@ -176,6 +178,7 @@ export const EXPERIMENTS: Experiment[] = [
       { problem: "Everything looks dark brown, so I can't tell the difference.", fix: "Your iodine is too concentrated. Dilute it with water and test again on a white background." },
       { problem: "Sugar turned slightly dark.", fix: "Check that the spoon or plate didn't have starchy crumbs on it. Use a clean spot and test a fresh pinch." },
     ],
+    video: { youtubeId: "SgDeHXWm8Hk", credit: "KClassScienceChannel" },
     conceptCheck: [
       { q: "Iodine turns blue-black on a food. What does that show?", choices: ["Protein is present", "Starch is present", "Fat is present", "Water is present"], answerIndex: 1, explanation: "Blue-black is the positive result for starch." },
       { q: "Why might a ripe banana react less than an unripe one?", choices: ["Ripening turns starch into sugar", "Ripe bananas contain iodine", "Ripe bananas have more starch", "Bananas have no carbohydrates"], answerIndex: 0, explanation: "Ripening enzymes break starch down into sweet sugars, which don't react with iodine." },
@@ -223,6 +226,7 @@ export const EXPERIMENTS: Experiment[] = [
       { problem: "My multimeter reads 0 V.", fix: "Your nail may not be zinc-coated. Use galvanized nails (dull grey) and clean the copper with salt and vinegar." },
       { problem: "The LED is very dim.", fix: "Add another lemon in series, and look in a darkened room." },
     ],
+    video: { youtubeId: "GhbuhT1GDpI", credit: "SciShow" },
     conceptCheck: [
       { q: "Why do you need two different metals?", choices: ["For decoration", "Different metals give up electrons differently, creating a voltage", "To make the lemon sour", "One metal is enough"], answerIndex: 1, explanation: "The voltage comes from the difference in how readily the two metals lose electrons." },
       { q: "Three cells of 0.9 V are connected in series. What is the total voltage?", choices: ["0.3 V", "0.9 V", "1.8 V", "2.7 V"], answerIndex: 3, explanation: "In series, voltages add: 0.9 + 0.9 + 0.9 = 2.7 V." },
@@ -267,6 +271,7 @@ export const EXPERIMENTS: Experiment[] = [
       { problem: "None of the nails rusted.", fix: "Your nails are probably galvanized or stainless. Use plain iron nails, or scrub them with sandpaper first." },
       { problem: "Nail C rusted too.", fix: "Some air got in. Make sure the oil layer completely covers the water and the nail is fully submerged." },
     ],
+    video: { youtubeId: "CqIn60cSSnM", credit: "Young Digital Planet" },
     conceptCheck: [
       { q: "Which two things are both needed for iron to rust?", choices: ["Oil and water", "Oxygen and water", "Salt and oil", "Light and heat"], answerIndex: 1, explanation: "The dry cup (no water) and the oil-sealed cup (no oxygen) barely rusted." },
       { q: "Why does painting a roof stop it rusting?", choices: ["Paint is magnetic", "Paint keeps oxygen and water away from the iron", "Paint adds zinc", "Paint makes the iron heavier"], answerIndex: 1, explanation: "Paint is a barrier — remove one of the two ingredients and rusting stops." },
@@ -311,6 +316,7 @@ export const EXPERIMENTS: Experiment[] = [
       { problem: "Nothing happened after 30 minutes.", fix: "Your water may have been too hot and killed the yeast, or the yeast is old. Try again with fresh yeast and water just warm to the touch." },
       { problem: "The balloon inflated a little and then stopped.", fix: "Check the balloon is sealed tightly on the bottle neck — gas may be leaking out." },
     ],
+    video: { youtubeId: "FYClCHVT00M", credit: "The Sci Guys" },
     conceptCheck: [
       { q: "Which gas inflates the balloon?", choices: ["Oxygen", "Nitrogen", "Carbon dioxide", "Hydrogen"], answerIndex: 2, explanation: "Carbon dioxide is released by yeast during respiration and fermentation." },
       { q: "Why did the cold-water bottle inflate more slowly?", choices: ["Cold water has no sugar", "Enzymes work slowly at low temperature", "Yeast only live in the dark", "Cold water contains more oxygen"], answerIndex: 1, explanation: "Lower temperatures slow down the enzyme-controlled reactions of respiration." },
@@ -737,6 +743,7 @@ export const EXPERIMENTS: Experiment[] = [
       { problem: "Clips stay stuck after I disconnect.", fix: "The nail has become slightly permanently magnetised (common with steel nails). That's normal — tap it on a table to reduce it." },
       { problem: "The battery gets hot quickly.", fix: "You've made a short circuit. Disconnect between tests and only connect for a few seconds." },
     ],
+    video: { youtubeId: "na_FpTXLFa8", credit: "Good Stuff Experiments" },
     conceptCheck: [
       { q: "What happens to the electromagnet's strength if you double the number of turns?", choices: ["It halves", "It stays the same", "It roughly doubles", "It becomes zero"], answerIndex: 2, explanation: "B is proportional to the number of turns per length, n." },
       { q: "Why does the electromagnet drop the clips when the battery is disconnected?", choices: ["The nail gets cold", "No current means no magnetic field", "The clips get heavier", "Gravity increases"], answerIndex: 1, explanation: "The magnetic field exists only while current flows through the coil." },
@@ -777,6 +784,7 @@ export const EXPERIMENTS: Experiment[] = [
       { problem: "The times are very close together.", fix: "Make the temperature difference bigger (fridge-cold vs warm), and use the same volume of water each time." },
       { problem: "It's hard to tell when fizzing stops.", fix: "Stop the timer when the last solid piece disappears instead." },
     ],
+    video: { youtubeId: "FQyj_gz9is0", credit: "Tamedu" },
     conceptCheck: [
       { q: "Why does the tablet react faster in warm water?", choices: ["Warm water has more oxygen", "Particles move faster and collide more often with enough energy", "Warm water is denser", "The tablet is softer"], answerIndex: 1, explanation: "Higher temperature increases both collision frequency and the fraction of collisions above the activation energy." },
       { q: "Crushing the tablet speeds up the reaction because it…", choices: ["Increases surface area", "Raises the temperature", "Adds a catalyst", "Removes the carbonate"], answerIndex: 0, explanation: "More exposed surface means more particles available to collide at once." },
@@ -819,6 +827,7 @@ export const EXPERIMENTS: Experiment[] = [
       { problem: "Very few bubbles even with raw potato.", fix: "Your hydrogen peroxide may be old (it slowly breaks down). Use a fresh bottle, and grate the potato for more surface area." },
       { problem: "The boiled potato still bubbled a lot.", fix: "It wasn't boiled long enough to denature all the enzyme. Boil for at least 5 minutes." },
     ],
+    video: { youtubeId: "3PYdMaClUmw", credit: "Professor Revell" },
     conceptCheck: [
       { q: "What gas is in the bubbles?", choices: ["Carbon dioxide", "Hydrogen", "Oxygen", "Nitrogen"], answerIndex: 2, explanation: "Catalase breaks 2H₂O₂ into 2H₂O + O₂." },
       { q: "Why does the boiled potato produce almost no bubbles?", choices: ["Boiling removed all the water", "The enzyme was denatured by heat", "Boiled potatoes have more starch", "The peroxide was used up"], answerIndex: 1, explanation: "Heat changes the shape of the enzyme's active site, so it can no longer catalyse the reaction." },
