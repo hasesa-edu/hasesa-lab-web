@@ -11,7 +11,7 @@ import {
   MenuIcon,
   MessageCircleIcon,
   NotebookPenIcon,
-  ReceiptIcon,
+  UserRoundIcon,
   SlidersHorizontalIcon,
   XIcon,
   type LucideIcon,
@@ -109,7 +109,7 @@ export function Nav() {
     { href: "/experiments", label: tr("nav.experiments"), icon: FlaskConicalIcon },
     { href: "/chat", label: tr("nav.assistant"), icon: MessageCircleIcon },
     { href: "/dashboard", label: tr("nav.dashboard"), icon: NotebookPenIcon },
-    { href: "/account", label: tr("nav.account"), icon: ReceiptIcon },
+    { href: "/account", label: tr("nav.account"), icon: UserRoundIcon },
     { href: "/onboarding", label: tr("nav.settings"), icon: SlidersHorizontalIcon },
   ];
 
@@ -166,7 +166,7 @@ export function Nav() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild className="min-h-9">
                   <Link href="/account">
-                    <ReceiptIcon />
+                    <UserRoundIcon />
                     {tr("nav.account")}
                   </Link>
                 </DropdownMenuItem>

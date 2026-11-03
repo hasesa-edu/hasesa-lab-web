@@ -4,9 +4,7 @@ import { FlaskConical } from "lucide-react";
 import { redirect } from "next/navigation";
 import { adjacentExperiments, getExperiment, toCatalogItem } from "@/lib/experiments";
 import { requireSession } from "@/lib/auth/session";
-import { canReadGuide, getEntitlement } from "@/lib/billing/entitlement";
 import { GuideView } from "@/components/experiment/GuideView";
-import { LockedGuide } from "@/components/experiment/LockedGuide";
 import { BRAND } from "@/lib/brand";
 import { Button } from "@/components/ui/button";
 
@@ -42,9 +40,6 @@ export default async function ExperimentPage({ params }: Props) {
       </div>
     );
   }
-
-  const ent = await getEntitlement(sess.userId);
-  if (!canReadGuide(exp.id, ent)) return <LockedGuide item={toCatalogItem(exp)} signedIn />;
 
   const { prev, next } = adjacentExperiments(exp.id);
   return <GuideView exp={exp} prev={prev && toCatalogItem(prev)} next={next && toCatalogItem(next)} />;

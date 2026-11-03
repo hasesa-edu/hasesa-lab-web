@@ -17,13 +17,13 @@ export const t: Dict = {
   "nav.settings": { en: "Grade & subjects" },
   "nav.signin": { en: "Continue with Google" },
   "nav.signup": { en: "Get started" },
-  "nav.account": { en: "Account & billing" },
+  "nav.account": { en: "Account" },
   "nav.signout": { en: "Sign out" },
   "nav.language": { en: "Language" },
 
   // Hero
   "hero.tag": {
-    en: "Quality Education for Ethiopian High School Students",
+    en: "Reimagining Education for the AI Era",
   },
   "hero.title.before": {
     en: "Don't memorize. Do it.",
@@ -35,14 +35,13 @@ export const t: Dict = {
     en: "An at-home experiment for every lesson, plus a tutor that learns at your pace.",
   },
   "hero.cta.lessons": { en: "Browse experiments" },
-  "hero.cta.pricing": { en: "See pricing" },
   "hero.cta.signup": { en: "Continue with Google" },
   "hero.cta.dashboard": { en: "Go to my dashboard" },
-  "hero.price": {
-    en: "300 ETB / month",
+  "hero.free": {
+    en: "Free for every student",
   },
-  "hero.price.note": {
-    en: "Try 2 guides free. Pay with Telebirr, CBE Birr or card.",
+  "hero.free.note": {
+    en: "Every guide and the lab assistant. Just sign in with Google.",
   },
   "hero.video.alt": {
     en: "Short demo of the AI tutor answering a question with worked steps",
@@ -60,12 +59,11 @@ export const t: Dict = {
   "how.3.body": { en: "Follow the steps and the video, note what you saw, and ask the lab assistant when you're stuck." },
   "showcase.eyebrow": { en: "The lab" },
   "showcase.title": { en: "Try these this week" },
-  "showcase.sub": { en: "Biology, chemistry and physics for grades 9 to 12. Start with the free ones." },
+  "showcase.sub": { en: "Biology, chemistry and physics for grades 9 to 12." },
   "showcase.stat.experiments": { en: "experiments" },
   "showcase.stat.subjects": { en: "subjects" },
   "showcase.stat.grades": { en: "grades 9–12" },
   "showcase.stat.minutes": { en: "min on average" },
-  "showcase.free": { en: "Free" },
   "showcase.min": { en: "min" },
   "showcase.all": { en: "See all experiments" },
   "showcase.grade": { en: "Grade" },
@@ -136,24 +134,8 @@ export const t: Dict = {
   // CTA strip
   "cta.title": { en: "Ready to start learning?" },
   "cta.sub": {
-    en: "Sign in with Google in seconds, try two guides for free, and unlock everything for 300 ETB a month.",
+    en: "Sign in with Google in seconds and get every guide and the lab assistant, free.",
   },
-
-  // Pricing
-  "pricing.eyebrow": { en: "Pricing" },
-  "pricing.title": { en: "One simple pass" },
-  "pricing.plan": { en: "Monthly pass" },
-  "pricing.per": { en: "/ month" },
-  "pricing.f.guides": { en: "Every step-by-step experiment guide, grades 9–12" },
-  "pricing.f.videos": { en: "Demo videos and local-material substitutes" },
-  "pricing.f.assistant": { en: "AI lab assistant, up to 30 questions a day" },
-  "pricing.f.notebook": { en: "Your lab notebook: progress and observations" },
-  "pricing.f.scientists": { en: "Guides reviewed by real scientists" },
-  "pricing.pay": { en: "Pay with Telebirr, CBE Birr, M-Pesa or card through Chapa. Each payment adds 30 days. No auto-charge, renew when you want." },
-  "pricing.cta": { en: "Get Hasesa" },
-  "pricing.cta.renew": { en: "Add 30 more days" },
-  "pricing.free": { en: "Try 2 free guides first" },
-  "pricing.active": { en: "Your pass is active until" },
 
   // Experiments catalogue + guide
   "experiments.title": { en: "Experiments" },
@@ -170,8 +152,6 @@ export const t: Dict = {
   "experiments.easy": { en: "Easy" },
   "experiments.medium": { en: "Medium" },
   "experiments.reviewedBy": { en: "Reviewed by" },
-  "experiments.free": { en: "Free sample" },
-  "experiments.locked": { en: "Subscribers" },
   "experiments.badge.video": { en: "Video" },
   "experiments.badge.materials": { en: "materials" },
   "experiments.badge.done": { en: "Done" },
@@ -287,11 +267,10 @@ export const t: Dict = {
   "common.tryAgain": { en: "Try again" },
 
   "footer.motto": {
-    en: "Quality Education for Ethiopian High School Students",
+    en: "Reimagining Education for the AI Era",
   },
   "footer.terms": { en: "Terms" },
   "footer.privacy": { en: "Privacy" },
-  "footer.refund": { en: "Refunds" },
 };
 
 export function tr(key: keyof typeof t, locale: Locale): string {

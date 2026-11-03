@@ -2,9 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowRight, Check, CircleDashed, Clock, Gift, Lock, Package, CirclePlay } from "lucide-react";
+import { ArrowRight, Check, CircleDashed, Clock, Package, CirclePlay } from "lucide-react";
 import { GRADES, SUBJECTS, type CatalogItem, type Grade, type Subject } from "@/lib/subjects";
-import { isPlanActive } from "@/lib/billing/plan";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
 import { apiGetProgress, type ProgressDTO } from "@/lib/api";
@@ -17,7 +16,6 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 export function ExperimentsClient({ catalog }: { catalog: CatalogItem[] }) {
   const { tr } = useLocale();
   const { user } = useUser();
-  const active = isPlanActive(user?.paidUntil);
   const [grade, setGrade] = useState<Grade | "all">("all");
   const [subject, setSubject] = useState<Subject | "all">("all");
   const [progress, setProgress] = useState<Record<string, ProgressDTO>>({});
@@ -112,18 +110,6 @@ export function ExperimentsClient({ catalog }: { catalog: CatalogItem[] }) {
                             <Badge variant="warning">
                               <CircleDashed aria-hidden />
                               {tr("experiments.badge.started")}
-                            </Badge>
-                          )}
-                          {exp.free && !active && (
-                            <Badge variant="success">
-                              <Gift aria-hidden />
-                              {tr("experiments.free")}
-                            </Badge>
-                          )}
-                          {!exp.free && !active && (
-                            <Badge variant="outline" className="text-muted-foreground">
-                              <Lock aria-hidden />
-                              {tr("experiments.locked")}
                             </Badge>
                           )}
                         </div>

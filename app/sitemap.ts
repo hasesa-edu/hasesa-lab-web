@@ -10,7 +10,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE}/login`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },
     { url: `${SITE}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },
-    { url: `${SITE}/refund`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },
   ];
 
   return staticPages;
