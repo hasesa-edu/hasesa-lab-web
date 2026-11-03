@@ -5,7 +5,6 @@ import { getSession } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
 import { and, eq } from "drizzle-orm";
 import { checkAndIncrement, refundUsage } from "@/lib/usage";
-import { getEntitlement } from "@/lib/billing/entitlement";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { readJsonLimited, BODY_LIMIT } from "@/lib/http";
 
@@ -113,12 +112,10 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  // The assistant is for students with an active pass only.
+  // The assistant is free, but students must be signed in.
   const session = await getSession();
   const userId = session.userId;
   if (!userId) return jsonError(401, "Please sign in to use the lab assistant.", "signin");
-  const ent = await getEntitlement(userId);
-  if (!ent.active) return jsonError(402, "The lab assistant is part of the Hasesa pass.", "plan_required");
 
   // Throttle every caller so the endpoint can't be looped to
   // burn AI provider quota. 20 requests per IP per 5 minutes.
