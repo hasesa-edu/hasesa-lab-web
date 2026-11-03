@@ -2,17 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Check, Clock, FlaskConical, MessageCircle, Search, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpen, Clock, FlaskConical, MessageCircle, Search, Sparkles } from "lucide-react";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
 import { googleSignInHref } from "@/components/GoogleButton";
-import { CheckoutButton } from "@/components/CheckoutButton";
 import { SUBJECT_STYLES, SubjectIcon, SubjectLabel, SubjectTile } from "@/components/Subject";
 import type { t as Dict } from "@/lib/i18n";
 import type { CatalogItem } from "@/lib/experiments";
-import { PLAN, isPlanActive } from "@/lib/billing/plan";
 import { SUBJECTS } from "@/lib/subjects";
-import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -34,7 +31,6 @@ export function LandingClient({ catalog }: { catalog: CatalogItem[] }) {
       <Showcase tr={tr} catalog={catalog} signedIn={!!user} />
       <AssistantSection tr={tr} />
       <Partners tr={tr} />
-      <Pricing tr={tr} />
       <FinalCta tr={tr} primaryHref={primaryHref} primaryLabel={primaryLabel} />
     </div>
   );
@@ -53,7 +49,7 @@ function Hero({
   primaryLabel: string;
   catalog: CatalogItem[];
 }) {
-  const sticker = catalog.find((e) => e.free) ?? catalog[0];
+  const sticker = catalog[0];
   return (
     <section className="relative isolate bg-deep text-deep-foreground">
       <div aria-hidden className="absolute inset-0 -z-10 bg-grid text-primary-soft opacity-50" />
@@ -98,14 +94,14 @@ function Hero({
               size="lg"
               className="text-deep-foreground hover:bg-white/10 hover:text-deep-foreground dark:hover:bg-white/10"
             >
-              <a href="#pricing">{tr("hero.cta.pricing")}</a>
+              <Link href="/experiments">{tr("hero.cta.lessons")}</Link>
             </Button>
           </div>
 
           <p className="mt-6 text-sm text-deep-foreground/70">
-            <span className="font-semibold text-deep-foreground">{tr("hero.price")}</span>
+            <span className="font-semibold text-deep-foreground">{tr("hero.free")}</span>
             <span className="mx-2">·</span>
-            {tr("hero.price.note")}
+            {tr("hero.free.note")}
           </p>
         </div>
 
@@ -144,7 +140,6 @@ function HeroVisual({ tr, sticker }: { tr: TR; sticker: CatalogItem }) {
       >
         <div className="flex items-center justify-between">
           <SubjectLabel subject={sticker.subject} />
-          {sticker.free && <Badge variant="success">{tr("showcase.free")}</Badge>}
         </div>
         <p className="mt-1.5 text-sm leading-snug font-semibold">{sticker.title}</p>
         <div className={cn("mt-2.5 h-1.5 overflow-hidden rounded-full", s.soft)}>
@@ -246,9 +241,8 @@ function HowItWorks({ tr }: { tr: TR }) {
 /* ───────────────────────────  SHOWCASE  ─────────────────────────── */
 
 function Showcase({ tr, catalog, signedIn }: { tr: TR; catalog: CatalogItem[]; signedIn: boolean }) {
-  // Free guides first, then one of each subject so all three colors show.
+  // One of each subject first so all three colors show.
   const picks: CatalogItem[] = [];
-  for (const e of catalog.filter((e) => e.free)) picks.push(e);
   for (const s of SUBJECTS) {
     const e = catalog.find((x) => x.subject === s.id && !picks.includes(x));
     if (e) picks.push(e);
@@ -295,13 +289,9 @@ function Showcase({ tr, catalog, signedIn }: { tr: TR; catalog: CatalogItem[]; s
                   <span aria-hidden className={cn("absolute inset-x-0 top-0 h-1.5", st.bg)} />
                   <div className="flex items-start justify-between gap-3">
                     <SubjectTile subject={e.subject} />
-                    {e.free ? (
-                      <Badge variant="success">{tr("showcase.free")}</Badge>
-                    ) : (
-                      <Badge variant="outline" className="text-muted-foreground">
-                        {tr("showcase.grade")} {e.grade}
-                      </Badge>
-                    )}
+                    <Badge variant="outline" className="text-muted-foreground">
+                      {tr("showcase.grade")} {e.grade}
+                    </Badge>
                   </div>
                   <h3 className="mt-4 text-lg leading-snug font-bold group-hover:text-primary-strong">{e.title}</h3>
                   <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted-foreground">{e.summary}</p>
@@ -418,72 +408,6 @@ function Partners({ tr }: { tr: TR }) {
             </li>
           ))}
         </ul>
-      </div>
-    </section>
-  );
-}
-
-/* ───────────────────────────  PRICING  ─────────────────────────── */
-
-function Pricing({ tr }: { tr: TR }) {
-  const { user } = useUser();
-  const active = isPlanActive(user?.paidUntil);
-  const features: Key[] = ["pricing.f.guides", "pricing.f.videos", "pricing.f.assistant", "pricing.f.notebook", "pricing.f.scientists"];
-  return (
-    <section id="pricing" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:py-24">
-      <div className="relative isolate overflow-hidden rounded-[2rem] bg-deep text-deep-foreground shadow-pop">
-        <div aria-hidden className="absolute inset-0 -z-10 bg-grid text-primary-soft opacity-40" />
-        <div aria-hidden className="absolute -bottom-24 -left-24 -z-10 size-80 rounded-full bg-primary/50 blur-3xl" />
-        <div aria-hidden className="absolute -top-24 right-0 -z-10 size-72 rounded-full bg-sun/20 blur-3xl" />
-
-        <div className="grid gap-10 p-7 sm:p-10 lg:grid-cols-2 lg:p-14">
-          <div>
-            <p className="text-xs font-bold tracking-[0.18em] text-sun uppercase">{tr("pricing.eyebrow")}</p>
-            <h2 className="mt-2 text-4xl leading-[1.05] font-extrabold sm:text-5xl">{tr("pricing.title")}</h2>
-            <p className="mt-3 text-deep-foreground/75">{tr("footer.motto")}.</p>
-            <p className="mt-8 flex items-baseline gap-2">
-              <span className="font-heading text-7xl font-extrabold tracking-tight text-sun tabular-nums">{PLAN.priceEtb}</span>
-              <span className="text-xl font-semibold">ETB</span>
-              <span className="text-deep-foreground/70">{tr("pricing.per")}</span>
-            </p>
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-deep-foreground/70">
-              {tr("pricing.pay")}{" "}
-              <Link href="/refund" className="underline hover:text-sun">
-                {tr("footer.refund")}
-              </Link>
-            </p>
-          </div>
-
-          <div className="rounded-2xl bg-card p-6 text-card-foreground shadow-card sm:p-7">
-            <p className="text-sm font-semibold tracking-wide text-primary uppercase">{tr("pricing.plan")}</p>
-            <ul className="mt-4 space-y-3">
-              {features.map((k) => (
-                <li key={k} className="flex gap-3 text-sm">
-                  <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary-strong">
-                    <Check className="size-3.5" />
-                  </span>
-                  <span>{tr(k)}</span>
-                </li>
-              ))}
-            </ul>
-            {active && user?.paidUntil && (
-              <p className="mt-5 rounded-lg bg-biology-soft px-3 py-2 text-sm font-medium text-biology">
-                {tr("pricing.active")} {formatDate(user.paidUntil)}.
-              </p>
-            )}
-            <div className="mt-6">
-              <CheckoutButton signedIn={!!user} label={active ? tr("pricing.cta.renew") : tr("pricing.cta")} className="w-full" />
-            </div>
-            {!active && (
-              <a
-                href={user ? "/experiments" : googleSignInHref("/experiments")}
-                className={cn(buttonVariants({ variant: "link" }), "mt-2 h-auto min-h-10 w-full whitespace-normal")}
-              >
-                {tr("pricing.free")} →
-              </a>
-            )}
-          </div>
-        </div>
       </div>
     </section>
   );

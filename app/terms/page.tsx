@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { BRAND, COMPANY } from "@/lib/brand";
 import { PLAN } from "@/lib/billing/plan";
 import { Contact, LegalPage } from "@/components/legal/LegalPage";
@@ -11,7 +10,7 @@ export default function TermsPage() {
     <LegalPage title="Terms of Service">
       <p>
         {BRAND} is a hands-on learning service for students. By signing in, you agree to these terms. If you are under 18, a
-        parent or guardian must agree to them for you, and should make any payment.
+        parent or guardian must agree to them for you.
       </p>
 
       <h2>Your account</h2>
@@ -20,22 +19,11 @@ export default function TermsPage() {
         <li>One account is for one student. Don't share your account or resell access.</li>
       </ul>
 
-      <h2>The {BRAND} pass</h2>
+      <h2>Free access</h2>
       <ul>
-        <li>
-          The pass costs {PLAN.priceEtb} ETB and gives {PLAN.days} days of access to every experiment guide, demo video and the AI
-          lab assistant.
-        </li>
-        <li>
-          It is prepaid and does <strong>not</strong> renew automatically. Each payment adds {PLAN.days} days on top of any days you
-          have left.
-        </li>
-        <li>Payments are processed by Chapa. We never see or store your card, Telebirr or bank details.</li>
+        <li>{BRAND} is free. Once you sign in, every experiment guide, demo video and the AI lab assistant are open to you.</li>
         <li>
           The lab assistant has a fair-use limit of {PLAN.dailyChatCap} messages a day, which resets at midnight Addis Ababa time.
-        </li>
-        <li>
-          Refunds follow our <Link href="/refund">Refund Policy</Link>.
         </li>
       </ul>
 
@@ -66,7 +54,7 @@ export default function TermsPage() {
 
       <h2>Changes</h2>
       <p>
-        We may update these terms. If a change affects a pass you've already paid for, it applies from your next payment.
+        We may update these terms. If we make a significant change, we'll tell you on the site before it applies.
       </p>
 
       <h2>Contact</h2>

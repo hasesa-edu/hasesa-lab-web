@@ -134,8 +134,8 @@ function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogIt
       if (!res.ok || !res.body) {
         const data = await res.json().catch(() => null);
         if (res.status === 429 && data?.code === "daily_cap") setRemaining(0);
-        if (data?.code === "plan_required" || data?.code === "signin") {
-          // Pass ran out mid-session: reload to show the paywall.
+        if (data?.code === "signin") {
+          // Session ended mid-chat: reload so the page redirects to login.
           router.refresh();
         }
         throw new ChatError(data?.error || tr("chat.error"));

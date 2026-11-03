@@ -98,9 +98,10 @@ Students today rely on YouTube demos (generic, often needing lab equipment they 
 - **FR-18** Sign-up and sign-in via Google only. The first Google sign-in creates the account.
 - **FR-19** Onboarding captures grade (9–12) and subjects of interest. School and region are optional.
 - **FR-20** Students under 18 see a simplified privacy notice, plus a guardian consent flow where the law requires one.
-- **FR-21** The experiment catalogue, guides and lab assistant require sign-in. Signed-in students can read the free sample guides. Every other guide and the lab assistant require an active Hasesa pass.
+- **FR-21** The experiment catalogue, guides and lab assistant require sign-in. Every signed-in student gets every guide and the lab assistant (up to 30 messages a day, reset at midnight Addis Ababa time) for free.
 
-### 5.4a Pricing & Billing
+### 5.4a Pricing & Billing (paused: free access since 2026-11)
+_The billing backend (Chapa, `payments`, `paid_until`) is still in the code but unused, and no pricing appears in the UI._
 - **FR-21a** One plan: a prepaid 30-day pass for 300 ETB, paid through Chapa (Telebirr, CBE Birr, M-Pesa, card). No auto-renewal; each payment stacks 30 days on any remaining time.
 - **FR-21b** A payment only unlocks access after the server verifies it with Chapa. The webhook and the return page both verify, idempotently.
 - **FR-21c** Pass holders get up to 30 lab-assistant messages a day (reset at midnight, Addis Ababa time).
@@ -176,7 +177,7 @@ Network baselines: **2G** = 400 Kbps / 400 ms RTT, **3G** = 1.6 Mbps / 300 ms RT
 | R4 | Local materials vary by region | List substitutes per material; collect student feedback on what was available |
 | R5 | Video bandwidth cost for students | Load on demand; plan low-resolution and downloadable versions |
 | R6 | Data privacy expectations for minors | Legal review before public launch; clear consent UX |
-| Q1 | ~~Funding model~~ Decided: 300 ETB/month prepaid pass with 2 free sample guides | Revisit pricing after launch data |
+| Q1 | ~~Funding model~~ Free access since 2026-11 (the 300 ETB/month pass is paused) | Revisit pricing after launch data |
 | Q2 | Partnership with the MoE or regional bureaus? | Would unlock curriculum sign-off and distribution |
 
 ## 11. Milestones (Indicative)

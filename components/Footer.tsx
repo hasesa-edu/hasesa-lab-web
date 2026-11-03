@@ -59,7 +59,6 @@ export function Footer() {
           <nav className="flex flex-wrap items-center justify-center gap-1 text-sm font-medium" aria-label="Legal">
             <Link href="/terms" className={legalLinkClass}>{tr("footer.terms")}</Link>
             <Link href="/privacy" className={legalLinkClass}>{tr("footer.privacy")}</Link>
-            <Link href="/refund" className={legalLinkClass}>{tr("footer.refund")}</Link>
           </nav>
         </div>
       </div>

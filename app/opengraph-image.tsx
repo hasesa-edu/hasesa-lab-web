@@ -102,7 +102,7 @@ export default async function OG() {
             }}
           >
             <div style={{ width: 8, height: 8, borderRadius: 999, background: "#f59e0b" }} />
-            300 ETB / month · 2 free guides
+            Free · Grades 9–12
           </div>
         </div>
       </div>
