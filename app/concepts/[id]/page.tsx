@@ -12,6 +12,8 @@ import { cn } from "@/lib/utils";
 import { Markdown } from "@/components/Markdown";
 import { SUBJECT_STYLES } from "@/components/Subject";
 import { ProblemSet } from "@/components/module/ProblemSet";
+import { PhasedContent } from "@/components/module/PhasedContent";
+import { splitSections } from "@/lib/content/sections";
 import { AskButton, AssistantPanel } from "@/components/assistant/AssistantPanel";
 import { conceptContext } from "@/lib/chat-context";
 import { BackLink, EnrolCard, SectionTitle, StatusBadge } from "@/components/module/ui";
@@ -89,11 +91,12 @@ export default async function ConceptPage({ params, searchParams }: Props) {
       </header>
 
       <div className="mx-auto max-w-6xl px-4 [&>*]:max-w-3xl pb-16">
-        <section className="mt-12">
-          <SectionTitle icon={BookOpen} className="mb-5">
-            The idea
-          </SectionTitle>
-          <Markdown>{c.body}</Markdown>
+        <section className="mt-10">
+          <PhasedContent
+            sections={splitSections(c.body, "The idea")}
+            storageKey={`concept/${c.id}`}
+            finish={{ label: "Go to the problems", href: "#problems" }}
+          />
         </section>
 
         <ProblemSet
