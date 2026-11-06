@@ -48,12 +48,44 @@ export function PWARegister() {
   }, []);
 
   useEffect(() => {
-    setDismissed(localStorage.getItem("pwa-install-dismissed") === "1");
+    try {
+      setDismissed(localStorage.getItem("pwa-install-dismissed") === "1");
+    } catch {
+      setDismissed(true);
+    }
+  }, []);
+
+  // Don't ask on a first visit, and never over the hero: only on a return
+  // visit, once the visitor has scrolled past the first screen or stayed 30 s.
+  const [engaged, setEngaged] = useState(false);
+  useEffect(() => {
+    let visits = 1;
+    try {
+      // Count each browser session once, not every page load.
+      visits = Number(localStorage.getItem("hasesa-visits") || "0");
+      if (!sessionStorage.getItem("hasesa-counted")) {
+        visits += 1;
+        localStorage.setItem("hasesa-visits", String(visits));
+        sessionStorage.setItem("hasesa-counted", "1");
+      }
+    } catch {
+      return;
+    }
+    if (visits < 2) return;
+    const onScroll = () => {
+      if (window.scrollY > window.innerHeight) setEngaged(true);
+    };
+    const timer = setTimeout(() => setEngaged(true), 30_000);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   // The install card only appears on the marketing home page so it doesn't
   // overlap content on task-focused pages (chat, dashboard, etc.).
-  if (pathname !== "/" || !installEvent || dismissed) return null;
+  if (pathname !== "/" || !installEvent || dismissed || !engaged) return null;
 
   return (
     <Card className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-4 sm:bottom-4 sm:max-w-sm z-30 ring-primary/30 shadow-pop p-3 flex-row items-start gap-3">
@@ -61,7 +93,7 @@ export function PWARegister() {
         <SmartphoneIcon aria-hidden className="size-5" />
       </span>
       <div className="flex-1">
-        <div className="font-heading font-bold text-foreground">Install {BRAND}</div>
+        <div className="font-bold text-foreground">Install {BRAND}</div>
         <div className="text-xs text-muted-foreground mt-0.5">
           Add to your home screen for faster, offline-capable access.
         </div>

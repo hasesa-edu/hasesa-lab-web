@@ -29,10 +29,10 @@ export function Footer() {
       <div aria-hidden className="absolute -top-32 -right-24 -z-10 size-80 rounded-full bg-signal/25 blur-3xl" />
       {showQuote && (
         <figure className="mx-auto max-w-6xl px-4 pt-14 pb-10 sm:pt-20 sm:pb-14 [&>*]:max-w-4xl">
-          <span aria-hidden className="block font-heading text-7xl leading-none font-extrabold text-sun sm:text-8xl">
+          <span aria-hidden className="block font-dial text-8xl leading-none font-extrabold text-sun">
             &ldquo;
           </span>
-          <blockquote className="-mt-4 font-heading text-2xl leading-snug font-bold tracking-tight text-balance sm:-mt-6 sm:text-4xl">
+          <blockquote className="-mt-4 font-dial text-3xl leading-tight font-bold text-balance sm:-mt-6 sm:text-5xl">
             {tr("dewey.quote")}
           </blockquote>
           <figcaption className="mt-5 flex items-center gap-3 text-sm font-semibold text-enamel-foreground/70">

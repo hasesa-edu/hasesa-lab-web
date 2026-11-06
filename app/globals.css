@@ -240,9 +240,15 @@
 }
 
 @layer base {
-  h1, h2, h3 {
-    font-family: var(--font-heading);
-    letter-spacing: -0.02em;
+  /* Big headings use the dial face; small headings stay in the body face,
+     bold, which reads better at small sizes than condensed type. */
+  h1, h2 {
+    font-family: var(--font-dial);
+    letter-spacing: 0;
+  }
+  h3 {
+    font-family: var(--font-sans);
+    letter-spacing: -0.01em;
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -458,7 +464,7 @@
 .lesson-prose h2,
 .lesson-prose h3,
 .lesson-prose h4 {
-  font-family: var(--font-heading, inherit);
+  font-family: var(--font-sans, inherit);
   font-weight: 700;
   color: var(--foreground);
   letter-spacing: -0.01em;
