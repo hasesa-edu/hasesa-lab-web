@@ -123,35 +123,52 @@ export function TuningDial({ stations }: { stations: Station[] }) {
   return (
     <div className="relative">
       {/* The display: a mystery when tuned, static between stations. */}
-      <div className="relative min-h-64 overflow-hidden rounded-2xl bg-black/35 p-6 ring-1 ring-white/10 sm:min-h-72 sm:p-8">
+      <div data-screen className="relative overflow-hidden rounded-2xl bg-black/35 p-6 ring-1 ring-white/10 sm:p-8">
         <div aria-hidden className="radio-static pointer-events-none absolute inset-0" style={{ opacity: (1 - strength) * 0.5 }} />
         <p className="relative flex items-baseline justify-between gap-4 font-dial text-enamel-foreground/60">
           <span className="text-lg">{tuned ? `Station: ${tuned.module.title}` : "Between stations"}</span>
-          <span className="text-3xl font-bold text-sun tabular-nums sm:text-4xl" aria-hidden>
+          <span className="min-w-[4.5ch] text-right text-3xl font-bold text-sun tabular-nums sm:text-4xl" aria-hidden>
             {khz} <span className="text-lg font-medium">kHz</span>
           </span>
         </p>
 
-        {tuned ? (
-          <div className="relative mt-4" style={{ opacity: 0.25 + strength * 0.75 }}>
-            <p className="max-w-3xl font-dial text-4xl leading-[1.02] font-bold text-white sm:text-6xl">“{mysteryOf(tuned.module)}”</p>
-            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
-              <p className="text-enamel-foreground/80">
-                {tuned.module.tagline}. {tuned.module.stepCount} steps, about {tuned.module.hours} hours.
-              </p>
-              <Link
-                href={`/modules/${tuned.module.id}`}
-                className={cn(buttonVariants({ size: "lg" }), "bg-sun font-bold text-ink hover:bg-sun/90")}
+        {/*
+          Every station's content and the "between stations" message share one
+          grid cell, so the screen is always as tall as the longest of them and
+          never changes size while tuning. Only the visible layer changes.
+        */}
+        <div className="relative mt-4 grid">
+          {stations.map((s) => {
+            const on = tuned?.khz === s.khz;
+            return (
+              <div
+                key={s.khz}
+                aria-hidden={!on}
+                className={cn("[grid-area:1/1]", !on && "invisible")}
+                style={{ opacity: on ? 0.25 + strength * 0.75 : 0 }}
               >
-                Open {tuned.module.title}
-              </Link>
-            </div>
-          </div>
-        ) : (
-          <p className="relative mt-10 max-w-md font-dial text-3xl leading-tight text-enamel-foreground/70 sm:text-4xl">
+                <p className="max-w-3xl font-dial text-4xl leading-[1.02] font-bold text-white sm:text-6xl">“{mysteryOf(s.module)}”</p>
+                <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+                  <p className="text-enamel-foreground/80">
+                    {s.module.tagline}. {s.module.stepCount} steps, about {s.module.hours} hours.
+                  </p>
+                  <Link href={`/modules/${s.module.id}`} className={cn(buttonVariants({ size: "lg" }), "bg-sun font-bold text-ink hover:bg-sun/90")}>
+                    Open {s.module.title}
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+          <p
+            aria-hidden={!!tuned}
+            className={cn(
+              "max-w-md self-center font-dial text-3xl leading-tight text-enamel-foreground/70 [grid-area:1/1] sm:text-4xl",
+              tuned && "invisible"
+            )}
+          >
             Keep turning. Each station is a mystery you&apos;ll solve with your hands.
           </p>
-        )}
+        </div>
       </div>
 
       {/* Announce stations, not every frequency step. */}
