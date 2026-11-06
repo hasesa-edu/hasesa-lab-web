@@ -48,19 +48,19 @@ export const t: Dict = {
   "solve.open": { en: "Open the whole case" },
   "solve.more": { en: "More problems like this" },
 
-  // Landing: why
-  "why.title": { en: "School was built for another era." },
-  "why.sub": { en: "AI now handles much of the thinking work schools train for. What's left is what people bring: curiosity, judgment and the habit of figuring things out." },
-  "why.then.label": { en: "What school builds today" },
-  "why.then.1": { en: "One curriculum for everyone" },
-  "why.then.2": { en: "Fixed schedules and one pace" },
-  "why.then.3": { en: "Theory first, maybe practice later" },
-  "why.then.4": { en: "Memorization and exams" },
-  "why.now.label": { en: "What students will need" },
-  "why.now.1": { en: "Curiosity, and the habit of feeding it" },
-  "why.now.2": { en: "Learning by doing: experimenting, not memorizing" },
-  "why.now.3": { en: "Their own path, at their own pace" },
-  "why.now.4": { en: "Working with others, and with AI" },
+  // Landing: why (written for students and parents, matched pairs)
+  "why.title": { en: "Same science. The other way round." },
+  "why.sub": { en: "In most classes the formula comes first and the experiment, if there is one, comes later. Here you start with something you want to build or a mystery you want to solve, and the theory turns up when you need it." },
+  "why.then.label": { en: "In a typical class" },
+  "why.then.1": { en: "Copy the formula for wavelength." },
+  "why.then.2": { en: "Memorize the parts of a neuron." },
+  "why.then.3": { en: "Learn the definition of density." },
+  "why.then.4": { en: "Everyone moves to the next chapter on the same day." },
+  "why.now.label": { en: "At Hasesa" },
+  "why.now.1": { en: "Work out how long your radio's antenna needs to be." },
+  "why.now.2": { en: "Find out how your arm can make a robot claw move." },
+  "why.now.3": { en: "Prove which honey from the market is fake." },
+  "why.now.4": { en: "Move on when you understand it, and skip what you already know." },
 
   // Landing: marquee, how it works, showcase
   "how.title": { en: "Start by doing. The theory follows." },

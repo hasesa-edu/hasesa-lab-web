@@ -27,6 +27,13 @@ export function assignStations(modules: ModuleSummary[]): Station[] {
 const pct = (khz: number) => ((khz - MIN_KHZ) / (MAX_KHZ - MIN_KHZ)) * 100;
 const clamp = (khz: number) => Math.min(MAX_KHZ, Math.max(MIN_KHZ, khz));
 
+/** Longer mysteries get a smaller size, so the whole radio fits on one screen. */
+function questionSize(q: string) {
+  if (q.length > 55) return "text-[1.7rem] sm:text-4xl";
+  if (q.length > 38) return "text-3xl sm:text-[2.6rem]";
+  return "text-[2rem] sm:text-5xl";
+}
+
 /** The last sentence of a hook is the mystery itself. */
 export function mysteryOf(m: ModuleSummary) {
   return m.hook.match(/[^.!?…—]*\?\s*$/)?.[0].trim() || m.tagline;
@@ -123,11 +130,11 @@ export function TuningDial({ stations }: { stations: Station[] }) {
   return (
     <div className="relative">
       {/* The display: a mystery when tuned, static between stations. */}
-      <div data-screen className="relative overflow-hidden rounded-2xl bg-black/35 p-6 ring-1 ring-white/10 sm:p-8">
+      <div data-screen className="relative overflow-hidden rounded-2xl bg-black/35 p-4 ring-1 ring-white/10 sm:p-7">
         <div aria-hidden className="radio-static pointer-events-none absolute inset-0" style={{ opacity: (1 - strength) * 0.5 }} />
         <p className="relative flex items-baseline justify-between gap-4 font-dial text-enamel-foreground/60">
           <span className="text-lg">{tuned ? `Station: ${tuned.module.title}` : "Between stations"}</span>
-          <span className="min-w-[4.5ch] text-right text-3xl font-bold text-sun tabular-nums sm:text-4xl" aria-hidden>
+          <span className="min-w-[4.5ch] text-right text-2xl font-bold text-sun tabular-nums sm:text-3xl" aria-hidden>
             {khz} <span className="text-lg font-medium">kHz</span>
           </span>
         </p>
@@ -137,7 +144,7 @@ export function TuningDial({ stations }: { stations: Station[] }) {
           grid cell, so the screen is always as tall as the longest of them and
           never changes size while tuning. Only the visible layer changes.
         */}
-        <div className="relative mt-4 grid">
+        <div className="relative mt-3 grid">
           {stations.map((s) => {
             const on = tuned?.khz === s.khz;
             return (
@@ -147,9 +154,11 @@ export function TuningDial({ stations }: { stations: Station[] }) {
                 className={cn("[grid-area:1/1]", !on && "invisible")}
                 style={{ opacity: on ? 0.25 + strength * 0.75 : 0 }}
               >
-                <p className="max-w-3xl font-dial text-4xl leading-[1.02] font-bold text-white sm:text-6xl">“{mysteryOf(s.module)}”</p>
-                <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
-                  <p className="text-enamel-foreground/80">
+                <p className={cn("max-w-3xl font-dial leading-[1.04] font-bold text-white", questionSize(mysteryOf(s.module)))}>
+                  “{mysteryOf(s.module)}”
+                </p>
+                <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3">
+                  <p className="hidden text-enamel-foreground/80 sm:block">
                     {s.module.tagline}. {s.module.stepCount} steps, about {s.module.hours} hours.
                   </p>
                   <Link href={`/modules/${s.module.id}`} className={cn(buttonVariants({ size: "lg" }), "bg-sun font-bold text-ink hover:bg-sun/90")}>
@@ -162,7 +171,7 @@ export function TuningDial({ stations }: { stations: Station[] }) {
           <p
             aria-hidden={!!tuned}
             className={cn(
-              "max-w-md self-center font-dial text-3xl leading-tight text-enamel-foreground/70 [grid-area:1/1] sm:text-4xl",
+              "max-w-md self-center font-dial text-[1.7rem] leading-tight text-enamel-foreground/70 [grid-area:1/1] sm:text-4xl",
               tuned && "invisible"
             )}
           >
@@ -177,7 +186,7 @@ export function TuningDial({ stations }: { stations: Station[] }) {
       </p>
 
       {/* The dial */}
-      <div className="mt-6 select-none">
+      <div className="mt-4 select-none">
         <div
           ref={scale}
           role="slider"
@@ -200,7 +209,7 @@ export function TuningDial({ stations }: { stations: Station[] }) {
             snap(khzAt(e.clientX));
           }}
           onPointerCancel={() => (dragging.current = false)}
-          className="relative h-24 cursor-ew-resize touch-none rounded-lg outline-none focus-visible:ring-3 focus-visible:ring-sun/60"
+          className="relative h-20 cursor-ew-resize touch-none rounded-lg outline-none focus-visible:ring-3 focus-visible:ring-sun/60"
         >
           {/* baseline */}
           <div aria-hidden className="absolute inset-x-0 bottom-9 h-px bg-enamel-foreground/40" />
@@ -242,7 +251,7 @@ export function TuningDial({ stations }: { stations: Station[] }) {
         </div>
 
         {/* station buttons, for tapping */}
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="-mx-4 mt-2 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
           {[...stations]
             .sort((a, b) => a.khz - b.khz)
             .map((s) => (
@@ -252,7 +261,7 @@ export function TuningDial({ stations }: { stations: Station[] }) {
                 onClick={() => tuneTo(s.khz, 700)}
                 aria-pressed={tuned?.khz === s.khz && strength === 1}
                 className={cn(
-                  "inline-flex min-h-10 items-center gap-2 rounded-full px-4 font-dial text-lg transition-colors outline-none focus-visible:ring-3 focus-visible:ring-sun/60",
+                  "inline-flex min-h-10 shrink-0 items-center gap-2 rounded-full px-4 font-dial text-lg whitespace-nowrap transition-colors outline-none focus-visible:ring-3 focus-visible:ring-sun/60",
                   tuned?.khz === s.khz && strength === 1
                     ? "bg-sun text-ink"
                     : "bg-white/10 text-enamel-foreground hover:bg-white/20"
