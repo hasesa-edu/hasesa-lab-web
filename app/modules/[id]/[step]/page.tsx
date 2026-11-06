@@ -10,6 +10,8 @@ import { BRAND } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 import { Markdown } from "@/components/Markdown";
 import { StepNotebook } from "@/components/module/StepNotebook";
+import { PhasedContent } from "@/components/module/PhasedContent";
+import { splitSections } from "@/lib/content/sections";
 import { AskButton, AssistantPanel } from "@/components/assistant/AssistantPanel";
 import { stepContext } from "@/lib/chat-context";
 import { BackLink, HeaderChip, KIND_LABEL, SectionTitle, StatusBadge, UnitStatusPill, VideoEmbed } from "@/components/module/ui";
@@ -44,6 +46,10 @@ export default async function StepPage({ params }: Props) {
   const saved = state?.steps.find((s) => s.moduleId === m.id && s.stepId === step.id);
   const unitStatus = new Map(state?.units.map((u) => [u.unitId, u.status]));
   const feedback = state?.feedback.filter((f) => f.moduleId === m.id && f.stepId === step.id) ?? [];
+  // Long steps show one phase at a time; the safety section is pulled out to the top.
+  const sections = splitSections(step.body);
+  const safety = sections.filter((x) => x.kind === "safety");
+  const phases = sections.filter((x) => x.kind !== "safety");
   const prev = m.steps[index - 1];
   const next = m.steps[index + 1];
   const ready = step.units.filter((u) => isUnitDone(unitStatus.get(u))).length;
@@ -89,8 +95,23 @@ export default async function StepPage({ params }: Props) {
           </section>
         )}
 
+        {safety.length > 0 && (
+          <section className="mt-8 border-l-4 border-red-500 bg-red-50 py-4 pr-4 pl-5 dark:bg-red-950/30">
+            <p className="font-bold text-red-800 dark:text-red-300">Safety for this step</p>
+            <Markdown className="mt-1 [&_p]:text-ink">{safety.map((x) => x.body).join("\n\n")}</Markdown>
+          </section>
+        )}
+
         <section className="mt-8">
-          <Markdown>{step.body}</Markdown>
+          {phases.length > 1 ? (
+            <PhasedContent
+              sections={phases}
+              storageKey={`${m.id}/${step.id}`}
+              finish={{ label: "Write it up in your notebook", href: "#notebook" }}
+            />
+          ) : (
+            <Markdown>{phases.map((x) => `## ${x.title}\n\n${x.body}`).join("\n\n")}</Markdown>
+          )}
         </section>
 
         {step.units.length > 0 && (

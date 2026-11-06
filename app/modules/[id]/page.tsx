@@ -240,7 +240,7 @@ export default async function ModulePage({ params }: Props) {
             <SectionTitle>Where this meets your school curriculum</SectionTitle>
             <p className="mt-3 max-w-2xl text-ink/75">The topics from the national curriculum you&apos;ll use for real. A draft until subject teachers check it.</p>
             <ul className="mt-6 flex max-w-4xl flex-wrap gap-2">
-              {summary.curriculum.map((c) => (
+              {summary.curriculum.slice(0, 6).map((c) => (
                 <li key={`${c.subject}-${c.grade}-${c.unit}`} className="rounded-full border-2 border-ink/15 px-3 py-1 text-sm">
                   <span className={cn("font-bold", SUBJECT_STYLES[c.subject].text)}>
                     {DISCIPLINES[c.subject].label} {c.grade}
@@ -249,6 +249,24 @@ export default async function ModulePage({ params }: Props) {
                 </li>
               ))}
             </ul>
+            {summary.curriculum.length > 6 && (
+              <details className="group mt-3 max-w-4xl">
+                <summary className="cursor-pointer list-none font-bold text-primary [&::-webkit-details-marker]:hidden">
+                  <span className="group-open:hidden">Show all {summary.curriculum.length} topics</span>
+                  <span className="hidden group-open:inline">Show fewer</span>
+                </summary>
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {summary.curriculum.slice(6).map((c) => (
+                    <li key={`${c.subject}-${c.grade}-${c.unit}`} className="rounded-full border-2 border-ink/15 px-3 py-1 text-sm">
+                  <span className={cn("font-bold", SUBJECT_STYLES[c.subject].text)}>
+                    {DISCIPLINES[c.subject].label} {c.grade}
+                  </span>{" "}
+                  <span className="text-ink/70">{c.unit}</span>
+                </li>
+                  ))}
+                </ul>
+              </details>
+            )}
           </section>
         )}
 
