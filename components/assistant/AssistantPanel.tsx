@@ -6,15 +6,23 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
-import { MessageCircle, Quote, SendHorizontal, Sparkles, X } from "lucide-react";
+import { NotebookPen, Quote, SendHorizontal, Sparkles, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { NotebookPane, type NotebookProps } from "@/components/module/NotebookPane";
 
 type Msg = { role: "user" | "assistant"; content: string };
+type Tab = "notebook" | "assistant";
+type OpenDetail = { tab?: Tab; quote?: string; prompt?: string };
 
-/** Open the panel from anywhere on the page, optionally quoting some text. */
-export function openAssistant(detail: { quote?: string; prompt?: string } = {}) {
+/** Open the workbench panel from anywhere on the page: a tab, and optionally a quote or a question to start with. */
+export function openWorkbench(detail: OpenDetail = {}) {
   window.dispatchEvent(new CustomEvent("hasesa:ask", { detail }));
+}
+
+/** Open the lab assistant tab. */
+export function openAssistant(detail: { quote?: string; prompt?: string } = {}) {
+  openWorkbench({ ...detail, tab: "assistant" });
 }
 
 // Wide tables scroll sideways inside the bubble instead of stretching it.
@@ -30,15 +38,29 @@ const PANEL_W = 420;
 const DESKTOP = "(min-width: 1024px)";
 
 /**
- * The lab assistant, embedded in a course page. The page passes its context
- * ("m:radio/antenna", "c:density", "m:radio"), so the assistant already knows
- * where the student is and what they've done there. One thread per page.
- * On desktop it docks on the right and the page shifts over; on phones it is
- * a bottom sheet. Selecting text in the page's [data-ask-scope] offers
- * "Ask about this".
+ * The workbench panel on course pages: the lab notebook (on steps) and the lab
+ * assistant, as two tabs of one panel. On desktop it docks on the right and the
+ * page shifts over; on phones it is a bottom sheet.
+ *
+ * The assistant tab: the page passes its context ("m:radio/antenna",
+ * "c:density", "m:radio"), so it already knows where the student is and what
+ * they've done there. One thread per page. Selecting text in the page's
+ * [data-ask-scope] offers "Ask about this".
  */
-export function AssistantPanel({ context, about, suggestions }: { context: string; about: string; suggestions: string[] }) {
+export function AssistantPanel({
+  context,
+  about,
+  suggestions,
+  notebook,
+}: {
+  context: string;
+  about: string;
+  suggestions: string[];
+  /** On step pages: the step's lab notebook, shown as a second tab. */
+  notebook?: NotebookProps;
+}) {
   const [open, setOpen] = useState(false);
+  const [tab, setTab] = useState<Tab>("assistant");
   const [loaded, setLoaded] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
@@ -54,7 +76,7 @@ export function AssistantPanel({ context, about, suggestions }: { context: strin
 
   // Load this page's thread the first time the panel opens.
   useEffect(() => {
-    if (!open || loaded) return;
+    if (!open || tab !== "assistant" || loaded) return;
     setLoaded(true);
     fetch(`/api/chat/thread?context=${encodeURIComponent(context)}`)
       .then((r) => r.json())
@@ -66,7 +88,7 @@ export function AssistantPanel({ context, about, suggestions }: { context: strin
         setCap(d.cap);
       })
       .catch(() => setError("Couldn't load the assistant. Try again."));
-  }, [open, loaded, context]);
+  }, [open, tab, loaded, context]);
 
   // Dock on desktop: make room on the right so the page and the chat sit side by side.
   useEffect(() => {
@@ -85,18 +107,19 @@ export function AssistantPanel({ context, about, suggestions }: { context: strin
   // Opened from elsewhere on the page.
   useEffect(() => {
     function onAsk(e: Event) {
-      const d = (e as CustomEvent<{ quote?: string; prompt?: string }>).detail ?? {};
+      const d = (e as CustomEvent<OpenDetail>).detail ?? {};
       if (d.quote) setQuote(d.quote);
       if (d.prompt) setInput(d.prompt);
+      setTab(d.tab === "notebook" && notebook ? "notebook" : "assistant");
       setOpen(true);
     }
     window.addEventListener("hasesa:ask", onAsk);
     return () => window.removeEventListener("hasesa:ask", onAsk);
-  }, []);
+  }, [notebook]);
 
   useEffect(() => {
-    if (open) setTimeout(() => inputRef.current?.focus(), 50);
-  }, [open, quote]);
+    if (open && tab === "assistant") setTimeout(() => inputRef.current?.focus(), 50);
+  }, [open, quote, tab]);
 
   useEffect(() => {
     if (!open) return;
@@ -192,6 +215,7 @@ export function AssistantPanel({ context, about, suggestions }: { context: strin
           onClick={() => {
             setQuote(selection.text);
             setSelection(null);
+            setTab("assistant");
             setOpen(true);
             window.getSelection()?.removeAllRanges();
           }}
@@ -202,14 +226,34 @@ export function AssistantPanel({ context, about, suggestions }: { context: strin
         </button>
       )}
 
+      {/* Room at the end of the page so the phone launcher bar never covers content. */}
+      <div aria-hidden className="h-20 lg:hidden" />
       {!open && (
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          className="fixed right-4 bottom-4 z-30 inline-flex h-12 items-center gap-2 rounded-full bg-enamel pr-5 pl-4 font-bold text-white shadow-pop ring-1 ring-white/10 outline-none hover:bg-enamel/90 focus-visible:ring-3 focus-visible:ring-sun/60"
-        >
-          <Sparkles aria-hidden className="size-5 text-sun" /> Ask the lab assistant
-        </button>
+        // Phones: a bar across the bottom. Desktop: a pair of buttons bottom-right.
+        <div className="fixed inset-x-0 bottom-0 z-30 flex gap-2 border-t border-ink/10 bg-lab/95 p-3 backdrop-blur lg:inset-x-auto lg:right-4 lg:bottom-4 lg:border-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
+          {notebook && (
+            <button
+              type="button"
+              onClick={() => {
+                setTab("notebook");
+                setOpen(true);
+              }}
+              className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-white px-5 font-bold text-ink shadow-pop ring-1 ring-ink/15 outline-none hover:ring-signal focus-visible:ring-3 focus-visible:ring-signal/50 lg:flex-none"
+            >
+              <NotebookPen aria-hidden className="size-5 text-primary" /> Notebook
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => {
+              setTab("assistant");
+              setOpen(true);
+            }}
+            className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-enamel px-5 font-bold text-white shadow-pop ring-1 ring-white/10 outline-none hover:bg-enamel/90 focus-visible:ring-3 focus-visible:ring-sun/60 lg:flex-none"
+          >
+            <Sparkles aria-hidden className="size-5 text-sun" /> {notebook ? "Ask" : "Ask the lab assistant"}
+          </button>
+        </div>
       )}
 
       {open && (
@@ -225,13 +269,32 @@ export function AssistantPanel({ context, about, suggestions }: { context: strin
               "lg:inset-x-auto lg:top-0 lg:right-0 lg:h-auto lg:w-[420px] lg:rounded-none lg:border-l lg:border-ink/10"
             )}
           >
-            <div className="flex shrink-0 items-start gap-3 bg-enamel px-5 py-4 text-enamel-foreground lg:min-h-[61px]">
-              <span className="mt-0.5 inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-sun text-ink">
-                <Sparkles aria-hidden className="size-4" />
-              </span>
+            <div className="flex shrink-0 items-start gap-3 bg-enamel px-5 pt-4 text-enamel-foreground lg:min-h-[61px]">
               <div className="min-w-0 flex-1">
-                <p className="font-dial text-2xl leading-none font-bold text-white">Lab assistant</p>
-                <p className="mt-1 truncate text-sm text-enamel-foreground/75">Knows you&apos;re on {about}</p>
+                {notebook ? (
+                  <div role="tablist" aria-label="Workbench" className="flex gap-1">
+                    {(["notebook", "assistant"] as const).map((t) => (
+                      <button
+                        key={t}
+                        type="button"
+                        role="tab"
+                        aria-selected={tab === t}
+                        onClick={() => setTab(t)}
+                        className={cn(
+                          "relative pb-3 font-dial text-2xl leading-none font-bold transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:rounded-full after:bg-signal",
+                          tab === t ? "text-white after:scale-x-100" : "text-enamel-foreground/55 after:scale-x-0 hover:text-white"
+                        )}
+                      >
+                        <span className="mr-4">{t === "notebook" ? "Notebook" : "Lab assistant"}</span>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="pb-1 font-dial text-2xl leading-none font-bold text-white">Lab assistant</p>
+                )}
+                {(!notebook || tab === "assistant") && (
+                  <p className="truncate pb-3 text-sm text-enamel-foreground/75">Knows you&apos;re on {about}</p>
+                )}
               </div>
               <button
                 type="button"
@@ -243,6 +306,12 @@ export function AssistantPanel({ context, about, suggestions }: { context: strin
               </button>
             </div>
 
+            {notebook && tab === "notebook" ? (
+              <div className="min-h-0 flex-1">
+                <NotebookPane {...notebook} />
+              </div>
+            ) : (
+            <>
             <div ref={listRef} className="min-h-0 flex-1 overflow-y-auto px-5 py-5">
               {messages.length === 0 ? (
                 <div>
@@ -342,19 +411,11 @@ export function AssistantPanel({ context, about, suggestions }: { context: strin
                     : `${remaining} of ${cap} messages left today. AI can make mistakes; follow the safety notes.`}
               </p>
             </form>
+            </>
+            )}
           </aside>
         </>
       )}
     </>
-  );
-}
-
-/** A button anywhere in the page that opens the assistant. */
-export function AskButton({ children, prompt, className }: { children: React.ReactNode; prompt?: string; className?: string }) {
-  return (
-    <button type="button" onClick={() => openAssistant({ prompt })} className={className}>
-      <MessageCircle aria-hidden className="size-5 shrink-0" />
-      {children}
-    </button>
   );
 }

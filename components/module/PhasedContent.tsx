@@ -7,12 +7,13 @@ import type { Section } from "@/lib/content/sections";
 import { cn } from "@/lib/utils";
 import { Markdown } from "@/components/Markdown";
 import { Button } from "@/components/ui/button";
+import { openWorkbench } from "@/components/assistant/AssistantPanel";
 
 /**
  * Long steps and concept units, one phase at a time. A sticky bar shows the
  * sequence (1 Do, 2 Notice, 3 Theory…); "Next" moves on. Instructions in "do"
  * phases become tick boxes, remembered on this device, so a student at the
- * bench can keep their place. "Show everything" reads it all on one page.
+ * bench can keep their place.
  */
 export function PhasedContent({
   sections,
@@ -21,11 +22,10 @@ export function PhasedContent({
 }: {
   sections: Section[];
   storageKey: string;
-  /** Where the last phase leads, e.g. the notebook or the problems. */
-  finish: { label: string; href: string };
+  /** Where the last phase leads: a link (the problems) or the notebook tab. */
+  finish: { label: string; href: string } | { label: string; open: "notebook" };
 }) {
   const [active, setActive] = useState(0);
-  const [all, setAll] = useState(false);
   const [seen, setSeen] = useState<Set<number>>(() => new Set([0]));
   const [ticked, setTicked] = useState<Record<string, boolean>>({});
   const top = useRef<HTMLDivElement>(null);
@@ -104,12 +104,12 @@ export function PhasedContent({
         <div className="flex items-center gap-2 px-4">
           <ol className="flex flex-1 gap-1 overflow-x-auto py-2 [scrollbar-width:none]">
             {sections.map((s, i) => {
-              const on = !all && i === active;
+              const on = i === active;
               return (
                 <li key={s.id} className="shrink-0">
                   <button
                     type="button"
-                    onClick={() => (all ? document.getElementById(`phase-${s.id}`)?.scrollIntoView({ behavior: "smooth" }) : go(i))}
+                    onClick={() => go(i)}
                     aria-current={on ? "step" : undefined}
                     className={cn(
                       "relative flex min-h-10 items-center gap-2 rounded-full px-3 text-sm font-bold whitespace-nowrap transition-colors",
@@ -130,26 +130,26 @@ export function PhasedContent({
               );
             })}
           </ol>
-          <button type="button" onClick={() => setAll((a) => !a)} className="shrink-0 py-2 text-sm font-bold text-primary underline underline-offset-4">
-            {all ? "One at a time" : "Show everything"}
-          </button>
         </div>
       </nav>
 
       <div className="pt-8">
-        {all ? (
-          <div className="space-y-14">{sections.map(render)}</div>
-        ) : (
-          <>
+        <>
             <p className="mb-3 text-sm text-ink/55">
               Part {active + 1} of {sections.length}
             </p>
             {render(current)}
             <div className="mt-10 flex flex-wrap items-center gap-4 border-t-2 border-ink pt-6">
               {last ? (
-                <Button asChild size="lg" className="bg-ink font-bold text-white hover:bg-ink/90">
-                  <a href={finish.href}>{finish.label}</a>
-                </Button>
+                "open" in finish ? (
+                  <Button size="lg" onClick={() => openWorkbench({ tab: finish.open })} className="bg-ink font-bold text-white hover:bg-ink/90">
+                    {finish.label}
+                  </Button>
+                ) : (
+                  <Button asChild size="lg" className="bg-ink font-bold text-white hover:bg-ink/90">
+                    <a href={finish.href}>{finish.label}</a>
+                  </Button>
+                )
               ) : (
                 <Button size="lg" onClick={() => go(active + 1)} className="bg-ink font-bold text-white hover:bg-ink/90">
                   Next: {sections[active + 1].label}
@@ -161,8 +161,7 @@ export function PhasedContent({
                 </button>
               )}
             </div>
-          </>
-        )}
+        </>
       </div>
     </div>
   );
