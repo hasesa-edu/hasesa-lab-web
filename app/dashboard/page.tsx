@@ -11,7 +11,8 @@ import { formatDate } from "@/lib/format";
 import { BRAND } from "@/lib/brand";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
-import { ModuleCard } from "@/components/module/ModuleCard";
+import { StationRows } from "@/components/module/StationRows";
+import { assignStations } from "@/lib/stations";
 import { FeedbackItem } from "@/components/module/FeedbackItem";
 import { EnrolCard, ProgressBar, SectionTitle, UnitStatusPill } from "@/components/module/ui";
 
@@ -178,10 +179,9 @@ export default async function DashboardPage() {
         {fresh.length > 0 && (
           <section>
             <SectionTitle icon={Compass}>{active.length || completed.length ? "Start another module" : "Choose your first module"}</SectionTitle>
-            <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {fresh.map(({ m }) => (
-                <ModuleCard key={m.id} m={summarize(m)} />
-              ))}
+            <div className="mt-6">
+              {/* Stations come from the full set so frequencies match everywhere else. */}
+              <StationRows stations={assignStations(modules.map(summarize)).filter((st) => fresh.some(({ m }) => m.id === st.module.id))} />
             </div>
           </section>
         )}

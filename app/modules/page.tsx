@@ -3,9 +3,10 @@ import { getModules, summarize } from "@/lib/content";
 import { getViewer } from "@/lib/viewer";
 import { moduleProgress } from "@/lib/summary";
 import { hasFullAccess } from "@/lib/access";
+import { assignStations } from "@/lib/stations";
 import { BRAND } from "@/lib/brand";
 import { PageHeader } from "@/components/PageHeader";
-import { ModuleCard } from "@/components/module/ModuleCard";
+import { StationRows, type RowProgress } from "@/components/module/StationRows";
 import { EnrolCard } from "@/components/module/ui";
 
 export const metadata: Metadata = {
@@ -14,23 +15,35 @@ export const metadata: Metadata = {
 };
 export const dynamic = "force-dynamic";
 
+const STATUS: Record<string, string> = { active: "In progress", completed: "Signed off", dropped: "Dropped" };
+
 export default async function ModulesPage() {
   const { access, state } = await getViewer();
   const modules = getModules();
+  const stations = assignStations(modules.map(summarize));
+
+  // Where a signed-in student is in each module they've touched.
+  const progress: Record<string, RowProgress> = {};
+  if (state) {
+    for (const m of modules) {
+      const p = moduleProgress(m, state);
+      if (p.status === "not-started") continue;
+      progress[m.id] = {
+        label: `${STATUS[p.status]}: ${p.stepsDone} of ${p.stepsTotal} steps`,
+        pct: p.stepsTotal ? Math.round((p.stepsDone / p.stepsTotal) * 100) : 0,
+      };
+    }
+  }
+
   return (
     <div>
       <PageHeader
-        eyebrow="Hasesa Academy"
         title="Modules"
-        description="Each module starts with a mystery or something to build. You learn the science and maths when the project needs it, and finish with something that works."
+        description="Each module is a station on the dial: a mystery or something to build. You learn the science and maths when the project needs it, and finish with something that works."
       />
-      <div className="mx-auto max-w-6xl px-4 pt-8 pb-16">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {modules.map((m) => (
-            <ModuleCard key={m.id} m={summarize(m)} progress={state ? moduleProgress(m, state) : undefined} />
-          ))}
-        </div>
-        {!hasFullAccess(access) && <EnrolCard signedIn={!!access.userId} next="/modules" className="mt-12" />}
+      <div className="mx-auto max-w-6xl px-4 pt-10 pb-16">
+        <StationRows stations={stations} progress={progress} />
+        {!hasFullAccess(access) && <EnrolCard signedIn={!!access.userId} next="/modules" className="mt-14" />}
       </div>
     </div>
   );

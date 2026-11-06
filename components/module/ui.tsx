@@ -7,15 +7,13 @@ import type { ContentStatus, StepKind, Video } from "@/lib/content/types";
 import { Button } from "@/components/ui/button";
 import { GoogleIcon, googleSignInHref } from "@/components/GoogleButton";
 
-export function SectionTitle({ icon: Icon, children, className }: { icon: LucideIcon; children: React.ReactNode; className?: string }) {
-  return (
-    <h2 className={cn("flex items-center gap-2.5 text-xl font-bold tracking-tight text-foreground sm:text-2xl", className)}>
-      <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary-strong dark:text-primary">
-        <Icon aria-hidden className="size-5" />
-      </span>
-      {children}
-    </h2>
-  );
+/**
+ * Section headings in the brand's display face. `icon` is still accepted from
+ * older call sites but no longer drawn: icon tiles beside every heading read
+ * as template chrome.
+ */
+export function SectionTitle({ children, className }: { icon?: LucideIcon; children: React.ReactNode; className?: string }) {
+  return <h2 className={cn("font-dial text-3xl leading-none font-bold text-ink sm:text-4xl", className)}>{children}</h2>;
 }
 
 export function ProgressBar({ pct, className }: { pct: number; className?: string }) {
@@ -36,21 +34,19 @@ export function ProgressBar({ pct, className }: { pct: number; className?: strin
 }
 
 /** Shows whether content has been checked by an expert. Drafts get a quiet amber badge. */
+/** One quiet line saying whether content has been checked by a subject expert. */
 export function StatusBadge({ status, className, onDark }: { status: ContentStatus; className?: string; onDark?: boolean }) {
+  const draft = status === "ai-draft";
   return (
     <span
-      title={status === "ai-draft" ? "Written with AI and not yet checked by a subject expert." : undefined}
       className={cn(
-        "inline-flex h-6 items-center rounded-full px-2.5 text-xs font-semibold",
-        status === "ai-draft"
-          ? onDark
-            ? "bg-white/10 text-sun ring-1 ring-sun/40"
-            : "bg-sun-soft text-amber-800 dark:text-sun"
-          : "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300",
+        "inline-flex items-center gap-2 text-sm",
+        onDark ? "text-enamel-foreground/70" : "text-ink/60",
         className
       )}
     >
-      {STATUS_LABEL[status]}
+      <span aria-hidden className={cn("size-2 rounded-full", draft ? "bg-sun" : "bg-signal")} />
+      {draft ? "Draft: being checked by subject experts" : STATUS_LABEL[status]}
     </span>
   );
 }
@@ -100,7 +96,7 @@ export function VideoEmbed({ video, title }: { video?: Video; title: string }) {
         <span className="relative inline-flex size-12 items-center justify-center rounded-2xl bg-sun text-deep">
           <Clapperboard aria-hidden className="size-6" />
         </span>
-        <p className="relative mt-3 font-heading text-lg font-bold">Video coming soon</p>
+        <p className="relative mt-3 font-dial text-2xl font-bold">Video coming soon</p>
         <p className="relative mt-1 max-w-sm text-sm text-deep-foreground/75">We&apos;re recording this at the Academy.</p>
       </div>
     );

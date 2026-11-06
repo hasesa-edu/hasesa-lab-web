@@ -59,7 +59,10 @@ export function ProblemSet({
       <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-muted-foreground">
         {mode === "practice" ? (
           <>
-            <span>Work each one out on paper, then check your answer.</span>
+            <span>
+              Work each one out on paper, then check your answer.
+              {problems.some((p) => p.type === "numeric") && " For powers of ten, type 3e8 or 3 x 10^8."}
+            </span>
             {unit?.status !== "completed" && unit?.status !== "tested_out" && (
               <Button variant="link" size="sm" className="h-auto p-0 text-sm" onClick={() => setMode("testout")}>
                 <Zap aria-hidden /> Already know this? Test out
@@ -82,7 +85,7 @@ export function ProblemSet({
       )}
 
       {mode === "practice" ? (
-        <ol className="mt-5 space-y-4">
+        <ol className="mt-6 border-t-2 border-ink">
           {problems.map((p, i) => (
             <PracticeItem key={p.id} unitId={unitId} problem={p} index={i} alreadySolved={solved.includes(p.id)} onUnit={onUnit} />
           ))}
@@ -97,7 +100,7 @@ export function ProblemSet({
 function QuestionText({ index, q }: { index: number; q: string }) {
   return (
     <div className="flex gap-3">
-      <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary-soft font-heading text-sm font-extrabold text-primary-strong dark:text-primary">
+      <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-enamel font-dial text-base font-bold text-sun">
         {index + 1}
       </span>
       <Markdown inline className="min-w-0 flex-1 pt-1 font-semibold leading-snug">
@@ -190,7 +193,6 @@ function AnswerInput({
           Check
         </Button>
       )}
-      <span className="w-full text-xs text-subtle-foreground">Powers of ten: type 3e8 or 3 x 10^8.</span>
     </form>
   );
 }
@@ -267,7 +269,7 @@ function PracticeItem({
   const revealed = !!result && (result.correct || tries >= 2 || showSolution);
 
   return (
-    <li className="rounded-2xl bg-card p-5 shadow-card ring-1 ring-border sm:p-6">
+    <li className="border-b border-ink/15 py-6">
       <div className="flex items-start justify-between gap-3">
         <QuestionText index={index} q={problem.q} />
         {alreadySolved && !result && (
@@ -374,9 +376,9 @@ function TestOut({ unitId, problems, onUnit, onDone }: { unitId: string; problem
           </div>
         </div>
       )}
-      <ol className="space-y-4">
+      <ol className="border-t-2 border-ink">
         {problems.map((p, i) => (
-          <li key={p.id} className="rounded-2xl bg-card p-5 shadow-card ring-1 ring-border sm:p-6">
+          <li key={p.id} className="border-b border-ink/15 py-6">
             <QuestionText index={i} q={p.q} />
             <AnswerInput
               problem={p}
