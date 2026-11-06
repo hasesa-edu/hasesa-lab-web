@@ -192,7 +192,7 @@ export default async function AdminPage() {
         <AdminSignOutButton />
       </PageHeader>
 
-      <div className="mx-auto max-w-5xl space-y-10 px-4 py-10">
+      <div className="mx-auto max-w-6xl space-y-10 px-4 py-10">
       <section>
         <SectionTitle icon={<Users className="size-4" />}>Users</SectionTitle>
         <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">

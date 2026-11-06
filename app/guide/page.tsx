@@ -40,7 +40,7 @@ export default async function GuidePage() {
         </div>
       </PageHeader>
 
-      <div className="mx-auto max-w-5xl px-4 pt-8 pb-16">
+      <div className="mx-auto max-w-6xl px-4 pt-8 pb-16">
         <SectionTitle icon={Users}>Students</SectionTitle>
         {roster.length === 0 ? (
           <p className="mt-4 rounded-2xl bg-card p-6 text-muted-foreground shadow-soft ring-1 ring-border">

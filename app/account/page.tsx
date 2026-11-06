@@ -33,7 +33,7 @@ export default async function AccountPage() {
         }
       />
 
-      <div className="mx-auto max-w-3xl px-4 pt-8 pb-16">
+      <div className="mx-auto max-w-6xl px-4 [&>*]:max-w-3xl pt-8 pb-16">
         <section className="rounded-2xl bg-card p-5 shadow-card ring-1 ring-border sm:p-6">
           <h2 className="flex items-center gap-2 text-lg font-bold text-foreground">
             <GraduationCap aria-hidden className="size-5 text-primary" /> Hasesa Academy

@@ -267,6 +267,11 @@
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
+  /* Keep room for the scrollbar on every page, so short and long pages
+     line up and nothing jumps sideways when you navigate. */
+  html {
+    scrollbar-gutter: stable;
+  }
   ::selection {
     background: color-mix(in oklab, var(--primary) 25%, transparent);
     color: var(--foreground);

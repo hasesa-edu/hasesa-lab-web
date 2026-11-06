@@ -67,7 +67,7 @@ export default async function ModulePage({ params }: Props) {
     <article>
       <header className="relative overflow-hidden bg-deep text-deep-foreground">
         <SubjectIcon subject={lead} className="absolute top-1/2 right-[6%] hidden size-64 -translate-y-1/2 rotate-12 text-white/[0.06] lg:block" />
-        <div className="relative mx-auto max-w-5xl px-4 pt-6 pb-9 sm:pt-8 sm:pb-12">
+        <div className="relative mx-auto max-w-6xl px-4 pt-6 pb-9 sm:pt-8 sm:pb-12">
           <BackLink href="/modules">← All modules</BackLink>
           <div className="mt-4 flex flex-wrap items-center gap-2">
             {m.disciplines.map((d) => (
@@ -118,7 +118,7 @@ export default async function ModulePage({ params }: Props) {
         <span aria-hidden className={cn("absolute inset-x-0 bottom-0 h-1.5", SUBJECT_STYLES[lead].bg)} />
       </header>
 
-      <div className="mx-auto max-w-5xl px-4 pb-16">
+      <div className="mx-auto max-w-6xl px-4 pb-16">
         {progress?.certificateCode && (
           <Link
             href={`/certificates/${progress.certificateCode}`}
