@@ -2,6 +2,7 @@
 title: The human nerve
 kind: investigate
 minutes: 75
+video: { youtubeId: "HYLyhXRp298", credit: "Bozeman Science" }
 units: [neurons-and-signals, nervous-system]
 ---
 ## Do: become a nerve

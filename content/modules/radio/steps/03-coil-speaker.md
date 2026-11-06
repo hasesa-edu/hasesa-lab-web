@@ -2,6 +2,7 @@
 title: Coil speaker
 kind: build
 minutes: 90
+video: { youtubeId: "3JJ_mvJjyi0", credit: "Rhett Allain" }
 units: [charge-current-voltage, simple-circuits, electromagnetism]
 ---
 ## Do: build a speaker from a cup

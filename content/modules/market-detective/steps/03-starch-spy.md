@@ -2,6 +2,7 @@
 title: The starch spy
 kind: investigate
 minutes: 90
+video: { youtubeId: "_6KM81mK6Rc", credit: "FSSAI" }
 units: [chemical-tests]
 ---
 ## Do: a first iodine test (20 minutes)

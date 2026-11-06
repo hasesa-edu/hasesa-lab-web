@@ -2,6 +2,7 @@
 title: Catch the ruler
 kind: investigate
 minutes: 75
+video: { youtubeId: "LheOjO2DJD0", credit: "Physics Online" }
 units: [free-fall-and-square-roots, rearranging-formulas, nervous-system]
 ---
 ## Do: the ruler drop

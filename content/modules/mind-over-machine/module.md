@@ -6,6 +6,7 @@ hook: "The guide clenches a fist — and a cardboard robot claw on the table sna
 goal: "Build a robot claw that opens and closes when you clench your own forearm muscles, use it to pick up an object, and explain every link in the chain from your brain to the motor."
 whatYouBuild: "A cardboard robot hand with straw-and-string tendons, pulled by a servo motor, controlled by an Arduino that reads your muscle's electrical signal through skin electrodes."
 hours: 10
+trailer: { youtubeId: "gsioAl4t5K0", credit: "Backyard Brains" }
 status: ai-draft
 publicSample: neurons-and-signals
 materials:

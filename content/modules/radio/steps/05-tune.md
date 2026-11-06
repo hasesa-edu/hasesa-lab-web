@@ -2,6 +2,7 @@
 title: Tune in
 kind: build
 minutes: 120
+video: { youtubeId: "QJr60m4_a1M", credit: "Matthew Fairbanks" }
 units: [resonance, rearranging-formulas, scientific-notation]
 ---
 ## Do: wind the tuning coil

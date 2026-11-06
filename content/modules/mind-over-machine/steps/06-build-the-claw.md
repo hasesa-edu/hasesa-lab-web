@@ -2,6 +2,7 @@
 title: Build the muscle-powered claw
 kind: build
 minutes: 135
+video: { youtubeId: "N5eBWFjQF7s", credit: "Thetips4you" }
 units: [microcontroller-basics, sensors-and-signals, charge-current-voltage, simple-circuits]
 ---
 ## Do: give the hand a muscle

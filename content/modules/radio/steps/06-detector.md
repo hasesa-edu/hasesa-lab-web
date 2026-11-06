@@ -2,6 +2,7 @@
 title: The detector
 kind: build
 minutes: 90
+video: { youtubeId: "G7wzFLegC48", credit: "Backroom Electronics" }
 units: [diodes-and-rectification, amplitude-modulation]
 ---
 ## Do: the one-way valve

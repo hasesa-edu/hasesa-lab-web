@@ -2,6 +2,7 @@
 title: Grit at the bottom
 kind: investigate
 minutes: 75
+video: { youtubeId: "GKH-x3kwyxQ", credit: "Helen Rogerson" }
 units: [mixtures-and-separation, density]
 ---
 ## Do: the sink test (15 minutes)

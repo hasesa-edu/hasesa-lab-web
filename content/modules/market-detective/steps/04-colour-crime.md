@@ -2,6 +2,7 @@
 title: The colour crime
 kind: investigate
 minutes: 90
+video: { youtubeId: "44IgrwW01ZI", credit: "Stephen Rizner" }
 units: [chromatography, mixtures-and-separation]
 ---
 ## Do: shake out the colour (20 minutes)
