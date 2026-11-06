@@ -35,17 +35,30 @@ export const t: Dict = {
     en: "Hands-on modules at Hasesa Academy. Build a radio, control a robot claw with your muscles, catch food fakers. The science and maths come when the project needs them.",
   },
   "hero.cta.lessons": { en: "See the modules" },
+  "hero.cta.sample": { en: "Try a free unit" },
   "hero.cta.signup": { en: "Sign up with Google" },
   "hero.cta.dashboard": { en: "Go to my dashboard" },
   "hero.free": {
     en: "Browse free",
   },
   "hero.free.note": {
-    en: "Try a concept unit from every module. Enrol at the Academy to start building.",
+    en: "Enrol at the Academy to start building.",
   },
-  "hero.video.alt": {
-    en: "Short demo of the AI lab assistant answering a question with worked steps",
-  },
+
+  // Landing: why
+  "why.eyebrow": { en: "Why Hasesa" },
+  "why.title": { en: "School was built for another era." },
+  "why.sub": { en: "AI now handles much of the thinking work schools train for. What's left is what people bring: curiosity, judgment and the habit of figuring things out." },
+  "why.then.label": { en: "What school builds today" },
+  "why.then.1": { en: "One curriculum for everyone" },
+  "why.then.2": { en: "Fixed schedules and one pace" },
+  "why.then.3": { en: "Theory first, maybe practice later" },
+  "why.then.4": { en: "Memorization and exams" },
+  "why.now.label": { en: "What students will need" },
+  "why.now.1": { en: "Curiosity, and the habit of feeding it" },
+  "why.now.2": { en: "Learning by doing: experimenting, not memorizing" },
+  "why.now.3": { en: "Their own path, at their own pace" },
+  "why.now.4": { en: "Working with others, and with AI" },
 
   // Landing: marquee, how it works, showcase
   "landing.strip.label": { en: "What students do in our modules" },
@@ -69,29 +82,20 @@ export const t: Dict = {
   "showcase.steps": { en: "steps" },
   "showcase.all": { en: "See every module" },
 
-  // Two pillars
-  "pillars.exp.mock.label": {
-    en: "MARKET DETECTIVE · STEP 2",
-  },
-  "pillars.exp.mock.title": {
-    en: "Is this honey real?",
-  },
-  "pillars.exp.mock.step1": {
-    en: "Weigh 10 mL of each honey sample.",
-  },
-  "pillars.exp.mock.step2": {
-    en: "Work out the density: mass ÷ volume.",
-  },
-  "pillars.exp.mock.step3": {
-    en: "Lower density than real honey? Someone added water or syrup.",
-  },
-  "pillars.ai.eyebrow": { en: "AI lab assistant" },
-  "pillars.ai.title": {
-    en: "A patient helper that knows your module",
-  },
-  "pillars.ai.body": {
-    en: "Stuck on a build or a problem at home? The assistant knows the step you're on and the theory behind it, and gives hints instead of answers.",
-  },
+  // What you get at the Academy
+  "pillars.eyebrow": { en: "At the Academy" },
+  "pillars.title": { en: "Everything a module needs." },
+  "pillars.sub": { en: "Hands-on work with a guide, theory at your own pace, and help whenever you're stuck." },
+  "pillars.hands.title": { en: "Hands-on" },
+  "pillars.hands.body": { en: "Build real things with real tools and local materials: a radio, a robot claw, a forensic lab." },
+  "pillars.paths.title": { en: "Your own path" },
+  "pillars.paths.body": { en: "Concept units you study at home, at your pace. Already know one? Test out and move on." },
+  "pillars.guide.title": { en: "A guide" },
+  "pillars.guide.body": { en: "A trained guide follows your progress, gives feedback and signs you off when your build works." },
+  "pillars.together.title": { en: "Build together" },
+  "pillars.together.body": { en: "Builds happen in groups at the Academy, so you learn from each other as much as from the steps." },
+  "pillars.ai.title": { en: "AI support" },
+  "pillars.ai.body": { en: "A lab assistant that knows the step you're on and gives hints, not answers." },
   "pillars.ai.mock.user": {
     en: "How long should my radio's antenna be for a 1000 kHz station?",
   },
@@ -102,8 +106,19 @@ export const t: Dict = {
     en: "Grounded in Radio, step 4",
   },
 
+  // For parents
+  "parents.eyebrow": { en: "For parents" },
+  "parents.title": { en: "Fun, and it counts." },
+  "parents.sub": { en: "Every module connects to the national curriculum, so what your child builds here shows up again in class and in exams." },
+  "parents.curriculum.title": { en: "curriculum topics, used for real" },
+  "parents.curriculum.body": { en: "Each concept unit is tagged with where it appears in the school curriculum." },
+  "parents.guide.title": { en: "A guide who follows every student" },
+  "parents.guide.body": { en: "The guide sees what your child studied, where they stopped and how they scored, and steps in when they're stuck." },
+  "parents.cert.title": { en: "A certificate for every module" },
+  "parents.cert.body": { en: "Earned by making the build work and explaining how, not by sitting an exam." },
+
   // Partners
-  "partners.eyebrow": { en: "Our partners" },
+  "partners.eyebrow": { en: "Our pilot partners" },
   "partners.sb.tag": {
     en: "Science communication by researchers-in-training.",
   },
@@ -121,6 +136,7 @@ export const t: Dict = {
 
   // CTA strip
   "cta.title": { en: "Ready to build something?" },
+  "cta.enrol": { en: "Contact us to enrol" },
   "cta.sub": {
     en: "Sign up with Google to browse every module and try a concept unit. Enrol at the Academy to start building.",
   },

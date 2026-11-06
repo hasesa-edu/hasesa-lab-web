@@ -2,13 +2,29 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Award, BookOpen, Clock, Hammer, MessageCircle, Search, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  Award,
+  BookOpen,
+  Clock,
+  GraduationCap,
+  Hammer,
+  Mail,
+  MessageCircle,
+  Route,
+  Search,
+  Sparkles,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
 import { googleSignInHref } from "@/components/GoogleButton";
 import { SUBJECT_STYLES, SubjectIcon, SubjectLabel, SubjectTile } from "@/components/Subject";
 import type { t as Dict } from "@/lib/i18n";
 import type { ModuleSummary } from "@/lib/content/types";
+import { DISCIPLINES } from "@/lib/disciplines";
+import { CONTACT_EMAIL } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -23,14 +39,18 @@ export function LandingClient({ modules }: { modules: ModuleSummary[] }) {
   const { user, ready } = useUser();
   const primaryHref = user ? "/dashboard" : googleSignInHref("/modules");
   const primaryLabel = ready && user ? tr("hero.cta.dashboard") : tr("hero.cta.signup");
+  // The first module's free concept unit: the quickest way to try the course.
+  const sampleHref = modules[0] ? `/concepts/${modules[0].publicSample.id}` : "/modules";
 
   return (
     <div className="overflow-hidden">
-      <Hero tr={tr} primaryHref={primaryHref} primaryLabel={primaryLabel} modules={modules} />
+      <Hero tr={tr} sampleHref={sampleHref} modules={modules} />
       <ModuleStrip tr={tr} modules={modules} />
-      <HowItWorks tr={tr} />
+      <WhyBand tr={tr} />
       <Showcase tr={tr} modules={modules} />
-      <AssistantSection tr={tr} />
+      <HowItWorks tr={tr} />
+      <Pillars tr={tr} />
+      <ParentsBand tr={tr} modules={modules} sampleHref={sampleHref} />
       <Partners tr={tr} />
       <FinalCta tr={tr} primaryHref={primaryHref} primaryLabel={primaryLabel} />
     </div>
@@ -39,18 +59,7 @@ export function LandingClient({ modules }: { modules: ModuleSummary[] }) {
 
 /* ─────────────────────────────  HERO  ───────────────────────────── */
 
-function Hero({
-  tr,
-  primaryHref,
-  primaryLabel,
-  modules,
-}: {
-  tr: TR;
-  primaryHref: string;
-  primaryLabel: string;
-  modules: ModuleSummary[];
-}) {
-  const sticker = modules[0];
+function Hero({ tr, sampleHref, modules }: { tr: TR; sampleHref: string; modules: ModuleSummary[] }) {
   return (
     <section className="relative isolate bg-deep text-deep-foreground">
       <div aria-hidden className="absolute inset-0 -z-10 bg-grid text-primary-soft opacity-50" />
@@ -78,24 +87,17 @@ function Hero({
           <p className="mx-auto mt-8 max-w-xl text-lg leading-relaxed text-deep-foreground/80 lg:mx-0">{tr("hero.sub")}</p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-            {/* Plain <a>: signed out, this is the Google OAuth route, which needs a full-page navigation. */}
-            <a
-              href={primaryHref}
-              className={cn(
-                buttonVariants({ size: "lg" }),
-                "bg-sun font-semibold text-deep shadow-pop hover:bg-sun/90"
-              )}
-            >
-              {primaryLabel}
+            <Link href="/modules" className={cn(buttonVariants({ size: "lg" }), "bg-sun font-semibold text-deep shadow-pop hover:bg-sun/90")}>
+              {tr("hero.cta.lessons")}
               <ArrowRight />
-            </a>
+            </Link>
             <Button
               asChild
               variant="ghost"
               size="lg"
-              className="text-deep-foreground hover:bg-white/10 hover:text-deep-foreground dark:hover:bg-white/10"
+              className="text-deep-foreground ring-1 ring-white/20 hover:bg-white/10 hover:text-deep-foreground dark:hover:bg-white/10"
             >
-              <Link href="/modules">{tr("hero.cta.lessons")}</Link>
+              <Link href={sampleHref}>{tr("hero.cta.sample")}</Link>
             </Button>
           </div>
 
@@ -106,65 +108,49 @@ function Hero({
           </p>
         </div>
 
-        {sticker && <HeroVisual tr={tr} sticker={sticker} />}
+        {modules.length > 0 && <MysteryCards tr={tr} modules={modules} />}
       </div>
     </section>
   );
 }
 
-function HeroVisual({ tr, sticker }: { tr: TR; sticker: ModuleSummary }) {
-  const lead = sticker.disciplines[0];
-  const s = SUBJECT_STYLES[lead];
+/** The module mysteries, pinned to the notebook like case cards. */
+function MysteryCards({ tr, modules }: { tr: TR; modules: ModuleSummary[] }) {
+  const tilts = ["-3deg", "2.5deg", "-1.5deg"];
   return (
-    <div className="relative mx-auto w-full max-w-md lg:max-w-none">
-      {/* Video, framed like a photo pinned to the notebook */}
-      <div className="relative rotate-2 rounded-[2rem] bg-deep-foreground/10 p-2 shadow-pop ring-1 ring-white/15 sm:p-3">
-        <video
-          className="aspect-[4/5] w-full rounded-[1.5rem] object-cover sm:aspect-[5/4] lg:aspect-[4/5]"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster="/hero-demo.poster.jpg"
-          aria-label={tr("hero.video.alt")}
-        >
-          {/* Chrome/Firefox pick the smaller WebM; Safari falls through to MP4. */}
-          <source src="/hero-demo.webm" type="video/webm" />
-          <source src="/hero-demo.mp4" type="video/mp4" />
-        </video>
-      </div>
-
-      {/* Sticker: a real module card */}
-      <div
-        className="absolute -bottom-6 -left-3 w-56 animate-float rounded-2xl bg-card p-3.5 text-card-foreground shadow-pop ring-1 ring-border sm:-left-8 sm:w-64"
-        style={{ ["--tilt" as string]: "-4deg" }}
-      >
-        <div className="flex items-center justify-between">
-          <SubjectLabel subject={lead} />
-        </div>
-        <p className="mt-1.5 text-sm leading-snug font-semibold">
-          {sticker.title}: {sticker.tagline}
-        </p>
-        <div className={cn("mt-2.5 h-1.5 overflow-hidden rounded-full", s.soft)}>
-          <div className={cn("h-full w-2/3 rounded-full", s.bg)} />
-        </div>
-        <p className="mt-1.5 flex items-center gap-1 text-[11px] text-muted-foreground">
-          <Clock className="size-3" /> {sticker.hours} {tr("showcase.hours")}
-        </p>
-      </div>
-
-      {/* Sticker: the assistant answering */}
-      <div
-        className="absolute -top-5 -right-2 w-52 animate-float rounded-2xl rounded-tr-md bg-sun-soft p-3 text-sm text-foreground shadow-pop ring-1 ring-sun/30 [animation-delay:-3s] sm:-right-6 sm:w-60"
-        style={{ ["--tilt" as string]: "3deg" }}
-      >
-        <p className="flex items-center gap-1.5 text-[11px] font-bold tracking-wide text-chemistry uppercase">
-          <MessageCircle className="size-3.5" /> {tr("pillars.ai.eyebrow")}
-        </p>
-        <p className="mt-1 leading-snug">{tr("pillars.ai.mock.assistant1")}</p>
-      </div>
-    </div>
+    <ul className="relative mx-auto flex w-full max-w-md flex-col gap-4 lg:max-w-lg">
+      {modules.slice(0, 3).map((m, i) => {
+        const lead = m.disciplines[0];
+        const st = SUBJECT_STYLES[lead];
+        // The hook's last sentence is the mystery itself.
+        const question = m.hook.match(/[^.!?…—]*\?\s*$/)?.[0].trim() || m.tagline;
+        return (
+          <li
+            key={m.id}
+            className={cn("animate-float", i === 1 && "sm:ml-10 [animation-delay:-2s]", i === 2 && "sm:ml-4 [animation-delay:-4s]")}
+            style={{ ["--tilt" as string]: tilts[i % tilts.length] }}
+          >
+            <Link
+              href={`/modules/${m.id}`}
+              className="group relative block overflow-hidden rounded-2xl bg-card p-4 text-card-foreground shadow-pop ring-1 ring-border transition hover:ring-sun focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none sm:p-5"
+            >
+              <span aria-hidden className={cn("absolute inset-y-0 left-0 w-1.5", st.bg)} />
+              <div className="flex items-center justify-between gap-3 pl-1">
+                <SubjectLabel subject={lead} />
+                <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
+                  <Clock className="size-3" /> ~{m.hours} {tr("showcase.hours")}
+                </span>
+              </div>
+              <p className="mt-2 pl-1 font-heading text-lg leading-snug font-extrabold sm:text-xl">&ldquo;{question}&rdquo;</p>
+              <p className="mt-1.5 flex items-center gap-1 pl-1 text-sm font-semibold text-primary-strong dark:text-primary">
+                {m.title}: {m.tagline}
+                <ArrowRight className="size-3.5 shrink-0 transition group-hover:translate-x-0.5" />
+              </p>
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 
@@ -207,6 +193,46 @@ function ModuleStrip({ tr, modules }: { tr: TR; modules: ModuleSummary[] }) {
       <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
         {row(false)}
         {row(true)}
+      </div>
+    </section>
+  );
+}
+
+/* ───────────────────────────  WHY  ─────────────────────────── */
+
+function WhyBand({ tr }: { tr: TR }) {
+  const then = ["why.then.1", "why.then.2", "why.then.3", "why.then.4"] as Key[];
+  const now = ["why.now.1", "why.now.2", "why.now.3", "why.now.4"] as Key[];
+  return (
+    <section className="relative mx-auto max-w-6xl px-4 py-20 sm:py-24">
+      <SectionHeading eyebrow={tr("why.eyebrow")} title={tr("why.title")} sub={tr("why.sub")} />
+      <div className="mt-10 grid gap-4 md:mt-14 md:grid-cols-2">
+        <div className="rounded-2xl bg-muted/60 p-6 ring-1 ring-border sm:p-7">
+          <p className="text-xs font-bold tracking-[0.18em] text-subtle-foreground uppercase">{tr("why.then.label")}</p>
+          <ul className="mt-4 space-y-3">
+            {then.map((k) => (
+              <li key={k} className="flex items-start gap-3 text-muted-foreground">
+                <span aria-hidden className="mt-2.5 h-0.5 w-3 shrink-0 rounded-full bg-subtle-foreground/60" />
+                <span className="leading-relaxed">{tr(k)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="relative overflow-hidden rounded-2xl bg-deep p-6 text-deep-foreground shadow-pop sm:p-7">
+          <div aria-hidden className="absolute inset-0 bg-grid text-primary-soft opacity-40" />
+          <div aria-hidden className="absolute -top-16 -right-16 size-48 rounded-full bg-sun/25 blur-3xl" />
+          <div className="relative">
+            <p className="text-xs font-bold tracking-[0.18em] text-sun uppercase">{tr("why.now.label")}</p>
+            <ul className="mt-4 space-y-3">
+              {now.map((k) => (
+                <li key={k} className="flex items-start gap-3">
+                  <Sparkles aria-hidden className="mt-1 size-4 shrink-0 text-sun" />
+                  <span className="leading-relaxed font-medium">{tr(k)}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -312,58 +338,118 @@ function Showcase({ tr, modules }: { tr: TR; modules: ModuleSummary[] }) {
   );
 }
 
-/* ──────────────────────────  ASSISTANT  ────────────────────────── */
+/* ───────────────────────────  PILLARS  ─────────────────────────── */
 
-function AssistantSection({ tr }: { tr: TR }) {
+function Pillars({ tr }: { tr: TR }) {
+  const cards: { icon: LucideIcon; title: Key; body: Key; tone: string }[] = [
+    { icon: Hammer, title: "pillars.hands.title", body: "pillars.hands.body", tone: "bg-sun-soft text-chemistry" },
+    { icon: Route, title: "pillars.paths.title", body: "pillars.paths.body", tone: "bg-primary-soft text-primary-strong" },
+    { icon: GraduationCap, title: "pillars.guide.title", body: "pillars.guide.body", tone: "bg-biology-soft text-biology" },
+    { icon: Users, title: "pillars.together.title", body: "pillars.together.body", tone: "bg-chemistry-soft text-chemistry" },
+  ];
   return (
-    <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 sm:py-24 lg:grid-cols-2">
-      <div>
-        <p className="text-xs font-bold tracking-[0.18em] text-primary uppercase">{tr("pillars.ai.eyebrow")}</p>
-        <h2 className="mt-2 text-4xl leading-[1.05] font-extrabold sm:text-5xl">{tr("pillars.ai.title")}</h2>
-        <p className="mt-4 max-w-lg text-lg leading-relaxed text-muted-foreground">{tr("pillars.ai.body")}</p>
-
-        <div className="mt-8 rounded-2xl border-2 border-dashed border-sun/50 bg-sun-soft/40 p-5">
-          <p className="text-[11px] font-bold tracking-[0.18em] text-chemistry uppercase">{tr("pillars.exp.mock.label")}</p>
-          <h3 className="mt-1 text-lg font-bold">{tr("pillars.exp.mock.title")}</h3>
-          <ol className="mt-3 space-y-2 text-sm">
-            {(["pillars.exp.mock.step1", "pillars.exp.mock.step2", "pillars.exp.mock.step3"] as Key[]).map((k, i) => (
-              <li key={k} className="flex items-start gap-2.5">
-                <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">
-                  {i + 1}
+    <section className="relative bg-primary-soft/40">
+      <div aria-hidden className="absolute inset-0 bg-dots text-primary opacity-40" />
+      <div className="relative mx-auto max-w-6xl px-4 py-20 sm:py-24">
+        <SectionHeading eyebrow={tr("pillars.eyebrow")} title={tr("pillars.title")} sub={tr("pillars.sub")} />
+        <div className="mt-10 grid gap-4 md:mt-14 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:col-span-2">
+            {cards.map((c) => (
+              <div key={c.title} className="rounded-2xl bg-card p-5 shadow-card ring-1 ring-border sm:p-6">
+                <span className={cn("inline-flex size-11 items-center justify-center rounded-xl", c.tone)}>
+                  <c.icon aria-hidden className="size-5" />
                 </span>
-                <span className="leading-relaxed">{tr(k)}</span>
-              </li>
+                <h3 className="mt-4 text-lg font-extrabold">{tr(c.title)}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{tr(c.body)}</p>
+              </div>
             ))}
-          </ol>
+          </div>
+
+          {/* AI support: the fifth pillar, with a small chat mock */}
+          <div className="relative overflow-hidden rounded-2xl bg-deep p-5 text-deep-foreground shadow-pop sm:p-6">
+            <div aria-hidden className="absolute inset-0 bg-grid text-primary-soft opacity-40" />
+            <div aria-hidden className="absolute -top-20 -right-16 size-56 rounded-full bg-primary/50 blur-3xl" />
+            <div className="relative">
+              <span className="inline-flex size-11 items-center justify-center rounded-xl bg-sun text-deep">
+                <MessageCircle aria-hidden className="size-5" />
+              </span>
+              <h3 className="mt-4 text-lg font-extrabold">{tr("pillars.ai.title")}</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-deep-foreground/80">{tr("pillars.ai.body")}</p>
+              <div className="mt-5 space-y-3">
+                <div className="flex justify-end">
+                  <div className="max-w-[90%] rounded-2xl rounded-br-md bg-primary px-3.5 py-2 text-sm text-primary-foreground shadow-soft">
+                    {tr("pillars.ai.mock.user")}
+                  </div>
+                </div>
+                <div className="max-w-[95%] space-y-2 rounded-2xl rounded-bl-md bg-card p-3.5 text-sm text-card-foreground shadow-soft">
+                  <div className="rounded-lg bg-primary-soft/60 py-1.5 text-center font-mono font-bold text-primary-strong">λ = c ÷ f</div>
+                  <p className="leading-relaxed">{tr("pillars.ai.mock.assistant1")}</p>
+                </div>
+                <p className="flex items-center gap-1.5 text-xs text-deep-foreground/70">
+                  <BookOpen className="size-3.5" /> {tr("pillars.ai.mock.source")}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+    </section>
+  );
+}
 
-      {/* Chat mock on the deep panel */}
-      <div className="relative overflow-hidden rounded-[2rem] bg-deep p-5 text-deep-foreground shadow-pop sm:p-7">
-        <div aria-hidden className="absolute inset-0 bg-grid text-primary-soft opacity-40" />
-        <div aria-hidden className="absolute -top-20 -right-16 size-60 rounded-full bg-primary/50 blur-3xl" />
-        <div className="relative space-y-4">
-          <div className="flex items-center gap-2 text-sm font-semibold">
-            <span className="flex size-8 items-center justify-center rounded-full bg-sun text-deep">
-              <Sparkles className="size-4" />
+/* ───────────────────────────  PARENTS  ─────────────────────────── */
+
+function ParentsBand({ tr, modules, sampleHref }: { tr: TR; modules: ModuleSummary[]; sampleHref: string }) {
+  const seen = new Map<string, ModuleSummary["curriculum"][number]>();
+  for (const m of modules) for (const c of m.curriculum) seen.set(`${c.subject}|${c.grade}|${c.unit}`, c);
+  const topics = [...seen.values()];
+  // A few examples across subjects, so parents see school topics they recognise.
+  const examples = (["physics", "chemistry", "biology"] as const)
+    .map((s) => topics.find((c) => c.subject === s))
+    .filter((c): c is NonNullable<typeof c> => !!c);
+
+  const points: { icon: LucideIcon; title: Key; body: Key }[] = [
+    { icon: BookOpen, title: "parents.curriculum.title", body: "parents.curriculum.body" },
+    { icon: GraduationCap, title: "parents.guide.title", body: "parents.guide.body" },
+    { icon: Award, title: "parents.cert.title", body: "parents.cert.body" },
+  ];
+
+  return (
+    <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-20 sm:py-24 lg:grid-cols-[1fr_1.1fr]">
+      <div>
+        <p className="text-xs font-bold tracking-[0.18em] text-primary uppercase">{tr("parents.eyebrow")}</p>
+        <h2 className="mt-2 text-4xl leading-[1.05] font-extrabold sm:text-5xl">{tr("parents.title")}</h2>
+        <p className="mt-4 max-w-lg text-lg leading-relaxed text-muted-foreground">{tr("parents.sub")}</p>
+        <Link href={sampleHref} className={cn(buttonVariants({ variant: "soft", size: "lg" }), "mt-8 font-semibold")}>
+          {tr("hero.cta.sample")} <ArrowRight />
+        </Link>
+      </div>
+      <div className="space-y-3">
+        {points.map((p) => (
+          <div key={p.title} className="flex gap-4 rounded-2xl bg-card p-5 shadow-card ring-1 ring-border">
+            <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary-strong dark:text-primary">
+              <p.icon aria-hidden className="size-5" />
             </span>
-            {tr("nav.assistant")}
-          </div>
-          <div className="flex justify-end">
-            <div className="max-w-[85%] rounded-2xl rounded-br-md bg-primary px-4 py-2.5 text-sm text-primary-foreground shadow-soft">
-              {tr("pillars.ai.mock.user")}
+            <div className="min-w-0">
+              <h3 className="font-bold text-foreground">
+                {p.title === "parents.curriculum.title" ? `${topics.length} ${tr(p.title)}` : tr(p.title)}
+              </h3>
+              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{tr(p.body)}</p>
+              {p.title === "parents.curriculum.title" && examples.length > 0 && (
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {examples.map((c) => (
+                    <li key={`${c.subject}-${c.grade}-${c.unit}`} className="inline-flex min-h-7 items-center gap-1.5 rounded-full bg-muted px-2.5 py-0.5 text-xs">
+                      <span className={cn("font-semibold", SUBJECT_STYLES[c.subject].text)}>
+                        {DISCIPLINES[c.subject].label} {c.grade}
+                      </span>
+                      <span className="text-muted-foreground">{c.unit}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
-          <div className="max-w-[90%] space-y-2 rounded-2xl rounded-bl-md bg-card p-4 text-sm text-card-foreground shadow-soft">
-            <div className="rounded-lg bg-primary-soft/60 py-2 text-center font-mono text-base font-bold text-primary-strong">
-              λ = c ÷ f
-            </div>
-            <p className="leading-relaxed">{tr("pillars.ai.mock.assistant1")}</p>
-          </div>
-          <p className="flex items-center gap-1.5 text-xs text-deep-foreground/70">
-            <BookOpen className="size-3.5" /> {tr("pillars.ai.mock.source")}
-          </p>
-        </div>
+        ))}
       </div>
     </section>
   );
@@ -420,10 +506,21 @@ function FinalCta({ tr, primaryHref, primaryLabel }: { tr: TR; primaryHref: stri
           </div>
           <h2 className="mt-6 text-4xl font-extrabold sm:text-5xl">{tr("cta.title")}</h2>
           <p className="mx-auto mt-3 max-w-xl text-muted-foreground">{tr("cta.sub")}</p>
-          <a href={primaryHref} className={cn(buttonVariants({ size: "lg" }), "mt-8 font-semibold shadow-pop")}>
-            {primaryLabel}
-            <ArrowRight />
-          </a>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            {/* Plain <a>: signed out, this is the Google OAuth route, which needs a full-page navigation. */}
+            <a href={primaryHref} className={cn(buttonVariants({ size: "lg" }), "font-semibold shadow-pop")}>
+              {primaryLabel}
+              <ArrowRight />
+            </a>
+            {CONTACT_EMAIL && (
+              <a
+                href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Enrolling at Hasesa Academy")}`}
+                className={cn(buttonVariants({ variant: "outline", size: "lg" }), "bg-card font-semibold")}
+              >
+                <Mail /> {tr("cta.enrol")}
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </section>
