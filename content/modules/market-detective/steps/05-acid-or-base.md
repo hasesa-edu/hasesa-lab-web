@@ -2,6 +2,7 @@
 title: Acid or base?
 kind: investigate
 minutes: 90
+video: { youtubeId: "PKUwxQI0wIo", credit: "The Royal Institution" }
 units: [acids-bases-ph, chemical-tests]
 ---
 ## Do: make a colour-changing potion (25 minutes)

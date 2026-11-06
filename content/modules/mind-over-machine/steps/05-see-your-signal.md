@@ -2,6 +2,7 @@
 title: See your muscle's electricity
 kind: investigate
 minutes: 90
+video: { youtubeId: "E2dALNLa8_g", credit: "Backyard Brains" }
 units: [sensors-and-signals, charge-current-voltage, simple-circuits, muscle-contraction]
 ---
 ## Safety check — before any electrode touches skin

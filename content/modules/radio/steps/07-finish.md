@@ -2,6 +2,7 @@
 title: Finish and explain
 kind: finish
 minutes: 90
+video: { youtubeId: "65qpjGqX6vM", credit: "Take Apart Engineering" }
 units: []
 ---
 ## Do: build it properly

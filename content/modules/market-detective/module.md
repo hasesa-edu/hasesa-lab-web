@@ -6,6 +6,7 @@ hook: "A case file has arrived at the Academy: honey, berbere, milk and kibe, fo
 goal: "Find every faked sample in the case file and prove each verdict with measured, fair-tested evidence."
 whatYouBuild: "A forensic case report with evidence for every sample, presented to the class like a detective closing the case."
 hours: 10
+trailer: { youtubeId: "JFbF8UoDBo8", credit: "The Better India" }
 status: ai-draft
 publicSample: density
 materials:

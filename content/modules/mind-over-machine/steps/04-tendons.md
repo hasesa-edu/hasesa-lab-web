@@ -2,6 +2,7 @@
 title: Strings inside a wing
 kind: build
 minutes: 90
+video: { youtubeId: "WaYe_HMxmVQ", credit: "Nick Spencer" }
 units: [muscle-contraction]
 ---
 ## Do: open a chicken wing

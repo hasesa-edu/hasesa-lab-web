@@ -2,6 +2,7 @@
 title: Heavy honey, thin milk
 kind: investigate
 minutes: 90
+video: { youtubeId: "KgZ7JtmOgHI", credit: "BeardedScienceGuy" }
 units: [density, properties-of-matter, rearranging-formulas]
 ---
 ## Do: the water-glass test (15 minutes)

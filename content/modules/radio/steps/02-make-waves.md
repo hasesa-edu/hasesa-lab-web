@@ -2,6 +2,7 @@
 title: Make waves
 kind: investigate
 minutes: 75
+video: { youtubeId: "sRbSQ9wGA1I", credit: "Ed Reeves" }
 units: [waves-and-vibrations, frequency-and-period, rearranging-formulas]
 ---
 ## Do: rope and slinky waves
