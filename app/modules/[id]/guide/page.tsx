@@ -26,11 +26,10 @@ export default async function GuideVersionPage({ params }: Props) {
   return (
     <article>
       <header className="relative overflow-hidden bg-deep text-deep-foreground">
-        <div aria-hidden className="absolute inset-0 bg-grid text-primary-soft opacity-60" />
         <div className="relative mx-auto max-w-3xl px-4 pt-6 pb-9 sm:pt-8">
           <BackLink href={`/modules/${m.id}`}>← {m.title}</BackLink>
-          <p className="mt-4 text-xs font-bold tracking-[0.16em] text-sun uppercase">Guide&apos;s version · not shown to students</p>
-          <h1 className="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{m.title}</h1>
+          <p className="mt-4 text-sm font-bold text-sun">Guide&apos;s version · not shown to students</p>
+          <h1 className="font-dial mt-2 text-5xl font-extrabold sm:text-7xl leading-[0.95]">{m.title}</h1>
           <div className="mt-4">
             <StatusBadge status={m.status} onDark className="h-8 px-3 text-sm" />
           </div>

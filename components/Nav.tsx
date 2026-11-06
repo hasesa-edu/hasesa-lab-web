@@ -72,8 +72,9 @@ export function Nav() {
   const isActive = (href: string) =>
     href.includes("#") ? false : href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-  // On the home page the bar is part of the radio: same enamel as the hero.
-  const onHero = pathname === "/";
+  // The bar is enamel on every page, so it runs into the hero on the home
+  // page and into the enamel page header everywhere else.
+  const onHome = pathname === "/";
 
   // Active link = a teal signal line under it; others are quiet until hovered.
   const navLinkClass = (href: string) =>
@@ -81,13 +82,7 @@ export function Nav() {
       "relative inline-flex min-h-10 items-center px-3 font-legible text-[0.95rem] font-bold transition-colors",
       "after:absolute after:inset-x-3 after:bottom-1 after:h-[3px] after:rounded-full after:bg-signal after:transition-transform",
       isActive(href) ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-50",
-      onHero
-        ? isActive(href)
-          ? "text-white"
-          : "text-enamel-foreground/75 hover:text-white"
-        : isActive(href)
-          ? "text-ink"
-          : "text-ink/60 hover:text-ink"
+      isActive(href) ? "text-white" : "text-enamel-foreground/75 hover:text-white"
     );
 
   const mobileLinkClass = (href: string) =>
@@ -114,16 +109,9 @@ export function Nav() {
   const mobileLinks = [...desktopLinks, { href: "/account", label: tr("nav.account"), icon: UserRoundIcon, show: true }];
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-20 border-b",
-        onHero
-          ? "border-white/10 bg-enamel text-enamel-foreground"
-          : "border-ink/10 bg-lab/90 backdrop-blur supports-[backdrop-filter]:bg-lab/80"
-      )}
-    >
-      <div className={cn("mx-auto flex items-center gap-3 px-4 py-2.5 sm:gap-5", onHero ? "max-w-6xl" : "max-w-5xl")}>
-        <Logo tone={onHero ? "light" : "brand"} />
+    <header className="sticky top-0 z-20 border-b border-white/10 bg-enamel text-enamel-foreground">
+      <div className={cn("mx-auto flex items-center gap-3 px-4 py-2.5 sm:gap-5", onHome ? "max-w-6xl" : "max-w-5xl")}>
+        <Logo tone="light" />
 
         <nav className="hidden md:flex items-center gap-1">
           {desktopLinks.map((l) => (
@@ -227,9 +215,6 @@ export function Nav() {
                 className="gap-0 overflow-y-auto bg-background p-0 [&>[data-slot=sheet-close]]:top-3 [&>[data-slot=sheet-close]]:right-3 [&>[data-slot=sheet-close]]:text-deep-foreground [&>[data-slot=sheet-close]:hover]:bg-white/10 [&>[data-slot=sheet-close]:hover]:text-deep-foreground"
               >
                 <SheetHeader className="relative overflow-hidden bg-deep px-5 pt-14 pb-6 text-deep-foreground">
-                  <div aria-hidden className="absolute inset-0 bg-grid text-primary-soft opacity-50" />
-                  <div aria-hidden className="absolute -top-16 -right-16 size-48 rounded-full bg-primary/50 blur-3xl" />
-                  <div aria-hidden className="absolute -bottom-20 -left-10 size-40 rounded-full bg-sun/20 blur-3xl" />
                   <div className="relative flex items-center gap-3">
                     <Avatar className="size-12 after:border-white/20">
                       <AvatarFallback className="bg-primary text-primary-foreground font-heading text-lg font-bold ring-2 ring-sun/70">

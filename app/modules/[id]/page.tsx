@@ -66,9 +66,6 @@ export default async function ModulePage({ params }: Props) {
   return (
     <article>
       <header className="relative overflow-hidden bg-deep text-deep-foreground">
-        <div aria-hidden className="absolute inset-0 bg-grid text-primary-soft opacity-60" />
-        <div aria-hidden className="absolute -top-24 -right-24 size-80 rounded-full bg-primary/40 blur-3xl" />
-        <div aria-hidden className="absolute -bottom-32 left-1/4 size-64 rounded-full bg-sun/20 blur-3xl" />
         <SubjectIcon subject={lead} className="absolute top-1/2 right-[6%] hidden size-64 -translate-y-1/2 rotate-12 text-white/[0.06] lg:block" />
         <div className="relative mx-auto max-w-5xl px-4 pt-6 pb-9 sm:pt-8 sm:pb-12">
           <BackLink href="/modules">← All modules</BackLink>
@@ -79,7 +76,7 @@ export default async function ModulePage({ params }: Props) {
               </span>
             ))}
           </div>
-          <h1 className="mt-3 text-4xl leading-[1.05] font-extrabold tracking-tight text-balance sm:text-5xl lg:text-6xl">{m.title}</h1>
+          <h1 className="font-dial mt-3 text-5xl leading-[0.95] font-extrabold text-balance sm:text-7xl lg:text-8xl">{m.title}</h1>
           <p className="mt-2 text-xl font-semibold text-sun sm:text-2xl">{m.tagline}</p>
           <div className="mt-6 flex flex-wrap gap-2">
             <HeaderChip icon={Clock}>About {m.hours} hours</HeaderChip>
@@ -138,7 +135,7 @@ export default async function ModulePage({ params }: Props) {
 
         <div className="mt-8 grid gap-4 lg:grid-cols-[1.3fr_1fr]">
           <div className="relative overflow-hidden rounded-2xl bg-sun-soft p-6 ring-1 ring-sun/30">
-            <p className="text-xs font-bold tracking-[0.16em] text-amber-800 uppercase dark:text-sun">The mystery</p>
+            <p className="text-sm font-bold text-amber-800 dark:text-sun">The mystery</p>
             <p className="mt-2 text-lg leading-relaxed font-medium text-foreground">{m.hook}</p>
           </div>
           <div className="space-y-4">
@@ -340,7 +337,7 @@ export default async function ModulePage({ params }: Props) {
               >
                 <BookOpen aria-hidden className="size-8 shrink-0 text-primary" />
                 <span className="flex-1">
-                  <span className="block text-xs font-bold tracking-[0.16em] text-primary-strong uppercase dark:text-primary">Try it free</span>
+                  <span className="block text-sm font-bold text-primary-strong dark:text-primary">Try it free</span>
                   <span className="block font-bold text-foreground">{summary.publicSample.title}</span>
                   <span className="text-sm text-muted-foreground">Read a concept unit from this module and solve its problems.</span>
                 </span>
@@ -362,7 +359,7 @@ function InfoBox({ icon: Icon, label, children }: { icon: typeof Target; label: 
         <Icon aria-hidden className="size-5" />
       </span>
       <div>
-        <p className="text-xs font-bold tracking-[0.14em] text-subtle-foreground uppercase">{label}</p>
+        <p className="text-sm font-bold text-subtle-foreground">{label}</p>
         <p className="mt-1 leading-relaxed text-foreground">{children}</p>
       </div>
     </div>

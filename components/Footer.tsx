@@ -26,12 +26,7 @@ export function Footer() {
         flush ? "border-t border-white/10" : "mt-16"
       )}
     >
-      <div aria-hidden className="absolute inset-0 -z-10 bg-grid text-enamel-foreground opacity-[0.06]" />
       <div aria-hidden className="absolute -top-32 -right-24 -z-10 size-80 rounded-full bg-signal/25 blur-3xl" />
-      {showQuote && (
-        <div aria-hidden className="absolute -bottom-24 -left-24 -z-10 size-72 rounded-full bg-sun/15 blur-3xl" />
-      )}
-
       {showQuote && (
         <figure className="mx-auto max-w-4xl px-4 pt-14 pb-10 sm:pt-20 sm:pb-14">
           <span aria-hidden className="block font-heading text-7xl leading-none font-extrabold text-sun sm:text-8xl">

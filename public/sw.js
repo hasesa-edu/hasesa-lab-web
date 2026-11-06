@@ -1,5 +1,5 @@
 /* Hasesa service worker */
-const VERSION = "v6";
+const VERSION = "v7";
 const APP_SHELL = "hasesa-shell-" + VERSION;
 const STATIC = "hasesa-static-" + VERSION;
 const PAGES = "hasesa-pages-" + VERSION;
@@ -14,7 +14,15 @@ const PUBLIC_PAGES = ["/", "/terms", "/privacy"];
 
 // Bump VERSION when this list changes so old caches get evicted on activate.
 
+// On localhost (development) this worker removes itself and its caches, so
+// it can never serve old JS or CSS while the app is being edited.
+const IS_LOCAL = ["localhost", "127.0.0.1"].includes(self.location.hostname);
+
 self.addEventListener("install", (event) => {
+  if (IS_LOCAL) {
+    self.skipWaiting();
+    return;
+  }
   event.waitUntil(
     caches.open(APP_SHELL).then((cache) => cache.addAll(PRECACHE_URLS)).catch(() => {})
   );
@@ -22,6 +30,19 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("activate", (event) => {
+  if (IS_LOCAL) {
+    event.waitUntil(
+      (async () => {
+        const keys = await caches.keys();
+        await Promise.all(keys.map((k) => caches.delete(k)));
+        await self.registration.unregister();
+        // Reload open tabs so they fetch fresh code from the dev server.
+        const tabs = await self.clients.matchAll({ type: "window" });
+        tabs.forEach((t) => t.navigate(t.url));
+      })()
+    );
+    return;
+  }
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(
@@ -35,6 +56,7 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+  if (IS_LOCAL) return;
   const req = event.request;
   if (req.method !== "GET") return;
   const url = new URL(req.url);
