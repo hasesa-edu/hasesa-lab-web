@@ -14,6 +14,8 @@ import { Markdown } from "@/components/Markdown";
 import { SUBJECT_STYLES, SubjectLabel } from "@/components/Subject";
 import { Button } from "@/components/ui/button";
 import { EnrollButton } from "@/components/module/EnrollButton";
+import { AssistantPanel } from "@/components/assistant/AssistantPanel";
+import { moduleContext } from "@/lib/chat-context";
 import { BackLink, EnrolCard, KIND_LABEL, ProgressBar, SectionTitle, StatusBadge, UnitStatusPill, VideoEmbed } from "@/components/module/ui";
 
 export const dynamic = "force-dynamic";
@@ -47,7 +49,7 @@ export default async function ModulePage({ params }: Props) {
   const started = !!progress && progress.status !== "not-started";
 
   return (
-    <article>
+    <article data-ask-scope>
       <header className="relative overflow-hidden bg-enamel text-enamel-foreground">
         <div aria-hidden className="absolute -bottom-40 left-1/2 h-72 w-[60rem] -translate-x-1/2 rounded-[50%] bg-signal/20 blur-3xl" />
         <div className="relative mx-auto max-w-6xl px-4 pt-6 pb-10 sm:pt-8 sm:pb-14">
@@ -324,6 +326,17 @@ export default async function ModulePage({ params }: Props) {
           </>
         )}
       </div>
+      {full && (
+        <AssistantPanel
+          context={moduleContext(m.id)}
+          about={`the ${m.title} module`}
+          suggestions={[
+            `What will I actually learn in ${m.title}?`,
+            "Where did I stop, and what should I do next?",
+            "How does this connect to what I'm learning at school?",
+          ]}
+        />
+      )}
     </article>
   );
 }
