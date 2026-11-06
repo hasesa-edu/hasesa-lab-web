@@ -25,9 +25,8 @@ export const t: Dict = {
   "hero.tag": {
     en: "Reimagining Education for the AI Era",
   },
-  "hero.title.before": {
-    en: "Don't memorize. Build it.",
-  },
+  "hero.title.a": { en: "Don't memorize." },
+  "hero.title.b": { en: "Build it." },
   "hero.title.highlight": {
     en: "Learn by doing.",
   },
@@ -38,12 +37,17 @@ export const t: Dict = {
   "hero.cta.sample": { en: "Try a free unit" },
   "hero.cta.signup": { en: "Sign up with Google" },
   "hero.cta.dashboard": { en: "Go to my dashboard" },
-  "hero.free": {
-    en: "Browse free",
-  },
-  "hero.free.note": {
-    en: "Enrol at the Academy to start building.",
-  },
+  "hero.note": { en: "↓ or try a real case right now" },
+
+  // Can you solve it? (hero challenge)
+  "solve.eyebrow": { en: "Case #2" },
+  "solve.title": { en: "Can you solve it?" },
+  "solve.check": { en: "Check" },
+  "solve.solved": { en: "Solved" },
+  "solve.wrong": { en: "Not quite." },
+  "solve.tryAgain": { en: "Check your working and try again." },
+  "solve.open": { en: "Open the whole case" },
+  "solve.more": { en: "More problems like this" },
 
   // Landing: why
   "why.eyebrow": { en: "Why Hasesa" },
@@ -108,7 +112,9 @@ export const t: Dict = {
 
   // For parents
   "parents.eyebrow": { en: "For parents" },
-  "parents.title": { en: "Fun, and it counts." },
+  "parents.title.a": { en: "Fun," },
+  "parents.title.b": { en: "and it counts." },
+  "parents.cert.mock": { en: "Certificate of completion" },
   "parents.sub": { en: "Every module connects to the national curriculum, so what your child builds here shows up again in class and in exams." },
   "parents.curriculum.title": { en: "curriculum topics, used for real" },
   "parents.curriculum.body": { en: "Each concept unit is tagged with where it appears in the school curriculum." },
@@ -135,7 +141,8 @@ export const t: Dict = {
   },
 
   // CTA strip
-  "cta.title": { en: "Ready to build something?" },
+  "cta.title.a": { en: "Ready to" },
+  "cta.title.b": { en: "build something?" },
   "cta.enrol": { en: "Contact us to enrol" },
   "cta.sub": {
     en: "Sign up with Google to browse every module and try a concept unit. Enrol at the Academy to start building.",
