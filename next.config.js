@@ -16,6 +16,8 @@ const nextConfig = {
       { source: "/experiments", destination: "/modules", permanent: true },
       { source: "/experiments/:id", destination: "/modules", permanent: true },
       { source: "/onboarding", destination: "/dashboard", permanent: false },
+      // The lab assistant now lives on each module, step and concept page.
+      { source: "/chat", destination: "/dashboard", permanent: false },
       { source: "/teacher", destination: "/dashboard", permanent: false },
       { source: "/join", destination: "/dashboard", permanent: false },
       { source: "/mock/:subject", destination: "/dashboard", permanent: false },

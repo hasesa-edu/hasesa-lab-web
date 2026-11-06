@@ -9,7 +9,6 @@ import {
   GraduationCapIcon,
   LogOutIcon,
   MenuIcon,
-  MessageCircleIcon,
   NotebookPenIcon,
   UserRoundIcon,
   XIcon,
@@ -100,7 +99,6 @@ export function Nav() {
   const full = user?.access === "enrolled" || user?.access === "guide";
   const links: { href: string; label: string; icon: LucideIcon; show: boolean }[] = [
     { href: "/modules", label: tr("nav.experiments"), icon: BoxesIcon, show: true },
-    { href: "/chat", label: tr("nav.assistant"), icon: MessageCircleIcon, show: full },
     { href: "/dashboard", label: tr("nav.dashboard"), icon: NotebookPenIcon, show: !!user },
     { href: "/guide", label: tr("nav.guide"), icon: GraduationCapIcon, show: user?.access === "guide" },
   ];

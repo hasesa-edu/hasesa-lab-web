@@ -12,6 +12,8 @@ import { cn } from "@/lib/utils";
 import { Markdown } from "@/components/Markdown";
 import { SUBJECT_STYLES } from "@/components/Subject";
 import { ProblemSet } from "@/components/module/ProblemSet";
+import { AskButton, AssistantPanel } from "@/components/assistant/AssistantPanel";
+import { conceptContext } from "@/lib/chat-context";
 import { BackLink, EnrolCard, SectionTitle, StatusBadge } from "@/components/module/ui";
 
 export const dynamic = "force-dynamic";
@@ -68,7 +70,7 @@ export default async function ConceptPage({ params, searchParams }: Props) {
   const unit = state?.units.find((u) => u.unitId === c.id);
 
   return (
-    <article>
+    <article data-ask-scope>
       <header className="relative overflow-hidden bg-deep text-deep-foreground">
         <div className="relative mx-auto max-w-6xl px-4 [&>*]:max-w-3xl pt-6 pb-9 sm:pt-8">
           <BackLink href={back.href}>{back.label}</BackLink>
@@ -103,14 +105,12 @@ export default async function ConceptPage({ params, searchParams }: Props) {
         />
 
         {full && (
-          <Link
-            href={`/chat?concept=${c.id}`}
-            className="mt-8 flex items-center gap-3 rounded-2xl bg-primary-soft/50 p-4 ring-1 ring-primary/20 transition hover:ring-primary/50"
+          <AskButton
+            prompt="Can you explain this another way? "
+            className="mt-10 flex w-full items-center gap-3 border-y-2 border-ink py-4 text-left font-bold hover:text-primary"
           >
-            <MessageCircle aria-hidden className="size-5 shrink-0 text-primary" />
-            <span className="flex-1 text-sm font-semibold text-foreground">Ask the lab assistant to explain this another way</span>
-            <ArrowRight aria-hidden className="size-4 text-primary" />
-          </Link>
+            Ask the lab assistant to explain this another way. It knows which problems you&apos;re stuck on.
+          </AskButton>
         )}
 
         <div className="mt-16 grid gap-10 sm:grid-cols-2">
@@ -150,6 +150,17 @@ export default async function ConceptPage({ params, searchParams }: Props) {
 
         {!full && <EnrolCard signedIn={!!access.userId} next={`/concepts/${c.id}`} className="mt-10" />}
       </div>
+      {full && (
+        <AssistantPanel
+          context={conceptContext(c.id)}
+          about={`the unit ${c.title}`}
+          suggestions={[
+            `Explain ${c.title.toLowerCase()} with an everyday example.`,
+            "I'm stuck on one of the problems. Give me a hint, not the answer.",
+            "Where does this show up in my module?",
+          ]}
+        />
+      )}
     </article>
   );
 }

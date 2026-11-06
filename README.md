@@ -39,7 +39,8 @@ Content lives in `content/` as Markdown with YAML frontmatter. See `content/READ
 | `/dashboard` | Student: where you stopped, guide feedback, assigned units, certificates |
 | `/guide`, `/guide/students/[id]` | Guide: every student's progress, notes and answers; feedback, assignments, flags, sign-off |
 | `/certificates/[code]` | Public printable certificate |
-| `/chat` | Lab assistant, grounded in a step or concept unit (`?module=&step=` or `?concept=`) |
+
+The **lab assistant** has no page of its own. Enrolled students and guides open it from any module, step or concept unit page: it docks on the right (a bottom sheet on phones), already knows which page they're on, and sees what they've done there (their notebook notes for a step, the problems they're stuck on in a unit, where they stopped in a module). There's one conversation per page, and selecting text offers "Ask about this". `/chat` redirects to the dashboard.
 | `/admin` | Operator: enrol students, set the guide role, analytics (env-credential login) |
 
 The old grade 9–12 routes (`/experiments`, `/onboarding`, `/lessons`) redirect to `/modules` or `/dashboard` (see `next.config.js`).
