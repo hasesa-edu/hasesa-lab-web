@@ -61,7 +61,7 @@ export async function GET(req: NextRequest) {
   await session.save();
 
   const next = safeNext(req.cookies.get(OAUTH_NEXT_COOKIE)?.value);
-  const dest = isNew ? `/onboarding${next ? `?next=${encodeURIComponent(next)}` : ""}` : next || "/dashboard";
+  const dest = next || (isNew ? "/modules" : "/dashboard");
   const res = NextResponse.redirect(new URL(dest, origin));
   clearOAuthCookies(res);
   return res;

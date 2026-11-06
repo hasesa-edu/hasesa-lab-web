@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { sql } from "drizzle-orm";
 import { getSession } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
-import { BarChart3, Eye, FlaskConical, ShieldCheck, Users } from "lucide-react";
+import { BarChart3, Boxes, Eye, ShieldCheck, Users } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AdminSignOutButton } from "./signout-button";
@@ -20,16 +20,13 @@ type RecentViewRow = {
 };
 type UserStatsRow = { total: number; d1: number; d7: number; d30: number };
 type ViewStatsRow = { total: number; d1: number; d7: number; d30: number; unique7d: number };
-type EngagementRow = { convos: number; messages: number; expStarted: number; expDone: number };
+type EngagementRow = { convos: number; messages: number; modulesActive: number; stepsDone: number; unitsDone: number; signoffs: number };
 type UserRow = {
   id: string;
   email: string;
   displayName: string;
-  grade: number | null;
-  language: string;
-  region: string | null;
-  school: string | null;
-  subjects: string[] | null;
+  role: string;
+  paidUntil: Date | null;
   createdAt: Date;
 };
 
@@ -76,12 +73,14 @@ async function loadStats() {
       select
         (select count(*)::int from conversations) as convos,
         (select count(*)::int from messages) as messages,
-        (select count(*)::int from experiment_progress) as "expStarted",
-        (select count(*)::int from experiment_progress where status = 'done') as "expDone"
+        (select count(*)::int from module_enrollments where status = 'active') as "modulesActive",
+        (select count(*)::int from step_progress where done) as "stepsDone",
+        (select count(*)::int from unit_progress where status <> 'started') as "unitsDone",
+        (select count(*)::int from signoffs) as signoffs
     `),
     db.execute<UserRow>(sql`
-      select id, email, display_name as "displayName", grade, language,
-             region, school, subjects, created_at as "createdAt"
+      select id, email, display_name as "displayName", role,
+             paid_until as "paidUntil", created_at as "createdAt"
       from users
       order by created_at desc
       limit 200
@@ -120,7 +119,7 @@ async function loadStats() {
 
   const u = rows<UserStatsRow>(userStats)[0] ?? { total: 0, d1: 0, d7: 0, d30: 0 };
   const v = rows<ViewStatsRow>(viewStats)[0] ?? { total: 0, d1: 0, d7: 0, d30: 0, unique7d: 0 };
-  const e = rows<EngagementRow>(engagement)[0] ?? { convos: 0, messages: 0, expStarted: 0, expDone: 0 };
+  const e = rows<EngagementRow>(engagement)[0] ?? { convos: 0, messages: 0, modulesActive: 0, stepsDone: 0, unitsDone: 0, signoffs: 0 };
 
   return {
     usersTotal: u.total,
@@ -138,8 +137,7 @@ async function loadStats() {
     recentViews: rows<RecentViewRow>(recentViews),
     convosTotal: e.convos,
     messagesTotal: e.messages,
-    experimentsStarted: e.expStarted,
-    experimentsDone: e.expDone,
+    engagement: e,
     users: rows<UserRow>(usersList),
   };
 }
@@ -219,18 +217,15 @@ export default async function AdminPage() {
               <TableRow className="hover:bg-transparent">
                 <TableHead className={TH}>Name</TableHead>
                 <TableHead className={TH}>Email</TableHead>
-                <TableHead className={TH}>Grade</TableHead>
-                <TableHead className={TH}>Lang</TableHead>
-                <TableHead className={TH}>Region</TableHead>
-                <TableHead className={TH}>School</TableHead>
-                <TableHead className={TH}>Subjects</TableHead>
+                <TableHead className={TH}>Role</TableHead>
+                <TableHead className={TH}>Enrolled until</TableHead>
                 <TableHead className={TH}>Joined</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {s.users.length === 0 ? (
                 <TableRow className="hover:bg-transparent">
-                  <TableCell colSpan={8} className="px-3 py-4 text-muted-foreground">
+                  <TableCell colSpan={5} className="px-3 py-4 text-muted-foreground">
                     No registered users yet.
                   </TableCell>
                 </TableRow>
@@ -239,12 +234,9 @@ export default async function AdminPage() {
                   <TableRow key={u.id} className="align-top">
                     <TableCell className="px-3 align-top text-foreground font-medium">{u.displayName}</TableCell>
                     <TableCell className="px-3 align-top text-foreground">{u.email}</TableCell>
-                    <TableCell className="px-3 align-top text-foreground tabular-nums">{u.grade ?? "—"}</TableCell>
-                    <TableCell className="px-3 align-top text-muted-foreground uppercase">{u.language}</TableCell>
-                    <TableCell className="px-3 align-top text-foreground">{u.region || "—"}</TableCell>
-                    <TableCell className="px-3 align-top text-foreground">{u.school || "—"}</TableCell>
-                    <TableCell className="px-3 align-top min-w-40 whitespace-normal text-muted-foreground">
-                      {(u.subjects ?? []).length ? (u.subjects ?? []).join(", ") : "—"}
+                    <TableCell className="px-3 align-top text-foreground capitalize">{u.role}</TableCell>
+                    <TableCell className="px-3 align-top text-muted-foreground">
+                      {u.paidUntil ? new Date(u.paidUntil).toLocaleDateString() : "—"}
                     </TableCell>
                     <TableCell className="px-3 align-top text-muted-foreground">
                       {new Date(u.createdAt).toLocaleDateString()}
@@ -277,12 +269,14 @@ export default async function AdminPage() {
       </section>
 
       <section>
-        <SectionTitle icon={<FlaskConical className="size-4" />}>Engagement</SectionTitle>
-        <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
-          <StatCard label="Conversations" value={s.convosTotal} tone="teal" />
+        <SectionTitle icon={<Boxes className="size-4" />}>Engagement</SectionTitle>
+        <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3">
+          <StatCard label="Modules in progress" value={s.engagement.modulesActive} tone="teal" sub="student × module" />
+          <StatCard label="Steps done" value={s.engagement.stepsDone} />
+          <StatCard label="Concept units done" value={s.engagement.unitsDone} sub="completed or tested out" />
+          <StatCard label="Certificates" value={s.engagement.signoffs} tone="sun" />
+          <StatCard label="Conversations" value={s.convosTotal} />
           <StatCard label="Chat messages" value={s.messagesTotal} />
-          <StatCard label="Experiments started" value={s.experimentsStarted} sub="student × experiment" />
-          <StatCard label="Experiments completed" value={s.experimentsDone} tone="sun" />
         </div>
       </section>
 
