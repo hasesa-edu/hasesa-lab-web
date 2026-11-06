@@ -74,7 +74,6 @@ export function Nav() {
 
   // The bar is enamel on every page, so it runs into the hero on the home
   // page and into the enamel page header everywhere else.
-  const onHome = pathname === "/";
 
   // Active link = a teal signal line under it; others are quiet until hovered.
   const navLinkClass = (href: string) =>
@@ -110,7 +109,7 @@ export function Nav() {
 
   return (
     <header className="sticky top-0 z-20 border-b border-white/10 bg-enamel text-enamel-foreground">
-      <div className={cn("mx-auto flex items-center gap-3 px-4 py-2.5 sm:gap-5", onHome ? "max-w-6xl" : "max-w-5xl")}>
+      <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2.5 sm:gap-5">
         <Logo tone="light" />
 
         <nav className="hidden md:flex items-center gap-1">

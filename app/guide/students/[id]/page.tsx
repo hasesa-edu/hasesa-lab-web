@@ -50,7 +50,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
         description={`${user.email} · ${user.paidUntil && new Date(user.paidUntil) > new Date() ? `enrolled until ${formatDate(user.paidUntil)}` : "not currently enrolled"}`}
       />
 
-      <div className="mx-auto max-w-5xl px-4 pt-8 pb-16">
+      <div className="mx-auto max-w-6xl px-4 pt-8 pb-16">
         <div className="grid gap-4 lg:grid-cols-2">
           <section className="rounded-2xl bg-card p-5 shadow-card ring-1 ring-border sm:p-6">
             <SectionTitle icon={MessageSquareQuote} className="text-lg sm:text-xl">

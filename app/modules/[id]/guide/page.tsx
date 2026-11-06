@@ -26,7 +26,7 @@ export default async function GuideVersionPage({ params }: Props) {
   return (
     <article>
       <header className="relative overflow-hidden bg-deep text-deep-foreground">
-        <div className="relative mx-auto max-w-3xl px-4 pt-6 pb-9 sm:pt-8">
+        <div className="relative mx-auto max-w-6xl px-4 [&>*]:max-w-3xl pt-6 pb-9 sm:pt-8">
           <BackLink href={`/modules/${m.id}`}>← {m.title}</BackLink>
           <p className="mt-4 text-sm font-bold text-sun">Guide&apos;s version · not shown to students</p>
           <h1 className="font-dial mt-2 text-5xl font-extrabold sm:text-7xl leading-[0.95]">{m.title}</h1>
@@ -35,7 +35,7 @@ export default async function GuideVersionPage({ params }: Props) {
           </div>
         </div>
       </header>
-      <div className="mx-auto max-w-3xl px-4 pt-8 pb-16">
+      <div className="mx-auto max-w-6xl px-4 [&>*]:max-w-3xl pt-8 pb-16">
         <Markdown>{m.guide}</Markdown>
       </div>
     </article>

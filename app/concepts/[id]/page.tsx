@@ -49,14 +49,14 @@ export default async function ConceptPage({ params, searchParams }: Props) {
     return (
       <div>
         <header className="relative overflow-hidden bg-deep text-deep-foreground">
-          <div className="relative mx-auto max-w-3xl px-4 pt-6 pb-9 sm:pt-8">
+          <div className="relative mx-auto max-w-6xl px-4 [&>*]:max-w-3xl pt-6 pb-9 sm:pt-8">
             <BackLink href={back.href}>{back.label}</BackLink>
             <p className="mt-4 text-sm font-bold text-sun">Concept unit</p>
             <h1 className="font-dial mt-2 text-5xl font-extrabold sm:text-7xl leading-[0.95]">{c.title}</h1>
             <p className="mt-3 text-lg text-deep-foreground/80">{c.summary}</p>
           </div>
         </header>
-        <div className="mx-auto max-w-3xl px-4 py-10">
+        <div className="mx-auto max-w-6xl px-4 [&>*]:max-w-3xl py-10">
           <EnrolCard signedIn={!!access.userId} next={`/concepts/${c.id}`} />
         </div>
       </div>
@@ -70,7 +70,7 @@ export default async function ConceptPage({ params, searchParams }: Props) {
   return (
     <article>
       <header className="relative overflow-hidden bg-deep text-deep-foreground">
-        <div className="relative mx-auto max-w-3xl px-4 pt-6 pb-9 sm:pt-8">
+        <div className="relative mx-auto max-w-6xl px-4 [&>*]:max-w-3xl pt-6 pb-9 sm:pt-8">
           <BackLink href={back.href}>{back.label}</BackLink>
           <p className="mt-4 text-sm font-bold text-sun">
             Concept unit{c.public && !full ? " · free sample" : ""}
@@ -86,7 +86,7 @@ export default async function ConceptPage({ params, searchParams }: Props) {
         </div>
       </header>
 
-      <div className="mx-auto max-w-3xl px-4 pb-16">
+      <div className="mx-auto max-w-6xl px-4 [&>*]:max-w-3xl pb-16">
         <section className="mt-8 rounded-2xl bg-card p-5 shadow-card ring-1 ring-border sm:p-7">
           <SectionTitle icon={BookOpen} className="mb-5">
             The idea

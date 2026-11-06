@@ -190,7 +190,7 @@ export function ChatClient({
   return (
     <div>
       <header className="relative overflow-hidden bg-deep text-deep-foreground">
-        <div className="relative mx-auto max-w-3xl px-4 py-5 sm:py-6">
+        <div className="relative mx-auto max-w-6xl px-4 [&>*]:max-w-3xl py-5 sm:py-6">
           <div className="flex items-center gap-3">
             <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-sun text-deep shadow-pop">
               <Sparkles className="size-5" aria-hidden />
@@ -240,7 +240,7 @@ export function ChatClient({
         </div>
       </header>
 
-      <div className="mx-auto max-w-3xl px-4">
+      <div className="mx-auto max-w-6xl px-4 [&>*]:max-w-3xl">
       <div className="mt-6 min-h-[280px]">
         {messages.length === 0 ? (
           <div className="relative overflow-hidden rounded-[1.5rem] bg-primary-soft/40 p-5 ring-1 ring-primary/15 sm:p-7">

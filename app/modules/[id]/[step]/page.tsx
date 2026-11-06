@@ -51,7 +51,7 @@ export default async function StepPage({ params }: Props) {
   return (
     <article>
       <header className="relative overflow-hidden bg-deep text-deep-foreground">
-        <div className="relative mx-auto max-w-3xl px-4 pt-6 pb-9 sm:pt-8">
+        <div className="relative mx-auto max-w-6xl px-4 [&>*]:max-w-3xl pt-6 pb-9 sm:pt-8">
           <BackLink href={`/modules/${m.id}`}>← {m.title}</BackLink>
           <p className="mt-4 text-sm font-bold text-sun">
             Step {index + 1} of {m.steps.length} · {KIND_LABEL[step.kind]}
@@ -66,7 +66,7 @@ export default async function StepPage({ params }: Props) {
         <span aria-hidden className={cn("absolute inset-x-0 bottom-0 h-1.5", SUBJECT_STYLES[lead].bg)} />
       </header>
 
-      <div className="mx-auto max-w-3xl px-4 pb-16">
+      <div className="mx-auto max-w-6xl px-4 [&>*]:max-w-3xl pb-16">
         {feedback.length > 0 && (
           <section className="mt-8 space-y-2">
             {feedback.map((f) => (

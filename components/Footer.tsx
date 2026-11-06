@@ -28,7 +28,7 @@ export function Footer() {
     >
       <div aria-hidden className="absolute -top-32 -right-24 -z-10 size-80 rounded-full bg-signal/25 blur-3xl" />
       {showQuote && (
-        <figure className="mx-auto max-w-4xl px-4 pt-14 pb-10 sm:pt-20 sm:pb-14">
+        <figure className="mx-auto max-w-6xl px-4 pt-14 pb-10 sm:pt-20 sm:pb-14 [&>*]:max-w-4xl">
           <span aria-hidden className="block font-heading text-7xl leading-none font-extrabold text-sun sm:text-8xl">
             &ldquo;
           </span>
@@ -42,7 +42,7 @@ export function Footer() {
         </figure>
       )}
 
-      <div className={cn("mx-auto max-w-5xl px-4", showQuote && "border-t border-white/10")}>
+      <div className={cn("mx-auto max-w-6xl px-4", showQuote && "border-t border-white/10")}>
         <div className="flex flex-col items-center gap-4 py-8 text-center sm:flex-row sm:justify-between sm:text-left">
           <div className="flex flex-col items-center gap-2 sm:items-start">
             <Link href="/" className="inline-flex min-h-10 items-center gap-2.5">
