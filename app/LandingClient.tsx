@@ -103,37 +103,42 @@ function Hero({ tr, stations, sampleHref }: { tr: TR; stations: Station[]; sampl
 /* ───────────────────────────  WHY  ─────────────────────────── */
 
 function Why({ tr }: { tr: TR }) {
-  // Matched pairs: the same science, the way a typical class asks for it
-  // and the way a Hasesa module gets you there.
-  const pairs = [1, 2, 3, 4].map((n) => ({ then: `why.then.${n}` as Key, now: `why.now.${n}` as Key }));
+  // The story from the deck, told in three beats: then, now, next. It is a
+  // real sequence in time, so it gets a line running through it.
+  const beats: { label: Key; line: Key; body: Key }[] = [
+    { label: "why.then.label", line: "why.then.line", body: "why.then.body" },
+    { label: "why.now.label", line: "why.now.line", body: "why.now.body" },
+    { label: "why.next.label", line: "why.next.line", body: "why.next.body" },
+  ];
   return (
     <section className="border-t-2 border-ink/10">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:py-28">
-        <h2 className="max-w-3xl font-dial text-5xl leading-[0.95] font-bold sm:text-7xl">{tr("why.title")}</h2>
-        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-ink/75">{tr("why.sub")}</p>
-        <table className="mt-12 w-full border-collapse text-left">
-          <thead>
-            <tr className="text-sm font-bold">
-              <th scope="col" className="pb-3 text-ink/55 md:w-1/2 md:pr-10">
-                {tr("why.then.label")}
-              </th>
-              <th scope="col" className="hidden pb-3 text-signal md:table-cell md:pl-10">
-                {tr("why.now.label")}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {pairs.map((p) => (
-              <tr key={p.then} className="flex flex-col border-t-2 border-ink/10 py-5 md:table-row md:py-0">
-                <td className="text-lg text-ink/55 md:py-6 md:pr-10 md:align-top">{tr(p.then)}</td>
-                <td className="mt-2 text-xl leading-snug font-bold md:mt-0 md:border-l-4 md:border-signal md:py-6 md:pl-10 md:align-top md:text-2xl">
-                  <span className="mr-2 text-sm font-bold text-signal md:hidden">{tr("why.now.label")}:</span>
-                  {tr(p.now)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ol className="relative space-y-14 border-l-4 border-signal/30 pl-6 sm:space-y-20 sm:pl-12">
+          {beats.map((b, i) => {
+            const last = i === beats.length - 1;
+            return (
+              <li key={b.label} className="relative">
+                <span
+                  aria-hidden
+                  className={cn(
+                    "absolute top-3 -left-[calc(1.5rem+0.6rem)] size-4 rounded-full ring-4 ring-lab sm:-left-[calc(3rem+0.6rem)]",
+                    last ? "bg-sun" : "bg-signal"
+                  )}
+                />
+                <p className={cn("text-sm font-bold", last ? "text-chemistry" : "text-signal")}>{tr(b.label)}</p>
+                <h2
+                  className={cn(
+                    "mt-1 max-w-4xl font-dial leading-[0.95] font-bold",
+                    last ? "text-5xl text-ink sm:text-7xl lg:text-8xl" : "text-4xl text-ink/70 sm:text-6xl"
+                  )}
+                >
+                  {tr(b.line)}
+                </h2>
+                <p className={cn("mt-4 max-w-2xl text-lg leading-relaxed", last ? "text-ink/85" : "text-ink/60")}>{tr(b.body)}</p>
+              </li>
+            );
+          })}
+        </ol>
       </div>
     </section>
   );

@@ -48,19 +48,16 @@ export const t: Dict = {
   "solve.open": { en: "Open the whole case" },
   "solve.more": { en: "More problems like this" },
 
-  // Landing: why (written for students and parents, matched pairs)
-  "why.title": { en: "Same science. The other way round." },
-  "why.sub": { en: "In most classes the formula comes first and the experiment, if there is one, comes later. Here you start with something you want to build or a mystery you want to solve, and the theory turns up when you need it." },
-  "why.then.label": { en: "In a typical class" },
-  "why.then.1": { en: "Copy the formula for wavelength." },
-  "why.then.2": { en: "Memorize the parts of a neuron." },
-  "why.then.3": { en: "Learn the definition of density." },
-  "why.then.4": { en: "Everyone moves to the next chapter on the same day." },
-  "why.now.label": { en: "At Hasesa" },
-  "why.now.1": { en: "Work out how long your radio's antenna needs to be." },
-  "why.now.2": { en: "Find out how your arm can make a robot claw move." },
-  "why.now.3": { en: "Prove which honey from the market is fake." },
-  "why.now.4": { en: "Move on when you understand it, and skip what you already know." },
+  // Landing: why — the deck's story in three beats, for students and parents
+  "why.then.label": { en: "Then" },
+  "why.then.line": { en: "School was built for factories." },
+  "why.then.body": { en: "Same lessons, same pace and the same exam for everyone. Memorize it, write it down, move on." },
+  "why.now.label": { en: "Now" },
+  "why.now.line": { en: "AI can recall it faster than you." },
+  "why.now.body": { en: "Any phone can recite a formula or define density in a second. Remembering facts is no longer what makes you stand out." },
+  "why.next.label": { en: "Next" },
+  "why.next.line": { en: "So learn what AI can't do for you." },
+  "why.next.body": { en: "Get curious, build things, test them, work out why they failed and fix them, together with other people. That's what every Hasesa module trains." },
 
   // Landing: marquee, how it works, showcase
   "how.title": { en: "Start by doing. The theory follows." },
