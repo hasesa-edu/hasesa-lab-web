@@ -20,7 +20,7 @@ export function PageHeader({
   return (
     <header className={cn("relative overflow-hidden bg-deep text-deep-foreground", className)}>
       <div aria-hidden className="absolute -bottom-40 left-1/2 h-72 w-[60rem] -translate-x-1/2 rounded-[50%] bg-signal/20 blur-3xl" />
-      <div className="relative mx-auto max-w-5xl px-4 pt-10 pb-8 sm:pt-14 sm:pb-10">
+      <div className="relative mx-auto max-w-6xl px-4 pt-10 pb-8 sm:pt-14 sm:pb-10">
         {eyebrow && (
           <p className="text-sm font-bold text-sun">{eyebrow}</p>
         )}
