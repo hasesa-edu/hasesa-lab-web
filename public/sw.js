@@ -1,5 +1,5 @@
 /* Hasesa service worker */
-const VERSION = "v5";
+const VERSION = "v6";
 const APP_SHELL = "hasesa-shell-" + VERSION;
 const STATIC = "hasesa-static-" + VERSION;
 const PAGES = "hasesa-pages-" + VERSION;
@@ -43,8 +43,10 @@ self.addEventListener("fetch", (event) => {
   // Never cache API
   if (url.pathname.startsWith("/api/")) return;
 
-  // Static assets — cache-first
-  if (url.pathname.startsWith("/_next/static/") || /\.(svg|png|jpg|jpeg|webp|woff2?|css|js)$/.test(url.pathname)) {
+  // Build assets — cache-first. Only /_next/static: its file names change with
+  // every build, so a cached copy can never be stale. Other files (public/
+  // images, dev-server chunks) go to the network so edits always show up.
+  if (url.pathname.startsWith("/_next/static/")) {
     event.respondWith(
       caches.open(STATIC).then(async (cache) => {
         const hit = await cache.match(req);
