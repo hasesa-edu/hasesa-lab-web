@@ -18,8 +18,14 @@ export function PWARegister() {
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
-    if (process.env.NODE_ENV !== "production") return;
     if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
+    if (process.env.NODE_ENV !== "production") {
+      // A worker left over from a production run on localhost would keep
+      // serving old JS and CSS in development. Remove it and its caches.
+      navigator.serviceWorker.getRegistrations().then((regs) => regs.forEach((r) => r.unregister())).catch(() => {});
+      if (typeof caches !== "undefined") caches.keys().then((keys) => keys.forEach((k) => caches.delete(k))).catch(() => {});
+      return;
+    }
     // Defer SW registration until the page has finished its first paint, so it
     // doesn't compete with hero rendering for the browser's main thread.
     function register() {

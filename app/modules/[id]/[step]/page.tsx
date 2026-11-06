@@ -51,14 +51,12 @@ export default async function StepPage({ params }: Props) {
   return (
     <article>
       <header className="relative overflow-hidden bg-deep text-deep-foreground">
-        <div aria-hidden className="absolute inset-0 bg-grid text-primary-soft opacity-60" />
-        <div aria-hidden className="absolute -top-24 -right-24 size-72 rounded-full bg-primary/40 blur-3xl" />
         <div className="relative mx-auto max-w-3xl px-4 pt-6 pb-9 sm:pt-8">
           <BackLink href={`/modules/${m.id}`}>← {m.title}</BackLink>
-          <p className="mt-4 text-xs font-bold tracking-[0.16em] text-sun uppercase">
+          <p className="mt-4 text-sm font-bold text-sun">
             Step {index + 1} of {m.steps.length} · {KIND_LABEL[step.kind]}
           </p>
-          <h1 className="mt-2 text-3xl leading-tight font-extrabold tracking-tight text-balance sm:text-5xl">{step.title}</h1>
+          <h1 className="font-dial mt-2 text-4xl leading-[0.95] font-extrabold text-balance sm:text-7xl">{step.title}</h1>
           <div className="mt-5 flex flex-wrap gap-2">
             <HeaderChip icon={Clock}>{step.minutes} min</HeaderChip>
             {saved?.done && <HeaderChip icon={Check}>Done</HeaderChip>}
@@ -143,7 +141,6 @@ export default async function StepPage({ params }: Props) {
           href={`/chat?module=${m.id}&step=${step.id}`}
           className="group relative mt-10 flex items-center gap-4 overflow-hidden rounded-[1.5rem] bg-deep p-5 text-deep-foreground shadow-pop outline-none focus-visible:ring-3 focus-visible:ring-ring/50 sm:p-6"
         >
-          <div aria-hidden className="absolute inset-0 bg-grid text-primary-soft opacity-40" />
           <span className="relative inline-flex size-12 shrink-0 items-center justify-center rounded-2xl bg-sun text-deep">
             <MessageCircle aria-hidden className="size-6" />
           </span>
@@ -174,7 +171,7 @@ function StepNav({ href, label, title, dir }: { href: string; label: string; tit
         isNext && "sm:items-end sm:text-right"
       )}
     >
-      <span className="flex items-center gap-1 text-[11px] font-semibold tracking-[0.14em] text-subtle-foreground uppercase">
+      <span className="flex items-center gap-1 text-xs font-semibold text-subtle-foreground">
         {!isNext && <ArrowLeft aria-hidden className="size-3.5" />}
         {label}
         {isNext && <ArrowRight aria-hidden className="size-3.5" />}

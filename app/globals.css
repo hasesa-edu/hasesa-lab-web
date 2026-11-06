@@ -14,41 +14,55 @@
 :root {
   color-scheme: light;
 
-  --background: rgb(250 250 249);
-  --foreground: rgb(28 25 23);
+  /*
+   * Hasesa brand palette (shared by every page):
+   *   enamel #0E3B4A  dark bands: hero, headers, footer
+   *   teal   #14A098  the logo line, the dial needle, rules, marks
+   *   deep teal #0B7A73  teal text, links and buttons on light (passes AA)
+   *   amber  #F59E0B  the logo's eyes, highlights, calls to action (never text on white)
+   *   lab    #F2F5F4  page background
+   *   ink    #12303A  text
+   */
+  --background: rgb(242 245 244);
+  --foreground: rgb(18 48 58);
   --card: rgb(255 255 255);
-  --card-foreground: rgb(28 25 23);
+  --card-foreground: rgb(18 48 58);
   --popover: rgb(255 255 255);
-  --popover-foreground: rgb(28 25 23);
-  --primary: rgb(13 148 136);
+  --popover-foreground: rgb(18 48 58);
+  --primary: rgb(11 122 115);
   --primary-foreground: rgb(255 255 255);
-  --secondary: rgb(245 245 244);
-  --secondary-foreground: rgb(28 25 23);
-  --muted: rgb(245 245 244);
-  --muted-foreground: rgb(87 83 78);
-  --accent: rgb(240 253 250);
-  --accent-foreground: rgb(15 118 110);
+  --secondary: rgb(230 237 236);
+  --secondary-foreground: rgb(18 48 58);
+  --muted: rgb(230 237 236);
+  --muted-foreground: rgb(75 98 106);
+  --accent: rgb(227 241 239);
+  --accent-foreground: rgb(11 122 115);
   --destructive: rgb(220 38 38);
-  --border: rgb(231 229 228);
-  --input: rgb(214 211 209);
-  --ring: rgb(13 148 136);
+  --border: rgb(217 226 225);
+  --input: rgb(195 208 207);
+  --ring: rgb(20 160 152);
   --radius: 0.625rem;
 
-  --chart-1: rgb(13 148 136);
+  --chart-1: rgb(20 160 152);
   --chart-2: rgb(245 158 11);
-  --chart-3: rgb(45 212 191);
-  --chart-4: rgb(15 118 110);
-  --chart-5: rgb(168 162 158);
+  --chart-3: rgb(92 201 191);
+  --chart-4: rgb(11 122 115);
+  --chart-5: rgb(126 146 152);
 
-  --primary-soft: rgb(204 251 241);
-  --primary-strong: rgb(15 118 110);
+  --primary-soft: rgb(220 239 236);
+  --primary-strong: rgb(10 95 90);
   --sun: rgb(245 158 11);
   --sun-soft: rgb(254 243 199);
-  --subtle-foreground: rgb(168 162 158);
+  --subtle-foreground: rgb(126 146 152);
 
-  /* Deep teal for bold bands (page headers, pricing, hero panels). */
-  --deep: rgb(9 61 57);
-  --deep-foreground: rgb(240 253 250);
+  /* Dark bands (page headers, panels). Same as enamel, kept for older class names. */
+  --deep: rgb(14 59 74);
+  --deep-foreground: rgb(234 244 243);
+  --enamel: rgb(14 59 74);
+  --enamel-foreground: rgb(234 244 243);
+  --signal: rgb(20 160 152);
+  --lab: rgb(242 245 244);
+  --ink: rgb(18 48 58);
 
   /* One color per subject, used for icon tiles, chips and card accents. */
   --physics: rgb(79 70 229);
@@ -58,14 +72,14 @@
   --biology: rgb(5 150 105);
   --biology-soft: rgb(236 253 245);
 
-  --sidebar: rgb(250 250 249);
-  --sidebar-foreground: rgb(28 25 23);
-  --sidebar-primary: rgb(13 148 136);
+  --sidebar: rgb(242 245 244);
+  --sidebar-foreground: rgb(18 48 58);
+  --sidebar-primary: rgb(11 122 115);
   --sidebar-primary-foreground: rgb(255 255 255);
-  --sidebar-accent: rgb(240 253 250);
-  --sidebar-accent-foreground: rgb(15 118 110);
-  --sidebar-border: rgb(231 229 228);
-  --sidebar-ring: rgb(13 148 136);
+  --sidebar-accent: rgb(227 241 239);
+  --sidebar-accent-foreground: rgb(11 122 115);
+  --sidebar-border: rgb(217 226 225);
+  --sidebar-ring: rgb(20 160 152);
 }
 
 .dark {
@@ -102,8 +116,13 @@
   --sun-soft: rgb(69 26 3);
   --subtle-foreground: rgb(107 117 114);
 
-  --deep: rgb(6 40 38);
+  --deep: rgb(9 38 48);
   --deep-foreground: rgb(240 253 250);
+  --enamel: rgb(9 38 48);
+  --enamel-foreground: rgb(234 244 243);
+  --signal: rgb(45 212 191);
+  --lab: rgb(14 20 22);
+  --ink: rgb(226 236 236);
 
   --physics: rgb(129 140 248);
   --physics-soft: rgb(30 27 75);
@@ -124,8 +143,10 @@
 
 @theme inline {
   --font-sans:
-    var(--font-geist), Geist, system-ui, -apple-system, Segoe UI, Roboto,
+    var(--font-atkinson), var(--font-geist), system-ui, -apple-system, Segoe UI, Roboto,
     Noto Sans Ethiopic, sans-serif;
+  --font-dial: var(--font-shoulders), "Arial Narrow", sans-serif;
+  --font-legible: var(--font-atkinson), var(--font-geist), system-ui, Noto Sans Ethiopic, sans-serif;
   --font-heading:
     var(--font-bricolage), var(--font-geist), system-ui, -apple-system,
     Segoe UI, Roboto, Noto Sans Ethiopic, sans-serif;
@@ -168,6 +189,11 @@
   --color-sun-soft: var(--sun-soft);
   --color-subtle-foreground: var(--subtle-foreground);
   --color-deep: var(--deep);
+  --color-enamel: var(--enamel);
+  --color-enamel-foreground: var(--enamel-foreground);
+  --color-signal: var(--signal);
+  --color-lab: var(--lab);
+  --color-ink: var(--ink);
   --color-deep-foreground: var(--deep-foreground);
   --color-physics: var(--physics);
   --color-physics-soft: var(--physics-soft);
@@ -462,7 +488,7 @@
   font-size: 0.88em;
 }
 .lesson-prose pre {
-  background: var(--deep, #0b2e2b);
+  background: var(--deep, #0E3B4A);
   color: #e6f4f1;
   border-radius: 0.75rem;
   padding: 0.9rem 1rem;
@@ -486,4 +512,32 @@
   header, footer, nav, .no-print { display: none !important; }
   body { background: white !important; }
   .print-sheet { box-shadow: none !important; margin: 0 !important; }
+}
+
+/* ───────── "Tune in" landing ─────────
+   Static between radio stations: an SVG noise tile that jitters. With
+   reduced motion it stays still. */
+.radio-static {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .radio-static {
+    animation: static-jitter 0.25s steps(4) infinite;
+  }
+  .shake {
+    animation: shake 0.4s ease-in-out;
+  }
+}
+@keyframes static-jitter {
+  0% { background-position: 0 0; }
+  25% { background-position: -40px 30px; }
+  50% { background-position: 50px -20px; }
+  75% { background-position: -20px -50px; }
+  100% { background-position: 0 0; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
 }

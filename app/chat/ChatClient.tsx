@@ -190,16 +190,13 @@ export function ChatClient({
   return (
     <div>
       <header className="relative overflow-hidden bg-deep text-deep-foreground">
-        <div aria-hidden className="absolute inset-0 bg-grid text-primary-soft opacity-50" />
-        <div aria-hidden className="absolute -top-20 -right-16 size-60 rounded-full bg-primary/40 blur-3xl" />
-        <div aria-hidden className="absolute -bottom-24 left-1/4 size-48 rounded-full bg-sun/15 blur-3xl" />
         <div className="relative mx-auto max-w-3xl px-4 py-5 sm:py-6">
           <div className="flex items-center gap-3">
             <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-sun text-deep shadow-pop">
               <Sparkles className="size-5" aria-hidden />
             </span>
             <div className="min-w-0">
-              <h1 className="text-2xl leading-tight font-extrabold tracking-tight sm:text-3xl">{tr("chat.title")}</h1>
+              <h1 className="font-dial text-3xl leading-[0.95] font-extrabold sm:text-4xl">{tr("chat.title")}</h1>
               <p className="text-sm text-deep-foreground/75">{tr("chat.subtitle")}</p>
             </div>
           </div>

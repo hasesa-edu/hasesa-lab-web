@@ -49,11 +49,10 @@ export default async function ConceptPage({ params, searchParams }: Props) {
     return (
       <div>
         <header className="relative overflow-hidden bg-deep text-deep-foreground">
-          <div aria-hidden className="absolute inset-0 bg-grid text-primary-soft opacity-60" />
           <div className="relative mx-auto max-w-3xl px-4 pt-6 pb-9 sm:pt-8">
             <BackLink href={back.href}>{back.label}</BackLink>
-            <p className="mt-4 text-xs font-bold tracking-[0.16em] text-sun uppercase">Concept unit</p>
-            <h1 className="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{c.title}</h1>
+            <p className="mt-4 text-sm font-bold text-sun">Concept unit</p>
+            <h1 className="font-dial mt-2 text-5xl font-extrabold sm:text-7xl leading-[0.95]">{c.title}</h1>
             <p className="mt-3 text-lg text-deep-foreground/80">{c.summary}</p>
           </div>
         </header>
@@ -71,14 +70,12 @@ export default async function ConceptPage({ params, searchParams }: Props) {
   return (
     <article>
       <header className="relative overflow-hidden bg-deep text-deep-foreground">
-        <div aria-hidden className="absolute inset-0 bg-grid text-primary-soft opacity-60" />
-        <div aria-hidden className="absolute -top-24 -right-24 size-72 rounded-full bg-primary/40 blur-3xl" />
         <div className="relative mx-auto max-w-3xl px-4 pt-6 pb-9 sm:pt-8">
           <BackLink href={back.href}>{back.label}</BackLink>
-          <p className="mt-4 text-xs font-bold tracking-[0.16em] text-sun uppercase">
+          <p className="mt-4 text-sm font-bold text-sun">
             Concept unit{c.public && !full ? " · free sample" : ""}
           </p>
-          <h1 className="mt-2 text-4xl leading-tight font-extrabold tracking-tight text-balance sm:text-5xl">{c.title}</h1>
+          <h1 className="font-dial mt-2 text-5xl leading-[0.95] font-extrabold text-balance sm:text-7xl">{c.title}</h1>
           <p className="mt-3 text-lg text-deep-foreground/80">{c.summary}</p>
           <div className="mt-5 flex flex-wrap items-center gap-2">
             <StatusBadge status={c.status} onDark className="h-8 px-3 text-sm" />

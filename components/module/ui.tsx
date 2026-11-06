@@ -97,7 +97,6 @@ export function VideoEmbed({ video, title }: { video?: Video; title: string }) {
   } else {
     inner = (
       <div className="relative flex aspect-video flex-col items-center justify-center overflow-hidden rounded-xl bg-deep px-6 text-center text-deep-foreground">
-        <div aria-hidden className="absolute inset-0 bg-grid text-primary-soft opacity-40" />
         <span className="relative inline-flex size-12 items-center justify-center rounded-2xl bg-sun text-deep">
           <Clapperboard aria-hidden className="size-6" />
         </span>
@@ -121,8 +120,6 @@ export function VideoEmbed({ video, title }: { video?: Video; title: string }) {
 export function EnrolCard({ signedIn, next, className }: { signedIn: boolean; next?: string; className?: string }) {
   return (
     <div className={cn("relative overflow-hidden rounded-[1.5rem] bg-deep p-6 text-deep-foreground shadow-pop sm:p-8", className)}>
-      <div aria-hidden className="absolute inset-0 bg-grid text-primary-soft opacity-40" />
-      <div aria-hidden className="absolute -top-16 -right-16 size-48 rounded-full bg-primary/40 blur-3xl" />
       <div className="relative">
         <span className="inline-flex size-11 items-center justify-center rounded-2xl bg-sun text-deep">
           <Lock aria-hidden className="size-5" />

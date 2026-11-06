@@ -30,9 +30,6 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
 
   return (
     <div className="relative isolate flex min-h-[calc(100svh-61px)] items-center justify-center overflow-hidden bg-deep px-4 py-12 text-deep-foreground sm:py-16">
-      <div aria-hidden className="absolute inset-0 -z-10 bg-grid text-primary-soft opacity-50" />
-      <div aria-hidden className="absolute -top-40 -left-32 -z-10 size-[28rem] rounded-full bg-primary/50 blur-3xl" />
-      <div aria-hidden className="absolute -right-24 -bottom-24 -z-10 size-80 rounded-full bg-sun/25 blur-3xl" />
 
       <div className="w-full max-w-md">
         <Card className="relative overflow-hidden rounded-[1.75rem] bg-card text-center shadow-pop ring-1 ring-white/10 [--card-spacing:--spacing(7)]">
@@ -46,7 +43,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           <CardHeader className="relative gap-2 pt-3">
             <LogoMark size={88} className="mx-auto mb-3" />
             <CardTitle>
-              <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">Welcome to {BRAND}</h1>
+              <h1 className="font-dial text-4xl font-extrabold text-foreground sm:text-5xl leading-[0.95]">Welcome to {BRAND}</h1>
             </CardTitle>
             <CardDescription className="text-base">{MOTTO}</CardDescription>
             <div aria-hidden className="mx-auto mt-3 flex gap-2">

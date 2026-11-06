@@ -7,7 +7,6 @@ import {
   ChevronDownIcon,
   BoxesIcon,
   GraduationCapIcon,
-  HomeIcon,
   LogOutIcon,
   MenuIcon,
   MessageCircleIcon,
@@ -73,21 +72,23 @@ export function Nav() {
   const isActive = (href: string) =>
     href.includes("#") ? false : href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-  // Active link = teal-tinted pill; others are quiet until hovered.
+  // The bar is enamel on every page, so it runs into the hero on the home
+  // page and into the enamel page header everywhere else.
+  const onHome = pathname === "/";
+
+  // Active link = a teal signal line under it; others are quiet until hovered.
   const navLinkClass = (href: string) =>
     cn(
-      "inline-flex min-h-10 items-center rounded-full px-3.5 text-sm font-semibold transition-colors",
-      isActive(href)
-        ? "bg-primary-soft text-primary-strong dark:text-primary"
-        : "text-muted-foreground hover:bg-primary-soft/50 hover:text-primary-strong"
+      "relative inline-flex min-h-10 items-center px-3 font-legible text-[0.95rem] font-bold transition-colors",
+      "after:absolute after:inset-x-3 after:bottom-1 after:h-[3px] after:rounded-full after:bg-signal after:transition-transform",
+      isActive(href) ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-50",
+      isActive(href) ? "text-white" : "text-enamel-foreground/75 hover:text-white"
     );
 
   const mobileLinkClass = (href: string) =>
     cn(
-      "flex min-h-12 w-full items-center gap-3 rounded-xl px-3 text-base font-semibold transition-colors",
-      isActive(href)
-        ? "bg-primary-soft text-primary-strong dark:text-primary"
-        : "text-foreground hover:bg-primary-soft/50 hover:text-primary-strong"
+      "flex min-h-12 w-full items-center gap-3 rounded-xl border-l-4 px-3 font-legible text-base font-bold transition-colors",
+      isActive(href) ? "border-signal bg-signal/10 text-ink" : "border-transparent text-ink hover:bg-ink/5"
     );
 
   const signInClass = cn(
@@ -99,7 +100,6 @@ export function Nav() {
 
   const full = user?.access === "enrolled" || user?.access === "guide";
   const links: { href: string; label: string; icon: LucideIcon; show: boolean }[] = [
-    { href: "/", label: tr("nav.home"), icon: HomeIcon, show: true },
     { href: "/modules", label: tr("nav.experiments"), icon: BoxesIcon, show: true },
     { href: "/chat", label: tr("nav.assistant"), icon: MessageCircleIcon, show: full },
     { href: "/dashboard", label: tr("nav.dashboard"), icon: NotebookPenIcon, show: !!user },
@@ -109,9 +109,9 @@ export function Nav() {
   const mobileLinks = [...desktopLinks, { href: "/account", label: tr("nav.account"), icon: UserRoundIcon, show: true }];
 
   return (
-    <header className="sticky top-0 z-20 border-b border-border/70 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-      <div className="max-w-5xl mx-auto px-4 py-2.5 flex items-center gap-3 sm:gap-5">
-        <Logo />
+    <header className="sticky top-0 z-20 border-b border-white/10 bg-enamel text-enamel-foreground">
+      <div className={cn("mx-auto flex items-center gap-3 px-4 py-2.5 sm:gap-5", onHome ? "max-w-6xl" : "max-w-5xl")}>
+        <Logo tone="light" />
 
         <nav className="hidden md:flex items-center gap-1">
           {desktopLinks.map((l) => (
@@ -215,9 +215,6 @@ export function Nav() {
                 className="gap-0 overflow-y-auto bg-background p-0 [&>[data-slot=sheet-close]]:top-3 [&>[data-slot=sheet-close]]:right-3 [&>[data-slot=sheet-close]]:text-deep-foreground [&>[data-slot=sheet-close]:hover]:bg-white/10 [&>[data-slot=sheet-close]:hover]:text-deep-foreground"
               >
                 <SheetHeader className="relative overflow-hidden bg-deep px-5 pt-14 pb-6 text-deep-foreground">
-                  <div aria-hidden className="absolute inset-0 bg-grid text-primary-soft opacity-50" />
-                  <div aria-hidden className="absolute -top-16 -right-16 size-48 rounded-full bg-primary/50 blur-3xl" />
-                  <div aria-hidden className="absolute -bottom-20 -left-10 size-40 rounded-full bg-sun/20 blur-3xl" />
                   <div className="relative flex items-center gap-3">
                     <Avatar className="size-12 after:border-white/20">
                       <AvatarFallback className="bg-primary text-primary-foreground font-heading text-lg font-bold ring-2 ring-sun/70">
@@ -253,7 +250,7 @@ export function Nav() {
                         <span
                           className={cn(
                             "inline-flex size-8 shrink-0 items-center justify-center rounded-lg [&_svg]:size-4",
-                            active ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                            active ? "bg-signal text-white" : "bg-muted text-muted-foreground"
                           )}
                         >
                           <Icon aria-hidden />

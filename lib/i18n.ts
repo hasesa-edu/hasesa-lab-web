@@ -25,44 +25,41 @@ export const t: Dict = {
   "hero.tag": {
     en: "Reimagining Education for the AI Era",
   },
-  "hero.title.before": {
-    en: "Don't memorize. Build it.",
-  },
+  "hero.title.a": { en: "Don't memorize." },
+  "hero.title.b": { en: "Build it." },
   "hero.title.highlight": {
     en: "Learn by doing.",
   },
   "hero.sub": {
-    en: "Hands-on modules at Hasesa Academy. Build a radio, control a robot claw with your muscles, catch food fakers. The science and maths come when the project needs them.",
+    en: "Hasesa Academy is hands-on science for teenagers. Every module starts with a mystery and ends with something you built. Turn the dial to hear one.",
   },
   "hero.cta.lessons": { en: "See the modules" },
   "hero.cta.sample": { en: "Try a free unit" },
   "hero.cta.signup": { en: "Sign up with Google" },
   "hero.cta.dashboard": { en: "Go to my dashboard" },
-  "hero.free": {
-    en: "Browse free",
-  },
-  "hero.free.note": {
-    en: "Enrol at the Academy to start building.",
-  },
 
-  // Landing: why
-  "why.eyebrow": { en: "Why Hasesa" },
-  "why.title": { en: "School was built for another era." },
-  "why.sub": { en: "AI now handles much of the thinking work schools train for. What's left is what people bring: curiosity, judgment and the habit of figuring things out." },
-  "why.then.label": { en: "What school builds today" },
-  "why.then.1": { en: "One curriculum for everyone" },
-  "why.then.2": { en: "Fixed schedules and one pace" },
-  "why.then.3": { en: "Theory first, maybe practice later" },
-  "why.then.4": { en: "Memorization and exams" },
-  "why.now.label": { en: "What students will need" },
-  "why.now.1": { en: "Curiosity, and the habit of feeding it" },
-  "why.now.2": { en: "Learning by doing: experimenting, not memorizing" },
-  "why.now.3": { en: "Their own path, at their own pace" },
-  "why.now.4": { en: "Working with others, and with AI" },
+  // Can you solve it? (hero challenge)
+  "solve.eyebrow": { en: "A real case from" },
+  "solve.title": { en: "Can you solve it?" },
+  "solve.check": { en: "Check" },
+  "solve.solved": { en: "Solved" },
+  "solve.wrong": { en: "Not quite." },
+  "solve.tryAgain": { en: "Check your working and try again." },
+  "solve.open": { en: "Open the whole case" },
+  "solve.more": { en: "More problems like this" },
+
+  // Landing: why — the deck's story in three beats, for students and parents
+  "why.then.label": { en: "Then" },
+  "why.then.line": { en: "School was built for factories." },
+  "why.then.body": { en: "Same lessons, same pace and the same exam for everyone. Memorize it, write it down, move on." },
+  "why.now.label": { en: "Now" },
+  "why.now.line": { en: "AI can recall it faster than you." },
+  "why.now.body": { en: "Any phone can recite a formula or define density in a second. Remembering facts is no longer what makes you stand out." },
+  "why.next.label": { en: "Next" },
+  "why.next.line": { en: "So learn what AI can't do for you." },
+  "why.next.body": { en: "Get curious, build things, test them, work out why they failed and fix them, together with other people. That's what every Hasesa module trains." },
 
   // Landing: marquee, how it works, showcase
-  "landing.strip.label": { en: "What students do in our modules" },
-  "how.eyebrow": { en: "How a module works" },
   "how.title": { en: "Start by doing. The theory follows." },
   "how.1.title": { en: "Meet the mystery" },
   "how.1.body": { en: "Every module opens with something that makes you curious: a radio with no battery, a claw that obeys your muscles." },
@@ -72,18 +69,13 @@ export const t: Dict = {
   "how.3.body": { en: "At home, read the concept units the project needs and solve real problems. Already know one? Test out." },
   "how.4.title": { en: "Finish and get signed off" },
   "how.4.body": { en: "Make it work, explain how, and your guide signs you off with a certificate." },
-  "showcase.eyebrow": { en: "The modules" },
-  "showcase.title": { en: "Pick a mystery" },
+  "showcase.title": { en: "Three mysteries, on air now" },
   "showcase.sub": { en: "Each one is about 10 hours, mixing physics, chemistry, biology, maths and technology." },
-  "showcase.stat.modules": { en: "modules" },
-  "showcase.stat.hours": { en: "hours each" },
-  "showcase.stat.curriculum": { en: "curriculum topics" },
   "showcase.hours": { en: "hours" },
   "showcase.steps": { en: "steps" },
   "showcase.all": { en: "See every module" },
 
   // What you get at the Academy
-  "pillars.eyebrow": { en: "At the Academy" },
   "pillars.title": { en: "Everything a module needs." },
   "pillars.sub": { en: "Hands-on work with a guide, theory at your own pace, and help whenever you're stuck." },
   "pillars.hands.title": { en: "Hands-on" },
@@ -96,18 +88,8 @@ export const t: Dict = {
   "pillars.together.body": { en: "Builds happen in groups at the Academy, so you learn from each other as much as from the steps." },
   "pillars.ai.title": { en: "AI support" },
   "pillars.ai.body": { en: "A lab assistant that knows the step you're on and gives hints, not answers." },
-  "pillars.ai.mock.user": {
-    en: "How long should my radio's antenna be for a 1000 kHz station?",
-  },
-  "pillars.ai.mock.assistant1": {
-    en: "Start from the wavelength: divide the speed of light by the frequency. What do you get?",
-  },
-  "pillars.ai.mock.source": {
-    en: "Grounded in Radio, step 4",
-  },
 
   // For parents
-  "parents.eyebrow": { en: "For parents" },
   "parents.title": { en: "Fun, and it counts." },
   "parents.sub": { en: "Every module connects to the national curriculum, so what your child builds here shows up again in class and in exams." },
   "parents.curriculum.title": { en: "curriculum topics, used for real" },
@@ -118,7 +100,7 @@ export const t: Dict = {
   "parents.cert.body": { en: "Earned by making the build work and explaining how, not by sitting an exam." },
 
   // Partners
-  "partners.eyebrow": { en: "Our pilot partners" },
+  "partners.eyebrow": { en: "Piloted with" },
   "partners.sb.tag": {
     en: "Science communication by researchers-in-training.",
   },
