@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { groundingFor } from "@/lib/chat-context";
+import { groundingFor, isValidContext, studentContextFor } from "@/lib/chat-context";
 import { getAccess, hasFullAccess } from "@/lib/access";
 import type { Locale } from "@/lib/i18n";
 import { db, schema } from "@/lib/db/client";
@@ -37,7 +37,7 @@ function jsonError(status: number, error: string, code?: string, extra: Record<s
   });
 }
 
-function buildSystemPrompt(locale: Locale, context?: string): string {
+function buildSystemPrompt(locale: Locale, context?: string, student?: string | null): string {
   const langName = LANG_NAME[locale] ?? "English";
   const grounding = groundingFor(context);
 
@@ -66,9 +66,14 @@ LANGUAGE: Respond in ${langName}. Do not switch unless the student asks.`;
 
   if (!grounding) return base;
 
+  const aboutStudent = student
+    ? `\n\n---\nWHAT THIS STUDENT HAS DONE HERE (use it to meet them where they are; refer to it naturally, e.g. "in your notes you wrote…"):\n${student}\n\nPROBLEMS: when a student is stuck on a practice problem, give one hint at a time and check their working. Never state the final answer to a practice problem, even if asked directly.`
+    : "";
+
   return (
     base +
-    `\n\n---\nGROUNDING CONTEXT — the student is working on ${grounding.title}. Ground your answers in the material below. When you rely on a specific part of it, cite it at the end, e.g. "(Source: ${grounding.title})". If it doesn't cover the question, say so and answer from general science knowledge.\n\n${grounding.text}`
+    `\n\n---\nGROUNDING CONTEXT — the student is on the page for ${grounding.title} and is asking from there. Ground your answers in the material below. When you rely on a specific part of it, cite it at the end, e.g. "(Source: ${grounding.title})". If it doesn't cover the question, say so and answer from general science knowledge.\n\n${grounding.text}` +
+    aboutStudent
   );
 }
 
@@ -110,7 +115,7 @@ export async function POST(req: NextRequest) {
   };
 
   const { messages, locale = "en" } = body;
-  const context = groundingFor(body.context) ? (body.context as string) : undefined;
+  const context = isValidContext(body.context) ? body.context : undefined;
   let conversationId = body.conversationId;
   if (!Array.isArray(messages) || messages.length === 0) {
     return new Response(JSON.stringify({ error: "messages required" }), { status: 400 });
@@ -178,7 +183,8 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const systemPrompt = buildSystemPrompt(locale as Locale, context);
+  const student = context ? await studentContextFor(userId, context).catch(() => null) : null;
+  const systemPrompt = buildSystemPrompt(locale as Locale, context, student);
 
   let aiRes: Response | null = null;
   try {

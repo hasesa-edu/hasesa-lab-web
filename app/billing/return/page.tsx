@@ -62,9 +62,9 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
                 variant="ghost"
                 className="bg-white/10 text-deep-foreground ring-1 ring-white/15 hover:bg-white/20 hover:text-deep-foreground"
               >
-                <Link href="/chat">
+                <Link href="/dashboard">
                   <MessageCircleIcon />
-                  Ask the assistant
+                  Go to my dashboard
                 </Link>
               </Button>
             </div>
