@@ -10,6 +10,8 @@ import { BRAND } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 import { Markdown } from "@/components/Markdown";
 import { StepNotebook } from "@/components/module/StepNotebook";
+import { AskButton, AssistantPanel } from "@/components/assistant/AssistantPanel";
+import { stepContext } from "@/lib/chat-context";
 import { BackLink, HeaderChip, KIND_LABEL, SectionTitle, StatusBadge, UnitStatusPill, VideoEmbed } from "@/components/module/ui";
 
 export const dynamic = "force-dynamic";
@@ -47,7 +49,7 @@ export default async function StepPage({ params }: Props) {
   const ready = step.units.filter((u) => isUnitDone(unitStatus.get(u))).length;
 
   return (
-    <article>
+    <article data-ask-scope>
       <header className="relative overflow-hidden bg-deep text-deep-foreground">
         <div className="relative mx-auto max-w-6xl px-4 [&>*]:max-w-3xl pt-6 pb-9 sm:pt-8">
           <BackLink href={`/modules/${m.id}`}>← {m.title}</BackLink>
@@ -134,16 +136,12 @@ export default async function StepPage({ params }: Props) {
           prompt={NOTEBOOK_PROMPT[step.kind]}
         />
 
-        <Link
-          href={`/chat?module=${m.id}&step=${step.id}`}
-          className="group relative mt-10 flex items-center gap-4 overflow-hidden rounded-[1.5rem] bg-deep p-5 text-deep-foreground shadow-pop outline-none focus-visible:ring-3 focus-visible:ring-ring/50 sm:p-6"
+        <AskButton
+          prompt="I'm stuck on this step. "
+          className="mt-10 flex w-full items-center gap-3 border-y-2 border-ink py-5 text-left font-dial text-2xl font-bold hover:text-primary sm:text-3xl"
         >
-          <span className="relative inline-flex size-12 shrink-0 items-center justify-center rounded-2xl bg-sun text-deep">
-            <MessageCircle aria-hidden className="size-6" />
-          </span>
-          <span className="relative flex-1 font-dial text-2xl leading-snug font-bold sm:text-3xl">Stuck? Ask the lab assistant about this step</span>
-          <ArrowRight aria-hidden className="relative size-5 shrink-0 text-sun transition group-hover:translate-x-1" />
-        </Link>
+          Stuck? Ask the lab assistant. It can see this step and your notes.
+        </AskButton>
 
         <nav aria-label="Between steps" className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {prev ? <StepNav href={`/modules/${m.id}/${prev.id}`} label={`Step ${index}`} title={prev.title} dir="prev" /> : <div className="hidden sm:block" />}
@@ -154,6 +152,15 @@ export default async function StepPage({ params }: Props) {
           )}
         </nav>
       </div>
+      <AssistantPanel
+        context={stepContext(m.id, step.id)}
+        about={`step ${index + 1}, ${step.title}`}
+        suggestions={[
+          `Explain the science behind "${step.title}" simply.`,
+          "My build isn't working the way the step says. Help me find out why.",
+          "What should I write in my notebook for this step?",
+        ]}
+      />
     </article>
   );
 }
