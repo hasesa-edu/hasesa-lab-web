@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
 import { googleSignInHref } from "@/components/GoogleButton";
-import { LogoMark } from "@/components/Logo";
 import { SUBJECT_STYLES } from "@/components/Subject";
 import type { t as Dict } from "@/lib/i18n";
 import type { ModuleSummary } from "@/lib/content/types";
@@ -66,35 +65,33 @@ export function LandingClient({ modules, challenge }: { modules: ModuleSummary[]
 /* ─────────────────────────────  HERO  ───────────────────────────── */
 
 function Hero({ tr, stations, sampleHref }: { tr: TR; stations: Station[]; sampleHref: string }) {
+  // The radio (screen + dial) must fit on the first screen. On phones the
+  // intro and buttons move below the dial; on desktop they sit beside the
+  // headline.
   return (
     <section className="relative isolate overflow-hidden bg-enamel text-enamel-foreground">
       {/* a soft teal glow behind the dial, like a lit radio face */}
       <div aria-hidden className="absolute -bottom-40 left-1/2 -z-10 h-80 w-[70rem] -translate-x-1/2 rounded-[50%] bg-signal/25 blur-3xl" />
-      <div className="mx-auto max-w-6xl px-4 pt-14 pb-16 sm:pt-20 sm:pb-20">
-        <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
-          <h1 className="font-dial text-[4.2rem] leading-[0.86] font-extrabold tracking-tight text-white sm:text-[6.5rem] lg:text-[8rem]">
-            {tr("hero.title.a")}
-            <br />
-            <span className="text-sun">{tr("hero.title.b")}</span>
-          </h1>
-          <div className="lg:pb-3">
-            <p className="max-w-md text-lg leading-relaxed text-enamel-foreground/85">{tr("hero.sub")}</p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link href="/modules" className={cn(buttonVariants({ size: "lg" }), "bg-white font-bold text-enamel hover:bg-white/90")}>
-                {tr("hero.cta.lessons")}
-              </Link>
-              <Link
-                href={sampleHref}
-                className={cn(buttonVariants({ size: "lg", variant: "outline" }), "border-white/30 bg-transparent font-bold text-white hover:bg-white/10 hover:text-white")}
-              >
-                {tr("hero.cta.sample")}
-              </Link>
-            </div>
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-x-10 gap-y-4 px-4 pt-4 pb-12 sm:gap-y-6 sm:pt-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:pb-16">
+        <h1 className="font-dial text-[2.8rem] leading-[0.88] font-extrabold tracking-tight text-white sm:text-7xl lg:text-[5.6rem]">
+          {tr("hero.title.a")} <span className="text-sun">{tr("hero.title.b")}</span>
+        </h1>
+        <div className="order-3 lg:order-none lg:pb-2">
+          <p className="max-w-md text-lg leading-relaxed text-enamel-foreground/85">{tr("hero.sub")}</p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link href="/modules" className={cn(buttonVariants({ size: "lg" }), "bg-white font-bold text-enamel hover:bg-white/90")}>
+              {tr("hero.cta.lessons")}
+            </Link>
+            <Link
+              href={sampleHref}
+              className={cn(buttonVariants({ size: "lg", variant: "outline" }), "border-white/30 bg-transparent font-bold text-white hover:bg-white/10 hover:text-white")}
+            >
+              {tr("hero.cta.sample")}
+            </Link>
           </div>
         </div>
-
         {stations.length > 0 && (
-          <div className="mt-14">
+          <div className="order-2 min-w-0 lg:order-none lg:col-span-2 lg:mt-2">
             <TuningDial stations={stations} />
           </div>
         )}
@@ -106,31 +103,37 @@ function Hero({ tr, stations, sampleHref }: { tr: TR; stations: Station[]; sampl
 /* ───────────────────────────  WHY  ─────────────────────────── */
 
 function Why({ tr }: { tr: TR }) {
-  const then = ["why.then.1", "why.then.2", "why.then.3", "why.then.4"] as Key[];
-  const now = ["why.now.1", "why.now.2", "why.now.3", "why.now.4"] as Key[];
+  // Matched pairs: the same science, the way a typical class asks for it
+  // and the way a Hasesa module gets you there.
+  const pairs = [1, 2, 3, 4].map((n) => ({ then: `why.then.${n}` as Key, now: `why.now.${n}` as Key }));
   return (
     <section className="border-t-2 border-ink/10">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:py-28">
         <h2 className="max-w-3xl font-dial text-5xl leading-[0.95] font-bold sm:text-7xl">{tr("why.title")}</h2>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-ink/75">{tr("why.sub")}</p>
-        <div className="mt-14 grid gap-12 md:grid-cols-2 md:gap-0">
-          <div className="md:pr-12">
-            <h3 className="text-sm font-bold text-ink/55">{tr("why.then.label")}</h3>
-            <ul className="mt-4 space-y-3 text-xl text-ink/50">
-              {then.map((k) => (
-                <li key={k}>{tr(k)}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="border-signal md:border-l-4 md:pl-12">
-            <h3 className="text-sm font-bold text-signal">{tr("why.now.label")}</h3>
-            <ul className="mt-4 space-y-3 text-2xl leading-snug font-bold">
-              {now.map((k) => (
-                <li key={k}>{tr(k)}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        <table className="mt-12 w-full border-collapse text-left">
+          <thead>
+            <tr className="text-sm font-bold">
+              <th scope="col" className="pb-3 text-ink/55 md:w-1/2 md:pr-10">
+                {tr("why.then.label")}
+              </th>
+              <th scope="col" className="hidden pb-3 text-signal md:table-cell md:pl-10">
+                {tr("why.now.label")}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {pairs.map((p) => (
+              <tr key={p.then} className="flex flex-col border-t-2 border-ink/10 py-5 md:table-row md:py-0">
+                <td className="text-lg text-ink/55 md:py-6 md:pr-10 md:align-top">{tr(p.then)}</td>
+                <td className="mt-2 text-xl leading-snug font-bold md:mt-0 md:border-l-4 md:border-signal md:py-6 md:pl-10 md:align-top md:text-2xl">
+                  <span className="mr-2 text-sm font-bold text-signal md:hidden">{tr("why.now.label")}:</span>
+                  {tr(p.now)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </section>
   );
@@ -342,7 +345,6 @@ function FinalCta({ tr, primaryHref, primaryLabel }: { tr: TR; primaryHref: stri
   return (
     <section className="mx-auto max-w-6xl px-4 pb-8">
       <div className="relative overflow-hidden rounded-3xl bg-sun px-6 py-14 sm:px-12 sm:py-20">
-        <LogoMark size={240} className="pointer-events-none absolute right-10 bottom-10 hidden lg:block" />
         <h2 className="relative max-w-2xl font-dial text-6xl leading-[0.9] font-extrabold text-ink sm:text-8xl">{tr("cta.title")}</h2>
         <p className="relative mt-5 max-w-lg text-lg text-ink/80">{tr("cta.sub")}</p>
         <div className="relative mt-8 flex flex-wrap gap-3">
