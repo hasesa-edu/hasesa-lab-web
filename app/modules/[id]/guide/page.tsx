@@ -3,7 +3,8 @@ import { notFound, redirect } from "next/navigation";
 import { getModule } from "@/lib/content";
 import { getAccess } from "@/lib/access";
 import { BRAND } from "@/lib/brand";
-import { Markdown } from "@/components/Markdown";
+import { PhasedContent } from "@/components/module/PhasedContent";
+import { splitSections } from "@/lib/content/sections";
 import { BackLink, StatusBadge } from "@/components/module/ui";
 
 export const dynamic = "force-dynamic";
@@ -36,7 +37,11 @@ export default async function GuideVersionPage({ params }: Props) {
         </div>
       </header>
       <div className="mx-auto max-w-6xl px-4 [&>*]:max-w-3xl pt-8 pb-16">
-        <Markdown>{m.guide}</Markdown>
+        <PhasedContent
+          sections={splitSections(m.guide, "Overview")}
+          storageKey={`guide/${m.id}`}
+          finish={{ label: "Back to the module", href: `/modules/${m.id}` }}
+        />
       </div>
     </article>
   );
