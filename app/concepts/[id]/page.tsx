@@ -14,7 +14,7 @@ import { SUBJECT_STYLES } from "@/components/Subject";
 import { ProblemSet } from "@/components/module/ProblemSet";
 import { PhasedContent } from "@/components/module/PhasedContent";
 import { splitSections } from "@/lib/content/sections";
-import { AskButton, AssistantPanel } from "@/components/assistant/AssistantPanel";
+import { AssistantPanel } from "@/components/assistant/AssistantPanel";
 import { conceptContext } from "@/lib/chat-context";
 import { BackLink, EnrolCard, SectionTitle, StatusBadge } from "@/components/module/ui";
 
@@ -107,14 +107,6 @@ export default async function ConceptPage({ params, searchParams }: Props) {
           canSave={!!access.userId}
         />
 
-        {full && (
-          <AskButton
-            prompt="Can you explain this another way? "
-            className="mt-10 flex w-full items-center gap-3 border-y-2 border-ink py-4 text-left font-bold hover:text-primary"
-          >
-            Ask the lab assistant to explain this another way. It knows which problems you&apos;re stuck on.
-          </AskButton>
-        )}
 
         <div className="mt-16 grid gap-10 sm:grid-cols-2">
           {usage.length > 0 && (
