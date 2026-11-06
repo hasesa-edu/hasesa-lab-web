@@ -60,11 +60,11 @@ export function SolveIt({ challenge, labels }: { challenge: Challenge; labels: R
         <h2 className="font-dial text-5xl leading-none font-bold text-ink sm:text-6xl">{labels.title}</h2>
         <p className="mt-4 max-w-md text-lg leading-relaxed text-ink/75">
           {labels.eyebrow}{" "}
-          <Link href={`/modules/${challenge.moduleId}`} className="font-bold text-signal underline underline-offset-4">
+          <Link href={`/modules/${challenge.moduleId}`} className="font-bold text-primary underline underline-offset-4">
             {challenge.moduleTitle}
           </Link>
           , from the free unit{" "}
-          <Link href={`/concepts/${challenge.unitId}`} className="font-bold text-signal underline underline-offset-4">
+          <Link href={`/concepts/${challenge.unitId}`} className="font-bold text-primary underline underline-offset-4">
             {challenge.unitTitle}
           </Link>
           .
