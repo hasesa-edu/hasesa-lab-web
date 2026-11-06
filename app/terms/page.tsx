@@ -19,9 +19,13 @@ export default function TermsPage() {
         <li>One account is for one student. Don't share your account or resell access.</li>
       </ul>
 
-      <h2>Free access</h2>
+      <h2>Access</h2>
       <ul>
-        <li>{BRAND} is free. Once you sign in, every experiment guide, demo video and the AI lab assistant are open to you.</li>
+        <li>
+          Anyone can browse the modules and try the free sample concept units. Full modules, every concept unit, the AI lab
+          assistant, guide feedback and certificates are for students enrolled at the {BRAND} Academy.
+        </li>
+        <li>Enrolment is arranged and paid with the Academy directly. It runs until the date shown on your account page.</li>
         <li>
           The lab assistant has a fair-use limit of {PLAN.dailyChatCap} messages a day, which resets at midnight Addis Ababa time.
         </li>
@@ -30,14 +34,14 @@ export default function TermsPage() {
       <h2>Safety</h2>
       <ul>
         <li>
-          Experiments use everyday materials, but heat, sharp tools, electricity and chemicals can still hurt you. Follow every safety
-          note in the guide, and have an adult present whenever a guide says so.
+          Modules use real tools and materials. Heat, sharp tools, electricity and chemicals can still hurt you. Follow every safety
+          note and your guide&apos;s instructions, and do hands-on work at the Academy or with an adult present.
         </li>
         <li>
           The AI lab assistant can make mistakes. It does not replace a teacher, a doctor or the safety notes in the guide. In an
           emergency, stop and get an adult or medical help.
         </li>
-        <li>You use the experiments at your own risk, to the extent the law allows.</li>
+        <li>You do the activities at your own risk, to the extent the law allows.</li>
       </ul>
 
       <h2>Acceptable use</h2>

@@ -48,14 +48,14 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
             </span>
             <h1 className="mt-5 text-4xl font-extrabold tracking-tight sm:text-5xl">You're in!</h1>
             <p className="mx-auto mt-3 max-w-sm text-deep-foreground/80">
-              Your {BRAND} pass is active{ent?.paidUntil ? " until " : ""}
-              {ent?.paidUntil && <strong className="font-semibold text-sun">{formatDate(ent.paidUntil)}</strong>}. Every guide
-              and the lab assistant are unlocked.
+              Your {BRAND} Academy enrolment is active{ent?.paidUntil ? " until " : ""}
+              {ent?.paidUntil && <strong className="font-semibold text-sun">{formatDate(ent.paidUntil)}</strong>}. Every module,
+              concept unit and the lab assistant are unlocked.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <Button asChild size="lg" className="bg-sun font-semibold text-deep shadow-pop hover:bg-sun/90">
-                <Link href="/experiments">
-                  Browse experiments
+                <Link href="/modules">
+                  Browse modules
                   <ArrowRightIcon />
                 </Link>
               </Button>

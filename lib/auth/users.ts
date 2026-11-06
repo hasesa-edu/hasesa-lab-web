@@ -1,28 +1,14 @@
 import { db, schema } from "@/lib/db/client";
 import { and, eq, isNull, ne } from "drizzle-orm";
 import type { Locale } from "@/lib/i18n";
-import { SUBJECTS, isGrade, type Grade, type Subject } from "@/lib/subjects";
+import { accessFrom, type AccessLevel } from "@/lib/access-rules";
 
-const VALID_SUBJECTS = new Set<string>(SUBJECTS.map((s) => s.id));
 const VALID_LOCALES = new Set<string>(["en"]);
 const MAX_TEXT = 120;
-const MAX_SUBJECTS = 8;
 
 function capStr(v: unknown, max = MAX_TEXT): string | undefined {
   if (typeof v !== "string") return undefined;
   return v.trim().slice(0, max);
-}
-
-function cleanSubjects(v: unknown): Subject[] | undefined {
-  if (!Array.isArray(v)) return undefined;
-  return v
-    .filter((x): x is Subject => typeof x === "string" && VALID_SUBJECTS.has(x))
-    .slice(0, MAX_SUBJECTS);
-}
-
-function cleanGrade(v: unknown): Grade | null | undefined {
-  if (v === null) return null;
-  return isGrade(v) ? v : undefined;
 }
 
 export type UserDTO = {
@@ -34,11 +20,12 @@ export type UserDTO = {
   school?: string | null;
   under18: boolean;
   extendedRetention: boolean;
-  subjects: Subject[];
-  grade: Grade | null;
   avatarUrl: string | null;
-  /** ISO timestamp the paid pass ends, or null if the student never paid. */
+  /** ISO timestamp the Academy enrolment ends, or null if never enrolled. */
   paidUntil: string | null;
+  role: "student" | "guide";
+  /** signed-in, enrolled or guide. */
+  access: Exclude<AccessLevel, "public">;
 };
 
 /**
@@ -124,18 +111,16 @@ export async function getUserDTO(userId: string): Promise<UserDTO | null> {
     school: u.school,
     under18: u.under18,
     extendedRetention: u.extendedRetention,
-    subjects: ((u.subjects ?? []) as string[]).filter((s): s is Subject => VALID_SUBJECTS.has(s)),
-    grade: isGrade(u.grade) ? u.grade : null,
     avatarUrl: u.avatarUrl,
     paidUntil: u.paidUntil ? u.paidUntil.toISOString() : null,
+    role: u.role === "guide" ? "guide" : "student",
+    access: accessFrom(u).level as Exclude<AccessLevel, "public">,
   };
 }
 
 export async function updateUserProfile(
   userId: string,
   patch: {
-    subjects?: Subject[];
-    grade?: Grade | null;
     language?: Locale;
     region?: string;
     school?: string;
@@ -143,14 +128,6 @@ export async function updateUserProfile(
   }
 ) {
   const set: Record<string, unknown> = {};
-  if (patch.subjects !== undefined) {
-    const s = cleanSubjects(patch.subjects);
-    if (s !== undefined) set.subjects = s;
-  }
-  if (patch.grade !== undefined) {
-    const g = cleanGrade(patch.grade);
-    if (g !== undefined) set.grade = g;
-  }
   if (patch.language !== undefined && VALID_LOCALES.has(patch.language as string)) {
     set.language = patch.language;
   }

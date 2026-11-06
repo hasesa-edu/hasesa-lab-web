@@ -72,7 +72,7 @@ export default async function OG() {
             fontWeight: 400,
           }}
         >
-          An at-home experiment for every lesson, plus a tutor that learns at your pace.
+          Start by doing. Build a radio, control a robot claw, catch food fakers.
         </div>
 
         {/* Footer row */}
@@ -102,7 +102,7 @@ export default async function OG() {
             }}
           >
             <div style={{ width: 8, height: 8, borderRadius: 999, background: "#f59e0b" }} />
-            Free · Grades 9–12
+            Hands-on Academy modules
           </div>
         </div>
       </div>

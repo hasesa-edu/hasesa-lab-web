@@ -1,8 +1,7 @@
-import { getCatalog } from "@/lib/experiments";
+import { getModules, summarize } from "@/lib/content";
 import { LandingClient } from "./LandingClient";
 
-// Server wrapper: reads the catalogue once so the landing page can show real
-// experiments without shipping full guide content to the browser.
+// Server wrapper: passes module summaries (never step or answer content) to the landing page.
 export default function Home() {
-  return <LandingClient catalog={getCatalog()} />;
+  return <LandingClient modules={getModules().map(summarize)} />;
 }

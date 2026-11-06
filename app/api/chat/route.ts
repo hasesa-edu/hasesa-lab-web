@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
-import { getExperiment, subjectMeta, type Experiment } from "@/lib/experiments";
+import { groundingFor } from "@/lib/chat-context";
+import { getAccess, hasFullAccess } from "@/lib/access";
 import type { Locale } from "@/lib/i18n";
-import { getSession } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
 import { and, eq } from "drizzle-orm";
 import { checkAndIncrement, refundUsage } from "@/lib/usage";
@@ -37,69 +37,38 @@ function jsonError(status: number, error: string, code?: string, extra: Record<s
   });
 }
 
-function experimentContext(exp: Experiment): string {
-  const concept = exp.concept.map((c) => `## ${c.heading}\n${c.body}`).join("\n\n");
-  const materials = exp.materials.map((m) => `- ${m.item}${m.localNote ? ` (${m.localNote})` : ""}`).join("\n");
-  const safety = exp.safety.map((s) => `- ${s}`).join("\n");
-  const steps = exp.steps.map((s, i) => `Step ${i + 1}: ${s.text}${s.tip ? ` (Tip: ${s.tip})` : ""}`).join("\n");
-  const troubleshooting = exp.troubleshooting.map((t) => `- Problem: ${t.problem}\n  Fix: ${t.fix}`).join("\n");
-  return `# ${exp.title}
-Grade ${exp.grade} ${subjectMeta(exp.subject).label} · ${exp.unit}
-${exp.summary}
-
-## Background concepts
-${concept}
-
-## Materials
-${materials}
-
-## Safety
-${safety}
-
-## Procedure
-${steps}
-
-## What the student should observe
-${exp.observe}
-
-## Why it happens
-${exp.explanation}
-
-## Troubleshooting
-${troubleshooting}`;
-}
-
-function buildSystemPrompt(locale: Locale, experimentId?: string): string {
+function buildSystemPrompt(locale: Locale, context?: string): string {
   const langName = LANG_NAME[locale] ?? "English";
-  const exp = experimentId ? getExperiment(experimentId) : undefined;
+  const grounding = groundingFor(context);
 
-  const base = `You are the Hasesa assistant for Ethiopian high school students (grades 9–12). Students do hands-on science experiments on their own, using cheap, locally available materials, by following step-by-step guides and pre-recorded videos. Your job is to help them while they do that: explain the science behind an experiment, help them work out why it didn't go as expected, and help them make sense of what they observed.
+  const base = `You are the Hasesa lab assistant for high-school students at Hasesa Academy in Ethiopia. Students learn through project modules: they start by doing (building a radio, controlling a robot claw with their muscles, solving a food-adulteration mystery) and learn the science and maths when the project needs it. Builds happen at the Academy with a guide; at home students read concept units and solve problems. Your job: explain concepts, help them reason through problems, help them work out why a build or test didn't go as expected, and help them make sense of what they observed.
 
-YOUR SCOPE — strictly Biology, Chemistry and Physics at the grade 9–12 level, with a focus on experiments and the concepts behind them.
+YOUR SCOPE — science, maths and technology at high-school level, with a focus on the student's module, its experiments and the concepts behind them.
 
-If a question is outside this scope (entertainment, politics, personal life, harmful content, other school subjects), politely decline in one sentence and steer back to the experiment or the science.
+If a question is outside this scope (entertainment, politics, personal life, harmful content, other school subjects), politely decline in one sentence and steer back to the module or the science.
 
 HOW TO HELP:
 - Be encouraging, clear and concise. Short paragraphs.
 - Explain *why*, not just *what*. Connect what the student sees to the underlying concept.
 - When a student says something went wrong, ask what they did or saw if it's unclear, then suggest the most likely cause and one concrete thing to try next.
-- Ask guiding questions so the student does the thinking — don't just hand over the answer.
+- Ask guiding questions so the student does the thinking — don't just hand over the answer. For practice problems, give hints and check their reasoning; don't just state the final number.
 - Use simple language; define jargon the first time.
 - Use plain-text formulas (e.g. "v = u + at"). Avoid LaTeX — many students use low-end Android phones.
 
 SAFETY FIRST:
 - Never suggest dangerous substitutions, stronger chemicals, higher voltages, open flames or bigger quantities than the guide uses.
-- For anything involving heat, sharp tools, mains electricity or chemicals such as alcohol, hydrogen peroxide, ash water or iodine, remind the student to have an adult present.
+- For anything involving heat, sharp tools, electricity, raw meat or chemicals such as iodine, remind the student to do it at the Academy with the guide, or with an adult present.
+- Never help connect anything to mains electricity. Electrodes on the body are battery-only.
 - If a student describes an injury, a burn, a chemical in the eyes or something swallowed, tell them to stop, rinse with plenty of clean water if relevant, and get an adult or medical help immediately.
 - Never produce harmful, age-inappropriate or politically charged content.
 
 LANGUAGE: Respond in ${langName}. Do not switch unless the student asks.`;
 
-  if (!exp) return base;
+  if (!grounding) return base;
 
   return (
     base +
-    `\n\n---\nGROUNDING CONTEXT — the student is working on the experiment below. Ground your answers in this guide. When you rely on a specific step, safety note or troubleshooting tip, cite it at the end, e.g. "(Source: ${exp.title}, step 3)" or "(Source: ${exp.title}, troubleshooting)". If the guide doesn't cover the question, say so and answer from general science knowledge.\n\n${experimentContext(exp)}`
+    `\n\n---\nGROUNDING CONTEXT — the student is working on ${grounding.title}. Ground your answers in the material below. When you rely on a specific part of it, cite it at the end, e.g. "(Source: ${grounding.title})". If it doesn't cover the question, say so and answer from general science knowledge.\n\n${grounding.text}`
   );
 }
 
@@ -112,10 +81,11 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  // The assistant is free, but students must be signed in.
-  const session = await getSession();
-  const userId = session.userId;
-  if (!userId) return jsonError(401, "Please sign in to use the lab assistant.", "signin");
+  // The assistant is for enrolled students and the guide.
+  const access = await getAccess();
+  if (!access.userId) return jsonError(401, "Please sign in to use the lab assistant.", "signin");
+  if (!hasFullAccess(access)) return jsonError(403, "The lab assistant is for students enrolled at the Academy.", "enrol");
+  const userId = access.userId;
 
   // Throttle every caller so the endpoint can't be looped to
   // burn AI provider quota. 20 requests per IP per 5 minutes.
@@ -134,15 +104,13 @@ export async function POST(req: NextRequest) {
   const body = parsed.data as {
     messages: Msg[];
     locale?: Locale;
-    experimentId?: string;
-    /** Legacy alias for experimentId. */
-    lessonId?: string;
+    /** "m:<module>/<step>" or "c:<concept>"; see lib/chat-context. */
+    context?: string;
     conversationId?: string;
   };
 
   const { messages, locale = "en" } = body;
-  const requestedId = body.experimentId ?? body.lessonId;
-  const experimentId = typeof requestedId === "string" && getExperiment(requestedId) ? requestedId : undefined;
+  const context = groundingFor(body.context) ? (body.context as string) : undefined;
   let conversationId = body.conversationId;
   if (!Array.isArray(messages) || messages.length === 0) {
     return new Response(JSON.stringify({ error: "messages required" }), { status: 400 });
@@ -191,7 +159,7 @@ export async function POST(req: NextRequest) {
 
   if (!conversationId) {
     conversationId = uid();
-    await db.insert(schema.conversations).values({ id: conversationId, userId, lessonId: experimentId ?? null });
+    await db.insert(schema.conversations).values({ id: conversationId, userId, lessonId: context ?? null });
   } else {
     await db
       .update(schema.conversations)
@@ -210,7 +178,7 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const systemPrompt = buildSystemPrompt(locale as Locale, experimentId);
+  const systemPrompt = buildSystemPrompt(locale as Locale, context);
 
   let aiRes: Response | null = null;
   try {

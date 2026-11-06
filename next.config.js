@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Course content is read from content/ at runtime; ship it with the server functions.
+  outputFileTracingIncludes: { "/**": ["./content/**/*"] },
   images: {
     // Logos/screenshots — no need to generate 3840-wide variants.
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
@@ -7,10 +9,13 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
   },
   async redirects() {
-    // Old exam-prep routes. /lessons IDs were kept as experiment IDs.
+    // Retired routes: the old exam-prep pages, then the grade 9–12 experiment catalogue.
     return [
-      { source: "/lessons", destination: "/experiments", permanent: true },
-      { source: "/lessons/:id", destination: "/experiments/:id", permanent: true },
+      { source: "/lessons", destination: "/modules", permanent: true },
+      { source: "/lessons/:id", destination: "/modules", permanent: true },
+      { source: "/experiments", destination: "/modules", permanent: true },
+      { source: "/experiments/:id", destination: "/modules", permanent: true },
+      { source: "/onboarding", destination: "/dashboard", permanent: false },
       { source: "/teacher", destination: "/dashboard", permanent: false },
       { source: "/join", destination: "/dashboard", permanent: false },
       { source: "/mock/:subject", destination: "/dashboard", permanent: false },

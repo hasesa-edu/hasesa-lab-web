@@ -8,7 +8,7 @@ import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LogoMark } from "@/components/Logo";
 import { SubjectTile } from "@/components/Subject";
-import { SUBJECTS } from "@/lib/subjects";
+const SUBJECTS = [{ id: "physics" }, { id: "chemistry" }, { id: "biology" }] as const;
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const metadata: Metadata = { title: `Sign in · ${BRAND}` };

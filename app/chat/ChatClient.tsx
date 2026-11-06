@@ -1,7 +1,7 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -9,24 +9,24 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import { useLocale } from "@/components/LocaleProvider";
-import type { CatalogItem } from "@/lib/subjects";
 import { ArrowDown, ArrowRight, FlaskConical, SendHorizontal, Sparkles } from "lucide-react";
-import { SubjectIcon } from "@/components/Subject";
 import { cn } from "@/lib/utils";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { NativeSelect, NativeSelectOptGroup, NativeSelectOption } from "@/components/ui/native-select";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
 class ChatError extends Error {}
 
+type ContextOption = { value: string; label: string; href: string; group: string };
+
 const GENERAL_SUGGESTIONS: { emoji: string; text: string }[] = [
-  { emoji: "🍓", text: "My strawberry DNA isn't clumping. What could have gone wrong?" },
-  { emoji: "🔋", text: "Why does a lemon battery need two different metals?" },
-  { emoji: "🧪", text: "What household things can I safely use as a pH indicator?" },
+  { emoji: "📻", text: "How can a crystal radio play sound without a battery?" },
+  { emoji: "💪", text: "How does my brain tell a muscle to move?" },
+  { emoji: "🍯", text: "How can density tell real honey from fake honey?" },
 ];
 
 // Wide tables scroll sideways inside the bubble instead of stretching it.
@@ -38,40 +38,47 @@ const MD_COMPONENTS = {
   ),
 };
 
-function experimentSuggestions(title: string): { emoji: string; text: string }[] {
+function contextSuggestions(opt: ContextOption): { emoji: string; text: string }[] {
+  if (opt.value.startsWith("c:")) {
+    return [
+      { emoji: "💡", text: `Explain "${opt.label}" in simple words, with an everyday example.` },
+      { emoji: "🧩", text: "I'm stuck on one of the problems. Can you give me a hint, not the answer?" },
+      { emoji: "🔗", text: "Where does this show up in real life and in my module?" },
+    ];
+  }
   return [
-    { emoji: "💡", text: `Explain the science behind "${title}" in simple words.` },
-    { emoji: "🛠️", text: "My result doesn't match what the guide says. Help me figure out why." },
-    { emoji: "🔁", text: "What could I change to turn this into my own fair test?" },
+    { emoji: "💡", text: `Explain the science behind "${opt.label.replace(/^\d+\.\s*/, "")}" in simple words.` },
+    { emoji: "🛠️", text: "My build isn't working the way the step says. Help me figure out why." },
+    { emoji: "🔁", text: "What could I change to make this work better?" },
   ];
 }
 
-export function ChatClient({ catalog, remainingToday, dailyCap }: { catalog: CatalogItem[]; remainingToday: number; dailyCap: number }) {
-  return (
-    <Suspense fallback={<ChatLoading />}>
-      <ChatInner catalog={catalog} initialRemaining={remainingToday} dailyCap={dailyCap} />
-    </Suspense>
-  );
+function hrefFor(value: string): string {
+  if (value.startsWith("m:")) {
+    const [m, s] = value.slice(2).split("/");
+    return `/chat?module=${encodeURIComponent(m)}&step=${encodeURIComponent(s)}`;
+  }
+  if (value.startsWith("c:")) return `/chat?concept=${encodeURIComponent(value.slice(2))}`;
+  return "/chat";
 }
 
-function ChatLoading() {
-  const { tr } = useLocale();
-  return (
-    <div>
-      <div aria-hidden className="h-[132px] bg-deep sm:h-[140px]" />
-      <div className="max-w-3xl mx-auto px-4 py-10 text-subtle-foreground">{tr("common.loading")}</div>
-    </div>
-  );
-}
-
-function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogItem[]; initialRemaining: number; dailyCap: number }) {
-  const params = useSearchParams();
+export function ChatClient({
+  options,
+  initialContext,
+  remainingToday,
+  dailyCap,
+}: {
+  options: ContextOption[];
+  initialContext: string;
+  remainingToday: number;
+  dailyCap: number;
+}) {
   const router = useRouter();
-  const wanted = params.get("experiment") || params.get("lesson") || "";
-  const experiment = catalog.find((e) => e.id === wanted);
-  const [remaining, setRemaining] = useState(initialRemaining);
-  const experimentId = experiment?.id;
-  const suggestions = experiment ? experimentSuggestions(experiment.title) : GENERAL_SUGGESTIONS;
+  const [context, setContext] = useState(initialContext);
+  const selected = options.find((o) => o.value === context);
+  const [remaining, setRemaining] = useState(remainingToday);
+  const suggestions = selected ? contextSuggestions(selected) : GENERAL_SUGGESTIONS;
+  const groups = [...new Set(options.map((o) => o.group))];
 
   const { locale, tr } = useLocale();
   const [messages, setMessages] = useState<Msg[]>([]);
@@ -102,15 +109,16 @@ function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogIt
     }
   }, [messages]);
 
-  // Switching experiment starts a fresh conversation with new grounding.
+  // Switching context starts a fresh conversation with new grounding.
   useEffect(() => {
     setMessages([]);
     setError(null);
     conversationIdRef.current = undefined;
-  }, [experimentId]);
+  }, [context]);
 
-  function pickExperiment(id: string) {
-    router.replace(id ? `/chat?experiment=${encodeURIComponent(id)}` : "/chat", { scroll: false });
+  function pickContext(value: string) {
+    setContext(value);
+    router.replace(hrefFor(value), { scroll: false });
   }
 
   function jumpToBottom() {
@@ -136,7 +144,7 @@ function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogIt
         body: JSON.stringify({
           messages: newMessages,
           locale,
-          experimentId,
+          context: context || undefined,
           conversationId: conversationIdRef.current,
         }),
       });
@@ -196,35 +204,37 @@ function ChatInner({ catalog, initialRemaining, dailyCap }: { catalog: CatalogIt
             </div>
           </div>
           <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1.5">
-            <Label htmlFor="experiment-picker" className="text-xs font-semibold text-deep-foreground/80">
-              {experiment ? (
-                <SubjectIcon subject={experiment.subject} className="size-3.5 text-sun" />
-              ) : (
-                <FlaskConical className="size-3.5 text-sun" aria-hidden />
-              )}
+            <Label htmlFor="context-picker" className="text-xs font-semibold text-deep-foreground/80">
+              <FlaskConical className="size-3.5 text-sun" aria-hidden />
               {tr("chat.pickLabel")}
             </Label>
             <NativeSelect
-              id="experiment-picker"
-              value={experimentId ?? ""}
-              onChange={(e) => pickExperiment(e.target.value)}
+              id="context-picker"
+              value={context}
+              onChange={(e) => pickContext(e.target.value)}
               disabled={busy}
               className="w-full max-w-full sm:w-auto sm:max-w-md"
             >
               <NativeSelectOption value="">{tr("chat.pickNone")}</NativeSelectOption>
-              {catalog.map((e) => (
-                <NativeSelectOption key={e.id} value={e.id}>
-                  G{e.grade} · {e.title}
-                </NativeSelectOption>
+              {groups.map((g) => (
+                <NativeSelectOptGroup key={g} label={g}>
+                  {options
+                    .filter((o) => o.group === g)
+                    .map((o) => (
+                      <NativeSelectOption key={o.value} value={o.value}>
+                        {o.label}
+                      </NativeSelectOption>
+                    ))}
+                </NativeSelectOptGroup>
               ))}
             </NativeSelect>
-            {experiment && (
+            {selected && (
               <Button
                 asChild
                 variant="link"
                 className="px-1 text-xs text-sun underline hover:text-sun/80"
               >
-                <Link href={`/experiments/${experiment.id}`}>
+                <Link href={selected.href}>
                   {tr("chat.viewExperiment")} <ArrowRight aria-hidden />
                 </Link>
               </Button>
