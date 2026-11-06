@@ -17,7 +17,7 @@ export function LogoMark({
   tone?: "brand" | "light";
   className?: string;
 }) {
-  const ink = tone === "light" ? "var(--primary-soft)" : "var(--primary)";
+  const ink = tone === "light" ? "var(--primary-soft)" : "var(--signal)";
   return (
     <svg
       width={size}

@@ -125,7 +125,7 @@ function Why({ tr }: { tr: TR }) {
                     last ? "bg-sun" : "bg-signal"
                   )}
                 />
-                <p className={cn("text-sm font-bold", last ? "text-chemistry" : "text-signal")}>{tr(b.label)}</p>
+                <p className={cn("text-sm font-bold", last ? "text-chemistry" : "text-primary")}>{tr(b.label)}</p>
                 <h2
                   className={cn(
                     "mt-1 max-w-4xl font-dial leading-[0.95] font-bold",
@@ -155,7 +155,7 @@ function Modules({ tr, stations }: { tr: TR; stations: Station[] }) {
             <h2 className="font-dial text-5xl leading-none font-bold sm:text-7xl">{tr("showcase.title")}</h2>
             <p className="mt-4 max-w-xl text-lg text-ink/75">{tr("showcase.sub")}</p>
           </div>
-          <Link href="/modules" className="font-bold text-signal underline underline-offset-4">
+          <Link href="/modules" className="font-bold text-primary underline underline-offset-4">
             {tr("showcase.all")}
           </Link>
         </div>
@@ -168,12 +168,12 @@ function Modules({ tr, stations }: { tr: TR; stations: Station[] }) {
                 href={`/modules/${m.id}`}
                 className="group grid gap-x-8 gap-y-3 py-8 outline-none focus-visible:bg-lab sm:grid-cols-[7rem_1fr] lg:grid-cols-[7rem_1.1fr_1fr_auto] lg:items-baseline"
               >
-                <span className="font-dial text-4xl font-bold text-sun tabular-nums">
+                <span className="font-dial text-4xl font-bold text-primary tabular-nums">
                   {khz}
                   <span className="ml-1 text-base font-medium text-ink/50">kHz</span>
                 </span>
                 <span>
-                  <span className="block font-dial text-4xl leading-none font-bold transition-colors group-hover:text-signal sm:text-5xl">
+                  <span className="block font-dial text-4xl leading-none font-bold transition-colors group-hover:text-primary sm:text-5xl">
                     {m.title}
                   </span>
                   <span className="mt-2 block text-ink/75">{m.tagline}</span>
@@ -278,7 +278,7 @@ function Parents({ tr, modules, sampleHref }: { tr: TR; modules: ModuleSummary[]
         </div>
         <div className="space-y-8">
           <div>
-            <p className="font-dial text-6xl font-bold text-signal tabular-nums">{topics.length}</p>
+            <p className="font-dial text-6xl font-bold text-primary tabular-nums">{topics.length}</p>
             <p className="font-bold">{tr("parents.curriculum.title")}</p>
             <p className="mt-1 text-ink/75">{tr("parents.curriculum.body")}</p>
             <ul className="mt-4 flex flex-wrap gap-2">
@@ -332,7 +332,7 @@ function Partners({ tr }: { tr: TR }) {
                   <Image src={p.logo} alt={`${p.name} logo`} width={96} height={96} className="size-full object-contain" loading="lazy" />
                 </span>
                 <span>
-                  <span className="block font-bold group-hover:text-signal">{p.name}</span>
+                  <span className="block font-bold group-hover:text-primary">{p.name}</span>
                   <span className="block text-sm text-ink/65">{p.tag}</span>
                 </span>
               </a>

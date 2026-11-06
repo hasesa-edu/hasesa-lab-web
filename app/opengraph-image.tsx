@@ -16,7 +16,7 @@ export default async function OG() {
           display: "flex",
           flexDirection: "column",
           background:
-            "linear-gradient(135deg, #042f2e 0%, #0d9488 60%, #14b8a6 100%)",
+            "radial-gradient(ellipse at 50% 120%, #14A09855 0%, #0E3B4A 60%)",
           padding: "64px",
           color: "#f5fffd",
           fontFamily: "sans-serif",
@@ -39,7 +39,7 @@ export default async function OG() {
           >
             {/* Hasesa peek */}
             <svg width="60" height="25" viewBox="64 194 384 160" fill="none">
-              <path d="M96 330H416" stroke="#0d9488" strokeWidth="48" strokeLinecap="round" />
+              <path d="M96 330H416" stroke="#14A098" strokeWidth="48" strokeLinecap="round" />
               <circle cx="214" cy="270" r="38" fill="#f59e0b" />
               <circle cx="306" cy="246" r="38" fill="#f59e0b" />
             </svg>
@@ -58,7 +58,7 @@ export default async function OG() {
             maxWidth: 1000,
           }}
         >
-          Don't memorize. Do it. Learn your way.
+          Don't memorize. Build it.
         </div>
 
         {/* Subhead */}
