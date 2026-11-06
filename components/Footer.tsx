@@ -12,9 +12,9 @@ export function Footer() {
   const pathname = usePathname();
   // Dewey quote belongs to the marketing story — keep it on the home page only.
   const showQuote = pathname === "/";
-  // Sign-in (student and admin), onboarding and payment-return pages fill the screen with their own background; let the footer sit flush under them.
+  // Sign-in (student and admin) and payment-return pages fill the screen with their own background; let the footer sit flush under them.
   const flush =
-    pathname === "/login" || pathname === "/admin/login" || pathname.startsWith("/onboarding") || pathname.startsWith("/billing");
+    pathname === "/login" || pathname === "/admin/login" || pathname.startsWith("/billing");
   // Padded so each legal link is a comfortable tap target on phones.
   const legalLinkClass =
     "inline-flex min-h-10 items-center rounded-full px-3 text-deep-foreground/75 transition-colors hover:bg-white/10 hover:text-deep-foreground";

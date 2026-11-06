@@ -1,13 +1,12 @@
 import { sql } from "drizzle-orm";
 import { db } from "@/lib/db/client";
 import { Badge } from "@/components/ui/badge";
-import { Gift, Wallet } from "lucide-react";
+import { GraduationCap, UserPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { GrantForm } from "./GrantForm";
+import { GrantForm, RoleForm } from "./GrantForm";
 
-type SubStats = { active: number; endingSoon: number; everPaid: number };
-type Revenue = { month: number; total: number; paymentsMonth: number };
+type SubStats = { active: number; endingSoon: number; everPaid: number; guides: number };
 type PaymentRow = {
   txRef: string;
   email: string;
@@ -25,26 +24,14 @@ function rows<T>(r: any): T[] {
 }
 
 export async function Subscribers() {
-  // Month boundary in Addis Ababa time (UTC+3).
-  const [subs, revenue, recent] = await Promise.all([
+  const [subs, recent] = await Promise.all([
     db.execute(sql`
       select
-        count(*) filter (where paid_until > now())::int as active,
-        count(*) filter (where paid_until > now() and paid_until < now() + interval '3 days')::int as "endingSoon",
-        count(*) filter (where paid_until is not null)::int as "everPaid"
+        count(*) filter (where paid_until > now() and role <> 'guide')::int as active,
+        count(*) filter (where paid_until > now() and paid_until < now() + interval '7 days' and role <> 'guide')::int as "endingSoon",
+        count(*) filter (where paid_until is not null and role <> 'guide')::int as "everPaid",
+        count(*) filter (where role = 'guide')::int as guides
       from users
-    `),
-    db.execute(sql`
-      select
-        coalesce(sum(amount_etb) filter (
-          where verified_at >= date_trunc('month', now() at time zone 'Africa/Addis_Ababa') at time zone 'Africa/Addis_Ababa'
-        ), 0)::int as month,
-        coalesce(sum(amount_etb), 0)::int as total,
-        count(*) filter (
-          where verified_at >= date_trunc('month', now() at time zone 'Africa/Addis_Ababa') at time zone 'Africa/Addis_Ababa'
-        )::int as "paymentsMonth"
-      from payments
-      where status = 'success' and source = 'chapa'
     `),
     db.execute(sql`
       select p.tx_ref as "txRef", u.email, p.amount_etb as "amountEtb", p.days, p.status, p.source, p.note,
@@ -54,29 +41,28 @@ export async function Subscribers() {
       limit 20
     `),
   ]);
-  const s = rows<SubStats>(subs)[0] ?? { active: 0, endingSoon: 0, everPaid: 0 };
-  const r = rows<Revenue>(revenue)[0] ?? { month: 0, total: 0, paymentsMonth: 0 };
+  const s = rows<SubStats>(subs)[0] ?? { active: 0, endingSoon: 0, everPaid: 0, guides: 0 };
   const list = rows<PaymentRow>(recent);
 
   return (
     <section>
-      <SectionTitle icon={<Wallet className="size-4" />}>Subscribers</SectionTitle>
+      <SectionTitle icon={<UserPlus className="size-4" />}>Academy enrolment</SectionTitle>
       <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
-        <StatCard label="Active passes" value={s.active} tone="teal" />
-        <StatCard label="Ending in 3 days" value={s.endingSoon} tone="sun" />
-        <StatCard label="Revenue this month (ETB)" value={r.month} sub={`${r.paymentsMonth} payments`} />
-        <StatCard label="Revenue all time (ETB)" value={r.total} sub={`${s.everPaid} students ever paid`} />
+        <StatCard label="Enrolled now" value={s.active} tone="teal" />
+        <StatCard label="Ending in 7 days" value={s.endingSoon} tone="sun" />
+        <StatCard label="Ever enrolled" value={s.everPaid} />
+        <StatCard label="Guides" value={s.guides} />
       </div>
 
       <div className="mt-4 rounded-2xl bg-sun-soft/50 p-5 ring-1 ring-sun/30">
         <div className="flex items-start gap-3">
           <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-sun text-deep">
-            <Gift className="size-4" />
+            <UserPlus className="size-4" />
           </span>
           <div>
-            <h3 className="text-base font-bold text-foreground">Add days to a pass</h3>
+            <h3 className="text-base font-bold text-foreground">Enrol a student</h3>
             <p className="mt-0.5 text-xs text-muted-foreground">
-              For gifts, or payments made outside Chapa. Adds days on top of what the student has left.
+              Once they&apos;ve paid the Academy. The student signs up with Google first. Days are added on top of any they have left.
             </p>
           </div>
         </div>
@@ -85,7 +71,24 @@ export async function Subscribers() {
         </div>
       </div>
 
-      <TablePanel title="Recent payments" className="mt-4">
+      <div className="mt-4 rounded-2xl bg-card p-5 shadow-card ring-1 ring-border">
+        <div className="flex items-start gap-3">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary-strong">
+            <GraduationCap className="size-4" />
+          </span>
+          <div>
+            <h3 className="text-base font-bold text-foreground">Guides</h3>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              A guide sees every student&apos;s progress, signs off modules and reads the guide&apos;s version. They sign in with Google first.
+            </p>
+          </div>
+        </div>
+        <div className="mt-4">
+          <RoleForm />
+        </div>
+      </div>
+
+      <TablePanel title="Recent enrolments" className="mt-4">
         <Table>
           <TableHeader className={TABLE_HEAD}>
             <TableRow className="hover:bg-transparent">
@@ -94,7 +97,7 @@ export async function Subscribers() {
               <TableHead className={TH}>Amount</TableHead>
               <TableHead className={TH}>Days</TableHead>
               <TableHead className={TH}>Status</TableHead>
-              <TableHead className={TH}>Pass ends</TableHead>
+              <TableHead className={TH}>Enrolled until</TableHead>
               <TableHead className={TH}>Ref / note</TableHead>
             </TableRow>
           </TableHeader>
@@ -102,7 +105,7 @@ export async function Subscribers() {
             {list.length === 0 ? (
               <TableRow className="hover:bg-transparent">
                 <TableCell colSpan={7} className="px-3 py-4 text-muted-foreground">
-                  No payments yet.
+                  No enrolments yet.
                 </TableCell>
               </TableRow>
             ) : (
@@ -110,7 +113,7 @@ export async function Subscribers() {
                 <TableRow key={p.txRef}>
                   <TableCell className="px-3 text-muted-foreground">{new Date(p.createdAt).toLocaleString()}</TableCell>
                   <TableCell className="px-3 text-foreground">{p.email}</TableCell>
-                  <TableCell className="px-3 font-semibold text-foreground tabular-nums">{p.source === "admin" ? "grant" : `${p.amountEtb} ETB`}</TableCell>
+                  <TableCell className="px-3 font-semibold text-foreground tabular-nums">{p.source === "admin" ? "admin" : `${p.amountEtb} ETB`}</TableCell>
                   <TableCell className="px-3 text-foreground tabular-nums">{p.days}</TableCell>
                   <TableCell className="px-3">
                     <StatusBadge status={p.status} />

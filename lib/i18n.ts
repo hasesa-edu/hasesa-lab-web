@@ -11,10 +11,10 @@ type Dict = Record<string, { en: string }>;
 export const t: Dict = {
   // Nav
   "nav.home": { en: "Home" },
-  "nav.experiments": { en: "Experiments" },
+  "nav.experiments": { en: "Modules" },
   "nav.assistant": { en: "Lab Assistant" },
-  "nav.dashboard": { en: "My lab notebook" },
-  "nav.settings": { en: "Grade & subjects" },
+  "nav.dashboard": { en: "My dashboard" },
+  "nav.guide": { en: "Student tracker" },
   "nav.signin": { en: "Continue with Google" },
   "nav.signup": { en: "Get started" },
   "nav.account": { en: "Account" },
@@ -26,92 +26,80 @@ export const t: Dict = {
     en: "Reimagining Education for the AI Era",
   },
   "hero.title.before": {
-    en: "Don't memorize. Do it.",
+    en: "Don't memorize. Build it.",
   },
   "hero.title.highlight": {
-    en: "Learn your way.",
+    en: "Learn by doing.",
   },
   "hero.sub": {
-    en: "An at-home experiment for every lesson, plus a tutor that learns at your pace.",
+    en: "Hands-on modules at Hasesa Academy. Build a radio, control a robot claw with your muscles, catch food fakers. The science and maths come when the project needs them.",
   },
-  "hero.cta.lessons": { en: "Browse experiments" },
-  "hero.cta.signup": { en: "Continue with Google" },
+  "hero.cta.lessons": { en: "See the modules" },
+  "hero.cta.signup": { en: "Sign up with Google" },
   "hero.cta.dashboard": { en: "Go to my dashboard" },
   "hero.free": {
-    en: "Free for every student",
+    en: "Browse free",
   },
   "hero.free.note": {
-    en: "Every guide and the lab assistant. Just sign in with Google.",
+    en: "Try a concept unit from every module. Enrol at the Academy to start building.",
   },
   "hero.video.alt": {
-    en: "Short demo of the AI tutor answering a question with worked steps",
+    en: "Short demo of the AI lab assistant answering a question with worked steps",
   },
 
   // Landing: marquee, how it works, showcase
-  "landing.strip.label": { en: "Experiments you can do this week" },
-  "how.eyebrow": { en: "How it works" },
-  "how.title": { en: "Three steps. Real science." },
-  "how.1.title": { en: "Pick an experiment" },
-  "how.1.body": { en: "Choose your grade and subject. Every experiment matches a lesson from your textbook." },
-  "how.2.title": { en: "Gather what you have" },
-  "how.2.body": { en: "Cabbage, lemons, salt, a glass of water. Things from home or the market, never a fancy lab." },
-  "how.3.title": { en: "Do it, then make sense of it" },
-  "how.3.body": { en: "Follow the steps and the video, note what you saw, and ask the lab assistant when you're stuck." },
-  "showcase.eyebrow": { en: "The lab" },
-  "showcase.title": { en: "Try these this week" },
-  "showcase.sub": { en: "Biology, chemistry and physics for grades 9 to 12." },
-  "showcase.stat.experiments": { en: "experiments" },
-  "showcase.stat.subjects": { en: "subjects" },
-  "showcase.stat.grades": { en: "grades 9–12" },
-  "showcase.stat.minutes": { en: "min on average" },
-  "showcase.min": { en: "min" },
-  "showcase.all": { en: "See all experiments" },
-  "showcase.grade": { en: "Grade" },
+  "landing.strip.label": { en: "What students do in our modules" },
+  "how.eyebrow": { en: "How a module works" },
+  "how.title": { en: "Start by doing. The theory follows." },
+  "how.1.title": { en: "Meet the mystery" },
+  "how.1.body": { en: "Every module opens with something that makes you curious: a radio with no battery, a claw that obeys your muscles." },
+  "how.2.title": { en: "Build and investigate" },
+  "how.2.body": { en: "At the Academy, with a guide, you test, build and measure, using real tools and local materials." },
+  "how.3.title": { en: "Learn just enough" },
+  "how.3.body": { en: "At home, read the concept units the project needs and solve real problems. Already know one? Test out." },
+  "how.4.title": { en: "Finish and get signed off" },
+  "how.4.body": { en: "Make it work, explain how, and your guide signs you off with a certificate." },
+  "showcase.eyebrow": { en: "The modules" },
+  "showcase.title": { en: "Pick a mystery" },
+  "showcase.sub": { en: "Each one is about 10 hours, mixing physics, chemistry, biology, maths and technology." },
+  "showcase.stat.modules": { en: "modules" },
+  "showcase.stat.hours": { en: "hours each" },
+  "showcase.stat.curriculum": { en: "curriculum topics" },
+  "showcase.hours": { en: "hours" },
+  "showcase.steps": { en: "steps" },
+  "showcase.all": { en: "See every module" },
 
   // Two pillars
-  "pillars.eyebrow": {
-    en: "Two things in every lesson",
-  },
-  "pillars.title": {
-    en: "Two ways to make it stick.",
-  },
-  "pillars.exp.eyebrow": { en: "Hands-on" },
-  "pillars.exp.title": {
-    en: "An experiment you can hold",
-  },
-  "pillars.exp.body": {
-    en: "Every topic ships with something tactile. Build a pH meter from red cabbage. Find a tree's height from its shadow. No fancy lab needed.",
-  },
   "pillars.exp.mock.label": {
-    en: "AT-HOME EXPERIMENT",
+    en: "MARKET DETECTIVE · STEP 2",
   },
   "pillars.exp.mock.title": {
-    en: "Make a pH meter from red cabbage",
+    en: "Is this honey real?",
   },
   "pillars.exp.mock.step1": {
-    en: "Boil red cabbage. Keep the purple water.",
+    en: "Weigh 10 mL of each honey sample.",
   },
   "pillars.exp.mock.step2": {
-    en: "Add a drop of lemon juice — it turns pink.",
+    en: "Work out the density: mass ÷ volume.",
   },
   "pillars.exp.mock.step3": {
-    en: "Add baking soda — it turns blue.",
+    en: "Lower density than real honey? Someone added water or syrup.",
   },
-  "pillars.ai.eyebrow": { en: "AI tutor" },
+  "pillars.ai.eyebrow": { en: "AI lab assistant" },
   "pillars.ai.title": {
-    en: "A patient teacher, always on",
+    en: "A patient helper that knows your module",
   },
   "pillars.ai.body": {
-    en: "Stuck? Ask anytime. The tutor explains step by step, follows your textbook, and answers in your language.",
+    en: "Stuck on a build or a problem at home? The assistant knows the step you're on and the theory behind it, and gives hints instead of answers.",
   },
   "pillars.ai.mock.user": {
-    en: "Explain F = m·a like I'm 14.",
+    en: "How long should my radio's antenna be for a 1000 kHz station?",
   },
   "pillars.ai.mock.assistant1": {
-    en: "Push something heavier → it speeds up slower.",
+    en: "Start from the wavelength: divide the speed of light by the frequency. What do you get?",
   },
   "pillars.ai.mock.source": {
-    en: "Grounded in your textbook",
+    en: "Grounded in Radio, step 4",
   },
 
   // Partners
@@ -132,132 +120,27 @@ export const t: Dict = {
   },
 
   // CTA strip
-  "cta.title": { en: "Ready to start learning?" },
+  "cta.title": { en: "Ready to build something?" },
   "cta.sub": {
-    en: "Sign in with Google in seconds and get every guide and the lab assistant, free.",
+    en: "Sign up with Google to browse every module and try a concept unit. Enrol at the Academy to start building.",
   },
-
-  // Experiments catalogue + guide
-  "experiments.title": { en: "Experiments" },
-  "experiments.subtitle": {
-    en: "Hands-on biology, chemistry and physics for grades 9–12, using materials you can find at home or in the market. Each one has a step-by-step guide, a video, and a lab assistant to help when you get stuck.",
-  },
-  "experiments.grade": { en: "Grade" },
-  "experiments.allGrades": { en: "All grades" },
-  "experiments.allSubjects": { en: "All subjects" },
-  "experiments.filter.grade": { en: "Filter by grade" },
-  "experiments.filter.subject": { en: "Filter by subject" },
-  "experiments.none": { en: "No experiments match these filters yet." },
-  "experiments.minutes": { en: "min" },
-  "experiments.easy": { en: "Easy" },
-  "experiments.medium": { en: "Medium" },
-  "experiments.reviewedBy": { en: "Reviewed by" },
-  "experiments.badge.video": { en: "Video" },
-  "experiments.badge.materials": { en: "materials" },
-  "experiments.badge.done": { en: "Done" },
-  "experiments.badge.started": { en: "In progress" },
-  "experiments.back": { en: "← All experiments" },
-  "experiments.notFound": { en: "Experiment not found." },
-  "experiments.nav.previous": { en: "Previous" },
-  "experiments.nav.next": { en: "Next" },
-  "experiments.nav.between": { en: "Between experiments" },
 
   // Chat (lab assistant)
   "chat.title": { en: "Lab Assistant" },
   "chat.subtitle": {
-    en: "Stuck on an experiment, or not sure why it worked? Ask about grade 9–12 biology, chemistry or physics.",
+    en: "Stuck on a build or a problem? Pick what you're working on for better answers.",
   },
-  "chat.placeholder": { en: "e.g. Why did my cabbage indicator turn green?" },
+  "chat.placeholder": { en: "e.g. Why does my radio only pick up one station?" },
   "chat.send": { en: "Send" },
   "chat.thinking": { en: "Thinking…" },
-  "chat.empty.title": { en: "How can I help with your experiment?" },
-  "chat.empty.body": { en: "Pick the experiment you're doing for better answers, or just ask." },
-  "chat.disclaimer": { en: "AI can make mistakes. Always follow the safety notes in the guide." },
+  "chat.empty.title": { en: "How can I help with your module?" },
+  "chat.empty.body": { en: "Pick the step or concept unit you're on for better answers, or just ask." },
+  "chat.disclaimer": { en: "AI can make mistakes. Always follow the safety notes and your guide." },
   "chat.error": { en: "Couldn't reach the lab assistant. Try again." },
-  "chat.pickLabel": { en: "Experiment:" },
+  "chat.pickLabel": { en: "Working on:" },
   "chat.pickNone": { en: "None (general question)" },
-  "chat.viewExperiment": { en: "Open guide" },
+  "chat.viewExperiment": { en: "Open it" },
   "chat.newMessage": { en: "New message" },
-
-  // Onboarding
-  "onboard.welcome": { en: "Welcome — let's set up your lab." },
-  "onboard.pickGrade": { en: "Which grade are you in?" },
-  "onboard.pickSubjects": { en: "Which subjects do you want to experiment with?" },
-  "onboard.continue": { en: "Save" },
-  "onboard.done.title": { en: "All set!" },
-  "onboard.done.body": { en: "Your lab notebook is ready. Pick an experiment to begin." },
-
-  // Lab notebook (dashboard)
-  "dash.title": { en: "My lab notebook" },
-  "dash.greeting": { en: "Hello" },
-  "dash.stat.done": { en: "Done" },
-  "dash.stat.inProgress": { en: "In progress" },
-  "dash.stat.total": { en: "Available" },
-  "dash.inProgress": { en: "Pick up where you left off" },
-  "dash.continue": { en: "Continue" },
-  "dash.next": { en: "Try next" },
-  "dash.nextWhyNew": { en: "Picked for your grade and subjects." },
-  "dash.nextWhy": { en: "Experiments you haven't tried yet, for your grade and subjects." },
-  "dash.start": { en: "Start" },
-  "dash.allDone": { en: "You've tried every experiment we have so far. More are coming!" },
-  "dash.completed": { en: "Completed experiments" },
-  "dash.noCompleted": { en: "Nothing here yet. Finish an experiment and mark it as done to save it here." },
-  "dash.noNotes": { en: "No observations recorded." },
-  "dash.browse": { en: "Browse all experiments" },
-  "dash.askAssistant": { en: "Ask the lab assistant" },
-
-  // Notebook card on the experiment page
-  "notebook.cardTitle": { en: "Your lab notebook" },
-  "notebook.prompt": { en: "What did you observe? Write down your results, measurements, and anything surprising." },
-  "notebook.placeholder": { en: "e.g. The lemon juice turned the indicator bright pink…" },
-  "notebook.saveNotes": { en: "Save notes" },
-  "notebook.markDone": { en: "Mark as done" },
-  "notebook.markNotDone": { en: "Mark as not done" },
-  "notebook.saved": { en: "Saved." },
-  "notebook.markedDone": { en: "Nice work — saved to your notebook." },
-  "notebook.saveError": { en: "Couldn't save. Try again." },
-  "notebook.signinPrompt": { en: "Sign in to save your observations and track the experiments you've done." },
-
-  // Experiment video
-  "video.credit": { en: "Video by" },
-  "exp.video": { en: "Watch the demo" },
-  "exp.videoSoon": { en: "Video coming soon" },
-  "exp.videoSoonBody": { en: "We're recording a demo for this experiment. Until then, follow the step-by-step guide below." },
-
-  // Why this matters
-  "why.label": { en: "Why this matters" },
-
-  // Experiment guide TOC
-  "toc.why": { en: "Why" },
-  "toc.video": { en: "Video" },
-  "toc.concept": { en: "Concept" },
-  "toc.materials": { en: "Materials" },
-  "toc.safety": { en: "Safety" },
-  "toc.steps": { en: "Steps" },
-  "toc.results": { en: "Results" },
-  "toc.troubleshooting": { en: "Troubleshooting" },
-  "toc.check": { en: "Check" },
-  "toc.notebook": { en: "Notebook" },
-
-  // Experiment guide sections
-  "exp.concept": { en: "The science" },
-  "exp.materials": { en: "You'll need" },
-  "exp.safety": { en: "Safety first" },
-  "exp.steps": { en: "Step by step" },
-  "exp.step": { en: "Step" },
-  "exp.stepsDone": { en: "done" },
-  "exp.observe": { en: "What you should see" },
-  "exp.explanation": { en: "Why it happens" },
-  "exp.troubleshooting": { en: "Didn't work? Try this" },
-  "exp.stillStuck": { en: "Still stuck?" },
-  "exp.askAssistant": { en: "Ask the lab assistant" },
-  "exp.askAbout": { en: "Ask the lab assistant about this experiment" },
-
-  // Concept check
-  "quiz.check": { en: "Check your understanding" },
-  "quiz.correct": { en: "Correct." },
-  "quiz.incorrect": { en: "Not quite." },
-  "quiz.tryAgain": { en: "Try again" },
 
   // Common
   "common.subjects": { en: "Subjects" },

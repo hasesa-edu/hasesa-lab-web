@@ -18,11 +18,12 @@ export default function PrivacyPage() {
           never see your Google password.
         </li>
         <li>
-          <strong>What you tell us:</strong> your grade and the subjects you chose.
+          <strong>Your learning:</strong> which modules and steps you started or finished, the notes you write in your lab
+          notebook, and the answers you give to practice problems.
         </li>
         <li>
-          <strong>Your learning:</strong> which experiments you started or finished and the observations you write in your lab
-          notebook.
+          <strong>From your guide:</strong> feedback, assigned concept units and module sign-offs. Your guide at the Academy can see
+          your progress, notebook notes and answers.
         </li>
         <li>
           <strong>Lab assistant chats:</strong> your messages and the assistant's replies.

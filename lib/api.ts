@@ -1,5 +1,4 @@
 import type { Locale } from "./i18n";
-import type { Grade, Subject } from "./subjects";
 
 export type UserDTO = {
   id: string;
@@ -10,10 +9,10 @@ export type UserDTO = {
   school?: string | null;
   under18: boolean;
   extendedRetention: boolean;
-  subjects: Subject[];
-  grade: Grade | null;
   avatarUrl: string | null;
   paidUntil: string | null;
+  role: "student" | "guide";
+  access: "signed-in" | "enrolled" | "guide";
 };
 
 async function jsonOrThrow(res: Response): Promise<any> {
@@ -51,30 +50,44 @@ export async function apiPatchMe(patch: Partial<UserDTO>): Promise<UserDTO> {
   return data.user;
 }
 
-export type ProgressDTO = {
-  experimentId: string;
-  status: "started" | "done";
-  observations: string | null;
-  updatedAt: string;
-  completedAt: string | null;
-};
 
-export async function apiGetProgress(): Promise<ProgressDTO[]> {
-  const res = await fetch("/api/progress");
-  const data = await jsonOrThrow(res);
-  return data.progress ?? [];
-}
-
-export async function apiSaveProgress(input: {
-  experimentId: string;
-  status?: "started" | "done";
-  observations?: string;
-}): Promise<ProgressDTO> {
-  const res = await fetch("/api/progress", {
+async function post(url: string, body: unknown): Promise<any> {
+  const res = await fetch(url, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify(input),
+    body: JSON.stringify(body),
   });
-  const data = await jsonOrThrow(res);
-  return data.progress;
+  return jsonOrThrow(res);
+}
+
+export type UnitStateDTO = { status: "started" | "completed" | "tested_out"; score: number } | null;
+
+export function apiEnroll(moduleId: string, action: "start" | "drop"): Promise<{ status: string }> {
+  return post("/api/modules/enroll", { moduleId, action });
+}
+
+export function apiSaveStep(input: { moduleId: string; stepId: string; done?: boolean; notes?: string }): Promise<{ step: { done: boolean; notes: string | null } }> {
+  return post("/api/steps", input);
+}
+
+export function apiAttempt(input: { unitId: string; questionId: string; answer: string }): Promise<{
+  correct: boolean;
+  explanation: string;
+  answer: string;
+  unit: UnitStateDTO;
+}> {
+  return post("/api/attempts", input);
+}
+
+export function apiTestOut(input: { unitId: string; answers: Record<string, string> }): Promise<{
+  score: number;
+  passed: boolean;
+  results: { id: string; correct: boolean; explanation: string; answer: string }[];
+  unit: UnitStateDTO;
+}> {
+  return post("/api/attempts/testout", input);
+}
+
+export function apiFeedbackRead(id: string): Promise<{ ok: true }> {
+  return post("/api/feedback/read", { id });
 }

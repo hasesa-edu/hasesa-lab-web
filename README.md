@@ -1,29 +1,48 @@
 # Hasesa — Reimagining Education for the AI Era
 
-Hasesa helps students in grades 9–12 do real biology, chemistry and physics experiments on their own, using cheap, locally available materials. Each experiment has:
+Hasesa Academy teaches science through hands-on **modules**. Each module starts with a mystery or something to build, and students learn the theory when the project needs it, not before. Builds happen at the Academy with a guide; at home, students read concept units and solve problems on their phone or computer.
 
-- **A step-by-step guide**: concept background, materials (with local substitutes), safety notes, a tickable procedure, expected results and why they happen, and troubleshooting.
-- **A pre-recorded demo video**: YouTube embeds for now. Self-hosted recordings are supported through `video.src`.
-- **An AI lab assistant** grounded in that guide. It explains the concepts, helps troubleshoot experiments that didn't work, and cites the step it relied on.
+The first three modules (all AI drafts awaiting expert review):
 
-The model was piloted in June 2026: a strawberry DNA extraction with Grade 11 students at Magic Carpet School, guided live by researchers from The Science Basement. Hasesa replaces that live support with guides, videos and the lab assistant so any student can do the experiments on their own, wherever they are.
+- **Radio:** build a radio that needs no battery (waves, circuits, electromagnetism, resonance).
+- **Mind over Machine:** control a robot claw with your muscles (nerves, muscles, sensors, microcontrollers).
+- **Market Detective:** fake or real? Catch the food fakers (density, chromatography, chemical tests, pH).
+
+Each module has:
+
+- **Steps** (about 10 hours in total): what to do, what to notice, and a lab notebook the guide can read.
+- **Shared concept units**: theory plus practice problems graded on the server. Units are shared between modules (e.g. "Current and voltage" is used by Radio and Mind over Machine), carry national-curriculum tags, and can be tested out of with 80%.
+- **A guide's version**: preparation, timing, answer keys and where students get stuck. Only guides see it.
+- **A sign-off checklist**: the guide ticks it, and the student gets a printable certificate.
+
+Content lives in `content/` as Markdown with YAML frontmatter. See `content/README.md` for the format.
+
+## Who sees what
+
+| | Browse modules, sample units | Full modules, all units, assistant | Guide tracker, guide's version |
+|---|---|---|---|
+| Signed out | ✓ | | |
+| Signed up | ✓ (progress saved) | | |
+| Enrolled (admin sets "enrolled until") | ✓ | ✓ | |
+| Guide (admin sets the role) | ✓ | ✓ | ✓ |
 
 ## What's in the app
 
 | Route | What it does |
 |---|---|
 | `/` | Landing page |
-| `/experiments` | Catalogue, filterable by grade (9–12) and subject |
-| `/experiments/[id]` | The experiment guide, a short concept check, and a lab-notebook card to save observations and mark it done |
-| `/chat` | Lab assistant. `?experiment=<id>` grounds it in that guide; a picker on the page does the same. |
-| `/dashboard` | My lab notebook: in progress, suggested next, and completed experiments with notes |
-| `/onboarding` | Pick grade and subjects |
-| `/signup`, `/login` | Email + password accounts (students) |
-| `/admin` | Analytics for the operator (env-credential login) |
+| `/modules` | Module catalogue (public) |
+| `/modules/[id]` | Module preview, or the full module with progress when enrolled |
+| `/modules/[id]/[step]` | A step: instructions, its concept units, lab notebook |
+| `/modules/[id]/guide` | The guide's version (guides only) |
+| `/concepts/[id]` | Concept unit: theory, practice problems, test-out |
+| `/dashboard` | Student: where you stopped, guide feedback, assigned units, certificates |
+| `/guide`, `/guide/students/[id]` | Guide: every student's progress, notes and answers; feedback, assignments, flags, sign-off |
+| `/certificates/[code]` | Public printable certificate |
+| `/chat` | Lab assistant, grounded in a step or concept unit (`?module=&step=` or `?concept=`) |
+| `/admin` | Operator: enrol students, set the guide role, analytics (env-credential login) |
 
-Old exam-prep routes (`/lessons`, `/teacher`, `/join`, `/mock/*`) redirect to their replacements (see `next.config.js`).
-
-Experiment content lives in `lib/experiments.ts`. All 18 experiments are **samples pending review** by Ethiopian subject teachers.
+The old grade 9–12 routes (`/experiments`, `/onboarding`, `/lessons`) redirect to `/modules` or `/dashboard` (see `next.config.js`).
 
 ## Stack
 
@@ -39,6 +58,7 @@ npm install
 cp .env.example .env.local   # fill in AI_API_KEY, DATABASE_URL, SESSION_SECRET, ADMIN_PASSWORD
 npm run db:push              # create/update tables
 npm run dev
+npm test                     # content validation + unit tests
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
@@ -51,10 +71,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Not built yet
 
-- Reviewed curriculum content, and coverage of the full grade 9–12 syllabus.
-- Our own pre-recorded experiment videos.
+- Expert review of all module content, safety notes and curriculum tags (everything is `ai-draft`).
+- Our own module videos.
+- Online payment (Chapa code is kept but unused; the admin enrols students by hand).
 - Amharic and Afaan Oromo.
-- Offline experiment packs.
-- Full-corpus retrieval for the assistant. Today it is grounded in one experiment at a time.
-
-`REQUIREMENTS.md` is the earlier exam-prep spec and is kept for reference.
