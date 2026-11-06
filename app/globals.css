@@ -49,6 +49,12 @@
   /* Deep teal for bold bands (page headers, pricing, hero panels). */
   --deep: rgb(9 61 57);
   --deep-foreground: rgb(240 253 250);
+  /* Workbench (landing + footer): warm paper, dark ink, amber tape. */
+  --paper: rgb(250 246 238);
+  --sand: rgb(241 233 218);
+  --ink: rgb(28 25 23);
+  --ink-foreground: rgb(250 246 238);
+  --tape: rgb(245 158 11 / 0.55);
 
   /* One color per subject, used for icon tiles, chips and card accents. */
   --physics: rgb(79 70 229);
@@ -104,6 +110,11 @@
 
   --deep: rgb(6 40 38);
   --deep-foreground: rgb(240 253 250);
+  --paper: rgb(20 18 16);
+  --sand: rgb(31 28 25);
+  --ink: rgb(12 10 9);
+  --ink-foreground: rgb(250 246 238);
+  --tape: rgb(251 191 36 / 0.45);
 
   --physics: rgb(129 140 248);
   --physics-soft: rgb(30 27 75);
@@ -126,6 +137,7 @@
   --font-sans:
     var(--font-geist), Geist, system-ui, -apple-system, Segoe UI, Roboto,
     Noto Sans Ethiopic, sans-serif;
+  --font-hand: var(--font-caveat), "Comic Sans MS", cursive;
   --font-heading:
     var(--font-bricolage), var(--font-geist), system-ui, -apple-system,
     Segoe UI, Roboto, Noto Sans Ethiopic, sans-serif;
@@ -168,6 +180,11 @@
   --color-sun-soft: var(--sun-soft);
   --color-subtle-foreground: var(--subtle-foreground);
   --color-deep: var(--deep);
+  --color-paper: var(--paper);
+  --color-sand: var(--sand);
+  --color-ink: var(--ink);
+  --color-ink-foreground: var(--ink-foreground);
+  --color-tape: var(--tape);
   --color-deep-foreground: var(--deep-foreground);
   --color-physics: var(--physics);
   --color-physics-soft: var(--physics-soft);
@@ -486,4 +503,162 @@
   header, footer, nav, .no-print { display: none !important; }
   body { background: white !important; }
   .print-sheet { box-shadow: none !important; margin: 0 !important; }
+}
+
+/* ───────── Workbench landing ─────────
+   Every effect below is opt-in on motion: with reduced motion the end state
+   (drawn doodles, struck-through and highlighted text) shows immediately. */
+
+/* A strip of masking tape. Put it on an absolutely positioned span. */
+@utility tape {
+  background: var(--tape);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
+  backdrop-filter: blur(1px);
+}
+
+/* Amber hazard stripes, for the edges of the step marquee. */
+@utility hazard {
+  background-image: repeating-linear-gradient(-45deg, var(--ink) 0 10px, var(--sun) 10px 20px);
+}
+
+/* Highlighter behind text: an amber swipe, slightly tilted. */
+.hl {
+  background-image: linear-gradient(transparent 55%, color-mix(in oklab, var(--sun) 70%, transparent) 55%, color-mix(in oklab, var(--sun) 70%, transparent) 92%, transparent 92%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  padding: 0 0.12em;
+  margin: 0 -0.12em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* On dark ink the highlight is a thick amber underline, so light text stays readable. */
+.hl.hl-dark {
+  background-image: linear-gradient(transparent 72%, var(--sun) 72%, var(--sun) 94%, transparent 94%);
+}
+
+/* Doodle line colour; a text-* utility on the svg overrides it. */
+@layer base {
+  .doodle { color: var(--ink); }
+  .dark .doodle { color: var(--foreground); }
+}
+
+/* Hand-drawn strike-through for "what school builds today". */
+.strike {
+  position: relative;
+}
+.strike::after {
+  content: "";
+  position: absolute;
+  left: -0.2em;
+  right: -0.2em;
+  top: 52%;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transform: rotate(-2deg);
+  transform-origin: left center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hl {
+    background-size: 0% 100%;
+    animation: highlight 0.9s 0.4s cubic-bezier(0.3, 0.7, 0.2, 1) forwards;
+  }
+  [data-reveal] .hl,
+  [data-reveal] .strike::after {
+    animation-play-state: paused;
+  }
+  [data-reveal][data-shown] .hl,
+  [data-reveal][data-shown] .strike::after {
+    animation-play-state: running;
+  }
+  .strike::after {
+    transform: rotate(-2deg) scaleX(0);
+    animation: strike 0.6s cubic-bezier(0.5, 0, 0.2, 1) forwards;
+    animation-delay: var(--d, 0s);
+  }
+  [data-reveal] .hl {
+    animation-delay: var(--d, 0s);
+  }
+
+  .draw {
+    /* Paths set pathLength="1", so one unit is the whole stroke. */
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: draw 1.6s var(--d, 0s) ease-out forwards;
+  }
+  .wave-pulse {
+    transform-box: fill-box;
+    transform-origin: left center;
+    animation: pulse-wave 2.4s var(--d, 0s) ease-out infinite;
+  }
+  .bubble {
+    animation: bubble 2.8s var(--d, 0s) ease-in infinite;
+  }
+  .claw-jaw {
+    transform-box: fill-box;
+    transform-origin: var(--o, left top);
+    animation: claw 2.6s ease-in-out infinite;
+  }
+  .claw-jaw.flip {
+    animation-name: claw-flip;
+  }
+  .stamp {
+    animation: stamp 0.45s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+  }
+  .shake {
+    animation: shake 0.4s ease-in-out;
+  }
+  .travel {
+    animation: travel 5s ease-in-out infinite alternate;
+  }
+  .sway {
+    animation: sway 9s ease-in-out infinite;
+  }
+}
+
+@keyframes highlight {
+  to { background-size: 100% 100%; }
+}
+@keyframes strike {
+  to { transform: rotate(-2deg) scaleX(1); }
+}
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes pulse-wave {
+  0% { opacity: 0; transform: scale(0.6); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.35); }
+}
+@keyframes bubble {
+  0% { transform: translateY(0); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(-34px); opacity: 0; }
+}
+@keyframes claw {
+  0%, 35%, 100% { transform: rotate(0deg); }
+  55%, 80% { transform: rotate(18deg); }
+}
+@keyframes claw-flip {
+  0%, 35%, 100% { transform: rotate(0deg); }
+  55%, 80% { transform: rotate(-18deg); }
+}
+@keyframes stamp {
+  0% { transform: scale(2.2) rotate(-14deg); opacity: 0; }
+  100% { transform: scale(1) rotate(-8deg); opacity: 1; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+@keyframes travel {
+  from { left: 0%; }
+  to { left: 100%; }
+}
+@keyframes sway {
+  0%, 100% { transform: rotateX(4deg) rotateY(-6deg); }
+  50% { transform: rotateX(2deg) rotateY(5deg); }
 }

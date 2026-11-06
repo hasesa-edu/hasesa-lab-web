@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Geist } from "next/font/google";
+import { Bricolage_Grotesque, Caveat, Geist } from "next/font/google";
 import "./globals.css";
 // KaTeX CSS (~200KB) is loaded only on the page that renders math, /chat.
 import { LocaleProvider } from "@/components/LocaleProvider";
@@ -22,6 +22,13 @@ const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-bricolage",
+});
+
+// Handwriting, only for margin notes on the landing page's workbench.
+const caveat = Caveat({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-caveat",
 });
 
 const TITLE = `${BRAND} · ${MOTTO}`;
@@ -60,7 +67,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geist.variable} ${bricolage.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${geist.variable} ${bricolage.variable} ${caveat.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
       </head>
