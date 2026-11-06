@@ -17,7 +17,7 @@ export function LogoMark({
   tone?: "brand" | "light";
   className?: string;
 }) {
-  const ink = tone === "light" ? "var(--primary-soft)" : "var(--primary)";
+  const ink = tone === "light" ? "var(--primary-soft)" : "var(--signal)";
   return (
     <svg
       width={size}
@@ -39,11 +39,18 @@ export function LogoMark({
   );
 }
 
-export function Logo({ className = "" }: { className?: string }) {
+export function Logo({ className = "", tone = "brand" }: { className?: string; tone?: "brand" | "light" }) {
   return (
-    <Link href="/" className={cn("inline-flex min-h-10 items-center gap-2 group", className)}>
-      <LogoMark size={40} className="mt-1" />
-      <span className="font-heading text-lg leading-none font-extrabold tracking-tight text-foreground">{BRAND}</span>
+    <Link href="/" aria-label={`${BRAND} home`} className={cn("inline-flex min-h-10 items-center gap-2 group", className)}>
+      <LogoMark size={40} tone={tone} className="mt-1" />
+      <span
+        className={cn(
+          "font-heading text-lg leading-none font-extrabold tracking-tight",
+          tone === "light" ? "text-white" : "text-foreground"
+        )}
+      >
+        {BRAND}
+      </span>
     </Link>
   );
 }

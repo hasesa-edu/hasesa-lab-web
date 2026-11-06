@@ -29,35 +29,35 @@ export default async function CertificatePage({ params }: Props) {
       <div className="no-print mx-auto mb-6 flex max-w-3xl justify-end">
         <PrintButton />
       </div>
-      <div className="print-sheet relative mx-auto max-w-3xl overflow-hidden rounded-[1.5rem] bg-white p-8 text-center text-[#0b2e2b] shadow-pop ring-1 ring-black/5 sm:p-14">
-        <div aria-hidden className="absolute inset-3 rounded-[1.1rem] border-2 border-[#0d9488]/30 sm:inset-5" />
+      <div className="print-sheet relative mx-auto max-w-3xl overflow-hidden rounded-[1.5rem] bg-white p-8 text-center text-[#12303A] shadow-pop ring-1 ring-black/5 sm:p-14">
+        <div aria-hidden className="absolute inset-3 rounded-[1.1rem] border-2 border-[#14A098]/40 sm:inset-5" />
         <div className="relative">
           <LogoMark size={110} className="mx-auto" />
-          <p className="mt-4 text-sm font-bold tracking-[0.24em] text-[#0d9488] uppercase">{BRAND} Academy</p>
+          <p className="mt-4 text-sm font-bold tracking-[0.24em] text-[#0B7A73] uppercase">{BRAND} Academy</p>
           <h1 className="mt-6 font-heading text-3xl font-extrabold tracking-tight sm:text-4xl">Certificate of completion</h1>
-          <p className="mt-8 text-base text-[#0b2e2b]/70">This certifies that</p>
+          <p className="mt-8 text-base text-[#12303A]/70">This certifies that</p>
           <p className="mt-2 font-heading text-4xl font-extrabold tracking-tight sm:text-5xl">{cert.student}</p>
-          <p className="mt-6 text-base text-[#0b2e2b]/70">built, investigated and explained</p>
+          <p className="mt-6 text-base text-[#12303A]/70">built, investigated and explained</p>
           <p className="mt-2 font-heading text-2xl font-bold sm:text-3xl">
             {m.title}: {m.tagline}
           </p>
-          <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-[#0b2e2b]/70">{m.whatYouBuild}</p>
-          {cert.note && <p className="mx-auto mt-4 max-w-lg text-sm italic text-[#0b2e2b]/80">&ldquo;{cert.note}&rdquo;</p>}
+          <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-[#12303A]/70">{m.whatYouBuild}</p>
+          {cert.note && <p className="mx-auto mt-4 max-w-lg text-sm italic text-[#12303A]/80">&ldquo;{cert.note}&rdquo;</p>}
           <div className="mt-10 grid gap-6 text-sm sm:grid-cols-3">
             <div>
               <p className="font-semibold">{cert.guide}</p>
-              <p className="text-[#0b2e2b]/60">Guide</p>
+              <p className="text-[#12303A]/60">Guide</p>
             </div>
             <div>
               <p className="font-semibold">{formatDate(cert.signedAt)}</p>
-              <p className="text-[#0b2e2b]/60">Date</p>
+              <p className="text-[#12303A]/60">Date</p>
             </div>
             <div>
               <p className="font-mono font-semibold">{cert.code}</p>
-              <p className="text-[#0b2e2b]/60">Certificate code</p>
+              <p className="text-[#12303A]/60">Certificate code</p>
             </div>
           </div>
-          <p className="mt-10 text-xs tracking-wide text-[#0b2e2b]/50">{MOTTO}</p>
+          <p className="mt-10 text-xs tracking-wide text-[#12303A]/50">{MOTTO}</p>
         </div>
       </div>
     </div>

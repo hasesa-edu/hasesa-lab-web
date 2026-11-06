@@ -36,9 +36,6 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
       <div className="mx-auto w-full max-w-lg text-center">
         {state === "paid" ? (
           <div className="relative isolate overflow-hidden rounded-[2rem] bg-deep px-6 py-10 text-deep-foreground shadow-pop sm:px-10 sm:py-12">
-            <div aria-hidden className="absolute inset-0 -z-10 bg-grid text-primary-soft opacity-40" />
-            <div aria-hidden className="absolute -top-24 -left-20 -z-10 size-72 rounded-full bg-primary/50 blur-3xl" />
-            <div aria-hidden className="absolute -right-16 -bottom-24 -z-10 size-72 rounded-full bg-sun/25 blur-3xl" />
             <SparklesIcon aria-hidden className="absolute top-8 left-8 size-6 text-sun animate-float" />
             <SparklesIcon aria-hidden className="absolute top-14 right-10 size-4 text-sun/80 animate-float [animation-delay:0.8s]" />
             <SparklesIcon aria-hidden className="absolute bottom-10 left-12 size-4 text-sun/70 animate-float [animation-delay:1.6s]" />
@@ -46,7 +43,7 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
             <span className="mx-auto inline-flex size-20 items-center justify-center rounded-3xl bg-sun text-deep shadow-pop [&_svg]:size-10">
               <PartyPopperIcon aria-hidden />
             </span>
-            <h1 className="mt-5 text-4xl font-extrabold tracking-tight sm:text-5xl">You're in!</h1>
+            <h1 className="font-dial mt-5 text-5xl font-extrabold sm:text-7xl leading-[0.95]">You're in!</h1>
             <p className="mx-auto mt-3 max-w-sm text-deep-foreground/80">
               Your {BRAND} Academy enrolment is active{ent?.paidUntil ? " until " : ""}
               {ent?.paidUntil && <strong className="font-semibold text-sun">{formatDate(ent.paidUntil)}</strong>}. Every module,
@@ -78,7 +75,7 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
             <span className="mx-auto inline-flex size-16 items-center justify-center rounded-2xl bg-sun-soft text-sun [&_svg]:size-8">
               <HourglassIcon aria-hidden className="animate-pulse" />
             </span>
-            <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-foreground">Confirming your payment…</h1>
+            <h1 className="font-dial mt-4 text-4xl font-extrabold text-foreground leading-[0.95]">Confirming your payment…</h1>
             <p className="mt-2 text-muted-foreground">
               Chapa hasn't confirmed it yet. This usually takes a few seconds. Refresh this page, or check your account in a minute.
             </p>
@@ -100,7 +97,7 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
             <span className="mx-auto inline-flex size-16 items-center justify-center rounded-2xl bg-destructive/10 text-destructive [&_svg]:size-8">
               <CircleAlertIcon aria-hidden />
             </span>
-            <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-foreground">Payment not completed</h1>
+            <h1 className="font-dial mt-4 text-4xl font-extrabold text-foreground leading-[0.95]">Payment not completed</h1>
             <p className="mt-2 text-muted-foreground">
               {state === "failed"
                 ? "The payment didn't go through, and you haven't been charged for a pass."
