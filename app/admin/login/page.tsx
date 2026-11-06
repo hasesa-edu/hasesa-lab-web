@@ -40,20 +40,17 @@ export default function AdminLoginPage() {
 
   return (
     <div className="relative isolate flex min-h-[calc(100svh-4rem)] items-center justify-center overflow-hidden bg-deep px-4 py-14 text-deep-foreground">
-      <div aria-hidden className="absolute inset-0 -z-10 bg-grid text-primary-soft opacity-50" />
-      <div aria-hidden className="absolute -top-32 -left-24 -z-10 size-96 rounded-full bg-primary/50 blur-3xl" />
-      <div aria-hidden className="absolute -right-24 -bottom-24 -z-10 size-80 rounded-full bg-sun/20 blur-3xl" />
 
       <div className="w-full max-w-sm">
         <div className="mb-6 text-center">
           <span className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-sun text-deep shadow-pop">
             <ShieldCheck className="size-7" aria-hidden />
           </span>
-          <p className="mt-4 text-xs font-bold tracking-[0.18em] text-sun uppercase">Admin</p>
+          <p className="mt-4 text-sm font-bold text-sun">Admin</p>
         </div>
 
         <div className="rounded-[1.5rem] bg-card p-6 text-card-foreground shadow-pop ring-1 ring-white/10 sm:p-7">
-          <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Admin sign in</h1>
+          <h1 className="font-dial text-3xl font-extrabold text-foreground leading-[0.95]">Admin sign in</h1>
           <p className="mt-1 text-sm text-muted-foreground">Restricted area — analytics and operations.</p>
 
           <form onSubmit={onSubmit} className="mt-6 space-y-4">

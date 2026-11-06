@@ -143,7 +143,7 @@
 
 @theme inline {
   --font-sans:
-    var(--font-geist), Geist, system-ui, -apple-system, Segoe UI, Roboto,
+    var(--font-atkinson), var(--font-geist), system-ui, -apple-system, Segoe UI, Roboto,
     Noto Sans Ethiopic, sans-serif;
   --font-dial: var(--font-shoulders), "Arial Narrow", sans-serif;
   --font-legible: var(--font-atkinson), var(--font-geist), system-ui, Noto Sans Ethiopic, sans-serif;
