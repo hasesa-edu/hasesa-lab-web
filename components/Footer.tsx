@@ -17,17 +17,17 @@ export function Footer() {
     pathname === "/login" || pathname === "/admin/login" || pathname.startsWith("/billing");
   // Padded so each legal link is a comfortable tap target on phones.
   const legalLinkClass =
-    "inline-flex min-h-10 items-center rounded-full px-3 text-ink-foreground/75 transition-colors hover:bg-white/10 hover:text-ink-foreground";
+    "inline-flex min-h-10 items-center rounded-full px-3 text-enamel-foreground/75 transition-colors hover:bg-white/10 hover:text-enamel-foreground";
 
   return (
     <footer
       className={cn(
-        "relative isolate overflow-hidden bg-ink text-ink-foreground",
+        "relative isolate overflow-hidden bg-enamel text-enamel-foreground",
         flush ? "border-t border-white/10" : "mt-16"
       )}
     >
-      <div aria-hidden className="absolute inset-0 -z-10 bg-grid text-ink-foreground opacity-[0.06]" />
-      <div aria-hidden className="absolute -top-32 -right-24 -z-10 size-80 rounded-full bg-sun/10 blur-3xl" />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-grid text-enamel-foreground opacity-[0.06]" />
+      <div aria-hidden className="absolute -top-32 -right-24 -z-10 size-80 rounded-full bg-signal/25 blur-3xl" />
       {showQuote && (
         <div aria-hidden className="absolute -bottom-24 -left-24 -z-10 size-72 rounded-full bg-sun/15 blur-3xl" />
       )}
@@ -40,7 +40,7 @@ export function Footer() {
           <blockquote className="-mt-4 font-heading text-2xl leading-snug font-bold tracking-tight text-balance sm:-mt-6 sm:text-4xl">
             {tr("dewey.quote")}
           </blockquote>
-          <figcaption className="mt-5 flex items-center gap-3 text-sm font-semibold text-ink-foreground/70">
+          <figcaption className="mt-5 flex items-center gap-3 text-sm font-semibold text-enamel-foreground/70">
             <span aria-hidden className="h-0.5 w-8 rounded-full bg-sun" />
             {tr("dewey.attribution")}
           </figcaption>
@@ -54,7 +54,7 @@ export function Footer() {
               <LogoMark size={40} tone="light" />
               <span className="font-heading text-lg font-bold tracking-tight">{BRAND}</span>
             </Link>
-            <p className="max-w-sm text-sm text-ink-foreground/70">{tr("footer.motto")}</p>
+            <p className="max-w-sm text-sm text-enamel-foreground/70">{tr("footer.motto")}</p>
           </div>
           <nav className="flex flex-wrap items-center justify-center gap-1 text-sm font-medium" aria-label="Legal">
             <Link href="/terms" className={legalLinkClass}>{tr("footer.terms")}</Link>

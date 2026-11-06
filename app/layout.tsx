@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Caveat, Geist } from "next/font/google";
+import { Atkinson_Hyperlegible_Next, Big_Shoulders, Bricolage_Grotesque, Geist } from "next/font/google";
 import "./globals.css";
 // KaTeX CSS (~200KB) is loaded only on the page that renders math, /chat.
 import { LocaleProvider } from "@/components/LocaleProvider";
@@ -24,11 +24,17 @@ const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
 });
 
-// Handwriting, only for margin notes on the landing page's workbench.
-const caveat = Caveat({
+// Landing page: condensed radio-dial numerals for display, and a typeface
+// designed for legibility for body text (low-end phones, young readers).
+const shoulders = Big_Shoulders({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-caveat",
+  variable: "--font-shoulders",
+});
+const atkinson = Atkinson_Hyperlegible_Next({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-atkinson",
 });
 
 const TITLE = `${BRAND} · ${MOTTO}`;
@@ -67,7 +73,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geist.variable} ${bricolage.variable} ${caveat.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${geist.variable} ${bricolage.variable} ${shoulders.variable} ${atkinson.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
       </head>

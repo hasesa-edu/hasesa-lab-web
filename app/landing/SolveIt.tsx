@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowRight, Search } from "lucide-react";
 import type { ClientProblem } from "@/lib/content/types";
 import { apiAttempt } from "@/lib/api";
 import { cn } from "@/lib/utils";
@@ -55,70 +54,66 @@ export function SolveIt({ challenge, labels }: { challenge: Challenge; labels: R
   return (
     <div
       key={wrongs}
-      className={cn(
-        "relative rounded-2xl bg-card p-5 text-card-foreground shadow-pop ring-1 ring-ink/10 sm:p-7",
-        wrongs > 0 && !solved && "shake"
-      )}
+      className={cn("relative grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14", wrongs > 0 && !solved && "shake")}
     >
-      <span aria-hidden className="tape absolute -top-2.5 left-8 h-5 w-24 -rotate-3" />
-      <span aria-hidden className="tape absolute -top-2.5 right-10 h-5 w-16 rotate-2" />
+      <div>
+        <h2 className="font-dial text-5xl leading-none font-bold text-ink sm:text-6xl">{labels.title}</h2>
+        <p className="mt-4 max-w-md text-lg leading-relaxed text-ink/75">
+          {labels.eyebrow}{" "}
+          <Link href={`/modules/${challenge.moduleId}`} className="font-bold text-signal underline underline-offset-4">
+            {challenge.moduleTitle}
+          </Link>
+          , from the free unit{" "}
+          <Link href={`/concepts/${challenge.unitId}`} className="font-bold text-signal underline underline-offset-4">
+            {challenge.unitTitle}
+          </Link>
+          .
+        </p>
+      </div>
 
-      {solved && (
-        <span
-          aria-hidden
-          className="stamp pointer-events-none absolute top-4 right-4 rounded-md border-4 border-sun px-3 py-1 font-heading text-2xl font-extrabold tracking-widest text-sun uppercase sm:top-6 sm:right-6 sm:text-3xl"
-        >
-          {labels.solved}
-        </span>
-      )}
+      {/* The instrument: question on top, a big readout to type into. */}
+      <div className="relative rounded-2xl border-2 border-ink bg-white p-6 shadow-[6px_6px_0_0_var(--ink)] sm:p-8 dark:bg-card">
+        {solved && (
+          <span
+            aria-hidden
+            className="absolute -top-5 right-6 rotate-[-6deg] rounded-md bg-sun px-3 py-1 font-dial text-2xl font-extrabold text-ink shadow-pop"
+          >
+            {labels.solved}
+          </span>
+        )}
+        <p className="text-xl leading-snug font-bold text-ink">{problem.q}</p>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_1.3fr] lg:items-start">
-        <div>
-          <p className="flex items-center gap-2 text-xs font-bold tracking-[0.18em] text-chemistry uppercase">
-            <Search aria-hidden className="size-4" /> {challenge.moduleTitle} · {labels.eyebrow}
-          </p>
-          <h2 className="mt-2 font-hand text-4xl leading-none text-ink sm:text-5xl dark:text-foreground">{labels.title}</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            From the free concept unit{" "}
-            <Link href={`/concepts/${challenge.unitId}`} className="font-semibold text-primary-strong underline underline-offset-4 dark:text-primary">
-              {challenge.unitTitle}
-            </Link>
-            .
-          </p>
-        </div>
-
-        <div className="min-w-0">
-          <p className="text-lg leading-snug font-semibold text-foreground">{problem.q}</p>
-
-          {problem.type === "mcq" ? (
-            <div className="mt-4 grid gap-2">
-              {problem.choices.map((c, i) => (
-                <Button
-                  key={i}
-                  type="button"
-                  variant="outline"
-                  disabled={busy || solved}
-                  onClick={() => {
-                    setValue(String(i));
-                    void check(String(i));
-                  }}
-                  className={cn(
-                    "h-auto min-h-11 justify-start rounded-xl py-2 text-left font-normal whitespace-normal disabled:opacity-100",
-                    value === String(i) && result && (result.correct ? "border-emerald-400 bg-emerald-50" : "border-red-300 bg-red-50")
-                  )}
-                >
-                  {c}
-                </Button>
-              ))}
-            </div>
-          ) : (
-            <form
-              className="mt-4 flex flex-wrap items-center gap-2"
-              onSubmit={(e) => {
-                e.preventDefault();
-                void check(value);
-              }}
-            >
+        {problem.type === "mcq" ? (
+          <div className="mt-5 grid gap-2">
+            {problem.choices.map((c, i) => (
+              <Button
+                key={i}
+                type="button"
+                variant="outline"
+                disabled={busy || solved}
+                onClick={() => {
+                  setValue(String(i));
+                  void check(String(i));
+                }}
+                className={cn(
+                  "h-auto min-h-11 justify-start rounded-xl py-2 text-left font-normal whitespace-normal disabled:opacity-100",
+                  value === String(i) && result && (result.correct ? "border-emerald-500 bg-emerald-50" : "border-red-400 bg-red-50")
+                )}
+              >
+                {c}
+              </Button>
+            ))}
+          </div>
+        ) : (
+          <form
+            className="mt-5 flex flex-wrap items-stretch gap-3"
+            onSubmit={(e) => {
+              e.preventDefault();
+              void check(value);
+            }}
+          >
+            <label className="flex items-baseline gap-2 rounded-xl bg-enamel px-4 py-2 text-sun focus-within:ring-3 focus-within:ring-sun/50">
+              <span className="sr-only">Your answer</span>
               <Input
                 inputMode="decimal"
                 value={value}
@@ -127,43 +122,41 @@ export function SolveIt({ challenge, labels }: { challenge: Challenge; labels: R
                   if (result && !result.correct) setResult(null);
                 }}
                 disabled={busy || solved}
-                placeholder="Your answer"
+                placeholder="0.00"
                 aria-label="Your answer"
                 maxLength={40}
-                className="h-12 w-36 bg-paper text-lg"
+                className="h-12 w-28 border-0 bg-transparent p-0 font-dial text-4xl font-bold text-sun shadow-none placeholder:text-sun/30 focus-visible:ring-0 dark:bg-transparent"
               />
-              {problem.unit && <span className="text-base font-semibold text-muted-foreground">{problem.unit}</span>}
-              {!solved && (
-                <Button type="submit" size="lg" disabled={busy || !value.trim()} className="bg-ink font-semibold text-ink-foreground hover:bg-ink/90">
-                  {busy ? "…" : labels.check}
-                </Button>
-              )}
-            </form>
-          )}
+              {problem.unit && <span className="font-dial text-xl text-sun/80">{problem.unit}</span>}
+            </label>
+            {!solved && (
+              <Button type="submit" size="lg" disabled={busy || !value.trim()} className="h-auto min-h-14 bg-ink px-6 text-base font-bold text-white hover:bg-ink/90">
+                {busy ? "Checking" : labels.check}
+              </Button>
+            )}
+          </form>
+        )}
 
-          <div aria-live="polite">
-            {error && <p className="mt-3 text-sm text-destructive">{error}</p>}
-            {result && !result.correct && (
-              <p className="mt-3 text-sm text-red-700 dark:text-red-400">
-                <span className="font-semibold">{labels.wrong}</span> {challenge.hint ?? labels.tryAgain}
-              </p>
-            )}
-            {solved && (
-              <div className="mt-4 rounded-xl bg-sun-soft p-4 text-sm leading-relaxed text-foreground">
-                <p>{result!.explanation}</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <Button asChild className="bg-ink font-semibold text-ink-foreground hover:bg-ink/90">
-                    <Link href={`/modules/${challenge.moduleId}`}>
-                      {labels.open} <ArrowRight aria-hidden />
-                    </Link>
-                  </Button>
-                  <Button asChild variant="outline" className="bg-card">
-                    <Link href={`/concepts/${challenge.unitId}`}>{labels.more}</Link>
-                  </Button>
-                </div>
+        <div aria-live="polite">
+          {error && <p className="mt-3 text-sm text-destructive">{error}</p>}
+          {result && !result.correct && (
+            <p className="mt-4 text-red-700 dark:text-red-400">
+              <span className="font-bold">{labels.wrong}</span> {challenge.hint ?? labels.tryAgain}
+            </p>
+          )}
+          {solved && (
+            <div className="mt-5 border-t-2 border-dashed border-ink/20 pt-5 text-ink/85">
+              <p className="leading-relaxed">{result!.explanation}</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Button asChild className="bg-ink font-bold text-white hover:bg-ink/90">
+                  <Link href={`/modules/${challenge.moduleId}`}>{labels.open}</Link>
+                </Button>
+                <Button asChild variant="outline">
+                  <Link href={`/concepts/${challenge.unitId}`}>{labels.more}</Link>
+                </Button>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
