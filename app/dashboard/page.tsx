@@ -58,7 +58,7 @@ export default async function DashboardPage() {
         )}
       </PageHeader>
 
-      <div className="mx-auto max-w-5xl px-4 pt-8 pb-16">
+      <div className="mx-auto max-w-6xl px-4 pt-8 pb-16">
         {!full && <EnrolCard signedIn next="/dashboard" className="mb-10" />}
 
         {state.feedback.length > 0 && (

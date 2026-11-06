@@ -24,7 +24,7 @@ export default async function ChatPage({ searchParams }: { searchParams: Promise
     return (
       <div>
         <PageHeader eyebrow={BRAND} title="Lab Assistant" description="An AI assistant that knows your module, for students enrolled at the Academy." />
-        <div className="mx-auto max-w-3xl px-4 py-10">
+        <div className="mx-auto max-w-6xl px-4 [&>*]:max-w-3xl py-10">
           <EnrolCard signedIn next="/chat" />
         </div>
       </div>

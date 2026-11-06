@@ -24,7 +24,7 @@ export default async function ModulesPage() {
         title="Modules"
         description="Each module starts with a mystery or something to build. You learn the science and maths when the project needs it, and finish with something that works."
       />
-      <div className="mx-auto max-w-5xl px-4 pt-8 pb-16">
+      <div className="mx-auto max-w-6xl px-4 pt-8 pb-16">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {modules.map((m) => (
             <ModuleCard key={m.id} m={summarize(m)} progress={state ? moduleProgress(m, state) : undefined} />
