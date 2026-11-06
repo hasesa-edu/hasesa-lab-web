@@ -5,14 +5,14 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   ChevronDownIcon,
-  FlaskConicalIcon,
+  BoxesIcon,
+  GraduationCapIcon,
   HomeIcon,
   LogOutIcon,
   MenuIcon,
   MessageCircleIcon,
   NotebookPenIcon,
   UserRoundIcon,
-  SlidersHorizontalIcon,
   XIcon,
   type LucideIcon,
 } from "lucide-react";
@@ -97,43 +97,36 @@ export function Nav() {
 
   const initial = user ? user.displayName.slice(0, 1).toUpperCase() : "";
 
-  const desktopLinks: { href: string; label: string }[] = [
-    { href: "/", label: tr("nav.home") },
-    { href: "/experiments", label: tr("nav.experiments") },
-    { href: "/chat", label: tr("nav.assistant") },
-    { href: "/dashboard", label: tr("nav.dashboard") },
+  const full = user?.access === "enrolled" || user?.access === "guide";
+  const links: { href: string; label: string; icon: LucideIcon; show: boolean }[] = [
+    { href: "/", label: tr("nav.home"), icon: HomeIcon, show: true },
+    { href: "/modules", label: tr("nav.experiments"), icon: BoxesIcon, show: true },
+    { href: "/chat", label: tr("nav.assistant"), icon: MessageCircleIcon, show: full },
+    { href: "/dashboard", label: tr("nav.dashboard"), icon: NotebookPenIcon, show: !!user },
+    { href: "/guide", label: tr("nav.guide"), icon: GraduationCapIcon, show: user?.access === "guide" },
   ];
-
-  const mobileLinks: { href: string; label: string; icon: LucideIcon }[] = [
-    { href: "/", label: tr("nav.home"), icon: HomeIcon },
-    { href: "/experiments", label: tr("nav.experiments"), icon: FlaskConicalIcon },
-    { href: "/chat", label: tr("nav.assistant"), icon: MessageCircleIcon },
-    { href: "/dashboard", label: tr("nav.dashboard"), icon: NotebookPenIcon },
-    { href: "/account", label: tr("nav.account"), icon: UserRoundIcon },
-    { href: "/onboarding", label: tr("nav.settings"), icon: SlidersHorizontalIcon },
-  ];
+  const desktopLinks = links.filter((l) => l.show);
+  const mobileLinks = [...desktopLinks, { href: "/account", label: tr("nav.account"), icon: UserRoundIcon, show: true }];
 
   return (
     <header className="sticky top-0 z-20 border-b border-border/70 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="max-w-5xl mx-auto px-4 py-2.5 flex items-center gap-3 sm:gap-5">
         <Logo />
 
-        {user && (
-          <nav className="hidden sm:flex items-center gap-1">
-            {desktopLinks.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                className={navLinkClass(l.href)}
-                aria-current={isActive(l.href) ? "page" : undefined}
-              >
-                {l.label}
-              </Link>
-            ))}
-          </nav>
-        )}
+        <nav className="hidden md:flex items-center gap-1">
+          {desktopLinks.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className={navLinkClass(l.href)}
+              aria-current={isActive(l.href) ? "page" : undefined}
+            >
+              {l.label}
+            </Link>
+          ))}
+        </nav>
 
-        <div className="ml-auto hidden sm:flex items-center gap-2">
+        <div className="ml-auto hidden md:flex items-center gap-2">
           {/* TEMP: theme toggle hidden — light-only for now */}
           <ThemeToggle className="hidden" />
 
@@ -157,9 +150,9 @@ export function Nav() {
                 <DropdownMenuLabel className="font-normal">
                   <div className="truncate font-semibold text-foreground">{user.displayName}</div>
                   <div className="truncate text-muted-foreground">{user.email}</div>
-                  {user.grade && (
+                  {user.access !== "signed-in" && (
                     <span className="mt-1.5 inline-flex rounded-full bg-primary-soft px-2 py-0.5 text-xs font-semibold text-primary-strong dark:text-primary">
-                      {tr("experiments.grade")} {user.grade}
+                      {user.access === "guide" ? "Guide" : "Enrolled"}
                     </span>
                   )}
                 </DropdownMenuLabel>
@@ -168,12 +161,6 @@ export function Nav() {
                   <Link href="/account">
                     <UserRoundIcon />
                     {tr("nav.account")}
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild className="min-h-9">
-                  <Link href="/onboarding">
-                    <SlidersHorizontalIcon />
-                    {tr("nav.settings")}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -197,14 +184,19 @@ export function Nav() {
           )}
         </div>
 
-        <div className="ml-auto flex sm:hidden items-center gap-1.5">
+        <div className="ml-auto flex md:hidden items-center gap-1.5">
           {/* TEMP: theme toggle hidden — light-only for now */}
           <ThemeToggle className="hidden" />
           {!user && (
-            <a href={signInHref} className={cn(signInClass, "px-3")}>
-              <GoogleIcon size={16} />
-              {tr("nav.signin")}
-            </a>
+            <>
+              <Link href="/modules" className={cn(navLinkClass("/modules"), "px-3")}>
+                {tr("nav.experiments")}
+              </Link>
+              <a href={signInHref} className={cn(signInClass, "px-3")} aria-label={tr("nav.signin")}>
+                <GoogleIcon size={16} />
+                Sign in
+              </a>
+            </>
           )}
           {user && (
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -239,9 +231,9 @@ export function Nav() {
                       <SheetDescription className="truncate text-sm text-deep-foreground/70">{user.email}</SheetDescription>
                     </div>
                   </div>
-                  {user.grade && (
+                  {user.access !== "signed-in" && (
                     <span className="relative mt-4 inline-flex w-fit rounded-full bg-sun px-2.5 py-0.5 text-xs font-bold text-deep">
-                      {tr("experiments.grade")} {user.grade}
+                      {user.access === "guide" ? "Guide" : "Enrolled"}
                     </span>
                   )}
                 </SheetHeader>

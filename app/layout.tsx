@@ -26,7 +26,7 @@ const bricolage = Bricolage_Grotesque({
 
 const TITLE = `${BRAND} · ${MOTTO}`;
 const DESCRIPTION =
-  "Hands-on learning for grades 9–12: curriculum-aligned biology, chemistry and physics experiments using local materials, with step-by-step guides, demo videos, and an AI lab assistant.";
+  "Hands-on modules at Hasesa Academy: build a radio, control a robot claw with your muscles, catch food fakers. Students start by doing and learn the science and maths when the project needs it.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://hasesa.vercel.app"),

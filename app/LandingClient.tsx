@@ -2,14 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Clock, FlaskConical, MessageCircle, Search, Sparkles } from "lucide-react";
+import { ArrowRight, Award, BookOpen, Clock, Hammer, MessageCircle, Search, Sparkles } from "lucide-react";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
 import { googleSignInHref } from "@/components/GoogleButton";
 import { SUBJECT_STYLES, SubjectIcon, SubjectLabel, SubjectTile } from "@/components/Subject";
 import type { t as Dict } from "@/lib/i18n";
-import type { CatalogItem } from "@/lib/experiments";
-import { SUBJECTS } from "@/lib/subjects";
+import type { ModuleSummary } from "@/lib/content/types";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -17,18 +16,20 @@ import { Button, buttonVariants } from "@/components/ui/button";
 type Key = keyof typeof Dict;
 type TR = (k: Key) => string;
 
-export function LandingClient({ catalog }: { catalog: CatalogItem[] }) {
+const FEATURED_SUBJECTS = ["physics", "chemistry", "biology"] as const;
+
+export function LandingClient({ modules }: { modules: ModuleSummary[] }) {
   const { tr } = useLocale();
   const { user, ready } = useUser();
-  const primaryHref = user ? "/dashboard" : googleSignInHref();
+  const primaryHref = user ? "/dashboard" : googleSignInHref("/modules");
   const primaryLabel = ready && user ? tr("hero.cta.dashboard") : tr("hero.cta.signup");
 
   return (
     <div className="overflow-hidden">
-      <Hero tr={tr} primaryHref={primaryHref} primaryLabel={primaryLabel} catalog={catalog} />
-      <ExperimentStrip tr={tr} catalog={catalog} />
+      <Hero tr={tr} primaryHref={primaryHref} primaryLabel={primaryLabel} modules={modules} />
+      <ModuleStrip tr={tr} modules={modules} />
       <HowItWorks tr={tr} />
-      <Showcase tr={tr} catalog={catalog} signedIn={!!user} />
+      <Showcase tr={tr} modules={modules} />
       <AssistantSection tr={tr} />
       <Partners tr={tr} />
       <FinalCta tr={tr} primaryHref={primaryHref} primaryLabel={primaryLabel} />
@@ -42,14 +43,14 @@ function Hero({
   tr,
   primaryHref,
   primaryLabel,
-  catalog,
+  modules,
 }: {
   tr: TR;
   primaryHref: string;
   primaryLabel: string;
-  catalog: CatalogItem[];
+  modules: ModuleSummary[];
 }) {
-  const sticker = catalog[0];
+  const sticker = modules[0];
   return (
     <section className="relative isolate bg-deep text-deep-foreground">
       <div aria-hidden className="absolute inset-0 -z-10 bg-grid text-primary-soft opacity-50" />
@@ -94,7 +95,7 @@ function Hero({
               size="lg"
               className="text-deep-foreground hover:bg-white/10 hover:text-deep-foreground dark:hover:bg-white/10"
             >
-              <Link href="/experiments">{tr("hero.cta.lessons")}</Link>
+              <Link href="/modules">{tr("hero.cta.lessons")}</Link>
             </Button>
           </div>
 
@@ -105,14 +106,15 @@ function Hero({
           </p>
         </div>
 
-        <HeroVisual tr={tr} sticker={sticker} />
+        {sticker && <HeroVisual tr={tr} sticker={sticker} />}
       </div>
     </section>
   );
 }
 
-function HeroVisual({ tr, sticker }: { tr: TR; sticker: CatalogItem }) {
-  const s = SUBJECT_STYLES[sticker.subject];
+function HeroVisual({ tr, sticker }: { tr: TR; sticker: ModuleSummary }) {
+  const lead = sticker.disciplines[0];
+  const s = SUBJECT_STYLES[lead];
   return (
     <div className="relative mx-auto w-full max-w-md lg:max-w-none">
       {/* Video, framed like a photo pinned to the notebook */}
@@ -133,20 +135,22 @@ function HeroVisual({ tr, sticker }: { tr: TR; sticker: CatalogItem }) {
         </video>
       </div>
 
-      {/* Sticker: a real experiment card */}
+      {/* Sticker: a real module card */}
       <div
         className="absolute -bottom-6 -left-3 w-56 animate-float rounded-2xl bg-card p-3.5 text-card-foreground shadow-pop ring-1 ring-border sm:-left-8 sm:w-64"
         style={{ ["--tilt" as string]: "-4deg" }}
       >
         <div className="flex items-center justify-between">
-          <SubjectLabel subject={sticker.subject} />
+          <SubjectLabel subject={lead} />
         </div>
-        <p className="mt-1.5 text-sm leading-snug font-semibold">{sticker.title}</p>
+        <p className="mt-1.5 text-sm leading-snug font-semibold">
+          {sticker.title}: {sticker.tagline}
+        </p>
         <div className={cn("mt-2.5 h-1.5 overflow-hidden rounded-full", s.soft)}>
           <div className={cn("h-full w-2/3 rounded-full", s.bg)} />
         </div>
         <p className="mt-1.5 flex items-center gap-1 text-[11px] text-muted-foreground">
-          <Clock className="size-3" /> {sticker.estimatedMinutes} {tr("showcase.min")}
+          <Clock className="size-3" /> {sticker.hours} {tr("showcase.hours")}
         </p>
       </div>
 
@@ -178,21 +182,22 @@ function Squiggle({ className }: { className?: string }) {
   );
 }
 
-/* ─────────────────────  EXPERIMENT MARQUEE  ───────────────────── */
+/* ───────────────────────  MODULE MARQUEE  ─────────────────────── */
 
-function ExperimentStrip({ tr, catalog }: { tr: TR; catalog: CatalogItem[] }) {
-  const items = catalog.slice(0, 14);
+function ModuleStrip({ tr, modules }: { tr: TR; modules: ModuleSummary[] }) {
+  // Every step of every module, so the strip shows what students actually do.
+  const items = modules.flatMap((m) => m.steps.map((s) => ({ key: `${m.id}/${s.id}`, subject: m.disciplines[0], label: s.title })));
   const row = (hidden: boolean) => (
     <ul aria-hidden={hidden || undefined} className="flex shrink-0 items-center gap-3 pr-3">
       {items.map((e) => (
         <li
-          key={e.id}
+          key={e.key}
           className="flex items-center gap-2 rounded-full bg-white/10 py-1.5 pr-4 pl-1.5 text-sm font-medium whitespace-nowrap text-primary-foreground"
         >
           <span className="flex size-7 items-center justify-center rounded-full bg-white/15">
             <SubjectIcon subject={e.subject} className="size-4" />
           </span>
-          {e.title}
+          {e.label}
         </li>
       ))}
     </ul>
@@ -212,15 +217,16 @@ function ExperimentStrip({ tr, catalog }: { tr: TR; catalog: CatalogItem[] }) {
 function HowItWorks({ tr }: { tr: TR }) {
   const steps = [
     { n: "01", icon: Search, title: tr("how.1.title"), body: tr("how.1.body"), tone: "bg-primary-soft text-primary-strong" },
-    { n: "02", icon: FlaskConical, title: tr("how.2.title"), body: tr("how.2.body"), tone: "bg-sun-soft text-chemistry" },
+    { n: "02", icon: Hammer, title: tr("how.2.title"), body: tr("how.2.body"), tone: "bg-sun-soft text-chemistry" },
     { n: "03", icon: BookOpen, title: tr("how.3.title"), body: tr("how.3.body"), tone: "bg-physics-soft text-physics" },
+    { n: "04", icon: Award, title: tr("how.4.title"), body: tr("how.4.body"), tone: "bg-biology-soft text-biology" },
   ];
   return (
     <section className="relative mx-auto max-w-6xl px-4 py-20 sm:py-24">
       <SectionHeading eyebrow={tr("how.eyebrow")} title={tr("how.title")} />
-      <ol className="relative mt-10 grid gap-8 md:mt-14 md:grid-cols-3 md:gap-6">
+      <ol className="relative mt-10 grid gap-8 md:mt-14 md:grid-cols-4 md:gap-6">
         {/* Dashed line joining the steps on wide screens */}
-        <div aria-hidden className="absolute top-8 right-[16%] left-[16%] hidden border-t-2 border-dashed border-primary/30 md:block" />
+        <div aria-hidden className="absolute top-8 right-[12%] left-[12%] hidden border-t-2 border-dashed border-primary/30 md:block" />
         {steps.map((s) => (
           <li key={s.n} className="relative flex gap-4 text-left md:block md:text-center">
             <span className={cn("relative flex size-14 shrink-0 items-center justify-center rounded-2xl shadow-card ring-4 ring-background md:mx-auto md:size-16", s.tone)}>
@@ -240,24 +246,13 @@ function HowItWorks({ tr }: { tr: TR }) {
 
 /* ───────────────────────────  SHOWCASE  ─────────────────────────── */
 
-function Showcase({ tr, catalog, signedIn }: { tr: TR; catalog: CatalogItem[]; signedIn: boolean }) {
-  // One of each subject first so all three colors show.
-  const picks: CatalogItem[] = [];
-  for (const s of SUBJECTS) {
-    const e = catalog.find((x) => x.subject === s.id && !picks.includes(x));
-    if (e) picks.push(e);
-  }
-  for (const e of catalog) if (picks.length < 6 && !picks.includes(e)) picks.push(e);
-  const shown = picks.slice(0, 6);
-
-  const avgMinutes = Math.round(catalog.reduce((n, e) => n + e.estimatedMinutes, 0) / Math.max(catalog.length, 1));
+function Showcase({ tr, modules }: { tr: TR; modules: ModuleSummary[] }) {
+  const units = new Set(modules.flatMap((m) => m.curriculum.map((c) => `${c.subject}|${c.grade}|${c.unit}`))).size;
   const stats = [
-    { value: String(catalog.length), label: tr("showcase.stat.experiments") },
-    { value: String(SUBJECTS.length), label: tr("showcase.stat.subjects") },
-    { value: "4", label: tr("showcase.stat.grades") },
-    { value: `~${avgMinutes}`, label: tr("showcase.stat.minutes") },
+    { value: String(modules.length), label: tr("showcase.stat.modules") },
+    { value: `~${Math.round(modules.reduce((n, m) => n + m.hours, 0) / Math.max(modules.length, 1))}`, label: tr("showcase.stat.hours") },
+    { value: String(units), label: tr("showcase.stat.curriculum") },
   ];
-  const hrefFor = (id: string) => (signedIn ? `/experiments/${id}` : googleSignInHref(`/experiments/${id}`));
 
   return (
     <section className="relative bg-primary-soft/40">
@@ -265,7 +260,7 @@ function Showcase({ tr, catalog, signedIn }: { tr: TR; catalog: CatalogItem[]; s
       <div className="relative mx-auto max-w-6xl px-4 py-20 sm:py-24">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <SectionHeading eyebrow={tr("showcase.eyebrow")} title={tr("showcase.title")} sub={tr("showcase.sub")} align="left" />
-          <dl className="grid shrink-0 grid-cols-4 gap-2 rounded-2xl bg-card p-2 shadow-card ring-1 ring-border">
+          <dl className="grid shrink-0 grid-cols-3 gap-2 rounded-2xl bg-card p-2 shadow-card ring-1 ring-border">
             {stats.map((s) => (
               <div key={s.label} className="rounded-xl px-3 py-2 text-center">
                 <dd className="font-heading text-2xl font-extrabold text-primary-strong tabular-nums">{s.value}</dd>
@@ -277,43 +272,40 @@ function Showcase({ tr, catalog, signedIn }: { tr: TR; catalog: CatalogItem[]; s
 
         {/* Phones: a swipeable row (snaps per card). Wider screens: a grid. */}
         <ul className="-mx-4 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 [scrollbar-width:none] sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
-          {shown.map((e) => {
-            const st = SUBJECT_STYLES[e.subject];
+          {modules.map((m) => {
+            const st = SUBJECT_STYLES[m.disciplines[0]];
             return (
-              <li key={e.id} className="w-[80%] shrink-0 snap-start sm:w-auto">
-                {/* Plain <a>: signed out, these go through Google sign-in first. */}
-                <a
-                  href={hrefFor(e.id)}
+              <li key={m.id} className="w-[85%] shrink-0 snap-start sm:w-auto">
+                <Link
+                  href={`/modules/${m.id}`}
                   className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-card p-5 shadow-card ring-1 ring-border transition hover:-translate-y-1 hover:shadow-pop focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
                 >
                   <span aria-hidden className={cn("absolute inset-x-0 top-0 h-1.5", st.bg)} />
                   <div className="flex items-start justify-between gap-3">
-                    <SubjectTile subject={e.subject} />
+                    <SubjectTile subject={m.disciplines[0]} />
                     <Badge variant="outline" className="text-muted-foreground">
-                      {tr("showcase.grade")} {e.grade}
+                      {m.hours} {tr("showcase.hours")}
                     </Badge>
                   </div>
-                  <h3 className="mt-4 text-lg leading-snug font-bold group-hover:text-primary-strong">{e.title}</h3>
-                  <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted-foreground">{e.summary}</p>
+                  <h3 className="mt-4 text-xl leading-snug font-extrabold group-hover:text-primary-strong">{m.title}</h3>
+                  <p className="font-semibold text-primary-strong dark:text-primary">{m.tagline}</p>
+                  <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted-foreground">{m.hook}</p>
                   <div className="mt-auto flex items-center justify-between pt-4 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1">
-                      <Clock className="size-3.5" /> {e.estimatedMinutes} {tr("showcase.min")}
+                      <Hammer className="size-3.5" /> {m.stepCount} {tr("showcase.steps")}
                     </span>
-                    <ArrowRight className={cn("size-4 transition group-hover:translate-x-1", st.text)} />
+                    <ArrowRight className={cn("size-4 shrink-0 transition group-hover:translate-x-1", st.text)} />
                   </div>
-                </a>
+                </Link>
               </li>
             );
           })}
         </ul>
 
         <div className="mt-10 text-center">
-          <a
-            href={signedIn ? "/experiments" : googleSignInHref("/experiments")}
-            className={cn(buttonVariants({ variant: "soft", size: "lg" }), "font-semibold")}
-          >
+          <Link href="/modules" className={cn(buttonVariants({ variant: "soft", size: "lg" }), "font-semibold")}>
             {tr("showcase.all")} <ArrowRight />
-          </a>
+          </Link>
         </div>
       </div>
     </section>
@@ -364,7 +356,7 @@ function AssistantSection({ tr }: { tr: TR }) {
           </div>
           <div className="max-w-[90%] space-y-2 rounded-2xl rounded-bl-md bg-card p-4 text-sm text-card-foreground shadow-soft">
             <div className="rounded-lg bg-primary-soft/60 py-2 text-center font-mono text-base font-bold text-primary-strong">
-              F = m · a
+              λ = c ÷ f
             </div>
             <p className="leading-relaxed">{tr("pillars.ai.mock.assistant1")}</p>
           </div>
@@ -422,8 +414,8 @@ function FinalCta({ tr, primaryHref, primaryLabel }: { tr: TR; primaryHref: stri
         <div aria-hidden className="absolute inset-0 bg-grid text-chemistry opacity-30" />
         <div className="relative">
           <div className="mx-auto flex w-fit gap-2">
-            {SUBJECTS.map((s) => (
-              <SubjectTile key={s.id} subject={s.id} size="lg" className="bg-card shadow-card" />
+            {FEATURED_SUBJECTS.map((s) => (
+              <SubjectTile key={s} subject={s} size="lg" className="bg-card shadow-card" />
             ))}
           </div>
           <h2 className="mt-6 text-4xl font-extrabold sm:text-5xl">{tr("cta.title")}</h2>
