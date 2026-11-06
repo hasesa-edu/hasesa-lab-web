@@ -78,7 +78,7 @@ export default async function ConceptPage({ params, searchParams }: Props) {
           <h1 className="font-dial mt-2 text-5xl leading-[0.95] font-extrabold text-balance sm:text-7xl">{c.title}</h1>
           <p className="mt-3 text-lg text-deep-foreground/80">{c.summary}</p>
           <div className="mt-5 flex flex-wrap items-center gap-2">
-            <StatusBadge status={c.status} onDark className="h-8 px-3 text-sm" />
+            <StatusBadge status={c.status} onDark />
             <a href="#problems" className="inline-flex min-h-8 items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-sm ring-1 ring-white/15 hover:bg-white/15">
               <Puzzle aria-hidden className="size-4 text-sun" /> {c.problems.length} problems
             </a>
@@ -87,7 +87,7 @@ export default async function ConceptPage({ params, searchParams }: Props) {
       </header>
 
       <div className="mx-auto max-w-6xl px-4 [&>*]:max-w-3xl pb-16">
-        <section className="mt-8 rounded-2xl bg-card p-5 shadow-card ring-1 ring-border sm:p-7">
+        <section className="mt-12">
           <SectionTitle icon={BookOpen} className="mb-5">
             The idea
           </SectionTitle>
@@ -113,10 +113,10 @@ export default async function ConceptPage({ params, searchParams }: Props) {
           </Link>
         )}
 
-        <div className="mt-12 grid gap-4 sm:grid-cols-2">
+        <div className="mt-16 grid gap-10 sm:grid-cols-2">
           {usage.length > 0 && (
-            <section className="rounded-2xl bg-card p-5 shadow-soft ring-1 ring-border">
-              <h2 className="text-sm font-bold tracking-wide text-subtle-foreground uppercase">Used in</h2>
+            <section className="border-t-2 border-ink pt-4">
+              <h2 className="text-sm font-bold text-subtle-foreground">Used in</h2>
               <ul className="mt-3 space-y-2 text-sm">
                 {usage.map(({ module, steps }) => (
                   <li key={module.id}>
@@ -130,8 +130,8 @@ export default async function ConceptPage({ params, searchParams }: Props) {
             </section>
           )}
           {c.curriculum.length > 0 && (
-            <section className="rounded-2xl bg-card p-5 shadow-soft ring-1 ring-border">
-              <h2 className="flex items-center gap-1.5 text-sm font-bold tracking-wide text-subtle-foreground uppercase">
+            <section className="border-t-2 border-ink pt-4">
+              <h2 className="flex items-center gap-1.5 text-sm font-bold text-subtle-foreground">
                 <GraduationCap aria-hidden className="size-4" /> In your school curriculum
               </h2>
               <ul className="mt-3 space-y-1.5 text-sm">

@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { ModuleSummary } from "@/lib/content/types";
 import { LogoMark } from "@/components/Logo";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { mysteryOf, type Station } from "@/lib/stations";
 
 // The medium-wave band, the one the Radio module's crystal radio receives.
 export const MIN_KHZ = 530;
@@ -14,16 +14,6 @@ const STEP = 10;
 // How close (kHz) the needle must be to hear a station, and to snap onto it.
 const CAPTURE = 45;
 const SNAP = 30;
-const FREQS = [1040, 700, 1420, 880, 1260, 1580];
-
-export type Station = { khz: number; module: ModuleSummary };
-
-/** Gives each module a station on the dial. Radio goes first: it's the radio. */
-export function assignStations(modules: ModuleSummary[]): Station[] {
-  const ordered = [...modules].sort((a, b) => Number(b.id === "radio") - Number(a.id === "radio"));
-  return ordered.slice(0, FREQS.length).map((module, i) => ({ khz: FREQS[i], module }));
-}
-
 const pct = (khz: number) => ((khz - MIN_KHZ) / (MAX_KHZ - MIN_KHZ)) * 100;
 const clamp = (khz: number) => Math.min(MAX_KHZ, Math.max(MIN_KHZ, khz));
 
@@ -32,11 +22,6 @@ function questionSize(q: string) {
   if (q.length > 55) return "text-[1.7rem] sm:text-4xl";
   if (q.length > 38) return "text-3xl sm:text-[2.6rem]";
   return "text-[2rem] sm:text-5xl";
-}
-
-/** The last sentence of a hook is the mystery itself. */
-export function mysteryOf(m: ModuleSummary) {
-  return m.hook.match(/[^.!?…—]*\?\s*$/)?.[0].trim() || m.tagline;
 }
 
 /**

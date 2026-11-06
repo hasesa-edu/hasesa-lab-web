@@ -9,7 +9,6 @@ import { isUnitDone } from "@/lib/summary";
 import { BRAND } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 import { Markdown } from "@/components/Markdown";
-import { SUBJECT_STYLES } from "@/components/Subject";
 import { StepNotebook } from "@/components/module/StepNotebook";
 import { BackLink, HeaderChip, KIND_LABEL, SectionTitle, StatusBadge, UnitStatusPill, VideoEmbed } from "@/components/module/ui";
 
@@ -45,7 +44,6 @@ export default async function StepPage({ params }: Props) {
   const feedback = state?.feedback.filter((f) => f.moduleId === m.id && f.stepId === step.id) ?? [];
   const prev = m.steps[index - 1];
   const next = m.steps[index + 1];
-  const lead = m.disciplines[0];
   const ready = step.units.filter((u) => isUnitDone(unitStatus.get(u))).length;
 
   return (
@@ -60,10 +58,9 @@ export default async function StepPage({ params }: Props) {
           <div className="mt-5 flex flex-wrap gap-2">
             <HeaderChip icon={Clock}>{step.minutes} min</HeaderChip>
             {saved?.done && <HeaderChip icon={Check}>Done</HeaderChip>}
-            <StatusBadge status={m.status} onDark className="h-8 px-3 text-sm" />
+            <StatusBadge status={m.status} onDark />
           </div>
         </div>
-        <span aria-hidden className={cn("absolute inset-x-0 bottom-0 h-1.5", SUBJECT_STYLES[lead].bg)} />
       </header>
 
       <div className="mx-auto max-w-6xl px-4 [&>*]:max-w-3xl pb-16">
@@ -73,7 +70,7 @@ export default async function StepPage({ params }: Props) {
               <div key={f.id} className="flex gap-3 rounded-2xl bg-sun-soft p-4 ring-1 ring-sun/30">
                 <MessageSquareQuote aria-hidden className="mt-0.5 size-5 shrink-0 text-amber-700 dark:text-sun" />
                 <div>
-                  <p className="text-xs font-bold tracking-wide text-amber-800 uppercase dark:text-sun">Your guide</p>
+                  <p className="text-sm font-bold text-amber-800 dark:text-sun">Your guide</p>
                   <p className="mt-1 whitespace-pre-wrap text-foreground">{f.body}</p>
                 </div>
               </div>
@@ -144,7 +141,7 @@ export default async function StepPage({ params }: Props) {
           <span className="relative inline-flex size-12 shrink-0 items-center justify-center rounded-2xl bg-sun text-deep">
             <MessageCircle aria-hidden className="size-6" />
           </span>
-          <span className="relative flex-1 font-heading text-lg leading-snug font-bold sm:text-xl">Stuck? Ask the lab assistant about this step</span>
+          <span className="relative flex-1 font-dial text-2xl leading-snug font-bold sm:text-3xl">Stuck? Ask the lab assistant about this step</span>
           <ArrowRight aria-hidden className="relative size-5 shrink-0 text-sun transition group-hover:translate-x-1" />
         </Link>
 
