@@ -49,7 +49,7 @@ export function SubjectTile({ subject, size = "md", className }: { subject: Disc
 export function SubjectLabel({ subject, className }: { subject: Discipline; className?: string }) {
   const s = SUBJECT_STYLES[subject];
   return (
-    <span className={cn("inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide", s.text, className)}>
+    <span className={cn("inline-flex items-center gap-1.5 text-sm font-bold", s.text, className)}>
       <SubjectIcon subject={subject} className="size-3.5" />
       {DISCIPLINES[subject].label}
     </span>

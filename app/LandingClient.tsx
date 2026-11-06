@@ -12,7 +12,9 @@ import { DISCIPLINES } from "@/lib/disciplines";
 import { CONTACT_EMAIL } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { TuningDial, assignStations, mysteryOf, type Station } from "./landing/TuningDial";
+import { TuningDial } from "./landing/TuningDial";
+import { StationRows } from "@/components/module/StationRows";
+import { assignStations, mysteryOf, type Station } from "@/lib/stations";
 import { SolveIt, type Challenge } from "./landing/SolveIt";
 
 type Key = keyof typeof Dict;
@@ -160,39 +162,9 @@ function Modules({ tr, stations }: { tr: TR; stations: Station[] }) {
           </Link>
         </div>
 
-        {/* Case files, filed by their station on the dial */}
-        <ul className="mt-12 border-t-2 border-ink">
-          {stations.map(({ khz, module: m }) => (
-            <li key={m.id} className="border-b-2 border-ink/15">
-              <Link
-                href={`/modules/${m.id}`}
-                className="group grid gap-x-8 gap-y-3 py-8 outline-none focus-visible:bg-lab sm:grid-cols-[7rem_1fr] lg:grid-cols-[7rem_1.1fr_1fr_auto] lg:items-baseline"
-              >
-                <span className="font-dial text-4xl font-bold text-primary tabular-nums">
-                  {khz}
-                  <span className="ml-1 text-base font-medium text-ink/50">kHz</span>
-                </span>
-                <span>
-                  <span className="block font-dial text-4xl leading-none font-bold transition-colors group-hover:text-primary sm:text-5xl">
-                    {m.title}
-                  </span>
-                  <span className="mt-2 block text-ink/75">{m.tagline}</span>
-                </span>
-                <span className="text-lg leading-snug italic sm:col-start-2 lg:col-start-auto">“{mysteryOf(m)}”</span>
-                <span className="flex flex-wrap gap-2 sm:col-start-2 lg:col-start-auto lg:justify-end">
-                  {m.disciplines.map((d) => (
-                    <span key={d} className={cn("text-sm font-bold", SUBJECT_STYLES[d].text)}>
-                      {DISCIPLINES[d].label}
-                    </span>
-                  ))}
-                  <span className="w-full text-sm text-ink/55 lg:text-right">
-                    {m.stepCount} {tr("showcase.steps")}, about {m.hours} {tr("showcase.hours")}
-                  </span>
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className="mt-12">
+          <StationRows stations={stations} />
+        </div>
       </div>
     </section>
   );

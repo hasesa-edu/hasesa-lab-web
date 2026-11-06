@@ -31,7 +31,7 @@ export default async function GuideVersionPage({ params }: Props) {
           <p className="mt-4 text-sm font-bold text-sun">Guide&apos;s version · not shown to students</p>
           <h1 className="font-dial mt-2 text-5xl font-extrabold sm:text-7xl leading-[0.95]">{m.title}</h1>
           <div className="mt-4">
-            <StatusBadge status={m.status} onDark className="h-8 px-3 text-sm" />
+            <StatusBadge status={m.status} onDark />
           </div>
         </div>
       </header>
