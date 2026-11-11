@@ -1,5 +1,11 @@
 // Pure access rules, shared by server code and tests.
 
+/**
+ * Pilot: every account is enrolled at the Academy until the end of 2027
+ * (Addis Ababa time). New sign-ups get this as their paid_until.
+ */
+export const PILOT_ENROLLED_UNTIL = new Date("2028-01-01T00:00:00+03:00");
+
 export type AccessLevel = "public" | "signed-in" | "enrolled" | "guide";
 
 export type Access = { level: "public"; userId?: undefined } | { level: Exclude<AccessLevel, "public">; userId: string };
