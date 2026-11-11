@@ -1,7 +1,7 @@
 import { db, schema } from "@/lib/db/client";
 import { and, eq, isNull, ne } from "drizzle-orm";
 import type { Locale } from "@/lib/i18n";
-import { accessFrom, type AccessLevel } from "@/lib/access-rules";
+import { accessFrom, PILOT_ENROLLED_UNTIL, type AccessLevel } from "@/lib/access-rules";
 
 const VALID_LOCALES = new Set<string>(["en"]);
 const MAX_TEXT = 120;
@@ -70,7 +70,7 @@ export async function upsertGoogleUser(profile: {
   const id = crypto.randomUUID();
   const inserted = await db
     .insert(schema.users)
-    .values({ id, email, googleSub: profile.sub, displayName, avatarUrl })
+    .values({ id, email, googleSub: profile.sub, displayName, avatarUrl, paidUntil: PILOT_ENROLLED_UNTIL })
     .onConflictDoNothing()
     .returning({ id: schema.users.id });
   if (inserted.length) return { userId: id, isNew: true };
