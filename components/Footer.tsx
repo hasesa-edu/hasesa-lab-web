@@ -45,6 +45,7 @@ export function Footer() {
                 <li><Link href="/" className={linkClass}>{tr("footer.explore.home")}</Link></li>
                 <li><Link href="/academy" className={linkClass}>{tr("footer.explore.academy")}</Link></li>
                 <li><Link href="/modules" className={linkClass}>{tr("footer.explore.modules")}</Link></li>
+                <li><Link href="/academy#faq" className={linkClass}>{tr("footer.explore.faq")}</Link></li>
               </ul>
             </nav>
 
