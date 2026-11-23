@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useLocale } from "./LocaleProvider";
 import { LogoMark } from "./Logo";
 import { BRAND, CONTACT_EMAIL } from "@/lib/brand";
-import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export function Footer() {
@@ -30,12 +30,15 @@ export function Footer() {
             <p className="mt-4 text-lg leading-relaxed text-white/75">{tr("footer.contact.body")}</p>
           </div>
           {CONTACT_EMAIL && (
-            <a
-              href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Hasesa")}`}
-              className={cn(buttonVariants({ size: "lg" }), "bg-white text-ink hover:bg-white/90")}
-            >
-              {tr("footer.contact.cta")}
-            </a>
+            <p className="flex flex-wrap items-center gap-x-4 gap-y-2">
+              <a
+                href={`mailto:${CONTACT_EMAIL}`}
+                className="text-xl font-semibold break-all text-white underline-offset-4 hover:underline sm:text-2xl"
+              >
+                {CONTACT_EMAIL}
+              </a>
+              <CopyEmail email={CONTACT_EMAIL} />
+            </p>
           )}
         </section>
       )}
@@ -61,5 +64,30 @@ export function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+/** Copies the contact address; hidden where the clipboard API isn't available. */
+function CopyEmail({ email }: { email: string }) {
+  const [canCopy, setCanCopy] = useState(false);
+  const [copied, setCopied] = useState(false);
+  useEffect(() => setCanCopy(typeof navigator !== "undefined" && !!navigator.clipboard), []);
+  if (!canCopy) return null;
+  return (
+    <button
+      type="button"
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(email);
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        } catch {
+          /* ignore: the address is still visible to copy by hand */
+        }
+      }}
+      className="inline-flex min-h-9 items-center rounded-md border border-white/25 px-3 font-mono text-xs tracking-[0.08em] text-white/80 uppercase transition-colors hover:bg-white/10 hover:text-white"
+    >
+      <span aria-live="polite">{copied ? "Copied" : "Copy"}</span>
+    </button>
   );
 }
