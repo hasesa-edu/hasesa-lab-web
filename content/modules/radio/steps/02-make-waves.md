@@ -4,6 +4,7 @@ kind: investigate
 minutes: 75
 video: { youtubeId: "sRbSQ9wGA1I", credit: "Ed Reeves" }
 units: [waves-and-vibrations, frequency-and-period, rearranging-formulas]
+summary: "Make waves with ropes, slinkies and a ripple tray, and find out what all waves have in common."
 ---
 ## Do: rope and slinky waves
 

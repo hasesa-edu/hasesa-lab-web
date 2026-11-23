@@ -3,6 +3,7 @@ title: Cells up close
 kind: investigate
 minutes: 90
 units: [cells, scientific-notation]
+summary: "Look at onion cells and your own cheek cells under the microscope, and work out how small they are."
 ---
 ## Do: onion cells (25 minutes)
 

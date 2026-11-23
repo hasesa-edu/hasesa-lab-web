@@ -3,6 +3,7 @@ title: The poster
 kind: finish
 minutes: 75
 units: []
+summary: "Make a scientific poster, share it in a poster session, and answer the mystery."
 ---
 ## Make your poster (40 minutes)
 

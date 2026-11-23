@@ -4,6 +4,7 @@ kind: investigate
 minutes: 90
 video: { youtubeId: "_6KM81mK6Rc", credit: "FSSAI" }
 units: [chemical-tests]
+summary: "Use iodine to hunt for hidden starch in the kibe and the berbere."
 ---
 ## Do: a first iodine test (20 minutes)
 

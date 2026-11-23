@@ -4,6 +4,7 @@ kind: investigate
 minutes: 75
 video: { youtubeId: "GKH-x3kwyxQ", credit: "Helen Rogerson" }
 units: [mixtures-and-separation, density]
+summary: "Sink-test the samples for grit and measure how much is hiding in them."
 ---
 ## Do: the sink test (15 minutes)
 

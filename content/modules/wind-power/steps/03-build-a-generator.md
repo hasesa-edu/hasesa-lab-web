@@ -3,6 +3,7 @@ title: Build a generator
 kind: build
 minutes: 150
 units: [electromagnetic-induction, charge-current-voltage]
+summary: "Build a generator from magnets and coils, test it, and improve its output."
 ---
 ## The design
 

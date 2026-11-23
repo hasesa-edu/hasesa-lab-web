@@ -3,6 +3,7 @@ title: Catch the wave
 kind: build
 minutes: 90
 units: [em-spectrum, scientific-notation]
+summary: "String up a long antenna safely and find out why it can be much shorter than the wave it catches."
 ---
 ## Safety first
 

@@ -3,6 +3,7 @@ title: A cracking continent
 kind: investigate
 minutes: 75
 units: [earthquakes-and-the-rift, waves-and-vibrations]
+summary: "Pull a model continent apart, make P and S waves, and work out how far away an earthquake was."
 ---
 ## Do: pull a continent apart (20 minutes)
 

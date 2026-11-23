@@ -3,6 +3,7 @@ title: From the market
 kind: hook
 minutes: 45
 units: [polymers]
+summary: "Handle soap and plastic made from market ingredients, and predict how they were made."
 ---
 ## Look and handle
 

@@ -3,6 +3,7 @@ title: Launch day
 kind: finish
 minutes: 60
 units: []
+summary: "Make your final launches, solve the mystery, and explain your rocket to your guide."
 ---
 ## Final launches (25 minutes)
 

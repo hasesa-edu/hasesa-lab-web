@@ -4,6 +4,7 @@ kind: investigate
 minutes: 90
 video: { youtubeId: "44IgrwW01ZI", credit: "Stephen Rizner" }
 units: [chromatography, mixtures-and-separation]
+summary: "Shake the colour out of berbere and run a chromatogram to see what's really in it."
 ---
 ## Do: shake out the colour (20 minutes)
 

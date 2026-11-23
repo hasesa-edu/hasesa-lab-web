@@ -4,6 +4,7 @@ kind: build
 minutes: 90
 video: { youtubeId: "G7wzFLegC48", credit: "Backroom Electronics" }
 units: [diodes-and-rectification, amplitude-modulation]
+summary: "Try a one-way valve for electricity, then add a diode to your radio and find out what it does."
 ---
 ## Do: the one-way valve
 

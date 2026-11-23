@@ -3,6 +3,7 @@ title: Plan a fair test
 kind: investigate
 minutes: 90
 units: [fair-tests]
+summary: "Choose one question about what seeds need and plan a fair test to answer it."
 ---
 ## Choose a question (15 minutes)
 

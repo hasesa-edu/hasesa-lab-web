@@ -3,6 +3,7 @@ title: Design and test
 kind: build
 minutes: 120
 units: [structures-and-forces, resonance]
+summary: "Design and build a tower to a materials budget, then test it and make it better."
 ---
 ## The challenge
 

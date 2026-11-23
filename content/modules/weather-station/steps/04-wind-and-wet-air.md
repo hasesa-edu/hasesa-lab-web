@@ -3,6 +3,7 @@ title: Wind and wet air
 kind: build
 minutes: 120
 units: [air-and-weather, frequency-and-period]
+summary: "Build an anemometer, a wind vane and a hygrometer, then teach another team how yours works."
 ---
 Each team builds one of three instruments, then teaches another team how it works.
 

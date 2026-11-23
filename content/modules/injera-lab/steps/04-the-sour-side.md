@@ -3,6 +3,7 @@ title: The sour side
 kind: investigate
 minutes: 75
 units: [acids-bases-ph, microbes]
+summary: "Make a red-cabbage indicator, track how sour the batter gets, and plan your baking experiment."
 ---
 ## Do: make an indicator (20 minutes)
 

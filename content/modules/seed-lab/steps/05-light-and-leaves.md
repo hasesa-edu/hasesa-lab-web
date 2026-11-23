@@ -3,6 +3,7 @@ title: Light and leaves
 kind: investigate
 minutes: 90
 units: [photosynthesis-and-growth, chemical-tests]
+summary: "Check on your experiment, then use a covered leaf and seedlings in the dark to see what light does."
 ---
 ## First: check your experiment (10 minutes)
 

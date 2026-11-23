@@ -3,6 +3,7 @@ title: Squeezed air
 kind: investigate
 minutes: 60
 units: [pressure]
+summary: "Squeeze air in syringes and a pumped bottle to feel pressure build, and work out the force on the nozzle."
 ---
 ## Do: feel the squeeze (20 minutes)
 

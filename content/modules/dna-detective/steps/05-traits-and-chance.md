@@ -3,6 +3,7 @@ title: Traits and chance
 kind: investigate
 minutes: 120
 units: [inheritance]
+summary: "Predict inheritance with Punnett squares, test the predictions with coins, and solve a family mystery."
 ---
 ## Theory: inheritance
 

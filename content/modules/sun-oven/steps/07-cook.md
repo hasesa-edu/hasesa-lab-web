@@ -3,6 +3,7 @@ title: Cook!
 kind: finish
 minutes: 60
 units: []
+summary: "Cook in your oven, solve the mystery, and explain how it works to your guide."
 ---
 ## Cook (set up at the start of the day)
 
