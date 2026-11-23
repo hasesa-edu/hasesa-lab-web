@@ -1,9 +1,11 @@
 # Hasesa Academy — Hands-on Science Modules for Ethiopian Students — Requirements
 
-**Version:** 0.6 (Draft)
+**Version:** 0.7 (Draft)
 **Date:** 2026-11-23
 **Owner:** TBD
 
+> **v0.7 change:** Pricing is set: a place at the Academy costs 12,000 ETB a year (hands-on sessions at partner schools in Addis Ababa), while online access stays free during the pilot (§5.6a). The Academy page gained an FAQ for parents (FR-34), and the site was made visible to search engines and AI answer engines: canonical URLs, structured data, `llms.txt`, and Google and Bing verification (FR-40).
+>
 > **v0.6 change:** The module page was reorganised around what the viewer needs next (§5.8, FR-39): an action panel, a "pick up where you left off" view for returning students, and fewer sections. The footer has a "Get in touch" column with the email and, later, social links (FR-36).
 >
 > **v0.5 change:** The website now presents **Hasesa** first, an organisation building an education system for the AI era, with the Academy as its first program. `/` is Hasesa's home page and the Academy has its own page at `/academy` (§5.8). The whole site moved to a clean, modern look (paper, ink, hairlines, one teal accent; Geist type). Marketing copy was reviewed for accuracy against the pilot (free sign-up, draft content and curriculum tags).
@@ -155,7 +157,7 @@ Students today rely on YouTube demos (generic, often needing lab equipment they 
   - Structured data: `EducationalOrganization` + `WebSite` on every page, `Course` on each module page, and `FAQPage` for the Academy FAQ.
   - `/llms.txt` summarises Hasesa and links its public pages; `sitemap.xml` lists the public pages; `robots.txt` allows all crawlers, including AI crawlers, except in private areas.
   - The Vercel production hosts redirect permanently to www.hasesa.com.
-  - The site is submitted to Google Search Console and Bing Webmaster Tools (pending).
+  - The site is verified in Google Search Console and Bing Webmaster Tools, with the sitemap submitted to both. Bing verification uses `public/BingSiteAuth.xml` and the `msvalidate.01` meta tag in `app/layout.tsx`; keep both.
 ### 5.7 Offline Access (post-MVP)
 - **FR-30** Students can save steps and concept units (text and images) for offline use. Videos are optional downloads.
 - **FR-31** Progress, notes and answers made offline sync automatically on the next connection.
@@ -242,7 +244,7 @@ Network baselines: **2G** = 400 Kbps / 400 ms RTT, **3G** = 1.6 Mbps / 300 ms RT
 |---|---|---|
 | Pilot (done, June 2026) | Strawberry DNA extraction with Grade 11 students, guided live | Showed demand for hands-on, low-cost science |
 | v0.3 experiment catalogue (retired, 2026-10/11) | Self-serve experiment guides, lab assistant, notebook | Replaced by the Academy model |
-| Academy pilot (current, to end of 2027) | Three AI-drafted modules, shared units, guide tools, certificates, embedded assistant; English; free enrolment | Students earn certificates; ≥ 50% of starters finish a module; no P0 bugs |
+| Academy pilot (current, to end of 2027) | Three AI-drafted modules, shared units, guide tools, certificates, embedded assistant; English; free online access, Academy places at 12,000 ETB a year | Students earn certificates; ≥ 50% of starters finish a module; no P0 bugs |
 | Expert-reviewed release | All three modules `expert-reviewed`, then `classroom-tested`; own videos | Assistant meets the §2 quality and safety targets |
 | Public launch | Amharic UI, offline steps and units, more modules, pricing decision | Privacy and legal sign-off; AI cost within budget at target scale |
 
