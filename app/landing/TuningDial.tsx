@@ -230,7 +230,7 @@ export function TuningDial({ stations }: { stations: Station[] }) {
 
           {/* the needle: the Hasesa "peek" riding on a teal line */}
           <div aria-hidden className="pointer-events-none absolute top-0 bottom-6 -translate-x-1/2" style={{ left: `${pct(khz)}%` }}>
-            <LogoMark size={46} className="-translate-y-1 drop-shadow" />
+            <LogoMark size={46} tone="light" className="-translate-y-1 drop-shadow" />
             <span className="absolute top-4 bottom-0 left-1/2 w-[3px] -translate-x-1/2 rounded-full bg-signal shadow-[0_0_12px_var(--signal)]" />
           </div>
         </div>
