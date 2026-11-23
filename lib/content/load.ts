@@ -6,6 +6,7 @@ import path from "node:path";
 import matter from "gray-matter";
 import { z } from "zod";
 import type { Concept, CurriculumRef, Level, Module, Step } from "./types";
+import { splitSections } from "./sections";
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 
@@ -59,6 +60,8 @@ const stepFm = z.object({
   minutes: z.number().int().min(5).max(300),
   units: z.array(z.string()).default([]),
   video: video.optional(),
+  /** One line shown in the module page's step list, before a student opens the step. */
+  summary: z.string().min(1).max(240).optional(),
 });
 
 const moduleFm = z.object({
@@ -143,7 +146,10 @@ function loadModule(dir: string, id: string, concepts: Map<string, Concept>): Mo
     for (const u of sfm.units) {
       if (!concepts.has(u)) throw new Error(`Step ${id}/${m[1]} uses unknown concept "${u}"`);
     }
-    return { id: m[1], ...sfm, body: s.content.trim() };
+    const body = s.content.trim();
+    // The step's section names, a preview that gives nothing away ("Watch · Predict · Test").
+    const sections = splitSections(body, "").filter((x) => x.title).map((x) => x.label);
+    return { id: m[1], ...sfm, body, sections };
   });
   if (!steps.length) throw new Error(`Module ${id} has no steps`);
   if (new Set(steps.map((s) => s.id)).size !== steps.length) throw new Error(`Module ${id} has duplicate step ids`);

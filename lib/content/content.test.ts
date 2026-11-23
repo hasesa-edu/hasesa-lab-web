@@ -17,6 +17,10 @@ describe("content", () => {
         expect(minutes).toBeLessThanOrEqual(m.hours * 60 * 1.25);
       });
 
+      it("gives every step named sections for its preview", () => {
+        for (const s of m.steps) expect(s.sections.length, s.id).toBeGreaterThan(0);
+      });
+
       it("starts by doing and ends with a finish step", () => {
         expect(m.steps[0].kind).toBe("hook");
         expect(m.steps[m.steps.length - 1].kind).toBe("finish");

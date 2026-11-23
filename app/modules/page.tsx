@@ -21,19 +21,17 @@ export default async function ModulesPage({ searchParams }: { searchParams: Prom
   const modules = getModules();
   const items = modules.map((m) => catalogueItem(summarize(m)));
   const params = await searchParams;
-  const initial = parseFilters(params);
   const sort = parseSort(params);
   const viewer: Viewer = !access.userId ? "visitor" : hasFullAccess(access) ? "full" : "limited";
+  const parsed = parseFilters(params);
+  // Only students have progress to filter by.
+  const initial = viewer === "full" ? parsed : { ...parsed, progress: null };
 
   return (
     <div>
       <PageHeader
-        title={initial.q ? `Results for “${initial.q}”` : "Explore modules"}
-        description={
-          initial.q
-            ? undefined
-            : "Each module is a mystery to solve or something to build, from beginner to advanced. Start anywhere: a beginner module is a good first step. Search from the bar at the top of any page."
-        }
+        title="Explore modules"
+        description="Each module is a mystery to solve or something to build, from beginner to advanced. New here? A beginner module is a good first step."
       />
       <div className="mx-auto max-w-6xl px-4 pt-8 pb-16">
         {/* Remount when the URL's filters change (e.g. a new search from the header). */}

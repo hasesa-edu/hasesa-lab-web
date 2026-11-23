@@ -51,20 +51,25 @@ export const LENGTHS = {
 } as const;
 export type Length = keyof typeof LENGTHS;
 
-export type Filters = { q: string; level: Level | null; subject: Discipline | null; length: Length | null };
-export const NO_FILTERS: Filters = { q: "", level: null, subject: null, length: null };
+/** Progress filters, for students. A dropped module counts as not started. */
+export const PROGRESS = { "not-started": "Not started", active: "In progress", completed: "Done" } as const;
+export type Progress = keyof typeof PROGRESS;
+
+export type Filters = { q: string; level: Level | null; subject: Discipline | null; length: Length | null; progress: Progress | null };
+export const NO_FILTERS: Filters = { q: "", level: null, subject: null, length: null, progress: null };
 
 type Params = Record<string, string | string[] | undefined>;
 const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) ?? "";
 const oneOf = <T extends string>(v: string, allowed: readonly T[]): T | null => (allowed.includes(v as T) ? (v as T) : null);
 
-/** Filters from a URL's query (`?q=&level=&subject=&length=`). Unknown values are ignored. */
+/** Filters from a URL's query (`?q=&level=&subject=&length=&progress=`). Unknown values are ignored. */
 export function parseFilters(params: Params): Filters {
   return {
     q: first(params.q).trim().slice(0, 100),
     level: oneOf(first(params.level), LEVEL_ORDER),
     subject: oneOf(first(params.subject), Object.keys(DISCIPLINES) as Discipline[]),
     length: oneOf(first(params.length), Object.keys(LENGTHS) as Length[]),
+    progress: oneOf(first(params.progress), Object.keys(PROGRESS) as Progress[]),
   };
 }
 
@@ -75,11 +80,12 @@ export function filtersQuery(f: Filters): string {
   if (f.level) p.set("level", f.level);
   if (f.subject) p.set("subject", f.subject);
   if (f.length) p.set("length", f.length);
+  if (f.progress) p.set("progress", f.progress);
   const s = p.toString();
   return s ? `?${s}` : "";
 }
 
-export const isFiltered = (f: Filters) => !!(f.q.trim() || f.level || f.subject || f.length);
+export const isFiltered = (f: Filters) => !!(f.q.trim() || f.level || f.subject || f.length || f.progress);
 
 const fold = (s: string) => s.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "");
 
@@ -91,13 +97,23 @@ export function matchesQuery(m: Pick<CatalogueItem, "title" | "tagline" | "myste
   return words.every((w) => text.includes(w));
 }
 
-/** The modules that match every filter, in the order given (content order: easiest first). */
-export function filterModules<T extends CatalogueItem>(items: T[], f: Filters): T[] {
+/** Where a student stands with a module, for the progress filter. */
+export function progressOf(status: Status | undefined): Progress {
+  return status === "active" || status === "completed" ? status : "not-started";
+}
+
+/**
+ * The modules that match every filter, in the order given (content order:
+ * easiest first). The progress filter reads `states`; without them every
+ * module counts as not started.
+ */
+export function filterModules<T extends CatalogueItem>(items: T[], f: Filters, states: Record<string, { status: Status }> = {}): T[] {
   return items.filter(
     (m) =>
       (!f.level || m.level === f.level) &&
       (!f.subject || m.disciplines.includes(f.subject)) &&
       (!f.length || LENGTHS[f.length].fits(m.hours)) &&
+      (!f.progress || progressOf(states[m.id]?.status) === f.progress) &&
       matchesQuery(m, f.q)
   );
 }

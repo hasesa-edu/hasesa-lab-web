@@ -67,6 +67,10 @@ export type Step = {
   /** Concept units this step relies on. */
   units: string[];
   video?: Video;
+  /** Optional one-line preview for the module page. */
+  summary?: string;
+  /** The names of the step's "## " sections, in order. */
+  sections: string[];
   body: string;
 };
 
