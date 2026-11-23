@@ -2,45 +2,36 @@
 
 import { cn } from "@/lib/utils";
 import type { t as Dict } from "@/lib/i18n";
+import { SectionLabel } from "./SectionLabel";
 
 type Key = keyof typeof Dict;
 type TR = (k: Key) => string;
 
 /* ───────────────────────────  WHY  ─────────────────────────── */
 
-export function Why({ tr }: { tr: TR }) {
-  // The story from the deck, told in three beats: then, now, next. It is a
-  // real sequence in time, so it gets a line running through it.
+/** The thesis in three beats, then / now / next, side by side. The last one carries the accent. */
+export function Why({ tr, n = "01" }: { tr: TR; n?: string }) {
   const beats: { label: Key; line: Key; body: Key }[] = [
     { label: "why.then.label", line: "why.then.line", body: "why.then.body" },
     { label: "why.now.label", line: "why.now.line", body: "why.now.body" },
     { label: "why.next.label", line: "why.next.line", body: "why.next.body" },
   ];
   return (
-    <section className="border-t-2 border-ink/10">
-      <div className="mx-auto max-w-6xl px-4 py-20 sm:py-28">
-        <ol className="relative space-y-14 border-l-4 border-signal/30 pl-6 sm:space-y-20 sm:pl-12">
+    <section className="border-t border-border">
+      <div className="mx-auto max-w-6xl px-4 py-16 sm:py-24">
+        <SectionLabel n={n}>{tr("label.why")}</SectionLabel>
+        <ol className="mt-10 grid gap-10 md:grid-cols-3">
           {beats.map((b, i) => {
             const last = i === beats.length - 1;
             return (
-              <li key={b.label} className="relative">
-                <span
-                  aria-hidden
-                  className={cn(
-                    "absolute top-3 -left-[calc(1.5rem+0.6rem)] size-4 rounded-full ring-4 ring-lab sm:-left-[calc(3rem+0.6rem)]",
-                    last ? "bg-sun" : "bg-signal"
-                  )}
-                />
-                <p className={cn("text-sm font-bold", last ? "text-chemistry" : "text-primary")}>{tr(b.label)}</p>
-                <h2
-                  className={cn(
-                    "mt-1 max-w-4xl font-dial leading-[0.95] font-bold",
-                    last ? "text-5xl text-ink sm:text-7xl lg:text-8xl" : "text-4xl text-ink/70 sm:text-6xl"
-                  )}
-                >
+              <li key={b.label} className={cn("pt-5", last ? "border-t-2 border-primary" : "border-t border-input")}>
+                <p className={cn("font-mono text-xs tracking-[0.08em] uppercase", last ? "text-primary" : "text-muted-foreground")}>
+                  {tr(b.label)}
+                </p>
+                <h2 className={cn("mt-3 text-2xl leading-tight font-semibold sm:text-[1.7rem]", !last && "text-muted-foreground")}>
                   {tr(b.line)}
                 </h2>
-                <p className={cn("mt-4 max-w-2xl text-lg leading-relaxed", last ? "text-ink/85" : "text-ink/60")}>{tr(b.body)}</p>
+                <p className={cn("mt-3 leading-relaxed", last ? "text-foreground/80" : "text-muted-foreground")}>{tr(b.body)}</p>
               </li>
             );
           })}

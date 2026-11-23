@@ -7,8 +7,6 @@ import { BRAND, MOTTO } from "@/lib/brand";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LogoMark } from "@/components/Logo";
-import { SubjectTile } from "@/components/Subject";
-const SUBJECTS = [{ id: "physics" }, { id: "chemistry" }, { id: "biology" }] as const;
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const metadata: Metadata = { title: `Sign in · ${BRAND}` };
@@ -29,37 +27,25 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const error = sp.error ? ERRORS[sp.error] ?? ERRORS.google : null;
 
   return (
-    <div className="relative isolate flex min-h-[calc(100svh-61px)] items-center justify-center overflow-hidden bg-deep px-4 py-12 text-deep-foreground sm:py-16">
+    <div className="flex min-h-[calc(100svh-61px)] items-center justify-center bg-background px-4 py-12 sm:py-16">
 
       <div className="w-full max-w-md">
-        <Card className="relative overflow-hidden rounded-[1.75rem] bg-card text-center shadow-pop ring-1 ring-white/10 [--card-spacing:--spacing(7)]">
-          {/* Notebook page: subject-colored binding along the top, faint ruled dots behind. */}
-          <div aria-hidden className="absolute inset-x-0 top-0 flex h-1.5">
-            <span className="flex-1 bg-physics" />
-            <span className="flex-1 bg-chemistry" />
-            <span className="flex-1 bg-biology" />
-          </div>
-          <div aria-hidden className="absolute inset-0 bg-dots text-primary opacity-30" />
-          <CardHeader className="relative gap-2 pt-3">
-            <LogoMark size={88} className="mx-auto mb-3" />
+        <Card className="text-center [--card-spacing:--spacing(8)]">
+          <CardHeader className="gap-2">
+            <LogoMark size={72} className="mx-auto mb-4" />
             <CardTitle>
-              <h1 className="font-dial text-4xl font-extrabold text-foreground sm:text-5xl leading-[0.95]">Welcome to {BRAND}</h1>
+              <h1 className="text-3xl leading-tight font-semibold text-foreground sm:text-4xl">Welcome to {BRAND}</h1>
             </CardTitle>
-            <CardDescription className="text-base">{MOTTO}</CardDescription>
-            <div aria-hidden className="mx-auto mt-3 flex gap-2">
-              {SUBJECTS.map((s) => (
-                <SubjectTile key={s.id} subject={s.id} size="sm" />
-              ))}
-            </div>
+            <CardDescription className="font-mono text-xs tracking-[0.08em] uppercase">{MOTTO}</CardDescription>
           </CardHeader>
-          <CardContent className="relative flex flex-col gap-5">
+          <CardContent className="flex flex-col gap-5">
             {error && (
               <Alert variant="destructive" className="text-center">
                 <AlertDescription className="text-destructive">{error}</AlertDescription>
               </Alert>
             )}
             <GoogleButton next={next} className="w-full" />
-            <p className="text-xs text-subtle-foreground leading-relaxed">
+            <p className="text-xs leading-relaxed text-muted-foreground">
               New here? Continuing with Google creates your account. By continuing you agree to our{" "}
               <Link href="/terms" className="underline hover:text-primary">Terms</Link> and{" "}
               <Link href="/privacy" className="underline hover:text-primary">Privacy Policy</Link>.
