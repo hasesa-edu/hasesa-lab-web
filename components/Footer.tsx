@@ -27,8 +27,7 @@ export function Footer() {
       {showContact && (
         <section className="mx-auto flex max-w-6xl flex-wrap justify-between gap-x-16 gap-y-10 px-4 pt-14 pb-10 sm:pt-20 sm:pb-14">
           <div className="max-w-2xl flex-[999_1_26rem]">
-            <h2 className="text-3xl leading-tight font-semibold text-white sm:text-5xl">{tr("footer.contact.title")}</h2>
-            <p className="mt-4 text-lg leading-relaxed text-white/75">{tr("footer.contact.body")}</p>
+            <p className="text-xl leading-relaxed text-pretty text-white sm:text-2xl sm:leading-snug">{tr("footer.contact.body")}</p>
           </div>
           {(CONTACT_EMAIL || SOCIAL_LINKS.length > 0) && (
             <div className="min-w-56 flex-1 sm:pt-2">
