@@ -197,7 +197,6 @@ export const t: Dict = {
   "footer.contact.body": {
     en: "Our goal is an education system that schools everywhere can use. If you run a school, teach, or want to support this work, we'd like to hear from you.",
   },
-  "footer.contact.cta": { en: "Get in touch" },
   "footer.terms": { en: "Terms" },
   "footer.privacy": { en: "Privacy" },
 };
