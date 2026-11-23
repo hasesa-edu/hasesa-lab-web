@@ -136,7 +136,7 @@ export function Nav() {
                   className="h-10 rounded-lg bg-card pl-1 pr-3 hover:bg-muted data-[state=open]:bg-muted"
                 >
                   <Avatar className="size-8 after:border-primary/30">
-                    <AvatarFallback className="bg-foreground text-background font-heading text-sm font-semibold">
+                    <AvatarFallback className="bg-foreground text-background font-display text-sm font-semibold">
                       {initial}
                     </AvatarFallback>
                   </Avatar>
@@ -216,12 +216,12 @@ export function Nav() {
                 <SheetHeader className="border-b border-border bg-card px-5 pt-14 pb-6">
                   <div className="relative flex items-center gap-3">
                     <Avatar className="size-12">
-                      <AvatarFallback className="bg-foreground text-background font-heading text-lg font-semibold">
+                      <AvatarFallback className="bg-foreground text-background font-display text-lg font-semibold">
                         {initial}
                       </AvatarFallback>
                     </Avatar>
                     <div className="min-w-0 flex-1">
-                      <SheetTitle className="truncate font-heading text-lg font-semibold">
+                      <SheetTitle className="truncate font-display text-lg font-semibold">
                         {user.displayName}
                       </SheetTitle>
                       <SheetDescription className="truncate text-sm text-muted-foreground">{user.email}</SheetDescription>

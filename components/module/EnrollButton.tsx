@@ -31,11 +31,11 @@ export function EnrollButton({ moduleId, status }: { moduleId: string; status: "
   return (
     <div className="flex flex-wrap items-center gap-2">
       {status === "active" ? (
-        <Button variant="ghost" size="sm" onClick={() => go("drop")} disabled={busy} className="text-deep-foreground/70 hover:bg-white/10 hover:text-deep-foreground">
+        <Button variant="ghost" size="sm" onClick={() => go("drop")} disabled={busy} className="text-muted-foreground hover:text-foreground">
           <X aria-hidden /> Drop module
         </Button>
       ) : (
-        <Button size="lg" onClick={() => go("start")} disabled={busy} className="bg-sun font-semibold text-deep shadow-pop hover:bg-sun/90">
+        <Button size="lg" onClick={() => go("start")} disabled={busy} variant="ink">
           <Play aria-hidden /> {status === "dropped" ? "Restart module" : "Start module"}
         </Button>
       )}

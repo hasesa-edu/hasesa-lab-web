@@ -17,7 +17,7 @@ export const SUBJECT_STYLES: Record<Discipline, { text: string; bg: string; soft
   chemistry: { text: "text-chemistry", bg: "bg-chemistry", soft: "bg-chemistry-soft", ring: "ring-chemistry/30", border: "border-chemistry" },
   biology: { text: "text-biology", bg: "bg-biology", soft: "bg-biology-soft", ring: "ring-biology/30", border: "border-biology" },
   mathematics: { text: "text-primary-strong dark:text-primary", bg: "bg-primary", soft: "bg-primary-soft", ring: "ring-primary/30", border: "border-primary" },
-  technology: { text: "text-amber-700 dark:text-sun", bg: "bg-sun", soft: "bg-sun-soft", ring: "ring-sun/30", border: "border-sun" },
+  technology: { text: "text-muted-foreground", bg: "bg-muted-foreground", soft: "bg-muted", ring: "ring-border", border: "border-muted-foreground" },
 };
 
 export function SubjectIcon({ subject, className }: { subject: Discipline; className?: string }) {
@@ -36,7 +36,7 @@ export function SubjectTile({ subject, size = "md", className }: { subject: Disc
         s.text,
         size === "sm" && "size-8 [&_svg]:size-4",
         size === "md" && "size-10 [&_svg]:size-5",
-        size === "lg" && "size-14 rounded-2xl [&_svg]:size-7",
+        size === "lg" && "size-14 rounded-lg [&_svg]:size-7",
         className
       )}
     >

@@ -9,8 +9,8 @@ import { Button } from "@/components/ui/button";
 export function FeedbackItem({ id, body, context, date, unread }: { id: string; body: string; context?: string; date: string; unread: boolean }) {
   const [isUnread, setUnread] = useState(unread);
   return (
-    <li className={cn("flex gap-3 rounded-2xl p-4 ring-1", isUnread ? "bg-sun-soft ring-sun/40" : "bg-card shadow-soft ring-border")}>
-      <MessageSquareQuote aria-hidden className={cn("mt-0.5 size-5 shrink-0", isUnread ? "text-amber-700 dark:text-sun" : "text-subtle-foreground")} />
+    <li className={cn("flex gap-3 rounded-lg p-4 ring-1", isUnread ? "bg-accent ring-primary/30" : "bg-card ring-border")}>
+      <MessageSquareQuote aria-hidden className={cn("mt-0.5 size-5 shrink-0", isUnread ? "text-primary" : "text-muted-foreground")} />
       <div className="min-w-0 flex-1">
         <p className="text-xs text-subtle-foreground">
           {date}

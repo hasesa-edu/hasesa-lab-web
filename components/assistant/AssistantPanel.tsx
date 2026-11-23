@@ -219,10 +219,10 @@ export function AssistantPanel({
             setOpen(true);
             window.getSelection()?.removeAllRanges();
           }}
-          className="fixed z-40 inline-flex -translate-x-1/2 -translate-y-full items-center gap-1.5 rounded-full bg-enamel px-3 py-1.5 text-sm font-bold text-white shadow-pop"
+          className="fixed z-40 inline-flex -translate-x-1/2 -translate-y-full items-center gap-1.5 rounded-lg bg-ink px-3 py-1.5 text-sm font-medium text-white shadow-pop"
           style={{ left: selection.x, top: selection.y - 8 }}
         >
-          <Sparkles aria-hidden className="size-4 text-sun" /> Ask about this
+          <Sparkles aria-hidden className="size-4" /> Ask about this
         </button>
       )}
 
@@ -230,7 +230,7 @@ export function AssistantPanel({
       <div aria-hidden className="h-20 lg:hidden" />
       {!open && (
         // Phones: a bar across the bottom. Desktop: a pair of buttons bottom-right.
-        <div className="fixed inset-x-0 bottom-0 z-30 flex gap-2 border-t border-ink/10 bg-lab/95 p-3 backdrop-blur lg:inset-x-auto lg:right-4 lg:bottom-4 lg:border-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
+        <div className="fixed inset-x-0 bottom-0 z-30 flex gap-2 border-t border-border bg-background/95 p-3 backdrop-blur lg:inset-x-auto lg:right-4 lg:bottom-4 lg:border-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
           {notebook && (
             <button
               type="button"
@@ -238,7 +238,7 @@ export function AssistantPanel({
                 setTab("notebook");
                 setOpen(true);
               }}
-              className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-white px-5 font-bold text-ink shadow-pop ring-1 ring-ink/15 outline-none hover:ring-signal focus-visible:ring-3 focus-visible:ring-signal/50 lg:flex-none"
+              className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-lg border border-input bg-card px-5 font-medium text-foreground shadow-pop outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/40 lg:flex-none"
             >
               <NotebookPen aria-hidden className="size-5 text-primary" /> Notebook
             </button>
@@ -249,9 +249,9 @@ export function AssistantPanel({
               setTab("assistant");
               setOpen(true);
             }}
-            className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-enamel px-5 font-bold text-white shadow-pop ring-1 ring-white/10 outline-none hover:bg-enamel/90 focus-visible:ring-3 focus-visible:ring-sun/60 lg:flex-none"
+            className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-lg bg-ink px-5 font-medium text-white shadow-pop outline-none hover:bg-ink/90 focus-visible:ring-3 focus-visible:ring-ring/40 lg:flex-none"
           >
-            <Sparkles aria-hidden className="size-5 text-sun" /> {notebook ? "Ask" : "Ask the lab assistant"}
+            <Sparkles aria-hidden className="size-5" /> {notebook ? "Ask" : "Ask the lab assistant"}
           </button>
         </div>
       )}
@@ -264,12 +264,12 @@ export function AssistantPanel({
             role="dialog"
             aria-label="Lab assistant"
             className={cn(
-              "fixed z-40 flex flex-col bg-white shadow-pop dark:bg-card",
+              "fixed z-40 flex flex-col border-border bg-card shadow-pop",
               "inset-x-0 bottom-0 h-[85svh] rounded-t-2xl",
-              "lg:inset-x-auto lg:top-0 lg:right-0 lg:h-auto lg:w-[420px] lg:rounded-none lg:border-l lg:border-ink/10"
+              "lg:inset-x-auto lg:top-0 lg:right-0 lg:h-auto lg:w-[420px] lg:rounded-none lg:border-l lg:border-border"
             )}
           >
-            <div className="flex shrink-0 items-start gap-3 bg-enamel px-5 pt-4 text-enamel-foreground lg:min-h-[61px]">
+            <div className="flex shrink-0 items-start gap-3 bg-ink px-5 pt-4 text-white lg:min-h-[61px]">
               <div className="min-w-0 flex-1">
                 {notebook ? (
                   <div role="tablist" aria-label="Workbench" className="flex gap-1">
@@ -281,8 +281,8 @@ export function AssistantPanel({
                         aria-selected={tab === t}
                         onClick={() => setTab(t)}
                         className={cn(
-                          "relative pb-3 font-dial text-2xl leading-none font-bold transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:rounded-full after:bg-signal",
-                          tab === t ? "text-white after:scale-x-100" : "text-enamel-foreground/55 after:scale-x-0 hover:text-white"
+                          "relative pb-3 text-base leading-none font-semibold transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-white",
+                          tab === t ? "text-white after:scale-x-100" : "text-white/55 after:scale-x-0 hover:text-white"
                         )}
                       >
                         <span className="mr-4">{t === "notebook" ? "Notebook" : "Lab assistant"}</span>
@@ -290,17 +290,17 @@ export function AssistantPanel({
                     ))}
                   </div>
                 ) : (
-                  <p className="pb-1 font-dial text-2xl leading-none font-bold text-white">Lab assistant</p>
+                  <p className="pb-1 text-base leading-none font-semibold text-white">Lab assistant</p>
                 )}
                 {(!notebook || tab === "assistant") && (
-                  <p className="truncate pb-3 text-sm text-enamel-foreground/75">Knows you&apos;re on {about}</p>
+                  <p className="truncate pb-3 font-mono text-[11px] tracking-[0.04em] text-white/60">Knows you&apos;re on {about}</p>
                 )}
               </div>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
                 aria-label="Close the lab assistant"
-                className="inline-flex size-9 items-center justify-center rounded-full text-enamel-foreground/80 hover:bg-white/10 hover:text-white"
+                className="inline-flex size-9 items-center justify-center rounded-md text-white/70 hover:bg-white/10 hover:text-white"
               >
                 <X aria-hidden className="size-5" />
               </button>
@@ -315,7 +315,7 @@ export function AssistantPanel({
             <div ref={listRef} className="min-h-0 flex-1 overflow-y-auto px-5 py-5">
               {messages.length === 0 ? (
                 <div>
-                  <p className="text-ink/75">
+                  <p className="text-muted-foreground">
                     Ask about anything on this page. I can see where you are and what you&apos;ve done here, and I&apos;ll give hints, not answers.
                   </p>
                   <ul className="mt-4 space-y-2">
@@ -325,7 +325,7 @@ export function AssistantPanel({
                           type="button"
                           disabled={busy || out || remaining === null}
                           onClick={() => void send(s)}
-                          className="w-full rounded-xl border-2 border-ink/10 px-3.5 py-2.5 text-left text-sm hover:border-signal disabled:opacity-60"
+                          className="w-full rounded-xl border border-border px-3.5 py-2.5 text-left text-sm hover:border-primary disabled:opacity-60"
                         >
                           {s}
                         </button>
@@ -337,15 +337,15 @@ export function AssistantPanel({
                 <ul className="space-y-4">
                   {messages.map((m, i) =>
                     m.role === "user" ? (
-                      <li key={i} className="ml-auto w-fit max-w-[88%] rounded-2xl rounded-br-md bg-enamel px-4 py-2.5 text-white">
-                        <div className="chat-prose text-white [&_blockquote]:border-sun/60 [&_blockquote]:text-white/80">
+                      <li key={i} className="ml-auto w-fit max-w-[88%] rounded-lg rounded-br-sm bg-ink px-4 py-2.5 text-white">
+                        <div className="chat-prose text-white [&_blockquote]:border-white/40 [&_blockquote]:text-white/80">
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.content}</ReactMarkdown>
                         </div>
                       </li>
                     ) : (
-                      <li key={i} className="max-w-[95%] rounded-2xl rounded-tl-md bg-lab px-4 py-3">
+                      <li key={i} className="max-w-[95%] rounded-lg rounded-tl-md bg-background px-4 py-3">
                         {m.content ? (
-                          <div className="chat-prose text-ink">
+                          <div className="chat-prose text-foreground">
                             <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]} components={MD_COMPONENTS}>
                               {m.content}
                             </ReactMarkdown>
@@ -366,22 +366,22 @@ export function AssistantPanel({
             </div>
 
             <form
-              className="shrink-0 border-t border-ink/10 p-3"
+              className="shrink-0 border-t border-border p-3"
               onSubmit={(e) => {
                 e.preventDefault();
                 void send(input);
               }}
             >
               {quote && (
-                <div className="mb-2 flex items-start gap-2 rounded-lg bg-sun-soft px-3 py-2 text-sm">
+                <div className="mb-2 flex items-start gap-2 rounded-lg border border-border bg-muted px-3 py-2 text-sm">
                   <Quote aria-hidden className="mt-0.5 size-4 shrink-0 text-chemistry" />
-                  <span className="line-clamp-3 flex-1 text-ink/80">{quote}</span>
-                  <button type="button" onClick={() => setQuote(null)} aria-label="Remove quote" className="text-ink/50 hover:text-ink">
+                  <span className="line-clamp-3 flex-1 text-foreground/80">{quote}</span>
+                  <button type="button" onClick={() => setQuote(null)} aria-label="Remove quote" className="text-muted-foreground hover:text-foreground">
                     <X aria-hidden className="size-4" />
                   </button>
                 </div>
               )}
-              <div className="flex items-end gap-2 rounded-2xl border-2 border-ink/15 bg-white p-1.5 focus-within:border-signal">
+              <div className="flex items-end gap-2 rounded-lg border border-input bg-card p-1.5 focus-within:border-ring">
                 <textarea
                   ref={inputRef}
                   value={input}
@@ -403,7 +403,7 @@ export function AssistantPanel({
                   <SendHorizontal aria-hidden />
                 </Button>
               </div>
-              <p className="mt-1.5 px-1 text-xs text-ink/55">
+              <p className="mt-1.5 px-1 text-xs text-muted-foreground">
                 {remaining === null
                   ? "AI can make mistakes. Follow the safety notes and your guide."
                   : out
