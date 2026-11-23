@@ -11,7 +11,16 @@ export type RowProgress = { label: string; pct: number };
  * Modules as case files, filed by their station on the dial. Used by the
  * landing page and the module list, so both read the same way.
  */
-export function StationRows({ stations, progress }: { stations: Station[]; progress?: Record<string, RowProgress> }) {
+export function StationRows({
+  stations,
+  progress,
+  showLevel = true,
+}: {
+  stations: Station[];
+  progress?: Record<string, RowProgress>;
+  /** Off when the rows already sit under a level heading. */
+  showLevel?: boolean;
+}) {
   return (
     <ul className="border-t border-border">
       {stations.map(({ khz, module: m }) => {
@@ -39,7 +48,8 @@ export function StationRows({ stations, progress }: { stations: Station[]; progr
                   </span>
                 ))}
                 <span className="w-full font-mono text-xs text-muted-foreground lg:text-right">
-                  {LEVELS[m.level].label} · {m.stepCount} steps · ~{m.hours} h
+                  {showLevel && `${LEVELS[m.level].label} · `}
+                  {m.stepCount} steps · ~{m.hours} h
                 </span>
                 {p && (
                   <span className="mt-1 w-full lg:text-right">
@@ -86,7 +96,7 @@ export function LevelledStations({
               </Heading>
               <p className="max-w-xl text-sm text-muted-foreground">{LEVELS[level].blurb}</p>
             </div>
-            <StationRows stations={here} progress={progress} />
+            <StationRows stations={here} progress={progress} showLevel={false} />
           </section>
         );
       })}
