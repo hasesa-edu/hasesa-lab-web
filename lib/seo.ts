@@ -37,6 +37,7 @@ export function organizationJsonLd() {
         logo: `${SITE_URL}/icon.svg`,
         description: ORG_DESCRIPTION,
         areaServed: "Ethiopia",
+        address: { "@type": "PostalAddress", addressLocality: "Addis Ababa", addressCountry: "ET" },
         ...(CONTACT_EMAIL ? { email: CONTACT_EMAIL } : {}),
         ...(SOCIAL_LINKS.length ? { sameAs: SOCIAL_LINKS.map((l) => l.href) } : {}),
       },

@@ -28,6 +28,8 @@ Content lives in `content/` as Markdown with YAML frontmatter. See `content/READ
 | Enrolled (`paid_until` in the future) | ✓ | ✓ | |
 | Guide (admin sets the role) | ✓ | ✓ | ✓ |
 
+**Pricing:** a place at the Academy (the hands-on sessions at partner schools in Addis Ababa) costs 12,000 ETB a year; families get in touch to enrol, and payment happens outside the app. Online access is free during the pilot.
+
 **Pilot:** every new account is enrolled until the end of 2027 (Addis Ababa time). See `PILOT_ENROLLED_UNTIL` in `lib/access-rules.ts`. The admin can still change anyone's enrolment date by hand.
 
 ## What's in the app
@@ -55,7 +57,7 @@ Retired routes redirect (see `next.config.js`): `/experiments`, `/lessons` → `
 ## The site
 
 - **Navigation:** visitors see **Academy**; signed-in students see **Modules** and **My dashboard**, and guides also see **Student tracker**.
-- **Footer:** on `/` and `/academy`, a full footer on one grid: the logo with a short contact note, an **Explore** column (Hasesa, The Academy, Modules) and a **Get in touch** column (the email from `NEXT_PUBLIC_CONTACT_EMAIL` and any social links in `SOCIAL_LINKS` in `lib/brand.ts`), above a thin bar with ©, the motto, Terms and Privacy. Other pages get only that bar, with the logo.
+- **Footer:** on `/` and `/academy`, a full footer on one grid: the logo with a short contact note, an **Explore** column (Hasesa, The Academy, Modules, FAQ) and a **Get in touch** column (the email from `NEXT_PUBLIC_CONTACT_EMAIL` and any social links in `SOCIAL_LINKS` in `lib/brand.ts`), above a thin bar with ©, the motto, Terms and Privacy. Other pages get only that bar, with the logo.
 - **Search and AI visibility:** every public page sets its own title, description, canonical URL and link preview through `pageMeta()` in `lib/seo.ts`. Structured data (JSON-LD): the organisation on every page, a `Course` on each module page and an `FAQPage` for the Academy FAQ. `/llms.txt` gives AI tools a plain summary with links, `sitemap.xml` lists the public pages, and the `*.vercel.app` hosts redirect to www.hasesa.com.
 - **Copy:** all marketing and navigation text is in `lib/i18n.ts` (English only for now).
 - **Look:** clean and modern. Paper background, ink text, hairline borders and teal as the one accent; amber only for the logo's eyes and "open" tags. Geist for headings and UI, Geist Mono for labels and numbers, Atkinson Hyperlegible for lessons and the assistant, Noto Sans Ethiopic for Amharic. The tokens are in `app/globals.css`. Dark mode is off (`LIGHT_ONLY` in `components/ThemeProvider.tsx`).

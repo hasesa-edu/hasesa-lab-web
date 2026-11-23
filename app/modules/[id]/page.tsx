@@ -69,10 +69,23 @@ export default async function ModulePage({ params }: Props) {
           provider: { "@type": "EducationalOrganization", "@id": `${SITE_URL}/#org`, name: BRAND, url: `${SITE_URL}/` },
           inLanguage: "en",
           timeRequired: `PT${m.hours}H`,
-          isAccessibleForFree: true,
+          // Online material is free during the pilot; a place at the Academy (the hands-on sessions) is paid.
+          isAccessibleForFree: false,
+          offers: {
+            "@type": "Offer",
+            category: "Paid",
+            price: 12000,
+            priceCurrency: "ETB",
+            description: "A year at Hasesa Academy, Addis Ababa. Online modules and concept units are free during the pilot.",
+          },
           educationalLevel: "Ages 13–18",
           about: m.disciplines.map((d) => DISCIPLINES[d].label),
-          hasCourseInstance: { "@type": "CourseInstance", courseMode: "blended", courseWorkload: `PT${m.hours}H` },
+          hasCourseInstance: {
+            "@type": "CourseInstance",
+            courseMode: "blended",
+            courseWorkload: `PT${m.hours}H`,
+            location: { "@type": "Place", name: "Partner schools", address: { "@type": "PostalAddress", addressLocality: "Addis Ababa", addressCountry: "ET" } },
+          },
         }}
       />
       <header className="border-b border-border bg-card">
