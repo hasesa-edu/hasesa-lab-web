@@ -1,5 +1,5 @@
 /* Hasesa service worker */
-const VERSION = "v7";
+const VERSION = "v8";
 const APP_SHELL = "hasesa-shell-" + VERSION;
 const STATIC = "hasesa-static-" + VERSION;
 const PAGES = "hasesa-pages-" + VERSION;
@@ -10,7 +10,7 @@ const PRECACHE_URLS = ["/", "/manifest.json", "/icon.svg"];
 // Only public pages are kept for offline use. Signed-in pages (guides,
 // dashboard, account, chat) are never cached, so guides and personal
 // details don't stay on a shared phone after sign-out.
-const PUBLIC_PAGES = ["/", "/terms", "/privacy"];
+const PUBLIC_PAGES = ["/", "/academy", "/terms", "/privacy"];
 
 // Bump VERSION when this list changes so old caches get evicted on activate.
 

@@ -10,6 +10,8 @@
 
 ## 1. Purpose
 
+**Hasesa and the Academy.** Hasesa (Amharic for "exploration") is building an education system for the AI era. The goal is a system that schools across Ethiopia and beyond can use. Hasesa develops new ways of learning, tests them with real students, keeps what works and brings it to schools. **Hasesa Academy is its first program** and the place where the model is tested. The website's home page (`/`) presents Hasesa: its thesis, the questions it is exploring (each marked *testing at the Academy* or *open*) and its programs. The Academy has its own landing page at `/academy`. The rest of this document specifies the Academy.
+
 Hasesa Academy teaches high-school science through hands-on modules. Each module starts with a mystery or something to build. Students learn the theory when the project needs it, not before. Builds happen at the Academy with a guide. At home, students read concept units and solve practice problems on their phone or computer. An AI lab assistant, available on every course page, helps them understand the material and troubleshoot their own work.
 
 The product must work on low-end Android phones over unreliable, low-bandwidth networks.
