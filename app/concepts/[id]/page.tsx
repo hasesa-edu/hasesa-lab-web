@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { ArrowRight, BookOpen, GraduationCap, MessageCircle, Puzzle } from "lucide-react";
@@ -25,7 +26,8 @@ type Props = { params: Promise<{ id: string }>; searchParams: Promise<{ from?: s
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const c = getConcept((await params).id);
   if (!c) return { title: `Not found · ${BRAND}` };
-  return { title: `${c.title} · ${BRAND}`, description: c.summary, robots: c.public ? undefined : { index: false } };
+  if (!c.public) return { title: `${c.title} · ${BRAND}`, description: c.summary, robots: { index: false } };
+  return pageMeta({ title: `${c.title} · ${BRAND}`, description: c.summary, path: `/concepts/${c.id}` });
 }
 
 export default async function ConceptPage({ params, searchParams }: Props) {

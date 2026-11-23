@@ -10,6 +10,8 @@ import { PWARegister } from "@/components/PWARegister";
 import { PageViewTracker } from "@/components/PageViewTracker";
 import { ThemeProvider, themeBootstrapScript } from "@/components/ThemeProvider";
 import { BRAND, MOTTO } from "@/lib/brand";
+import { ORG_DESCRIPTION, SITE_URL, organizationJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
 
 // Geist for headings and UI, Geist Mono for labels and numbers, Atkinson
 // Hyperlegible for long reading (lessons, the assistant) on low-end phones,
@@ -37,11 +39,10 @@ const ethiopic = Noto_Sans_Ethiopic({
 });
 
 const TITLE = `${BRAND} · ${MOTTO}`;
-const DESCRIPTION =
-  "Hasesa (Amharic for \"exploration\") is building an education system for the AI era, tested with real students before it goes to schools across Ethiopia and beyond. Hasesa Academy, hands-on science for teenagers, is our first program.";
+const DESCRIPTION = ORG_DESCRIPTION;
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://hasesa.vercel.app"),
+  metadataBase: new URL(SITE_URL),
   title: TITLE,
   description: DESCRIPTION,
   manifest: "/manifest.json",
@@ -75,6 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${geist.variable} ${geistMono.variable} ${atkinson.variable} ${ethiopic.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
+        <JsonLd data={organizationJsonLd()} />
       </head>
       <body className="min-h-screen flex flex-col bg-background text-foreground antialiased font-sans">
         <ThemeProvider>

@@ -11,6 +11,13 @@ const nextConfig = {
   async redirects() {
     // Retired routes: the old exam-prep pages, then the grade 9–12 experiment catalogue.
     return [
+      // One public address: the Vercel production hosts redirect to the real domain.
+      ...["hasesa.vercel.app", "ai-edu.vercel.app"].map((host) => ({
+        source: "/:path*",
+        has: [{ type: "host", value: host }],
+        destination: "https://www.hasesa.com/:path*",
+        permanent: true,
+      })),
       { source: "/lessons", destination: "/modules", permanent: true },
       { source: "/lessons/:id", destination: "/modules", permanent: true },
       { source: "/experiments", destination: "/modules", permanent: true },
