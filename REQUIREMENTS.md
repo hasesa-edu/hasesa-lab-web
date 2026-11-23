@@ -137,7 +137,7 @@ _The billing backend (Chapa, `payments`, `paid_until`) is still in the code but 
 
 ### 5.8 Website & Brand
 - **FR-33** **Home page (`/`)** presents Hasesa, in this order: the thesis (with the ሐሰሳ "exploration" eyebrow), *Why now* (then / now / next), *What we're exploring* (six open questions, each tagged *Testing* when the Academy is trying an answer or *Open*), *How we work* (try it with real students, keep what works, bring it to schools) and *Our first program* (a card linking to the Academy).
-- **FR-34** **Academy page (`/academy`)**, in this order: the hero with the **tuning dial** (each station is a module; drag, arrow keys, Page Up/Down or station buttons; announced to screen readers), the module list, a public sample problem the visitor can solve, *How a module works* (with the Dewey quote), *For parents* (curriculum mapping, the guide, certificates), the pilot partners ("Piloted with"), and a sign-up call to action.
+- **FR-34** **Academy page (`/academy`)**, in this order: the hero with the **tuning dial** (each station is a module; drag, arrow keys, Page Up/Down or station buttons; announced to screen readers), the module list, a public sample problem the visitor can solve, *How a module works* (with the Dewey quote), *For parents* (curriculum mapping, the guide, certificates), *Questions parents ask* (an FAQ: who it's for (ages 13–18), where sessions happen, cost, module length, what to bring, certificates), the pilot partners ("Piloted with"), and a sign-up call to action.
 - **FR-35** **Navigation** depends on sign-in: visitors see **Academy**; signed-in students see **Modules** and **My dashboard**; guides also see **Student tracker**.
 - **FR-36** **Footer:** on `/` and `/academy`, a full footer on one 12-column grid, left-aligned at every width: the logo with a short contact note (the goal of reaching schools in Ethiopia and beyond, and an invitation to get in touch); an **Explore** column (Hasesa, The Academy, Modules); and a **Get in touch** column with the `NEXT_PUBLIC_CONTACT_EMAIL` address and the social links in `SOCIAL_LINKS` (`lib/brand.ts`), hidden when both are empty. Below it, a thin bar with ©, the motto and the legal links. Other pages show only that bar, with the logo.
 - **FR-37** **Copy** lives in `lib/i18n.ts` and must match the facts: sign-up is free and opens everything during the pilot; content and curriculum tags are described as drafts until reviewed; partners are named only for what they actually did.
@@ -148,6 +148,12 @@ _The billing backend (Chapa, `payments`, `paid_until`) is still in the code but 
   - Returning students (module started, not finished) open on "Pick up where you left off" and the steps, with their current step marked; the story moves to "About this module".
   - Then the theory (each unit with its curriculum tags), how you finish (sign-off checklist), and "Before you start" (materials, safety and the full overview).
 
+- **FR-40** **Search and AI visibility:**
+  - Every public page has its own title, description, canonical URL on www.hasesa.com and link-preview tags (`pageMeta()` in `lib/seo.ts`).
+  - Structured data: `EducationalOrganization` + `WebSite` on every page, `Course` on each module page, and `FAQPage` for the Academy FAQ.
+  - `/llms.txt` summarises Hasesa and links its public pages; `sitemap.xml` lists the public pages; `robots.txt` allows all crawlers, including AI crawlers, except in private areas.
+  - The Vercel production hosts redirect permanently to www.hasesa.com.
+  - The site is submitted to Google Search Console and Bing Webmaster Tools (pending).
 ### 5.7 Offline Access (post-MVP)
 - **FR-30** Students can save steps and concept units (text and images) for offline use. Videos are optional downloads.
 - **FR-31** Progress, notes and answers made offline sync automatically on the next connection.

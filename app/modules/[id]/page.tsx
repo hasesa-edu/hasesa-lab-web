@@ -10,6 +10,8 @@ import { isUnitDone, moduleProgress } from "@/lib/summary";
 import { stationFor } from "@/lib/stations";
 import { DISCIPLINES } from "@/lib/disciplines";
 import { BRAND } from "@/lib/brand";
+import { SITE_URL, pageMeta } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
 import { cn } from "@/lib/utils";
 import { Markdown } from "@/components/Markdown";
 import { SUBJECT_STYLES, SubjectLabel } from "@/components/Subject";
@@ -26,7 +28,7 @@ type Props = { params: Promise<{ id: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const m = getModule((await params).id);
   if (!m) return { title: `Module not found · ${BRAND}` };
-  return { title: `${m.title}: ${m.tagline} · ${BRAND}`, description: m.hook };
+  return pageMeta({ title: `${m.title}: ${m.tagline} · ${BRAND}`, description: m.hook, path: `/modules/${m.id}` });
 }
 
 /*
@@ -57,6 +59,22 @@ export default async function ModulePage({ params }: Props) {
 
   return (
     <article data-ask-scope className={cn(!full && "pb-20 lg:pb-0")}>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Course",
+          name: m.title,
+          description: `${m.tagline}. ${m.hook}`,
+          url: `${SITE_URL}/modules/${m.id}`,
+          provider: { "@type": "EducationalOrganization", "@id": `${SITE_URL}/#org`, name: BRAND, url: `${SITE_URL}/` },
+          inLanguage: "en",
+          timeRequired: `PT${m.hours}H`,
+          isAccessibleForFree: true,
+          educationalLevel: "Ages 13–18",
+          about: m.disciplines.map((d) => DISCIPLINES[d].label),
+          hasCourseInstance: { "@type": "CourseInstance", courseMode: "blended", courseWorkload: `PT${m.hours}H` },
+        }}
+      />
       <header className="border-b border-border bg-card">
         <div className="mx-auto max-w-6xl px-4 pt-6 pb-10 sm:pt-8 sm:pb-12">
           <BackLink href="/modules">← All modules</BackLink>
