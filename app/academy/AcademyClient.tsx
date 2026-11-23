@@ -223,7 +223,7 @@ function Parents({ tr, modules, sampleHref }: { tr: TR; modules: ModuleSummary[]
 // The same wording is published as FAQPage structured data (app/academy/page.tsx).
 function Faq({ tr }: { tr: TR }) {
   return (
-    <section className="border-t border-border">
+    <section id="faq" className="scroll-mt-20 border-t border-border">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:py-24 lg:grid-cols-[1fr_2fr]">
         <div>
           <SectionLabel n="05">{tr("label.faq")}</SectionLabel>

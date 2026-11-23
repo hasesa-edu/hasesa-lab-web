@@ -32,7 +32,7 @@ export function ModuleActions({ moduleId, hours, steps, units, khz, status, full
     <div className="rounded-lg border border-border bg-card p-5">
       {!full ? (
         <div className="space-y-2">
-          <p className="font-semibold">Free during the pilot</p>
+          <p className="font-semibold">Online access is free during the pilot</p>
           <p className="text-sm text-muted-foreground">Sign up to open every step, concept unit and the lab assistant.</p>
           {!signedIn && (
             <Button asChild size="lg" variant="ink" className="mt-2 w-full">
