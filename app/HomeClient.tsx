@@ -9,20 +9,22 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Why } from "./landing/Why";
 import { Partners } from "./landing/Partners";
+import { SectionLabel } from "./landing/SectionLabel";
+import { StatusTag } from "./landing/StatusTag";
 
 type Key = keyof typeof Dict;
 type TR = (k: Key) => string;
 
 // Hasesa's own page: the organisation, its thesis and the questions it is
-// exploring. The Academy (its first program) has its own page at /academy,
-// which keeps the radio dial; this page stays typographic.
+// exploring. Clean and typographic: paper, ink, hairlines, numbered mono
+// section labels. The Academy (its first program) lives at /academy.
 
 export function HomeClient({ moduleCount }: { moduleCount: number }) {
   const { tr } = useLocale();
   return (
-    <div className="bg-lab font-legible text-ink">
+    <div className="bg-background">
       <Hero tr={tr} />
-      <Why tr={tr} />
+      <Why tr={tr} n="01" />
       <Exploring tr={tr} />
       <HowWeWork tr={tr} />
       <Programs tr={tr} moduleCount={moduleCount} />
@@ -36,25 +38,26 @@ export function HomeClient({ moduleCount }: { moduleCount: number }) {
 
 function Hero({ tr }: { tr: TR }) {
   return (
-    <section className="relative isolate overflow-hidden bg-enamel text-enamel-foreground">
-      <div aria-hidden className="absolute -bottom-40 left-1/2 -z-10 h-80 w-[70rem] -translate-x-1/2 rounded-[50%] bg-signal/25 blur-3xl" />
-      <div className="mx-auto max-w-6xl px-4 pt-12 pb-16 sm:pt-20 sm:pb-24">
-        <p className="font-bold text-sun">{tr("home.eyebrow")}</p>
-        <h1 className="mt-4 max-w-5xl font-dial text-[2.8rem] leading-[0.9] font-extrabold tracking-tight text-white sm:text-7xl lg:text-[6rem]">
-          {tr("home.title.a")} <span className="text-sun">{tr("home.title.b")}</span>
-        </h1>
-        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-enamel-foreground/85 sm:text-xl">{tr("home.sub")}</p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/academy" className={cn(buttonVariants({ size: "lg" }), "bg-white font-bold text-enamel hover:bg-white/90")}>
-            {tr("home.cta.academy")}
-          </Link>
-          <a
-            href="#exploring"
-            className={cn(buttonVariants({ size: "lg", variant: "outline" }), "border-white/30 bg-transparent font-bold text-white hover:bg-white/10 hover:text-white")}
-          >
-            {tr("home.cta.exploring")}
-          </a>
-        </div>
+    <section className="mx-auto max-w-6xl px-4 pt-16 pb-16 sm:pt-24 sm:pb-24">
+      <p className="flex items-center gap-3 font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase">
+        <span lang="am" className="font-ethiopic text-lg font-bold tracking-normal text-foreground normal-case">
+          ሐሰሳ
+        </span>
+        <span aria-hidden className="h-px w-8 bg-input" />
+        {tr("home.eyebrow")}
+      </p>
+      <h1 className="mt-7 max-w-5xl text-[2.75rem] leading-[1] font-semibold tracking-[-0.04em] sm:text-7xl lg:text-[5.5rem]">
+        {tr("home.title")}
+      </h1>
+      <p className="mt-7 max-w-2xl text-lg leading-relaxed text-foreground/75 sm:text-xl">{tr("home.sub")}</p>
+      <div className="mt-9 flex flex-wrap gap-3">
+        <Link href="/academy" className={buttonVariants({ size: "lg", variant: "ink" })}>
+          {tr("home.cta.academy")}
+        </Link>
+        <a href="#exploring" className={buttonVariants({ size: "lg", variant: "outline" })}>
+          {tr("home.cta.exploring")}
+          <ArrowRightIcon />
+        </a>
       </div>
     </section>
   );
@@ -75,26 +78,23 @@ const QUESTIONS: Question[] = [
 
 function Exploring({ tr }: { tr: TR }) {
   return (
-    <section id="exploring" className="scroll-mt-16 bg-white dark:bg-card">
-      <div className="mx-auto max-w-6xl px-4 py-20 sm:py-28">
-        <h2 className="font-dial text-5xl leading-none font-bold sm:text-7xl">{tr("home.exploring.title")}</h2>
-        <p className="mt-4 max-w-2xl text-lg text-ink/75">{tr("home.exploring.sub")}</p>
-        <ol className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+    <section id="exploring" className="scroll-mt-16 border-y border-border bg-card">
+      <div className="mx-auto max-w-6xl px-4 py-16 sm:py-24">
+        <SectionLabel n="02">{tr("label.exploring")}</SectionLabel>
+        <h2 className="mt-4 text-3xl leading-tight font-semibold sm:text-5xl">{tr("home.exploring.title")}</h2>
+        <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground">{tr("home.exploring.sub")}</p>
+        {/* A bordered grid: each cell draws its right and bottom edge, the list draws the top and left. */}
+        <ol className="mt-10 grid border-t border-l border-border sm:grid-cols-2 lg:grid-cols-3">
           {QUESTIONS.map((q, i) => (
-            <li key={q.title} className={cn("border-t-4 pt-4", q.status === "testing" ? "border-signal" : "border-sun")}>
+            <li key={q.title} className="flex flex-col gap-3 border-r border-b border-border p-6 sm:p-7">
               <div className="flex items-center justify-between gap-3">
-                <span className="font-dial text-3xl font-bold text-ink/40 tabular-nums">{String(i + 1).padStart(2, "0")}</span>
-                <span
-                  className={cn(
-                    "rounded-full px-2.5 py-0.5 text-xs font-bold",
-                    q.status === "testing" ? "bg-signal/15 text-primary" : "border-2 border-sun text-ink/80"
-                  )}
-                >
+                <span className="font-mono text-sm text-muted-foreground tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+                <StatusTag tone={q.status === "testing" ? "teal" : "open"}>
                   {tr(q.status === "testing" ? "home.status.testing" : "home.status.open")}
-                </span>
+                </StatusTag>
               </div>
-              <h3 className="mt-3 font-dial text-3xl leading-[0.95] font-bold">{tr(q.title)}</h3>
-              <p className="mt-3 leading-relaxed text-ink/75">{tr(q.body)}</p>
+              <h3 className="text-xl leading-snug font-semibold">{tr(q.title)}</h3>
+              <p className="leading-relaxed text-muted-foreground">{tr(q.body)}</p>
             </li>
           ))}
         </ol>
@@ -112,18 +112,15 @@ function HowWeWork({ tr }: { tr: TR }) {
     { title: "home.how.3.title", body: "home.how.3.body" },
   ];
   return (
-    <section className="mx-auto max-w-6xl px-4 py-20 sm:py-28">
-      <h2 className="max-w-3xl font-dial text-5xl leading-[0.95] font-bold sm:text-7xl">{tr("home.how.title")}</h2>
-      {/* A real sequence, so it gets numbers and a line that runs through it. */}
-      <ol className="relative mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
-        <span aria-hidden className="absolute top-7 right-0 left-0 hidden h-1 rounded-full bg-signal/30 md:block" />
+    <section className="mx-auto max-w-6xl px-4 py-16 sm:py-24">
+      <SectionLabel n="03">{tr("label.how")}</SectionLabel>
+      <h2 className="mt-4 max-w-3xl text-3xl leading-tight font-semibold sm:text-5xl">{tr("home.how.title")}</h2>
+      <ol className="mt-10 grid gap-10 md:grid-cols-3">
         {steps.map((s, i) => (
-          <li key={s.title} className="relative">
-            <span className="relative flex size-14 items-center justify-center rounded-full bg-enamel font-dial text-3xl font-bold text-sun ring-8 ring-lab">
-              {i + 1}
-            </span>
-            <h3 className="mt-5 font-dial text-3xl leading-none font-bold">{tr(s.title)}</h3>
-            <p className="mt-3 leading-relaxed text-ink/75">{tr(s.body)}</p>
+          <li key={s.title} className="border-t border-input pt-5">
+            <span className="font-mono text-3xl text-primary tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+            <h3 className="mt-3 text-xl font-semibold">{tr(s.title)}</h3>
+            <p className="mt-2 leading-relaxed text-muted-foreground">{tr(s.body)}</p>
           </li>
         ))}
       </ol>
@@ -135,28 +132,29 @@ function HowWeWork({ tr }: { tr: TR }) {
 
 function Programs({ tr, moduleCount }: { tr: TR; moduleCount: number }) {
   return (
-    <section className="bg-enamel text-enamel-foreground">
-      <div className="mx-auto max-w-6xl px-4 py-20 sm:py-28">
-        <p className="font-bold text-sun">{tr("home.programs.eyebrow")}</p>
+    <section className="border-t border-border">
+      <div className="mx-auto max-w-6xl px-4 py-16 sm:py-24">
+        <SectionLabel n="04">{tr("label.program")}</SectionLabel>
         <Link
           href="/academy"
-          className="group mt-5 grid gap-8 rounded-3xl border-2 border-white/15 p-6 outline-none transition-colors hover:border-signal focus-visible:ring-3 focus-visible:ring-signal/50 sm:p-10 lg:grid-cols-[1.4fr_0.6fr] lg:items-end"
+          className="group mt-6 flex flex-wrap items-end justify-between gap-8 rounded-lg border border-border bg-card p-6 outline-none transition-colors hover:border-input focus-visible:ring-3 focus-visible:ring-ring/40 sm:p-9"
         >
-          <div>
-            <span className="inline-flex rounded-full bg-signal/20 px-2.5 py-0.5 text-xs font-bold text-white">{tr("home.programs.academy.status")}</span>
-            <h2 className="mt-4 font-dial text-5xl leading-none font-bold text-white sm:text-7xl">{tr("home.programs.academy.title")}</h2>
-            <p className="mt-4 max-w-xl text-lg leading-relaxed text-enamel-foreground/80">{tr("home.programs.academy.body")}</p>
+          <div className="flex max-w-2xl flex-[999_1_26rem] flex-col gap-4">
+            <StatusTag tone="teal">{tr("home.programs.academy.status")}</StatusTag>
+            <span className="font-display text-3xl leading-tight font-semibold tracking-[-0.03em] sm:text-5xl">
+              {tr("home.programs.academy.title")}
+            </span>
+            <span className="text-lg leading-relaxed text-muted-foreground">{tr("home.programs.academy.body")}</span>
           </div>
-          <div className="flex items-end justify-between gap-6 lg:flex-col lg:items-end">
+          <div className="flex flex-[1_1_12rem] flex-col items-start gap-4">
             {moduleCount > 0 && (
-              <p className="lg:text-right">
-                <span className="block font-dial text-6xl leading-none font-bold text-sun tabular-nums">{moduleCount}</span>
-                <span className="text-sm text-enamel-foreground/70">{tr("nav.experiments").toLowerCase()}</span>
-              </p>
+              <span className="font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase">
+                {moduleCount} {tr("nav.experiments")}
+              </span>
             )}
-            <span className="inline-flex items-center gap-2 font-bold text-white">
+            <span className="inline-flex items-center gap-2 font-medium text-primary">
               {tr("home.programs.academy.cta")}
-              <ArrowRightIcon className="size-5 transition-transform group-hover:translate-x-1" />
+              <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
             </span>
           </div>
         </Link>
@@ -170,25 +168,18 @@ function Programs({ tr, moduleCount }: { tr: TR; moduleCount: number }) {
 function FinalCta({ tr }: { tr: TR }) {
   return (
     <section className="mx-auto max-w-6xl px-4 pb-8">
-      <div className="relative overflow-hidden rounded-3xl bg-sun px-6 py-14 sm:px-12 sm:py-20">
-        <h2 className="relative max-w-3xl font-dial text-6xl leading-[0.9] font-extrabold text-ink sm:text-8xl">{tr("home.cta.title")}</h2>
-        <p className="relative mt-5 max-w-xl text-lg text-ink/80">{tr("home.cta.sub")}</p>
-        <div className="relative mt-8 flex flex-wrap gap-3">
+      <div className="flex flex-wrap items-end justify-between gap-8 rounded-lg bg-accent px-6 py-12 sm:px-10 sm:py-14">
+        <div className="max-w-2xl flex-[999_1_26rem]">
+          <h2 className="text-3xl leading-tight font-semibold sm:text-5xl">{tr("home.cta.title")}</h2>
+          <p className="mt-4 text-lg leading-relaxed text-foreground/75">{tr("home.cta.sub")}</p>
+        </div>
+        <div className="flex flex-wrap gap-3">
           {CONTACT_EMAIL && (
-            <a
-              href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Hasesa")}`}
-              className={cn(buttonVariants({ size: "lg" }), "bg-ink font-bold text-white hover:bg-ink/90")}
-            >
+            <a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Hasesa")}`} className={buttonVariants({ size: "lg", variant: "ink" })}>
               {tr("home.cta.contact")}
             </a>
           )}
-          <Link
-            href="/academy"
-            className={cn(
-              buttonVariants({ size: "lg", variant: CONTACT_EMAIL ? "outline" : "default" }),
-              CONTACT_EMAIL ? "border-ink/40 bg-transparent font-bold text-ink hover:bg-ink/10 hover:text-ink" : "bg-ink font-bold text-white hover:bg-ink/90"
-            )}
-          >
+          <Link href="/academy" className={cn(buttonVariants({ size: "lg", variant: CONTACT_EMAIL ? "outline" : "ink" }))}>
             {tr("home.cta.academy")}
           </Link>
         </div>

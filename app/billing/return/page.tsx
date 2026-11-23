@@ -8,7 +8,7 @@ import { getEntitlement } from "@/lib/billing/entitlement";
 import { BRAND } from "@/lib/brand";
 import { formatDate } from "@/lib/format";
 import { Button } from "@/components/ui/button";
-import { ArrowRightIcon, CircleAlertIcon, HourglassIcon, MessageCircleIcon, PartyPopperIcon, RefreshCwIcon, SparklesIcon } from "lucide-react";
+import { ArrowRightIcon, CircleAlertIcon, HourglassIcon, MessageCircleIcon, PartyPopperIcon, RefreshCwIcon } from "lucide-react";
 
 export const metadata: Metadata = { title: `Payment · ${BRAND}`, robots: { index: false } };
 export const dynamic = "force-dynamic";
@@ -31,26 +31,21 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
   const ent = sess ? await getEntitlement(sess.userId) : null;
 
   return (
-    <div className="relative isolate flex min-h-[calc(100svh-61px)] items-center overflow-hidden bg-primary-soft/40 px-4 py-14 sm:py-20">
-      <div aria-hidden className="absolute inset-0 -z-10 bg-dots text-primary opacity-40" />
+    <div className="flex min-h-[calc(100svh-61px)] items-center bg-background px-4 py-14 sm:py-20">
       <div className="mx-auto w-full max-w-lg text-center">
         {state === "paid" ? (
-          <div className="relative isolate overflow-hidden rounded-[2rem] bg-deep px-6 py-10 text-deep-foreground shadow-pop sm:px-10 sm:py-12">
-            <SparklesIcon aria-hidden className="absolute top-8 left-8 size-6 text-sun animate-float" />
-            <SparklesIcon aria-hidden className="absolute top-14 right-10 size-4 text-sun/80 animate-float [animation-delay:0.8s]" />
-            <SparklesIcon aria-hidden className="absolute bottom-10 left-12 size-4 text-sun/70 animate-float [animation-delay:1.6s]" />
-
-            <span className="mx-auto inline-flex size-20 items-center justify-center rounded-3xl bg-sun text-deep shadow-pop [&_svg]:size-10">
+          <div className="rounded-lg border border-border bg-card px-6 py-10 sm:px-10 sm:py-12">
+            <span className="mx-auto inline-flex size-14 items-center justify-center rounded-lg bg-accent text-primary [&_svg]:size-7">
               <PartyPopperIcon aria-hidden />
             </span>
-            <h1 className="font-dial mt-5 text-5xl font-extrabold sm:text-7xl leading-[0.95]">You're in!</h1>
-            <p className="mx-auto mt-3 max-w-sm text-deep-foreground/80">
+            <h1 className="mt-5 text-4xl leading-tight font-semibold sm:text-5xl">You're in!</h1>
+            <p className="mx-auto mt-3 max-w-sm text-muted-foreground">
               Your {BRAND} Academy enrolment is active{ent?.paidUntil ? " until " : ""}
-              {ent?.paidUntil && <strong className="font-semibold text-sun">{formatDate(ent.paidUntil)}</strong>}. Every module,
+              {ent?.paidUntil && <strong className="font-semibold text-foreground">{formatDate(ent.paidUntil)}</strong>}. Every module,
               concept unit and the lab assistant are unlocked.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <Button asChild size="lg" className="bg-sun font-semibold text-deep shadow-pop hover:bg-sun/90">
+              <Button asChild size="lg" variant="ink">
                 <Link href="/modules">
                   Browse modules
                   <ArrowRightIcon />
@@ -59,8 +54,7 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
               <Button
                 asChild
                 size="lg"
-                variant="ghost"
-                className="bg-white/10 text-deep-foreground ring-1 ring-white/15 hover:bg-white/20 hover:text-deep-foreground"
+                variant="outline"
               >
                 <Link href="/dashboard">
                   <MessageCircleIcon />
@@ -70,12 +64,11 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
             </div>
           </div>
         ) : state === "pending" ? (
-          <div className="relative overflow-hidden rounded-[2rem] bg-card px-6 py-10 shadow-pop ring-1 ring-border sm:px-10">
-            <div aria-hidden className="absolute inset-x-0 top-0 h-1.5 bg-sun" />
-            <span className="mx-auto inline-flex size-16 items-center justify-center rounded-2xl bg-sun-soft text-sun [&_svg]:size-8">
+          <div className="rounded-lg border border-border bg-card px-6 py-10 sm:px-10">
+            <span className="mx-auto inline-flex size-14 items-center justify-center rounded-lg bg-muted text-muted-foreground [&_svg]:size-7">
               <HourglassIcon aria-hidden className="animate-pulse" />
             </span>
-            <h1 className="font-dial mt-4 text-4xl font-extrabold text-foreground leading-[0.95]">Confirming your payment…</h1>
+            <h1 className="mt-4 text-3xl leading-tight font-semibold text-foreground">Confirming your payment…</h1>
             <p className="mt-2 text-muted-foreground">
               Chapa hasn't confirmed it yet. This usually takes a few seconds. Refresh this page, or check your account in a minute.
             </p>
@@ -92,12 +85,11 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
             </div>
           </div>
         ) : (
-          <div className="relative overflow-hidden rounded-[2rem] bg-card px-6 py-10 shadow-pop ring-1 ring-border sm:px-10">
-            <div aria-hidden className="absolute inset-x-0 top-0 h-1.5 bg-destructive/70" />
-            <span className="mx-auto inline-flex size-16 items-center justify-center rounded-2xl bg-destructive/10 text-destructive [&_svg]:size-8">
+          <div className="rounded-lg border border-border bg-card px-6 py-10 sm:px-10">
+            <span className="mx-auto inline-flex size-14 items-center justify-center rounded-lg bg-destructive/10 text-destructive [&_svg]:size-7">
               <CircleAlertIcon aria-hidden />
             </span>
-            <h1 className="font-dial mt-4 text-4xl font-extrabold text-foreground leading-[0.95]">Payment not completed</h1>
+            <h1 className="mt-4 text-3xl leading-tight font-semibold text-foreground">Payment not completed</h1>
             <p className="mt-2 text-muted-foreground">
               {state === "failed"
                 ? "The payment didn't go through, and you haven't been charged for a pass."

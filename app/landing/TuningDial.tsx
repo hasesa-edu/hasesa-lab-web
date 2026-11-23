@@ -17,16 +17,16 @@ const SNAP = 30;
 const pct = (khz: number) => ((khz - MIN_KHZ) / (MAX_KHZ - MIN_KHZ)) * 100;
 const clamp = (khz: number) => Math.min(MAX_KHZ, Math.max(MIN_KHZ, khz));
 
-/** Longer mysteries get a smaller size, so the whole radio fits on one screen. */
+/** Longer mysteries get a smaller size, so the whole panel fits on one screen. */
 function questionSize(q: string) {
-  if (q.length > 55) return "text-[1.7rem] sm:text-4xl";
-  if (q.length > 38) return "text-3xl sm:text-[2.6rem]";
-  return "text-[2rem] sm:text-5xl";
+  if (q.length > 55) return "text-2xl sm:text-3xl";
+  if (q.length > 38) return "text-[1.7rem] sm:text-4xl";
+  return "text-3xl sm:text-[2.6rem]";
 }
 
 /**
- * The hero: a radio dial. Between stations there's static; tune onto one and
- * you hear a module's mystery. Drag the needle, use the arrow keys, or pick a
+ * The hero: a radio dial, drawn as a light, precise instrument panel. Between
+ * stations the screen is quiet; tune onto one and you hear a module's mystery. Drag the needle, use the arrow keys, or pick a
  * station. On load the needle sweeps up the band to the first station.
  */
 export function TuningDial({ stations }: { stations: Station[] }) {
@@ -113,14 +113,16 @@ export function TuningDial({ stations }: { stations: Station[] }) {
   for (let f = 540; f <= 1700; f += 20) if (f % 100) minors.push(f);
 
   return (
-    <div className="relative">
-      {/* The display: a mystery when tuned, static between stations. */}
-      <div data-screen className="relative overflow-hidden rounded-2xl bg-black/35 p-4 ring-1 ring-white/10 sm:p-7">
-        <div aria-hidden className="radio-static pointer-events-none absolute inset-0" style={{ opacity: (1 - strength) * 0.5 }} />
-        <p className="relative flex items-baseline justify-between gap-4 font-dial text-enamel-foreground/60">
-          <span className="text-lg">{tuned ? `Station: ${tuned.module.title}` : "Between stations"}</span>
-          <span className="min-w-[4.5ch] text-right text-2xl font-bold text-sun tabular-nums sm:text-3xl" aria-hidden>
-            {khz} <span className="text-lg font-medium">kHz</span>
+    <div className="overflow-hidden rounded-lg border border-border bg-card">
+      {/* The display: a mystery when tuned, a hint between stations. */}
+      <div data-screen className="relative p-5 sm:p-8">
+        <p className="flex items-baseline justify-between gap-4">
+          <span className="font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase">
+            {tuned ? `Station found · ${tuned.module.title}` : "Between stations"}
+          </span>
+          <span className="min-w-[4.5ch] text-right font-mono text-3xl tracking-[-0.02em] text-foreground tabular-nums sm:text-5xl" aria-hidden>
+            {khz}
+            <span className="text-base text-muted-foreground sm:text-lg"> kHz</span>
           </span>
         </p>
 
@@ -129,7 +131,7 @@ export function TuningDial({ stations }: { stations: Station[] }) {
           grid cell, so the screen is always as tall as the longest of them and
           never changes size while tuning. Only the visible layer changes.
         */}
-        <div className="relative mt-3 grid">
+        <div className="mt-4 grid">
           {stations.map((s) => {
             const on = tuned?.khz === s.khz;
             return (
@@ -139,16 +141,16 @@ export function TuningDial({ stations }: { stations: Station[] }) {
                 className={cn("[grid-area:1/1]", !on && "invisible")}
                 style={{ opacity: on ? 0.25 + strength * 0.75 : 0 }}
               >
-                <p className={cn("max-w-3xl font-dial leading-[1.04] font-bold text-white", questionSize(mysteryOf(s.module)))}>
+                <p className={cn("max-w-3xl font-display leading-[1.08] font-semibold tracking-[-0.03em] text-foreground", questionSize(mysteryOf(s.module)))}>
                   “{mysteryOf(s.module)}”
                 </p>
-                <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3">
-                  <p className="hidden text-enamel-foreground/80 sm:block">
-                    {s.module.tagline}. {s.module.stepCount} steps, about {s.module.hours} hours.
-                  </p>
-                  <Link href={`/modules/${s.module.id}`} className={cn(buttonVariants({ size: "lg" }), "bg-sun font-bold text-ink hover:bg-sun/90")}>
+                <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3">
+                  <Link href={`/modules/${s.module.id}`} className={buttonVariants({ size: "lg" })}>
                     Open {s.module.title}
                   </Link>
+                  <p className="hidden text-muted-foreground sm:block">
+                    {s.module.tagline}. {s.module.stepCount} steps, about {s.module.hours} hours.
+                  </p>
                 </div>
               </div>
             );
@@ -156,7 +158,7 @@ export function TuningDial({ stations }: { stations: Station[] }) {
           <p
             aria-hidden={!!tuned}
             className={cn(
-              "max-w-md self-center font-dial text-[1.7rem] leading-tight text-enamel-foreground/70 [grid-area:1/1] sm:text-4xl",
+              "max-w-md self-center font-display text-2xl leading-snug tracking-[-0.02em] text-muted-foreground [grid-area:1/1] sm:text-3xl",
               tuned && "invisible"
             )}
           >
@@ -171,7 +173,7 @@ export function TuningDial({ stations }: { stations: Station[] }) {
       </p>
 
       {/* The dial */}
-      <div className="mt-4 select-none">
+      <div className="border-t border-border px-5 pt-4 pb-5 select-none sm:px-8">
         <div
           ref={scale}
           role="slider"
@@ -194,68 +196,66 @@ export function TuningDial({ stations }: { stations: Station[] }) {
             snap(khzAt(e.clientX));
           }}
           onPointerCancel={() => (dragging.current = false)}
-          className="relative h-20 cursor-ew-resize touch-none rounded-lg outline-none focus-visible:ring-3 focus-visible:ring-sun/60"
+          className="relative h-20 cursor-ew-resize touch-none rounded-md outline-none focus-visible:ring-3 focus-visible:ring-ring/40"
         >
           {/* baseline */}
-          <div aria-hidden className="absolute inset-x-0 bottom-9 h-px bg-enamel-foreground/40" />
+          <div aria-hidden className="absolute inset-x-0 bottom-7 h-px bg-foreground/20" />
           {minors.map((f) => (
-            <span key={f} aria-hidden className="absolute bottom-9 h-2.5 w-px bg-enamel-foreground/35" style={{ left: `${pct(f)}%` }} />
+            <span key={f} aria-hidden className="absolute bottom-7 h-2 w-px bg-foreground/20" style={{ left: `${pct(f)}%` }} />
           ))}
           {majors.map((f) => (
-            <span key={f} aria-hidden className="absolute bottom-9 flex -translate-x-1/2 flex-col items-center" style={{ left: `${pct(f)}%` }}>
+            <span key={f} aria-hidden className="absolute bottom-7 flex -translate-x-1/2 flex-col items-center" style={{ left: `${pct(f)}%` }}>
               <span
                 className={cn(
-                  "absolute top-full mt-1.5 font-dial text-base text-enamel-foreground/70 tabular-nums sm:text-lg",
+                  "absolute top-full mt-1.5 font-mono text-[11px] text-muted-foreground tabular-nums",
                   f % 200 && "hidden sm:inline"
                 )}
               >
-                {f / 100}
+                {f}
               </span>
-              <span className="h-5 w-px bg-enamel-foreground/70" />
+              <span className="h-4 w-px bg-foreground/45" />
             </span>
           ))}
-          <span aria-hidden className="absolute -top-1 right-0 font-dial text-xs text-enamel-foreground/50">
-            kHz ×100
-          </span>
 
           {/* station marks */}
           {stations.map((s) => (
             <span
               key={s.khz}
               aria-hidden
-              className={cn("absolute bottom-[3.1rem] size-2.5 -translate-x-1/2 rounded-full", tuned?.khz === s.khz ? "bg-sun" : "bg-sun/50")}
+              className={cn("absolute bottom-[2.6rem] size-2 -translate-x-1/2 rounded-full", tuned?.khz === s.khz ? "bg-sun" : "bg-foreground/60")}
               style={{ left: `${pct(s.khz)}%` }}
             />
           ))}
 
           {/* the needle: the Hasesa "peek" riding on a teal line */}
-          <div aria-hidden className="pointer-events-none absolute top-0 bottom-6 -translate-x-1/2" style={{ left: `${pct(khz)}%` }}>
-            <LogoMark size={46} tone="light" className="-translate-y-1 drop-shadow" />
-            <span className="absolute top-4 bottom-0 left-1/2 w-[3px] -translate-x-1/2 rounded-full bg-signal shadow-[0_0_12px_var(--signal)]" />
+          <div aria-hidden className="pointer-events-none absolute top-0 bottom-5 -translate-x-1/2" style={{ left: `${pct(khz)}%` }}>
+            <LogoMark size={36} className="-translate-y-1" />
+            <span className="absolute top-4 bottom-0 left-1/2 w-0.5 -translate-x-1/2 bg-primary" />
           </div>
         </div>
 
         {/* station buttons, for tapping */}
-        <div className="-mx-4 mt-2 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
+        <div className="-mx-5 mt-3 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
           {[...stations]
             .sort((a, b) => a.khz - b.khz)
-            .map((s) => (
-              <button
-                key={s.khz}
-                type="button"
-                onClick={() => tuneTo(s.khz, 700)}
-                aria-pressed={tuned?.khz === s.khz && strength === 1}
-                className={cn(
-                  "inline-flex min-h-10 shrink-0 items-center gap-2 rounded-full px-4 font-dial text-lg whitespace-nowrap transition-colors outline-none focus-visible:ring-3 focus-visible:ring-sun/60",
-                  tuned?.khz === s.khz && strength === 1
-                    ? "bg-sun text-ink"
-                    : "bg-white/10 text-enamel-foreground hover:bg-white/20"
-                )}
-              >
-                <span className="tabular-nums">{s.khz}</span>
-                <span className="font-legible text-sm font-bold">{s.module.title}</span>
-              </button>
-            ))}
+            .map((s) => {
+              const on = tuned?.khz === s.khz && strength === 1;
+              return (
+                <button
+                  key={s.khz}
+                  type="button"
+                  onClick={() => tuneTo(s.khz, 700)}
+                  aria-pressed={on}
+                  className={cn(
+                    "inline-flex min-h-10 shrink-0 items-center gap-2 rounded-md border px-3.5 text-sm whitespace-nowrap transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/40",
+                    on ? "border-foreground bg-foreground text-background" : "border-input bg-card text-foreground hover:bg-muted"
+                  )}
+                >
+                  <span className="font-mono tabular-nums">{s.khz}</span>
+                  <span className="font-medium">{s.module.title}</span>
+                </button>
+              );
+            })}
         </div>
       </div>
     </div>
