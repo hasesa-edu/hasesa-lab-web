@@ -56,11 +56,14 @@ The theory, in Markdown. Use $...$ for maths, e.g. $T = \frac{1}{f}$.
 
 ## Module: `modules/<id>/module.md`
 
+`level` is how much a module asks of a student, by skill rather than age: **beginner** (kitchen-table materials, simple measuring and arithmetic), **intermediate** (longer builds, formulas to rearrange, data to graph) or **advanced** (electronics, heat or stronger chemicals with a guide, more independent work). Modules are listed easiest first, and each level has its own stretch of the tuning dial. `hours` can be anything from 1 to 40; the steps' minutes must add up to within 25% of it.
+
 ```yaml
 ---
 title: Radio
 tagline: Build a radio that needs no battery
 disciplines: [physics, mathematics]
+level: intermediate                     # beginner | intermediate | advanced
 hook: "The guide's radio is playing… but there's no battery. Where is the energy coming from?"
 goal: "Build a working crystal radio, tune in a station, and explain every part."
 whatYouBuild: "A crystal radio: coil, antenna, diode and earpiece on a wooden board."

@@ -4,15 +4,15 @@ Hasesa (Amharic for "exploration") is building an education system for the AI er
 
 **Hasesa Academy is our first program**, and it is what this app runs. The Academy teaches science through hands-on **modules**. Each module starts with a mystery or something to build, and students learn the theory when the project needs it, not before. Builds happen at the Academy with a guide; at home, students read concept units and solve problems on their phone or computer.
 
-The first three modules (all AI drafts awaiting expert review):
+Fourteen modules, organised by level (all AI drafts awaiting expert review). Levels reflect skill (maths, tools, independent work), not age; beginner modules are a suggested first step, not a requirement.
 
-- **Radio:** build a radio that needs no battery (waves, circuits, electromagnetism, resonance).
-- **Mind over Machine:** control a robot claw with your muscles (nerves, muscles, sensors, microcontrollers).
-- **Market Detective:** fake or real? Catch the food fakers (density, chromatography, chemical tests, pH).
+- **Beginner:** **Bottle Rocket** (water rockets, Newton's laws, pressure, measuring heights), **Clean Water** (settle, filter and disinfect river water), **Market Detective** (catch food fakers with density, chromatography and pH), **Seed Lab** (a two-week fair-test growing experiment), **Sun Oven** (cook with a cardboard solar oven; heat transfer, energy and efficiency).
+- **Intermediate:** **Bean to Cup** (the chemistry of roasting and brewing coffee), **Injera Lab** (fermentation, enzymes and pH in teff batter), **Radio** (a radio that needs no battery), **Rift Valley Shake** (earthquakes, resonance and towers on a shake table), **Weather Station** (build instruments, log a week of data, score forecasts).
+- **Advanced:** **DNA Detective** (DNA extraction, inheritance, gel electrophoresis), **Mind over Machine** (a robot claw controlled by muscle signals), **Soap & Bioplastic** (saponification, polymers and reacting quantities), **Wind Power** (a generator, turbine blades and rectified DC).
 
 Each module has:
 
-- **A trailer and steps** (about 10 hours in total): what to do, what to notice, and a lab notebook the guide can read. Some steps have a demo video, and long steps are shown one phase at a time.
+- **A level, a trailer and steps** (8–14 hours in total, depending on the module): what to do, what to notice, and a lab notebook the guide can read. Some steps have a demo video, and long steps are shown one phase at a time.
 - **Shared concept units**: theory plus practice problems graded on the server. Units are shared between modules (e.g. "Current and voltage" is used by Radio and Mind over Machine), carry national-curriculum tags, and can be tested out of with 80%. One unit per module is a free public sample.
 - **A guide's version**: preparation, timing, answer keys and where students get stuck. Only guides see it.
 - **A sign-off checklist**: the guide ticks it, and the student gets a printable certificate.
@@ -37,9 +37,9 @@ Content lives in `content/` as Markdown with YAML frontmatter. See `content/READ
 | Route | What it does |
 |---|---|
 | `/` | Hasesa home: the thesis, why now, what we're exploring (each question marked *testing* or *open*), how we work, our first program |
-| `/academy` | Academy page: the tuning dial, the modules, a sample problem to solve, how a module works (with the Dewey quote), for parents, pilot partners, sign-up |
+| `/academy` | Academy page: the tuning dial (stations laid out by level, beginner at the low end), the modules grouped by level, a sample problem to solve, how a module works (with the Dewey quote), for parents, pilot partners, sign-up |
 | `/login`, `/signup` | Google sign-in (the first sign-in creates the account) |
-| `/modules` | Module catalogue (public) |
+| `/modules` | Module catalogue (public), grouped by level |
 | `/modules/[id]` | Module page: the story (mystery, goal, build, trailer), steps, theory with curriculum tags, how you finish, materials and safety. An action panel beside it (sign up, start, continue, certificate) stays in view on desktop; visitors get a sign-up bar on phones. Returning students open on "Pick up where you left off" |
 | `/modules/[id]/[step]` | A step: instructions, its concept units, and the workbench panel (lab notebook + assistant) |
 | `/modules/[id]/guide` | The guide's version (guides only) |
