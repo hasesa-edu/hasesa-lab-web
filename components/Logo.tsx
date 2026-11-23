@@ -3,9 +3,9 @@ import { BRAND } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 
 /**
- * The Hasesa "peek": two amber eyes looking over a teal line, one a little higher,
- * like a head tilting at something curious. `tone="light"` swaps the teal for a
- * pale mint so it reads on deep-teal backgrounds.
+ * The Hasesa "peek": two amber eyes looking over a line, one a little higher,
+ * like a head tilting at something curious. The line is ink; `tone="light"`
+ * makes it white so it reads on the dark footer.
  */
 export function LogoMark({
   size = 40,
@@ -17,7 +17,7 @@ export function LogoMark({
   tone?: "brand" | "light";
   className?: string;
 }) {
-  const ink = tone === "light" ? "var(--primary-soft)" : "var(--signal)";
+  const ink = tone === "light" ? "#FFFFFF" : "var(--foreground)";
   return (
     <svg
       width={size}
@@ -42,10 +42,10 @@ export function LogoMark({
 export function Logo({ className = "", tone = "brand" }: { className?: string; tone?: "brand" | "light" }) {
   return (
     <Link href="/" aria-label={`${BRAND} home`} className={cn("inline-flex min-h-10 items-center gap-2 group", className)}>
-      <LogoMark size={40} tone={tone} className="mt-1" />
+      <LogoMark size={36} tone={tone} className="mt-0.5" />
       <span
         className={cn(
-          "font-heading text-lg leading-none font-extrabold tracking-tight",
+          "font-heading text-lg leading-none font-semibold tracking-[-0.02em]",
           tone === "light" ? "text-white" : "text-foreground"
         )}
       >

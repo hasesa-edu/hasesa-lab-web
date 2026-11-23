@@ -26,8 +26,8 @@ export default async function AccountPage() {
         title="Account"
         description={
           <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1 break-all">
-            <UserRound className="size-4 shrink-0 text-sun" />
-            <span className="font-semibold text-deep-foreground">{user.displayName}</span>
+            <UserRound className="size-4 shrink-0 text-muted-foreground" />
+            <span className="font-semibold text-foreground">{user.displayName}</span>
             <span>· {user.email} (Google)</span>
           </span>
         }

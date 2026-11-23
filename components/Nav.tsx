@@ -73,27 +73,25 @@ export function Nav() {
   const isActive = (href: string) =>
     href.includes("#") ? false : href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-  // The bar is enamel on every page, so it runs into the hero on the home
-  // page and into the enamel page header everywhere else.
-
-  // Active link = a teal signal line under it; others are quiet until hovered.
+  // A white bar with a hairline under it on every page.
+  // Active link = ink with a thin teal line under it; others are muted until hovered.
   const navLinkClass = (href: string) =>
     cn(
-      "relative inline-flex min-h-10 items-center px-3 font-legible text-[0.95rem] font-bold transition-colors",
-      "after:absolute after:inset-x-3 after:bottom-1 after:h-[3px] after:rounded-full after:bg-signal after:transition-transform",
-      isActive(href) ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-50",
-      isActive(href) ? "text-white" : "text-enamel-foreground/75 hover:text-white"
+      "relative inline-flex min-h-10 items-center px-3 text-[0.95rem] font-medium transition-colors",
+      "after:absolute after:inset-x-3 after:bottom-0.5 after:h-0.5 after:bg-primary after:transition-transform",
+      isActive(href) ? "after:scale-x-100" : "after:scale-x-0",
+      isActive(href) ? "text-foreground" : "text-muted-foreground hover:text-foreground"
     );
 
   const mobileLinkClass = (href: string) =>
     cn(
-      "flex min-h-12 w-full items-center gap-3 rounded-xl border-l-4 px-3 font-legible text-base font-bold transition-colors",
-      isActive(href) ? "border-signal bg-signal/10 text-ink" : "border-transparent text-ink hover:bg-ink/5"
+      "flex min-h-12 w-full items-center gap-3 rounded-lg border-l-2 px-3 text-base font-medium transition-colors",
+      isActive(href) ? "border-primary bg-accent text-foreground" : "border-transparent text-foreground hover:bg-muted"
     );
 
   const signInClass = cn(
     buttonVariants({ variant: "outline" }),
-    "rounded-full bg-white text-[#1f1f1f] hover:bg-white hover:text-[#1f1f1f] hover:border-primary/60 shadow-soft dark:bg-white dark:hover:bg-white"
+    "rounded-lg border-input bg-card text-foreground hover:bg-muted hover:text-foreground"
   );
 
   const initial = user ? user.displayName.slice(0, 1).toUpperCase() : "";
@@ -109,9 +107,9 @@ export function Nav() {
   const mobileLinks = [...desktopLinks, { href: "/account", label: tr("nav.account"), icon: UserRoundIcon, show: true }];
 
   return (
-    <header className="sticky top-0 z-20 border-b border-white/10 bg-enamel text-enamel-foreground">
+    <header className="sticky top-0 z-20 border-b border-border bg-card text-foreground">
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2.5 sm:gap-5">
-        <Logo tone="light" />
+        <Logo />
 
         <nav className="hidden md:flex items-center gap-1">
           {desktopLinks.map((l) => (
@@ -135,10 +133,10 @@ export function Nav() {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="h-10 rounded-full bg-card pl-1 pr-3 hover:border-primary/60 hover:bg-primary-soft/40 data-[state=open]:border-primary/60 data-[state=open]:bg-primary-soft/40"
+                  className="h-10 rounded-lg bg-card pl-1 pr-3 hover:bg-muted data-[state=open]:bg-muted"
                 >
                   <Avatar className="size-8 after:border-primary/30">
-                    <AvatarFallback className="bg-primary text-primary-foreground font-heading text-sm font-bold">
+                    <AvatarFallback className="bg-foreground text-background font-heading text-sm font-semibold">
                       {initial}
                     </AvatarFallback>
                   </Avatar>
@@ -206,31 +204,31 @@ export function Nav() {
                   variant="outline"
                   size="icon-lg"
                   aria-label={mobileOpen ? "Close menu" : "Open menu"}
-                  className="rounded-full bg-card hover:border-primary/60 hover:bg-primary-soft/40"
+                  className="rounded-lg bg-card hover:bg-muted"
                 >
                   {mobileOpen ? <XIcon className="size-5" /> : <MenuIcon className="size-5" />}
                 </Button>
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="gap-0 overflow-y-auto bg-background p-0 [&>[data-slot=sheet-close]]:top-3 [&>[data-slot=sheet-close]]:right-3 [&>[data-slot=sheet-close]]:text-deep-foreground [&>[data-slot=sheet-close]:hover]:bg-white/10 [&>[data-slot=sheet-close]:hover]:text-deep-foreground"
+                className="gap-0 overflow-y-auto bg-background p-0 [&>[data-slot=sheet-close]]:top-3 [&>[data-slot=sheet-close]]:right-3"
               >
-                <SheetHeader className="relative overflow-hidden bg-deep px-5 pt-14 pb-6 text-deep-foreground">
+                <SheetHeader className="border-b border-border bg-card px-5 pt-14 pb-6">
                   <div className="relative flex items-center gap-3">
-                    <Avatar className="size-12 after:border-white/20">
-                      <AvatarFallback className="bg-primary text-primary-foreground font-heading text-lg font-bold ring-2 ring-sun/70">
+                    <Avatar className="size-12">
+                      <AvatarFallback className="bg-foreground text-background font-heading text-lg font-semibold">
                         {initial}
                       </AvatarFallback>
                     </Avatar>
                     <div className="min-w-0 flex-1">
-                      <SheetTitle className="truncate font-heading text-lg font-bold text-deep-foreground">
+                      <SheetTitle className="truncate font-heading text-lg font-semibold">
                         {user.displayName}
                       </SheetTitle>
-                      <SheetDescription className="truncate text-sm text-deep-foreground/70">{user.email}</SheetDescription>
+                      <SheetDescription className="truncate text-sm text-muted-foreground">{user.email}</SheetDescription>
                     </div>
                   </div>
                   {user.access !== "signed-in" && (
-                    <span className="relative mt-4 inline-flex w-fit rounded-full bg-sun px-2.5 py-0.5 text-xs font-bold text-deep">
+                    <span className="mt-4 inline-flex w-fit rounded-full bg-foreground px-2.5 py-0.5 font-mono text-[11px] tracking-[0.08em] text-background uppercase">
                       {user.access === "guide" ? "Guide" : "Enrolled"}
                     </span>
                   )}
@@ -251,7 +249,7 @@ export function Nav() {
                         <span
                           className={cn(
                             "inline-flex size-8 shrink-0 items-center justify-center rounded-lg [&_svg]:size-4",
-                            active ? "bg-signal text-white" : "bg-muted text-muted-foreground"
+                            active ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
                           )}
                         >
                           <Icon aria-hidden />
