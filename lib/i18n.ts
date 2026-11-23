@@ -149,9 +149,9 @@ export const t: Dict = {
   "faq.who.q": { en: "Who is the Academy for?" },
   "faq.who.a": { en: "Teenagers aged 13 to 18 who want to know how things work. The theory each project needs is taught along the way." },
   "faq.where.q": { en: "Where do sessions happen?" },
-  "faq.where.a": { en: "Hands-on sessions run at our partner schools, with a guide. Get in touch to find out about the next sessions." },
+  "faq.where.a": { en: "Hands-on sessions run at our partner schools in Addis Ababa, with a guide. Get in touch to find out about the next sessions." },
   "faq.cost.q": { en: "What does it cost?" },
-  "faq.cost.a": { en: "It's free during the pilot, which runs to the end of 2027. We'll announce pricing before the pilot ends." },
+  "faq.cost.a": { en: "A place at the Academy costs 12,000 ETB a year. Online access to the modules and concept units is free during the pilot, which runs to the end of 2027. Get in touch to enrol." },
   "faq.length.q": { en: "How long is a module?" },
   "faq.length.a": { en: "About 10 hours, split between hands-on sessions at the Academy and concept units at home." },
   "faq.need.q": { en: "What do students need?" },
@@ -179,7 +179,7 @@ export const t: Dict = {
   // CTA strip
   "cta.title": { en: "Ready to build something?" },
   "cta.sub": {
-    en: "Sign up with Google. It's free during the pilot and opens every module, concept unit and the lab assistant.",
+    en: "Sign up with Google. Online access is free during the pilot and opens every module, concept unit and the lab assistant.",
   },
 
   // Chat (lab assistant)
@@ -217,6 +217,7 @@ export const t: Dict = {
   "footer.explore.home": { en: "Hasesa" },
   "footer.explore.academy": { en: "The Academy" },
   "footer.explore.modules": { en: "Modules" },
+  "footer.explore.faq": { en: "FAQ" },
   "footer.terms": { en: "Terms" },
   "footer.privacy": { en: "Privacy" },
 };

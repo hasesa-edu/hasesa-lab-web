@@ -70,7 +70,7 @@ Students today rely on YouTube demos (generic, often needing lab equipment they 
 - An AI lab assistant (text) embedded in module, step and concept pages.
 - Google sign-in.
 - Mobile-first responsive web app (PWA) targeting Android.
-- Free during the pilot (every new sign-up is enrolled until the end of 2027).
+- Online access free during the pilot (every new sign-up is enrolled until the end of 2027). A place at the Academy (hands-on sessions) costs 12,000 ETB a year, enrolled and paid outside the app.
 
 ### 4.2 Out of Scope (MVP)
 - The v0.3 self-serve experiment catalogue and onboarding.
@@ -132,15 +132,17 @@ Students today rely on YouTube demos (generic, often needing lab equipment they 
 - **FR-28** **Pilot:** every new account is enrolled until 2028-01-01 00:00 Addis Ababa time. The admin can set any student's enrolment date and the guide role by hand.
 - **FR-29** Students under 18 see a simplified privacy notice, plus a guardian consent flow where the law requires one.
 
-### 5.6a Pricing & Billing (paused)
-_The billing backend (Chapa, `payments`, `paid_until`) is still in the code but unused, and no pricing appears in the UI. The previous plan was a prepaid 30-day pass for 300 ETB through Chapa, with stacking days and server-side verification. Pricing will be revisited after the pilot._
+### 5.6a Pricing & Billing
+- **Academy place:** 12,000 ETB a year for the hands-on sessions at partner schools in Addis Ababa. Families get in touch to enrol; payment is handled outside the app. The FAQ and structured data state this price.
+- **Online access:** free during the pilot (FR-28).
+- _The online billing backend (Chapa, `payments`, `paid_until`) is still in the code but unused. The earlier plan was a prepaid 30-day pass for 300 ETB through Chapa. Whether online access is charged after the pilot is still open (Q1)._
 
 ### 5.8 Website & Brand
 - **FR-33** **Home page (`/`)** presents Hasesa, in this order: the thesis (with the ሐሰሳ "exploration" eyebrow), *Why now* (then / now / next), *What we're exploring* (six open questions, each tagged *Testing* when the Academy is trying an answer or *Open*), *How we work* (try it with real students, keep what works, bring it to schools) and *Our first program* (a card linking to the Academy).
-- **FR-34** **Academy page (`/academy`)**, in this order: the hero with the **tuning dial** (each station is a module; drag, arrow keys, Page Up/Down or station buttons; announced to screen readers), the module list, a public sample problem the visitor can solve, *How a module works* (with the Dewey quote), *For parents* (curriculum mapping, the guide, certificates), *Questions parents ask* (an FAQ: who it's for (ages 13–18), where sessions happen, cost, module length, what to bring, certificates), the pilot partners ("Piloted with"), and a sign-up call to action.
+- **FR-34** **Academy page (`/academy`)**, in this order: the hero with the **tuning dial** (each station is a module; drag, arrow keys, Page Up/Down or station buttons; announced to screen readers), the module list, a public sample problem the visitor can solve, *How a module works* (with the Dewey quote), *For parents* (curriculum mapping, the guide, certificates), *Questions parents ask* (an FAQ at `/academy#faq`: who it's for (ages 13–18), where sessions happen (partner schools in Addis Ababa), cost (12,000 ETB a year; online access free during the pilot), module length, what to bring, certificates), the pilot partners ("Piloted with"), and a sign-up call to action.
 - **FR-35** **Navigation** depends on sign-in: visitors see **Academy**; signed-in students see **Modules** and **My dashboard**; guides also see **Student tracker**.
-- **FR-36** **Footer:** on `/` and `/academy`, a full footer on one 12-column grid, left-aligned at every width: the logo with a short contact note (the goal of reaching schools in Ethiopia and beyond, and an invitation to get in touch); an **Explore** column (Hasesa, The Academy, Modules); and a **Get in touch** column with the `NEXT_PUBLIC_CONTACT_EMAIL` address and the social links in `SOCIAL_LINKS` (`lib/brand.ts`), hidden when both are empty. Below it, a thin bar with ©, the motto and the legal links. Other pages show only that bar, with the logo.
-- **FR-37** **Copy** lives in `lib/i18n.ts` and must match the facts: sign-up is free and opens everything during the pilot; content and curriculum tags are described as drafts until reviewed; partners are named only for what they actually did.
+- **FR-36** **Footer:** on `/` and `/academy`, a full footer on one 12-column grid, left-aligned at every width: the logo with a short contact note (the goal of reaching schools in Ethiopia and beyond, and an invitation to get in touch); an **Explore** column (Hasesa, The Academy, Modules); and a **Get in touch** column with the `NEXT_PUBLIC_CONTACT_EMAIL` address and the social links in `SOCIAL_LINKS` (`lib/brand.ts`), hidden when both are empty; the Explore column also links to the Academy FAQ. Below it, a thin bar with ©, the motto and the legal links. Other pages show only that bar, with the logo.
+- **FR-37** **Copy** lives in `lib/i18n.ts` and must match the facts: online sign-up is free and opens everything during the pilot, while an Academy place costs 12,000 ETB a year; content and curriculum tags are described as drafts until reviewed; partners are named only for what they actually did.
 - **FR-38** **Visual identity:** paper background, ink text, hairline borders and teal as the single accent; amber only for the logo's eyes and *Open* tags. Geist for headings and UI, Geist Mono for labels and numbers, Atkinson Hyperlegible for lessons and the assistant, Noto Sans Ethiopic for Amharic. Tokens are defined once in `app/globals.css`; pages don't hard-code colours.
 - **FR-39** **Module page (`/modules/[id]`):**
   - An action panel shows the viewer's next action: sign up and a free sample unit (visitors), Start or Restart (signed in), Continue with progress (started), or the certificate (finished). It also shows a Guide's version link for guides, plus hours, steps, units and the draft status. On desktop it sits beside the content and stays in view; on phones, visitors get a sign-up bar at the bottom, and enrolled students keep only the assistant's bar.
@@ -231,7 +233,7 @@ Network baselines: **2G** = 400 Kbps / 400 ms RTT, **3G** = 1.6 Mbps / 300 ms RT
 | R6 | Video bandwidth cost for students | Load on demand; plan low-resolution and downloadable versions |
 | R7 | Data privacy expectations for minors | Legal review before public launch; clear consent UX |
 | R8 | A single guide becomes a bottleneck as the cohort grows | Tracker flags and assignments to focus guide time; plan more guides |
-| Q1 | Funding model after the pilot (enrolment ends 2027-12-31) | Revisit pricing (the Chapa pass is ready) with pilot data |
+| Q1 | Online access after the pilot (free enrolment ends 2027-12-31) | Decide whether online access stays free alongside the 12,000 ETB/year Academy place (the Chapa pass is ready) |
 | Q2 | Partnership with the MoE or regional bureaus? | Would unlock curriculum sign-off and distribution |
 
 ## 11. Milestones (Indicative)

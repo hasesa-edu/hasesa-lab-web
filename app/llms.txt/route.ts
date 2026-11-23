@@ -21,12 +21,13 @@ Key facts:
 - Hasesa means "exploration" in Amharic (ሐሰሳ).
 - It is building an education system for the AI era: it tries new ways of learning with real students, keeps what works and brings it to schools in Ethiopia and beyond.
 - Hasesa Academy is its first program: hands-on science modules for teenagers aged 13 to 18. Students build at partner schools with a guide and study short concept units at home.
-- The Academy is free during the pilot, which runs to the end of 2027.
+- Hands-on sessions run at partner schools in Addis Ababa, Ethiopia. A place at the Academy costs 12,000 ETB a year.
+- Online access to the modules and concept units is free during the pilot, which runs to the end of 2027.
 - Content is in English. All modules are drafts being checked by subject experts.
 
 ## Pages
 - [Hasesa](${SITE_URL}/): the thesis, the questions Hasesa is exploring and how it works.
-- [Hasesa Academy](${SITE_URL}/academy): how a module works, what parents should know, and frequently asked questions.
+- [Hasesa Academy](${SITE_URL}/academy): how a module works, what parents should know, and frequently asked questions ([FAQ](${SITE_URL}/academy#faq)).
 - [All modules](${SITE_URL}/modules)
 
 ## Modules
