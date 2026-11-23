@@ -3,6 +3,7 @@ title: The big shake
 kind: finish
 minutes: 60
 units: []
+summary: "Put your tower through the class earthquake test and explain why it stood or fell."
 ---
 ## The test (30 minutes)
 

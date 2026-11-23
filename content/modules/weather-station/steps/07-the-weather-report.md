@@ -3,6 +3,7 @@ title: The weather report
 kind: finish
 minutes: 90
 units: []
+summary: "Present your weather report, solve the mystery, and explain your findings to your guide."
 ---
 ## Prepare (40 minutes)
 

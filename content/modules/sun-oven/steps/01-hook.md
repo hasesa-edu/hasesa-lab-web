@@ -3,6 +3,7 @@ title: The egg in the box
 kind: hook
 minutes: 45
 units: [heat-transfer]
+summary: "Find out how an egg cooked in a cardboard box, predict why, and test one of your ideas."
 ---
 ## Look
 

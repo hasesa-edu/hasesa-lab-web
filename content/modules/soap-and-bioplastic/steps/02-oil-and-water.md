@@ -3,6 +3,7 @@ title: Oil and water
 kind: investigate
 minutes: 75
 units: [fats-oils-and-soap]
+summary: "Mix oil and water, clean a greasy plate, and find out how soap brings them together."
 ---
 ## Do: oil and water (25 minutes)
 

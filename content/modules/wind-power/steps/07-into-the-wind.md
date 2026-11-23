@@ -3,6 +3,7 @@ title: Into the wind
 kind: finish
 minutes: 120
 units: []
+summary: "Assemble your turbine, test it outdoors, and explain the whole system to your guide."
 ---
 ## Assemble (40 minutes)
 

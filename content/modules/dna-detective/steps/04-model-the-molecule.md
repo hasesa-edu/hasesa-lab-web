@@ -3,6 +3,7 @@ title: Model the molecule
 kind: build
 minutes: 90
 units: [dna-and-genes]
+summary: "Build a double-helix model, copy it the way a cell does, and hide a secret message in its bases."
 ---
 ## Build a double helix (50 minutes)
 

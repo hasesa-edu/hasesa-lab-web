@@ -3,6 +3,7 @@ title: The verdict
 kind: finish
 minutes: 120
 units: [chemical-tests]
+summary: "Build an evidence board, write the case report, and present your verdicts."
 ---
 ## Do: build the evidence board (40 minutes)
 

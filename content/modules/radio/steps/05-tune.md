@@ -4,6 +4,7 @@ kind: build
 minutes: 120
 video: { youtubeId: "QJr60m4_a1M", credit: "Matthew Fairbanks" }
 units: [resonance, rearranging-formulas, scientific-notation]
+summary: "Wind a tuning coil, add a capacitor, and calculate the coil that picks out one station."
 ---
 ## Do: wind the tuning coil
 

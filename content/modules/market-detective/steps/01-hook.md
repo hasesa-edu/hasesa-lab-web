@@ -3,6 +3,7 @@ title: Open the case file
 kind: hook
 minutes: 45
 units: [properties-of-matter]
+summary: "Open the case file, learn rule zero, examine the samples with your senses, and plan your investigation."
 ---
 ## The case
 

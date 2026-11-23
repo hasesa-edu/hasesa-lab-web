@@ -4,6 +4,7 @@ kind: build
 minutes: 135
 video: { youtubeId: "N5eBWFjQF7s", credit: "Thetips4you" }
 units: [microcontroller-basics, sensors-and-signals, charge-current-voltage, simple-circuits]
+summary: "Give the hand a servo for a muscle, wire it to the Arduino, and make it obey your forearm."
 ---
 ## Do: give the hand a muscle
 

@@ -4,6 +4,7 @@ kind: investigate
 minutes: 90
 video: { youtubeId: "KgZ7JtmOgHI", credit: "BeardedScienceGuy" }
 units: [density, properties-of-matter, rearranging-formulas]
+summary: "Test honey and milk in water, then measure their densities to check which are genuine."
 ---
 ## Do: the water-glass test (15 minutes)
 

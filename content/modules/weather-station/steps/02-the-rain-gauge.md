@@ -3,6 +3,7 @@ title: The rain gauge
 kind: build
 minutes: 75
 units: [air-and-weather, rearranging-formulas]
+summary: "Build and place a rain gauge, and work out why rain is measured by depth."
 ---
 ## Check yesterday's forecast (5 minutes)
 

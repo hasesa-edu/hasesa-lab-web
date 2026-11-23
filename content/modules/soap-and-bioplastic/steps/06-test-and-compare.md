@@ -3,6 +3,7 @@ title: Test and compare
 kind: investigate
 minutes: 120
 units: [polymers, acids-bases-ph, chemical-tests]
+summary: "Test your soap and your plastics for strength, flexibility, lather and how fast they break down."
 ---
 About four weeks have passed. Your soap has cured, and your plastic strips have been in the soil.
 

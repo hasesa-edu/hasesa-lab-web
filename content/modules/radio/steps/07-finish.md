@@ -4,6 +4,7 @@ kind: finish
 minutes: 90
 video: { youtubeId: "65qpjGqX6vM", credit: "Take Apart Engineering" }
 units: []
+summary: "Build your radio properly, log the stations you catch, and explain every part to your guide."
 ---
 ## Do: build it properly
 

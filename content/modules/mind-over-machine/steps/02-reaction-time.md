@@ -4,6 +4,7 @@ kind: investigate
 minutes: 75
 video: { youtubeId: "LheOjO2DJD0", credit: "Physics Online" }
 units: [free-fall-and-square-roots, rearranging-formulas, nervous-system]
+summary: "Catch a falling ruler to measure your reaction time, then see what a distraction does to it."
 ---
 ## Do: the ruler drop
 

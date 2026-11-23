@@ -3,6 +3,7 @@ title: What dissolves?
 kind: investigate
 minutes: 75
 units: [solutions-and-concentration]
+summary: "Race to dissolve things in water, then make a colour scale you'll use to measure how strong a brew is."
 ---
 ## Do: dissolving races (20 minutes)
 

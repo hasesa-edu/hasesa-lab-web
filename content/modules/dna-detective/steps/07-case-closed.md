@@ -3,6 +3,7 @@ title: Case closed
 kind: finish
 minutes: 105
 units: [dna-and-genes, inheritance]
+summary: "Write the case report, debate DNA testing in real life, and explain your findings to your guide."
 ---
 ## The case report (30 minutes)
 

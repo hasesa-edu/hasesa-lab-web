@@ -3,6 +3,7 @@ title: The bubbling bucket
 kind: hook
 minutes: 45
 units: [microbes]
+summary: "Look, smell and listen to a bucket of fermenting batter, and predict who is doing all the work."
 ---
 ## Look, smell, listen
 

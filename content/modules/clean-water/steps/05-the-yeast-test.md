@@ -3,6 +3,7 @@ title: The yeast test
 kind: investigate
 minutes: 75
 units: [microbes, water-treatment]
+summary: "Use yeast as a harmless stand-in for germs to test whether your filter makes water safe."
 ---
 ## The problem
 

@@ -4,6 +4,7 @@ kind: build
 minutes: 90
 video: { youtubeId: "WaYe_HMxmVQ", credit: "Nick Spencer" }
 units: [muscle-contraction]
+summary: "Open a chicken wing to find its tendons, then build a cardboard hand that moves the same way."
 ---
 ## Do: open a chicken wing
 

@@ -4,6 +4,7 @@ kind: build
 minutes: 90
 video: { youtubeId: "3JJ_mvJjyi0", credit: "Rhett Allain" }
 units: [charge-current-voltage, simple-circuits, electromagnetism]
+summary: "Build a speaker from a paper cup and a coil of wire, and play your phone through it."
 ---
 ## Do: build a speaker from a cup
 

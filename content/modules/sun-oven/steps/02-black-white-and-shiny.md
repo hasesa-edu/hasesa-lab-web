@@ -3,6 +3,7 @@ title: Black, white and shiny
 kind: investigate
 minutes: 60
 units: [heat-transfer, graphs-and-relationships]
+summary: "Race cans of water in the sun to see how colour and shine change heating, and graph the results."
 ---
 ## Do: the can race (35 minutes)
 

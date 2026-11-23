@@ -3,6 +3,7 @@ title: Mind over machine
 kind: finish
 minutes: 90
 units: [nervous-system, neurons-and-signals, muscle-contraction, sensors-and-signals, microcontroller-basics]
+summary: "Take the claw challenge, improve your build, and explain the whole chain from brain to motor."
 ---
 ## The challenge
 

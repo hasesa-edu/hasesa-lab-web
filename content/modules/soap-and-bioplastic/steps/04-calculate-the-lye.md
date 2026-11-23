@@ -3,6 +3,7 @@ title: Calculate the lye
 kind: investigate
 minutes: 75
 units: [reacting-quantities, rearranging-formulas]
+summary: "Test your films, then calculate exactly how much lye your soap recipe needs."
 ---
 ## First: test your films (25 minutes)
 
