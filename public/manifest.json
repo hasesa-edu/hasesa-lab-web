@@ -1,12 +1,12 @@
 {
   "name": "Hasesa",
   "short_name": "Hasesa",
-  "description": "Reimagining Education for the AI Era. Science experiments for Ethiopian grades 9–12, with step-by-step guides, videos and an AI lab assistant.",
+  "description": "Reimagining Education for the AI Era. Hasesa is building an education system for the AI era; Hasesa Academy, hands-on science for teenagers, is its first program.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#F2F5F4",
-  "theme_color": "#0E3B4A",
+  "background_color": "#FAFAF8",
+  "theme_color": "#FFFFFF",
   "orientation": "portrait",
   "lang": "en",
   "icons": [
