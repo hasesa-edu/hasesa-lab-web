@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Award, ChevronRight } from "lucide-react";
+import { Award, Check, ChevronRight } from "lucide-react";
 import type { CardState, CatalogueItem, Viewer } from "@/lib/catalogue";
 import { DISCIPLINES, LEVELS } from "@/lib/disciplines";
 import { cn } from "@/lib/utils";
@@ -73,11 +73,28 @@ export function ModuleAction({
   return <StartButton moduleId={item.id} firstStepId={item.firstStepId} restart={status === "dropped"} size={size} className={className} />;
 }
 
-/** A module as a card: cover, title, mystery, level, length and subjects, and what you can do next. */
+/**
+ * A module as a card: cover, title, mystery, level, length and subjects. The
+ * whole card opens the module page, which holds Start and sign-up. Students
+ * also see where they stand: a progress bar on the cover and a Continue link
+ * for a module under way, a Done badge and the certificate for a finished one.
+ */
 export function ModuleCard({ item, state, viewer, className }: { item: CatalogueItem; state?: CardState; viewer: Viewer; className?: string }) {
+  const status = viewer === "full" ? (state?.status ?? "not-started") : "not-started";
+  const pct = state && state.stepsTotal ? Math.round((state.stepsDone / state.stepsTotal) * 100) : 0;
+  const link = "relative z-10 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline";
+
   return (
     <article className={cn("group relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition hover:border-foreground/25 hover:shadow-card", className)}>
-      <ModuleCover id={item.id} disciplines={item.disciplines} level={item.level} />
+      <div className="relative">
+        <ModuleCover id={item.id} disciplines={item.disciplines} level={item.level} />
+        {status === "active" && <ProgressBar pct={pct} className="absolute inset-x-0 bottom-0 h-1.5 rounded-none bg-card/60" />}
+        {status === "completed" && (
+          <span className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-primary px-2.5 py-0.5 font-mono text-[10px] tracking-[0.08em] text-primary-foreground uppercase">
+            <Check aria-hidden className="size-3" strokeWidth={3} /> Done
+          </span>
+        )}
+      </div>
       <div className="flex flex-1 flex-col p-4">
         <p className="font-mono text-[11px] tracking-[0.06em] text-muted-foreground uppercase">
           {item.disciplines.map((d) => DISCIPLINES[d].label).join(" · ")}
@@ -92,9 +109,23 @@ export function ModuleCard({ item, state, viewer, className }: { item: Catalogue
         <p className="mt-3 font-mono text-xs text-muted-foreground">
           {LEVELS[item.level].label} · {item.stepCount} steps · ~{item.hours} h
         </p>
-        <div className="mt-auto pt-4">
-          <ModuleAction item={item} state={state} viewer={viewer} size="sm" />
-        </div>
+        {status === "active" && (
+          <p className="mt-auto flex items-center justify-between gap-3 pt-4">
+            <Link href={`/modules/${item.id}/${state?.nextStepId ?? item.firstStepId}`} className={link}>
+              {state?.stepsDone ? "Continue" : "Begin"} <ChevronRight aria-hidden className="size-4" />
+            </Link>
+            <span className="text-xs text-muted-foreground tabular-nums">
+              {state?.stepsDone ?? 0} of {state?.stepsTotal ?? 0} steps
+            </span>
+          </p>
+        )}
+        {status === "completed" && state?.certificateCode && (
+          <p className="mt-auto pt-4">
+            <Link href={`/certificates/${state.certificateCode}`} className={link}>
+              <Award aria-hidden className="size-4" /> Certificate
+            </Link>
+          </p>
+        )}
       </div>
     </article>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { SlidersHorizontal, XIcon } from "lucide-react";
+import { SearchIcon, SlidersHorizontal, XIcon } from "lucide-react";
 import {
   type CardState,
   type CatalogueItem,
@@ -9,6 +9,8 @@ import {
   LENGTHS,
   type Length,
   NO_FILTERS,
+  PROGRESS,
+  type Progress,
   SORTS,
   type Sort,
   type Viewer,
@@ -21,23 +23,26 @@ import type { Discipline, Level } from "@/lib/content/types";
 import { DISCIPLINES, LEVELS, LEVEL_ORDER } from "@/lib/disciplines";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { GoogleIcon, googleSignInHref } from "@/components/GoogleButton";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { CardGrid, ModuleCard } from "./ModuleCard";
 
 /** Cards shown at first, and added by each "Show more". */
 const PAGE = 12;
 
-type Facet = "level" | "subject" | "length";
+type Facet = "level" | "subject" | "length" | "progress";
 const FACETS: { key: Facet; label: string; options: { value: string; label: string }[] }[] = [
+  // Students only: shown when the viewer can start modules.
+  { key: "progress", label: "Your progress", options: (Object.keys(PROGRESS) as Progress[]).map((p) => ({ value: p, label: PROGRESS[p] })) },
   { key: "level", label: "Level", options: LEVEL_ORDER.map((l) => ({ value: l, label: LEVELS[l].label })) },
   { key: "subject", label: "Subject", options: (Object.keys(DISCIPLINES) as Discipline[]).map((d) => ({ value: d, label: DISCIPLINES[d].label })) },
   { key: "length", label: "Length", options: (Object.keys(LENGTHS) as Length[]).map((l) => ({ value: l, label: LENGTHS[l].label })) },
 ];
 
 /**
- * The catalogue: filters (a sidebar on desktop, a sheet on phones), sort, and
- * the matching modules as cards. Search comes from the header (`?q=`). Every
- * choice is kept in the URL, so a filtered view can be linked and shared.
+ * The catalogue: a search box, filters (a sidebar on desktop, a sheet on
+ * phones), sort, and the matching modules as cards. Every choice is kept in
+ * the URL, so a filtered view can be linked and shared.
  */
 export function Catalogue({
   items,
@@ -56,9 +61,21 @@ export function Catalogue({
   const [sort, setSort] = useState<Sort>(initialSort);
   const [shown, setShown] = useState(PAGE);
   const [sheet, setSheet] = useState(false);
+  // What's typed in the search box; it filters a moment after typing stops.
+  const [typed, setTyped] = useState(initial.q);
 
-  const results = useMemo(() => sortModules(filterModules(items, f), sort), [items, f, sort]);
-  const active = FACETS.filter(({ key }) => f[key]).length + (f.q.trim() ? 1 : 0);
+  const facets = FACETS.filter((x) => x.key !== "progress" || viewer === "full");
+  const results = useMemo(() => sortModules(filterModules(items, f, states), sort), [items, f, states, sort]);
+  const active = facets.filter(({ key }) => f[key]).length + (f.q.trim() ? 1 : 0);
+
+  useEffect(() => {
+    if (typed === f.q) return;
+    const t = setTimeout(() => {
+      setF((cur) => ({ ...cur, q: typed }));
+      setShown(PAGE);
+    }, 150);
+    return () => clearTimeout(t);
+  }, [typed, f.q]);
 
   // Keep the address bar in step, without a navigation or a history entry per click.
   useEffect(() => {
@@ -68,15 +85,16 @@ export function Catalogue({
 
   const update = (next: Filters) => {
     setF(next);
+    setTyped(next.q);
     setShown(PAGE);
   };
   const toggle = (k: Facet, v: string) => update({ ...f, [k]: f[k] === v ? null : v } as Filters);
   /** How many modules an option would show, given the other filters. */
-  const count = (k: Facet, v: string) => filterModules(items, { ...f, [k]: v } as Filters).length;
+  const count = (k: Facet, v: string) => filterModules(items, { ...f, [k]: v } as Filters, states).length;
 
   const panel = (
     <div className="space-y-7">
-      {FACETS.map((facet) => (
+      {facets.map((facet) => (
         <fieldset key={facet.key}>
           <legend className="font-mono text-[11px] tracking-[0.08em] text-muted-foreground uppercase">{facet.label}</legend>
           <ul className="mt-2 space-y-0.5">
@@ -118,6 +136,7 @@ export function Catalogue({
     ...(f.level ? [{ key: "level", label: LEVELS[f.level as Level].label, clear: () => update({ ...f, level: null }) }] : []),
     ...(f.subject ? [{ key: "subject", label: DISCIPLINES[f.subject].label, clear: () => update({ ...f, subject: null }) }] : []),
     ...(f.length ? [{ key: "length", label: LENGTHS[f.length].label, clear: () => update({ ...f, length: null }) }] : []),
+    ...(f.progress ? [{ key: "progress", label: PROGRESS[f.progress], clear: () => update({ ...f, progress: null }) }] : []),
   ];
 
   return (
@@ -127,6 +146,44 @@ export function Catalogue({
       </aside>
 
       <div className="min-w-0">
+        <form role="search" onSubmit={(e) => e.preventDefault()} className="relative mb-5">
+          <label htmlFor="catalogue-q" className="sr-only">
+            Search modules
+          </label>
+          <SearchIcon aria-hidden className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" />
+          <input
+            id="catalogue-q"
+            type="search"
+            value={typed}
+            onChange={(e) => setTyped(e.target.value)}
+            placeholder="Search modules: rocket, coffee, DNA…"
+            autoComplete="off"
+            className="h-12 w-full rounded-xl border border-input bg-card pr-11 pl-10 text-base outline-none placeholder:text-muted-foreground focus-visible:ring-3 focus-visible:ring-ring/50 [&::-webkit-search-cancel-button]:hidden"
+          />
+          {typed && (
+            <button
+              type="button"
+              onClick={() => update({ ...f, q: "" })}
+              aria-label="Clear search"
+              className="absolute top-1/2 right-2 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
+            >
+              <XIcon aria-hidden className="size-4" />
+            </button>
+          )}
+        </form>
+
+        {viewer === "visitor" && (
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-accent px-4 py-3">
+            <p className="text-sm">
+              <span className="font-semibold">Free during the pilot.</span>{" "}
+              <span className="text-foreground/75">Sign up to open every step and concept unit.</span>
+            </p>
+            <a href={googleSignInHref("/modules")} className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
+              <GoogleIcon size={14} /> Sign up free
+            </a>
+          </div>
+        )}
+
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-muted-foreground" aria-live="polite">
             <span className="font-semibold text-foreground tabular-nums">{results.length}</span>{" "}
@@ -143,7 +200,7 @@ export function Catalogue({
               <SheetContent side="bottom" className="max-h-[85dvh] overflow-y-auto rounded-t-2xl bg-background px-5 pt-6 pb-5">
                 <SheetHeader className="p-0">
                   <SheetTitle>Filters</SheetTitle>
-                  <SheetDescription className="sr-only">Narrow the modules by level, subject and length</SheetDescription>
+                  <SheetDescription className="sr-only">Narrow the modules by level, subject, length and progress</SheetDescription>
                 </SheetHeader>
                 {panel}
                 <div className="sticky bottom-0 flex gap-2 bg-background pt-3">

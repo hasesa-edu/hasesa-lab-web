@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Award, Check, ChevronRight, Lock } from "lucide-react";
+import { ArrowRight, Check, ChevronRight, Lock } from "lucide-react";
 import { getConcept, getModule, moduleUnits, summarize } from "@/lib/content";
 import type { Module } from "@/lib/content/types";
 import { getViewer } from "@/lib/viewer";
@@ -17,11 +17,11 @@ import { ModuleCover } from "@/components/module/ModuleCover";
 import { cn } from "@/lib/utils";
 import { Markdown } from "@/components/Markdown";
 import { SUBJECT_STYLES, SubjectLabel } from "@/components/Subject";
-import { Button } from "@/components/ui/button";
 import { AssistantPanel } from "@/components/assistant/AssistantPanel";
-import { ModuleActions, ModuleMobileBar } from "@/components/module/ModuleActions";
+import { ModuleIncludes, ModuleMobileBar } from "@/components/module/ModuleActions";
+import { SectionTabs } from "@/components/module/SectionTabs";
 import { moduleContext } from "@/lib/chat-context";
-import { BackLink, KIND_LABEL, ProgressBar, SectionTitle, UnitStatusPill, VideoEmbed } from "@/components/module/ui";
+import { BackLink, KIND_LABEL, SectionTitle, UnitStatusPill, VideoEmbed } from "@/components/module/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -36,8 +36,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 /*
  * A module page has two jobs. For visitors and new students it tells the
  * story: the mystery, what you'll build, the steps, the theory. For students
- * already working through it, it starts where they stopped. An action panel
- * (sign up, start, continue) stays beside the content on desktop.
+ * already working through it, it starts where they stopped. The banner holds
+ * the one thing to do next (sign up, start, continue; for visitors on phones
+ * it is pinned to the bottom too); tabs under it jump between the sections.
  */
 export default async function ModulePage({ params }: Props) {
   const { id } = await params;
@@ -53,11 +54,22 @@ export default async function ModulePage({ params }: Props) {
   const unitIds = moduleUnits(m);
   const doneSteps = new Set(state?.steps.filter((s) => s.moduleId === m.id && s.done).map((s) => s.stepId));
   const unitStatus = new Map(state?.units.map((u) => [u.unitId, u.status]));
+  const cardState = cardStates([m], state)[m.id];
   // Returning students (module started, not finished) see where they stopped first.
   const returning = full && progress?.status === "active";
+  const completed = full && progress?.status === "completed";
   const nextStep = returning && progress?.nextStep ? m.steps.find((s) => s.id === progress.nextStep!.id) : undefined;
-  const pct = progress && progress.stepsTotal ? Math.round((progress.stepsDone / progress.stepsTotal) * 100) : 0;
+  const sample = summary.publicSample;
 
+  // Returning students get the steps first and the story later; the tabs follow the page's order.
+  const tabs = [
+    ...(returning ? [] : [{ id: "overview", label: "Overview" }]),
+    { id: "steps", label: "Steps" },
+    { id: "theory", label: "Theory" },
+    { id: "finish", label: "How you finish" },
+    ...(returning ? [{ id: "overview", label: "About" }] : []),
+    { id: "materials", label: "Materials & safety" },
+  ];
   const story = <Story m={m} returning={returning} />;
 
   return (
@@ -105,72 +117,49 @@ export default async function ModulePage({ params }: Props) {
             </div>
             <h1 className="mt-3 text-5xl leading-[1.02] font-semibold tracking-[-0.04em] sm:text-6xl">{m.title}</h1>
             <p className="mt-3 max-w-3xl text-xl font-medium text-foreground/80 sm:text-2xl">{m.tagline}</p>
-            <p className="mt-4 font-mono text-xs text-muted-foreground">
+            {/* Phones only: on desktop the side card has these facts. */}
+            <p className="mt-4 font-mono text-xs text-muted-foreground lg:hidden">
               ~{m.hours} hours · {m.steps.length} steps · {unitIds.length} concept units · {STATUS_LABEL[m.status]}
             </p>
-            <ModuleAction item={item} state={cardStates([m], state)[m.id]} viewer={viewer} size="lg" className="mt-6" />
+            {nextStep && (
+              <p className="mt-6 text-sm">
+                <span className="font-mono text-[11px] tracking-[0.08em] text-primary uppercase">Next</span>{" "}
+                <span className="text-muted-foreground">
+                  Step {m.steps.indexOf(nextStep) + 1} of {m.steps.length} ·{" "}
+                </span>
+                <span className="font-semibold">{nextStep.title}</span>
+                <span className="text-muted-foreground"> · ~{nextStep.minutes} min</span>
+              </p>
+            )}
+            {completed && <p className="mt-6 font-semibold">Module complete. Your guide signed you off.</p>}
+            <ModuleAction item={item} state={cardState} viewer={viewer} size="lg" className={nextStep || completed ? "mt-3" : "mt-6"} />
           </div>
           <ModuleCover id={m.id} disciplines={m.disciplines} level={m.level} className="hidden rounded-xl border border-border sm:block" />
         </div>
-        {/* What you'll learn: the concept units this module teaches. */}
+        {/* What you'll achieve: the sign-off checks, which are what a student can do by the end. */}
         <div className="border-t border-border">
-          <div className="mx-auto max-w-6xl px-4 py-6">
-            <h2 className="font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase">What you&apos;ll learn</h2>
-            <ul className="mt-3 grid gap-x-8 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
-              {unitIds.slice(0, 6).map((u) => (
-                <li key={u} className="flex items-start gap-2 text-sm">
-                  <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-primary" />
-                  {getConcept(u)?.title ?? u}
+          <div id="outcomes" className="mx-auto max-w-6xl scroll-mt-32 px-4 py-6">
+            <h2 className="font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase">What you&apos;ll achieve</h2>
+            <ul className="mt-3 grid gap-x-8 gap-y-2.5 sm:grid-cols-2 lg:grid-cols-3">
+              {m.signoff.map((s) => (
+                <li key={s.id} className="flex items-start gap-2 text-sm leading-relaxed">
+                  <Check aria-hidden className="mt-1 size-4 shrink-0 text-primary" />
+                  {s.text}
                 </li>
               ))}
-              {unitIds.length > 6 && <li className="text-sm text-muted-foreground">and {unitIds.length - 6} more</li>}
             </ul>
           </div>
         </div>
       </header>
 
+      <SectionTabs sections={tabs} />
+
       <div className="mx-auto grid max-w-6xl gap-10 px-4 pb-16 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-14">
         <div className="min-w-0">
-          {progress?.certificateCode && (
-            <Link
-              href={`/certificates/${progress.certificateCode}`}
-              className="mt-10 flex items-center gap-4 border-y border-border py-5 transition hover:bg-muted"
-            >
-              <Award aria-hidden className="size-8 shrink-0 text-primary" />
-              <span className="flex-1">
-                <span className="block font-bold">Module complete. Your guide signed you off.</span>
-                <span className="text-sm text-muted-foreground">View and print your certificate</span>
-              </span>
-              <ChevronRight aria-hidden className="size-5 text-primary" />
-            </Link>
-          )}
-
-          {/* Returning students: pick up where you left off. */}
-          {returning && nextStep && (
-            <section className="mt-10 rounded-lg border border-border bg-accent p-5 sm:p-6">
-              <p className="font-mono text-xs tracking-[0.08em] text-accent-foreground uppercase">Pick up where you left off</p>
-              <p className="mt-3 text-sm text-muted-foreground">
-                Step {m.steps.indexOf(nextStep) + 1}, {KIND_LABEL[nextStep.kind].toLowerCase()}, about {nextStep.minutes} min
-              </p>
-              <p className="mt-1 text-2xl leading-snug font-semibold">{nextStep.title}</p>
-              <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-3">
-                <Button asChild size="lg" variant="ink">
-                  <Link href={`/modules/${m.id}/${nextStep.id}`}>{progress!.stepsDone ? "Continue" : "Begin"}</Link>
-                </Button>
-                <div className="min-w-48 flex-1">
-                  <p className="text-sm text-muted-foreground">
-                    {progress!.stepsDone} of {progress!.stepsTotal} steps · {progress!.unitsDone} of {progress!.unitsTotal} units
-                  </p>
-                  <ProgressBar pct={pct} className="mt-2" />
-                </div>
-              </div>
-            </section>
-          )}
-
           {!returning && story}
 
-          {/* The steps, as a tuning track. */}
-          <section className={returning ? "mt-14" : "mt-20"}>
+          {/* The steps, as a track. Everyone sees what each one holds; students open them. */}
+          <section id="steps" className={cn("scroll-mt-32", returning ? "mt-12" : "mt-20")}>
             <SectionTitle>The steps</SectionTitle>
             <ol className="relative mt-8 max-w-3xl border-l-2 border-primary/30 pl-8 sm:pl-12">
               {m.steps.map((s, i) => {
@@ -186,11 +175,13 @@ export default async function ModulePage({ params }: Props) {
                       {s.title}
                       {!full && <Lock aria-hidden className="size-4 shrink-0 text-muted-foreground" />}
                     </p>
+                    <p className="mt-1.5 text-foreground/75">{s.summary ?? s.sections.join(" · ")}</p>
                     {s.units.length > 0 && (
                       <p className="mt-2 text-sm text-muted-foreground">Theory: {s.units.map((u) => getConcept(u)?.title).join(", ")}</p>
                     )}
                   </>
                 );
+                const free = !full && s.units.includes(sample.id);
                 return (
                   <li key={s.id} className="relative pb-9 last:pb-0">
                     <span
@@ -211,7 +202,17 @@ export default async function ModulePage({ params }: Props) {
                         {body}
                       </Link>
                     ) : (
-                      <div>{body}</div>
+                      <div>
+                        {body}
+                        {free && (
+                          <Link
+                            href={`/concepts/${sample.id}?from=${m.id}`}
+                            className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-primary/40 px-3 py-1 text-sm font-medium text-primary transition hover:bg-primary/10"
+                          >
+                            Free sample: {sample.title} <ArrowRight aria-hidden className="size-3.5" />
+                          </Link>
+                        )}
+                      </div>
                     )}
                   </li>
                 );
@@ -220,7 +221,7 @@ export default async function ModulePage({ params }: Props) {
           </section>
 
           {/* The theory, with where each unit meets the school curriculum. */}
-          <section className="mt-20">
+          <section id="theory" className="mt-20 scroll-mt-32">
             <SectionTitle>The theory</SectionTitle>
             <p className="mt-3 max-w-2xl text-muted-foreground">
               Concept units you read and practise at home. They&apos;re shared between modules, and you can test out of any you
@@ -280,23 +281,30 @@ export default async function ModulePage({ params }: Props) {
             </ul>
           </section>
 
-          <section className="mt-20 max-w-3xl">
+          <section id="finish" className="mt-20 max-w-3xl scroll-mt-32">
             <SectionTitle>How you finish</SectionTitle>
-            <p className="mt-3 text-muted-foreground">When you&apos;re ready, your guide checks these with you and signs you off. Then you get a certificate.</p>
-            <ul className="mt-6 border-t border-border">
-              {m.signoff.map((s) => (
-                <li key={s.id} className="flex gap-3 border-b border-border py-3.5">
-                  <Check aria-hidden className="mt-1 size-4 shrink-0 text-primary" />
-                  <span>{s.text}</span>
+            <ol className="mt-6 grid gap-6 sm:grid-cols-3">
+              {[
+                ["Work through the steps", `${m.steps.length} steps at the Academy, with the theory at home in between.`],
+                ["Show your guide", `They check the ${m.signoff.length} things in What you'll achieve with you, and sign you off.`],
+                ["Get your certificate", "A certificate for the module, to print and keep."],
+              ].map(([title, body], n) => (
+                <li key={title} className="border-t border-input pt-4">
+                  <span className="font-mono text-sm text-primary tabular-nums">{String(n + 1).padStart(2, "0")}</span>
+                  <p className="mt-1 font-semibold">{title}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{body}</p>
                 </li>
               ))}
-            </ul>
+            </ol>
+            <a href="#outcomes" className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline">
+              See what your guide checks <ArrowRight aria-hidden className="size-4" />
+            </a>
           </section>
 
           {returning && story}
 
           {/* Before you start: materials and safety, open for enrolled students. */}
-          <section className="mt-20">
+          <section id="materials" className="mt-20 scroll-mt-32">
             <SectionTitle>Before you start</SectionTitle>
             <div className="mt-6 grid gap-10 sm:grid-cols-2">
               <details open={full} className="group">
@@ -342,27 +350,25 @@ export default async function ModulePage({ params }: Props) {
           </section>
         </div>
 
-        {/* Phones: the panel goes first only when it holds the main action (Start); visitors have the
-            bottom bar and returning students the pick-up card, so for them it sits at the end. */}
-        <aside aria-label="Module actions" className={cn("mt-8 lg:order-none lg:mt-10", full && !returning && "order-first")}>
-          <div className="lg:sticky lg:top-24">
-            <ModuleActions
+        {/* The facts at a glance; below the section tabs while scrolling on desktop, at the end on phones. */}
+        <aside aria-label="About this module" className="mt-8 lg:mt-10">
+          <div className="lg:sticky lg:top-32">
+            <ModuleIncludes
               moduleId={m.id}
               hours={m.hours}
               steps={m.steps.length}
               units={unitIds.length}
+              materials={m.materials.length}
               status={m.status}
-              full={full}
-              signedIn={signedIn}
+              progress={full ? (progress?.status ?? null) : null}
               guide={access.level === "guide"}
-              progress={progress}
-              sample={summary.publicSample}
             />
           </div>
         </aside>
       </div>
 
-      {!full && <ModuleMobileBar moduleId={m.id} signedIn={signedIn} sample={summary.publicSample} />}
+      {/* Phones, visitors: the banner's action stays in reach. (Students have the lab assistant's bar there instead.) */}
+      {!full && <ModuleMobileBar item={item} viewer={viewer} />}
 
       {full && (
         <AssistantPanel
@@ -382,7 +388,7 @@ export default async function ModulePage({ params }: Props) {
 /** The mystery, the goal, what you'll build and the trailer. First for newcomers; "About this module" for returning students. */
 function Story({ m, returning }: { m: Module; returning: boolean }) {
   return (
-    <section className={returning ? "mt-20" : "mt-10 sm:mt-14"}>
+    <section id="overview" className={cn("scroll-mt-32", returning ? "mt-20" : "mt-10 sm:mt-14")}>
       {returning ? (
         <SectionTitle>About this module</SectionTitle>
       ) : (

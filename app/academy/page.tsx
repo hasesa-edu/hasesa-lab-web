@@ -4,6 +4,10 @@ import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
 import { JsonLd } from "@/components/JsonLd";
 import { t } from "@/lib/i18n";
+import { getViewer } from "@/lib/viewer";
+import { cardStates } from "@/lib/summary";
+import { hasFullAccess } from "@/lib/access";
+import type { Viewer } from "@/lib/catalogue";
 import { FAQ_KEYS } from "./faq";
 import { AcademyClient } from "./AcademyClient";
 
@@ -41,12 +45,16 @@ const faqJsonLd = {
   })),
 };
 
-// Server wrapper: passes module summaries and one answer-free problem to the Academy page.
-export default function AcademyPage() {
+// Server wrapper: passes module summaries, the viewer's progress on each and one
+// answer-free problem to the Academy page.
+export default async function AcademyPage() {
+  const { access, state } = await getViewer();
+  const modules = getModules();
+  const viewer: Viewer = !access.userId ? "visitor" : hasFullAccess(access) ? "full" : "limited";
   return (
     <>
       <JsonLd data={faqJsonLd} />
-      <AcademyClient modules={getModules().map(summarize)} challenge={pickChallenge()} />
+      <AcademyClient modules={modules.map(summarize)} states={cardStates(modules, state)} viewer={viewer} challenge={pickChallenge()} />
     </>
   );
 }
