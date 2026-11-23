@@ -54,9 +54,9 @@ export async function Subscribers() {
         <StatCard label="Guides" value={s.guides} />
       </div>
 
-      <div className="mt-4 rounded-2xl bg-sun-soft/50 p-5 ring-1 ring-sun/30">
+      <div className="mt-4 rounded-lg bg-accent p-5 ring-1 ring-primary/20">
         <div className="flex items-start gap-3">
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-sun text-deep">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-foreground text-background">
             <UserPlus className="size-4" />
           </span>
           <div>
@@ -71,9 +71,9 @@ export async function Subscribers() {
         </div>
       </div>
 
-      <div className="mt-4 rounded-2xl bg-card p-5 shadow-card ring-1 ring-border">
+      <div className="mt-4 rounded-lg bg-card p-5 shadow-card ring-1 ring-border">
         <div className="flex items-start gap-3">
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary-strong">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
             <GraduationCap className="size-4" />
           </span>
           <div>
@@ -134,13 +134,13 @@ export async function Subscribers() {
 
 /* Shared admin building blocks (also used by ./page.tsx). */
 
-export const TABLE_HEAD = "bg-primary-soft/50";
-export const TH = "px-3 text-xs font-bold tracking-wide text-primary-strong uppercase";
+export const TABLE_HEAD = "bg-muted";
+export const TH = "px-3 font-mono text-[11px] font-normal tracking-[0.08em] text-muted-foreground uppercase";
 
 const STAT_TONES = {
-  teal: { bar: "bg-primary", value: "text-primary-strong" },
-  sun: { bar: "bg-sun", value: "text-chemistry" },
-  plain: { bar: "bg-primary/30", value: "text-foreground" },
+  teal: { bar: "bg-primary", value: "text-primary" },
+  sun: { bar: "bg-foreground", value: "text-foreground" },
+  plain: { bar: "bg-border", value: "text-foreground" },
 } as const;
 
 export function StatCard({
@@ -156,10 +156,10 @@ export function StatCard({
 }) {
   const t = STAT_TONES[tone];
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-card p-4 shadow-card ring-1 ring-border">
-      <span aria-hidden className={cn("absolute inset-x-0 top-0 h-1", t.bar)} />
-      <div className="text-[11px] leading-tight font-semibold tracking-wide text-muted-foreground uppercase">{label}</div>
-      <div className={cn("mt-1.5 font-heading text-3xl leading-none font-extrabold tabular-nums", t.value)}>
+    <div className="relative overflow-hidden rounded-lg bg-card p-4 shadow-card ring-1 ring-border">
+      <span aria-hidden className={cn("absolute inset-x-0 top-0 h-0.5", t.bar)} />
+      <div className="font-mono text-[11px] leading-tight tracking-[0.08em] text-muted-foreground uppercase">{label}</div>
+      <div className={cn("mt-2 font-mono text-3xl leading-none tracking-[-0.02em] tabular-nums", t.value)}>
         {typeof value === "number" ? value.toLocaleString() : value}
       </div>
       {sub && <div className="mt-1 text-xs text-subtle-foreground">{sub}</div>}
@@ -188,7 +188,7 @@ export function TablePanel({
   children: React.ReactNode;
 }) {
   return (
-    <div className={cn("overflow-hidden rounded-2xl bg-card shadow-card ring-1 ring-border", className)}>
+    <div className={cn("overflow-hidden rounded-lg bg-card shadow-card ring-1 ring-border", className)}>
       <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-border px-4 py-3">
         <h3 className="text-sm font-bold text-foreground">{title}</h3>
         {aside}

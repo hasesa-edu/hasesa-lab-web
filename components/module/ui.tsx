@@ -8,12 +8,12 @@ import { Button } from "@/components/ui/button";
 import { GoogleIcon, googleSignInHref } from "@/components/GoogleButton";
 
 /**
- * Section headings in the brand's display face. `icon` is still accepted from
+ * Section headings: Geist, semibold, tightly tracked. `icon` is still accepted from
  * older call sites but no longer drawn: icon tiles beside every heading read
  * as template chrome.
  */
 export function SectionTitle({ children, className }: { icon?: LucideIcon; children: React.ReactNode; className?: string }) {
-  return <h2 className={cn("font-dial text-3xl leading-none font-bold text-ink sm:text-4xl", className)}>{children}</h2>;
+  return <h2 className={cn("text-2xl leading-tight font-semibold text-foreground sm:text-3xl", className)}>{children}</h2>;
 }
 
 export function ProgressBar({ pct, className }: { pct: number; className?: string }) {
@@ -23,7 +23,7 @@ export function ProgressBar({ pct, className }: { pct: number; className?: strin
       aria-valuenow={pct}
       aria-valuemin={0}
       aria-valuemax={100}
-      className={cn("h-2 overflow-hidden rounded-full bg-muted", className)}
+      className={cn("h-1 overflow-hidden rounded-full bg-border", className)}
     >
       <div
         className={cn("h-full rounded-full transition-[width] duration-500", pct >= 100 ? "bg-emerald-500" : "bg-primary")}
@@ -33,19 +33,17 @@ export function ProgressBar({ pct, className }: { pct: number; className?: strin
   );
 }
 
-/** Shows whether content has been checked by an expert. Drafts get a quiet amber badge. */
 /** One quiet line saying whether content has been checked by a subject expert. */
-export function StatusBadge({ status, className, onDark }: { status: ContentStatus; className?: string; onDark?: boolean }) {
+export function StatusBadge({ status, className }: { status: ContentStatus; className?: string }) {
   const draft = status === "ai-draft";
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-2 text-sm",
-        onDark ? "text-enamel-foreground/70" : "text-ink/60",
+        "inline-flex items-center gap-2 text-sm text-muted-foreground",
         className
       )}
     >
-      <span aria-hidden className={cn("size-2 rounded-full", draft ? "bg-sun" : "bg-signal")} />
+      <span aria-hidden className={cn("size-2 rounded-full", draft ? "bg-sun" : "bg-primary")} />
       {draft ? "Draft: being checked by subject experts" : STATUS_LABEL[status]}
     </span>
   );
@@ -60,15 +58,15 @@ export const KIND_LABEL: Record<StepKind, string> = {
 
 export function HeaderChip({ icon: Icon, children }: { icon: LucideIcon; children: React.ReactNode }) {
   return (
-    <span className="inline-flex min-h-8 items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-sm text-deep-foreground ring-1 ring-white/15">
-      <Icon aria-hidden className="size-4 shrink-0 text-sun" />
+    <span className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-sm text-foreground">
+      <Icon aria-hidden className="size-4 shrink-0 text-muted-foreground" />
       {children}
     </span>
   );
 }
 
 export function VideoEmbed({ video, title }: { video?: Video; title: string }) {
-  const frame = "relative aspect-video overflow-hidden rounded-xl bg-black";
+  const frame = "relative aspect-video overflow-hidden rounded-md bg-black";
   let inner: React.ReactNode;
   if (video?.src) {
     inner = (
@@ -92,19 +90,19 @@ export function VideoEmbed({ video, title }: { video?: Video; title: string }) {
     );
   } else {
     inner = (
-      <div className="relative flex aspect-video flex-col items-center justify-center overflow-hidden rounded-xl bg-deep px-6 text-center text-deep-foreground">
-        <span className="relative inline-flex size-12 items-center justify-center rounded-2xl bg-sun text-deep">
+      <div className="relative flex aspect-video flex-col items-center justify-center overflow-hidden rounded-md bg-muted px-6 text-center">
+        <span className="relative inline-flex size-12 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground">
           <Clapperboard aria-hidden className="size-6" />
         </span>
-        <p className="relative mt-3 font-dial text-2xl font-bold">Video coming soon</p>
-        <p className="relative mt-1 max-w-sm text-sm text-deep-foreground/75">We&apos;re recording this at the Academy.</p>
+        <p className="relative mt-3 text-xl font-semibold">Video coming soon</p>
+        <p className="relative mt-1 max-w-sm text-sm text-muted-foreground">We&apos;re recording this at the Academy.</p>
       </div>
     );
   }
   return (
-    <div className="rounded-[1.25rem] bg-card p-1.5 shadow-pop ring-1 ring-border sm:p-2">
+    <div className="rounded-lg border border-border bg-card p-1.5 sm:p-2">
       {inner}
-      {video?.credit && <p className="px-2 pt-2 text-xs text-subtle-foreground">Video by {video.credit}</p>}
+      {video?.credit && <p className="px-2 pt-2 font-mono text-[11px] text-muted-foreground">Video by {video.credit}</p>}
     </div>
   );
 }
@@ -115,28 +113,28 @@ export function VideoEmbed({ video, title }: { video?: Video; title: string }) {
  */
 export function EnrolCard({ signedIn, next, className }: { signedIn: boolean; next?: string; className?: string }) {
   return (
-    <div className={cn("relative overflow-hidden rounded-[1.5rem] bg-deep p-6 text-deep-foreground shadow-pop sm:p-8", className)}>
-      <div className="relative">
-        <span className="inline-flex size-11 items-center justify-center rounded-2xl bg-sun text-deep">
+    <div className={cn("rounded-lg border border-border bg-accent p-6 sm:p-8", className)}>
+      <div>
+        <span className="inline-flex size-10 items-center justify-center rounded-lg bg-foreground text-background">
           <Lock aria-hidden className="size-5" />
         </span>
-        <h2 className="mt-4 text-2xl font-extrabold tracking-tight">
+        <h2 className="mt-4 text-2xl font-semibold">
           {signedIn ? "Enrol at the Academy to unlock everything" : "Sign up, then enrol at the Academy"}
         </h2>
-        <p className="mt-2 max-w-xl text-deep-foreground/80">
+        <p className="mt-2 max-w-xl text-foreground/75">
           Enrolled students get every step, every concept unit and its problems, the lab assistant, a guide who tracks their
           progress, and a certificate for each finished module.
         </p>
         <div className="mt-5 flex flex-wrap gap-2">
           {!signedIn && (
-            <Button asChild size="lg" className="bg-white font-semibold text-[#1f1f1f] hover:bg-white/90">
+            <Button asChild size="lg" variant="ink">
               <a href={googleSignInHref(next ?? null)}>
                 <GoogleIcon size={16} /> Sign up with Google
               </a>
             </Button>
           )}
           {CONTACT_EMAIL && (
-            <Button asChild size="lg" variant={signedIn ? "default" : "outline"} className={cn("font-semibold", !signedIn && "border-white/30 bg-transparent text-deep-foreground hover:bg-white/10 hover:text-deep-foreground")}>
+            <Button asChild size="lg" variant={signedIn ? "ink" : "outline"}>
               <a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Enrolling at Hasesa Academy")}`}>
                 <Sparkles aria-hidden /> Contact us to enrol
               </a>
@@ -144,7 +142,7 @@ export function EnrolCard({ signedIn, next, className }: { signedIn: boolean; ne
           )}
         </div>
         {signedIn && (
-          <p className="mt-4 text-sm text-deep-foreground/70">
+          <p className="mt-4 text-sm text-muted-foreground">
             Already paid? Your access opens as soon as the Academy marks you enrolled. Refresh this page after that.
           </p>
         )}
@@ -156,19 +154,19 @@ export function EnrolCard({ signedIn, next, className }: { signedIn: boolean; ne
 export function UnitStatusPill({ status }: { status?: "started" | "completed" | "tested_out" }) {
   if (!status) return null;
   const map = {
-    started: { label: "In progress", cls: "bg-primary-soft text-primary-strong dark:text-primary" },
-    completed: { label: "Completed", cls: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300" },
-    tested_out: { label: "Tested out", cls: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300" },
+    started: { label: "In progress", cls: "border border-input text-foreground" },
+    completed: { label: "Completed", cls: "bg-accent text-accent-foreground" },
+    tested_out: { label: "Tested out", cls: "bg-accent text-accent-foreground" },
   } as const;
   const m = map[status];
-  return <span className={cn("inline-flex h-6 shrink-0 items-center rounded-full px-2.5 text-xs font-semibold", m.cls)}>{m.label}</span>;
+  return <span className={cn("inline-flex h-6 shrink-0 items-center rounded-full px-2.5 font-mono text-[11px] tracking-[0.06em] uppercase", m.cls)}>{m.label}</span>;
 }
 
 export function BackLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <Link
       href={href}
-      className="inline-flex h-10 items-center rounded-full text-sm font-medium text-deep-foreground/75 outline-none hover:text-deep-foreground focus-visible:ring-3 focus-visible:ring-ring/50"
+      className="inline-flex h-10 items-center rounded-md text-sm font-medium text-muted-foreground outline-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/40"
     >
       {children}
     </Link>

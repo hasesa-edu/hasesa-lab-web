@@ -76,9 +76,9 @@ export function PhasedContent({
               type="checkbox"
               checked={on}
               onChange={() => toggle(key)}
-              className="mt-1.5 size-5 shrink-0 cursor-pointer accent-[var(--signal)]"
+              className="mt-1.5 size-5 shrink-0 cursor-pointer accent-[var(--primary)]"
             />
-            <span className={cn("min-w-0 flex-1 [&>p]:m-0", on && "text-ink/45 line-through decoration-ink/30")}>{children}</span>
+            <span className={cn("min-w-0 flex-1 [&>p]:m-0", on && "text-muted-foreground line-through decoration-foreground/30")}>{children}</span>
           </label>
         </li>
       );
@@ -87,7 +87,7 @@ export function PhasedContent({
 
   const render = (s: Section) => (
     <section key={s.id} id={`phase-${s.id}`} className="scroll-mt-32">
-      <h2 className="font-dial text-4xl leading-none font-bold sm:text-5xl">{s.title}</h2>
+      <h2 className="text-3xl leading-tight font-semibold sm:text-4xl">{s.title}</h2>
       <Markdown className="mt-5" components={s.kind === "do" ? checklist(s.id) : undefined}>
         {s.body}
       </Markdown>
@@ -100,7 +100,7 @@ export function PhasedContent({
   return (
     <div ref={top}>
       {/* The phase bar: a real sequence, so it's numbered. */}
-      <nav aria-label="Phases of this page" className="sticky top-[61px] z-10 -mx-4 border-b border-ink/10 bg-lab/95 backdrop-blur">
+      <nav aria-label="Phases of this page" className="sticky top-[61px] z-10 -mx-4 border-b border-border bg-background/95 backdrop-blur">
         <div className="flex items-center gap-2 px-4">
           <ol className="flex flex-1 gap-1 overflow-x-auto py-2 [scrollbar-width:none]">
             {sections.map((s, i) => {
@@ -113,13 +113,13 @@ export function PhasedContent({
                     aria-current={on ? "step" : undefined}
                     className={cn(
                       "relative flex min-h-10 items-center gap-2 rounded-full px-3 text-sm font-bold whitespace-nowrap transition-colors",
-                      on ? "bg-enamel text-white" : "text-ink/65 hover:text-ink"
+                      on ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"
                     )}
                   >
                     <span
                       className={cn(
-                        "flex size-5 items-center justify-center rounded-full font-dial text-sm",
-                        on ? "bg-sun text-ink" : seen.has(i) ? "bg-signal text-white" : "bg-ink/10"
+                        "flex size-5 items-center justify-center rounded-full font-mono text-[11px]",
+                        on ? "bg-background text-foreground" : seen.has(i) ? "bg-primary text-primary-foreground" : "bg-muted"
                       )}
                     >
                       {seen.has(i) && !on ? <Check className="size-3" strokeWidth={3} aria-hidden /> : i + 1}
@@ -135,28 +135,28 @@ export function PhasedContent({
 
       <div className="pt-8">
         <>
-            <p className="mb-3 text-sm text-ink/55">
+            <p className="mb-3 text-sm text-muted-foreground">
               Part {active + 1} of {sections.length}
             </p>
             {render(current)}
-            <div className="mt-10 flex flex-wrap items-center gap-4 border-t-2 border-ink pt-6">
+            <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-border pt-6">
               {last ? (
                 "open" in finish ? (
-                  <Button size="lg" onClick={() => openWorkbench({ tab: finish.open })} className="bg-ink font-bold text-white hover:bg-ink/90">
+                  <Button size="lg" onClick={() => openWorkbench({ tab: finish.open })} variant="ink">
                     {finish.label}
                   </Button>
                 ) : (
-                  <Button asChild size="lg" className="bg-ink font-bold text-white hover:bg-ink/90">
+                  <Button asChild size="lg" variant="ink">
                     <a href={finish.href}>{finish.label}</a>
                   </Button>
                 )
               ) : (
-                <Button size="lg" onClick={() => go(active + 1)} className="bg-ink font-bold text-white hover:bg-ink/90">
+                <Button size="lg" onClick={() => go(active + 1)} variant="ink">
                   Next: {sections[active + 1].label}
                 </Button>
               )}
               {active > 0 && (
-                <button type="button" onClick={() => go(active - 1)} className="font-bold text-ink/65 hover:text-ink">
+                <button type="button" onClick={() => go(active - 1)} className="font-bold text-muted-foreground hover:text-foreground">
                   Back to {sections[active - 1].label}
                 </button>
               )}

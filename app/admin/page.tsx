@@ -145,7 +145,7 @@ async function loadStats() {
 function TopList({ title, rows }: { title: string; rows: LabelCountRow[] }) {
   const max = Math.max(1, ...rows.map((r) => r.count));
   return (
-    <div className="rounded-2xl bg-card p-5 shadow-card ring-1 ring-border">
+    <div className="rounded-lg bg-card p-5 shadow-card ring-1 ring-border">
       <h3 className="text-sm font-bold text-foreground">{title}</h3>
       <div className="mt-3">
         {rows.length === 0 ? (

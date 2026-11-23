@@ -57,14 +57,6 @@
   --sun-strong: rgb(138 82 7);
   --subtle-foreground: rgb(128 135 145);
 
-  /* Legacy names from the radio look, retired page by page in the rebrand.
-     Until then the old dark bands render as ink. */
-  --deep: rgb(19 23 28);
-  --deep-foreground: rgb(243 244 246);
-  --enamel: rgb(19 23 28);
-  --enamel-foreground: rgb(228 231 235);
-  --signal: rgb(20 160 152);
-  --lab: rgb(250 250 248);
   --ink: rgb(19 23 28);
 
   /* One color per subject, toned for light surfaces. */
@@ -119,12 +111,6 @@
   --sun-soft: rgb(69 26 3);
   --subtle-foreground: rgb(107 117 114);
 
-  --deep: rgb(9 38 48);
-  --deep-foreground: rgb(240 253 250);
-  --enamel: rgb(9 38 48);
-  --enamel-foreground: rgb(234 244 243);
-  --signal: rgb(45 212 191);
-  --lab: rgb(14 20 22);
   --ink: rgb(226 236 236);
 
   --physics: rgb(129 140 248);
@@ -154,9 +140,6 @@
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-legible: var(--font-atkinson), var(--font-geist), system-ui, var(--font-ethiopic), Noto Sans Ethiopic, sans-serif;
   --font-ethiopic: var(--font-noto-ethiopic), Noto Sans Ethiopic, sans-serif;
-  /* Legacy names, kept so older pages keep working until they are restyled. */
-  --font-dial: var(--font-display);
-  --font-heading: var(--font-display);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -196,13 +179,7 @@
   --color-sun-soft: var(--sun-soft);
   --color-sun-strong: var(--sun-strong);
   --color-subtle-foreground: var(--subtle-foreground);
-  --color-deep: var(--deep);
-  --color-enamel: var(--enamel);
-  --color-enamel-foreground: var(--enamel-foreground);
-  --color-signal: var(--signal);
-  --color-lab: var(--lab);
   --color-ink: var(--ink);
-  --color-deep-foreground: var(--deep-foreground);
   --color-physics: var(--physics);
   --color-physics-soft: var(--physics-soft);
   --color-chemistry: var(--chemistry);
@@ -458,7 +435,7 @@
 }
 .lesson-prose pre {
   background: var(--ink);
-  color: var(--deep-foreground);
+  color: rgb(243 244 246);
   border-radius: var(--radius);
   padding: 0.9rem 1rem;
   overflow-x: auto;
