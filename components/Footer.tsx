@@ -4,14 +4,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale } from "./LocaleProvider";
 import { LogoMark } from "./Logo";
-import { BRAND } from "@/lib/brand";
+import { BRAND, CONTACT_EMAIL } from "@/lib/brand";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export function Footer() {
   const { tr } = useLocale();
   const pathname = usePathname();
-  // Dewey quote belongs to the marketing story — keep it on the home and Academy pages only.
-  const showQuote = pathname === "/" || pathname === "/academy";
+  // The two marketing pages end with the invitation to get in touch; app pages keep the plain bar.
+  const showContact = pathname === "/" || pathname === "/academy";
   // Sign-in (student and admin) and payment-return pages fill the screen with their own background; let the footer sit flush under them.
   const flush =
     pathname === "/login" || pathname === "/admin/login" || pathname.startsWith("/billing");
@@ -19,25 +20,31 @@ export function Footer() {
   const legalLinkClass =
     "inline-flex min-h-10 items-center rounded-md px-3 text-white/75 transition-colors hover:bg-white/10 hover:text-white";
 
-  // The one dark surface on the site: ink, quiet, with the Dewey quote on the marketing pages.
+  // The one dark surface on the site: ink, quiet, with the contact note on the marketing pages.
   return (
     <footer className={cn("bg-ink text-white/75", !flush && "mt-16")}>
-      {showQuote && (
-        <figure className="mx-auto max-w-6xl px-4 pt-14 pb-10 sm:pt-20 sm:pb-14">
-          <blockquote className="max-w-4xl font-display text-2xl leading-snug font-medium tracking-[-0.015em] text-balance text-white sm:text-3xl">
-            &ldquo;{tr("dewey.quote")}&rdquo;
-          </blockquote>
-          <figcaption className="mt-4 font-mono text-xs tracking-[0.08em] text-white/60 uppercase">
-            — {tr("dewey.attribution")}
-          </figcaption>
-        </figure>
+      {showContact && (
+        <section className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-8 px-4 pt-14 pb-10 sm:pt-20 sm:pb-14">
+          <div className="max-w-2xl flex-[999_1_26rem]">
+            <h2 className="text-3xl leading-tight font-semibold text-white sm:text-5xl">{tr("footer.contact.title")}</h2>
+            <p className="mt-4 text-lg leading-relaxed text-white/75">{tr("footer.contact.body")}</p>
+          </div>
+          {CONTACT_EMAIL && (
+            <a
+              href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Hasesa")}`}
+              className={cn(buttonVariants({ size: "lg" }), "bg-white text-ink hover:bg-white/90")}
+            >
+              {tr("footer.contact.cta")}
+            </a>
+          )}
+        </section>
       )}
 
       <div className="mx-auto max-w-6xl px-4">
         <div
           className={cn(
             "flex flex-col items-center gap-4 py-8 text-center sm:flex-row sm:justify-between sm:text-left",
-            showQuote && "border-t border-white/10"
+            showContact && "border-t border-white/10"
           )}
         >
           <div className="flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:gap-3">
