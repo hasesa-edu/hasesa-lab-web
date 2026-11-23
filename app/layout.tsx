@@ -46,6 +46,8 @@ export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   manifest: "/manifest.json",
+  // Search engine ownership verification. Bing says to keep the tag even after verifying.
+  verification: { other: { "msvalidate.01": "DAE36E9ABA96C59BC28D931E4B3A3424" } },
   // Favicon is generated automatically from app/icon.svg (Next file convention),
   // which appends a content-hash to the URL so browsers don't serve a stale icon.
   openGraph: {
