@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   COVER_PATTERNS,
   type CatalogueItem,
+  type Filters,
   NO_FILTERS,
   catalogueQuery,
   coverPattern,
@@ -43,31 +44,44 @@ const ids = (xs: CatalogueItem[]) => xs.map((m) => m.id);
 
 describe("filters", () => {
   it("reads only known values from the URL", () => {
-    expect(parseFilters({ q: "  rocket ", level: "beginner", subject: "physics", length: "short" })).toEqual({
+    expect(parseFilters({ q: "  rocket ", level: "beginner", subject: "physics", length: ["short"] })).toEqual({
       q: "rocket",
-      level: "beginner",
-      subject: "physics",
-      length: "short",
+      level: ["beginner"],
+      subject: ["physics"],
+      length: ["short"],
       progress: null,
     });
-    expect(parseFilters({ level: "expert", subject: ["chemistry", "physics"], length: "huge" })).toEqual({ ...NO_FILTERS, subject: "chemistry" });
+    expect(parseFilters({ level: "expert", length: "huge" })).toEqual(NO_FILTERS);
+  });
+
+  it("reads several values, comma-separated or repeated, once each in a fixed order", () => {
+    expect(parseFilters({ subject: "chemistry,physics,volcanoes" }).subject).toEqual(["physics", "chemistry"]);
+    expect(parseFilters({ subject: ["chemistry", "physics", "chemistry"] }).subject).toEqual(["physics", "chemistry"]);
+    expect(parseFilters({ level: "advanced,beginner" }).level).toEqual(["beginner", "advanced"]);
   });
 
   it("round-trips through the query string", () => {
-    const f = { q: "wind power", level: "advanced", subject: null, length: "long", progress: "active" } as const;
+    const f: Filters = { q: "wind power", level: ["intermediate", "advanced"], subject: [], length: ["long"], progress: "active" };
     expect(parseFilters(Object.fromEntries(new URLSearchParams(filtersQuery(f))))).toEqual(f);
+    expect(filtersQuery({ ...NO_FILTERS, subject: ["physics", "chemistry"] })).toBe("?subject=physics,chemistry");
     expect(filtersQuery(NO_FILTERS)).toBe("");
   });
 
   it("combines search, level, subject and length", () => {
     expect(ids(filterModules(items, NO_FILTERS))).toEqual(ids(items));
-    expect(ids(filterModules(items, { ...NO_FILTERS, level: "beginner" }))).toEqual(["rocket", "water", "seeds"]);
-    expect(ids(filterModules(items, { ...NO_FILTERS, subject: "technology" }))).toEqual(["radio", "wind"]);
-    expect(ids(filterModules(items, { ...NO_FILTERS, length: "short" }))).toEqual(["rocket", "water"]);
-    expect(ids(filterModules(items, { ...NO_FILTERS, length: "long" }))).toEqual(["wind"]);
-    expect(ids(filterModules(items, { ...NO_FILTERS, q: "BIOLOGY", level: "advanced" }))).toEqual(["dna"]);
+    expect(ids(filterModules(items, { ...NO_FILTERS, level: ["beginner"] }))).toEqual(["rocket", "water", "seeds"]);
+    expect(ids(filterModules(items, { ...NO_FILTERS, subject: ["technology"] }))).toEqual(["radio", "wind"]);
+    expect(ids(filterModules(items, { ...NO_FILTERS, length: ["short"] }))).toEqual(["rocket", "water"]);
+    expect(ids(filterModules(items, { ...NO_FILTERS, length: ["long"] }))).toEqual(["wind"]);
+    expect(ids(filterModules(items, { ...NO_FILTERS, q: "BIOLOGY", level: ["advanced"] }))).toEqual(["dna"]);
     expect(ids(filterModules(items, { ...NO_FILTERS, q: "physics radio" }))).toEqual(["radio"]);
     expect(filterModules(items, { ...NO_FILTERS, q: "volcano" })).toEqual([]);
+  });
+
+  it("matches any value within a group, and every group", () => {
+    expect(ids(filterModules(items, { ...NO_FILTERS, subject: ["technology", "mathematics"] }))).toEqual(["rocket", "radio", "wind"]);
+    expect(ids(filterModules(items, { ...NO_FILTERS, level: ["beginner", "advanced"], subject: ["physics"] }))).toEqual(["rocket", "wind"]);
+    expect(ids(filterModules(items, { ...NO_FILTERS, length: ["short", "long"] }))).toEqual(["rocket", "water", "wind"]);
   });
 
   it("filters by the student's progress, counting dropped as not started", () => {
@@ -127,8 +141,8 @@ describe("sorting", () => {
   });
 
   it("adds a sort to the query only when it isn't the default", () => {
-    expect(catalogueQuery({ ...NO_FILTERS, level: "beginner" }, "suggested")).toBe("?level=beginner");
-    expect(catalogueQuery({ ...NO_FILTERS, level: "beginner" }, "short")).toBe("?level=beginner&sort=short");
+    expect(catalogueQuery({ ...NO_FILTERS, level: ["beginner"] }, "suggested")).toBe("?level=beginner");
+    expect(catalogueQuery({ ...NO_FILTERS, level: ["beginner"] }, "short")).toBe("?level=beginner&sort=short");
     expect(catalogueQuery(NO_FILTERS, "az")).toBe("?sort=az");
   });
 });

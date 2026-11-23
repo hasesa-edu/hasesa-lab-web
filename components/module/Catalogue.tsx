@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { SearchIcon, SlidersHorizontal, XIcon } from "lucide-react";
+import { CheckIcon, SearchIcon, SlidersHorizontal, XIcon } from "lucide-react";
 import {
   type CardState,
   type CatalogueItem,
   type Filters,
   LENGTHS,
   type Length,
+  type MultiFacet,
   NO_FILTERS,
   PROGRESS,
   type Progress,
@@ -19,7 +20,7 @@ import {
   isFiltered,
   sortModules,
 } from "@/lib/catalogue";
-import type { Discipline, Level } from "@/lib/content/types";
+import type { Discipline } from "@/lib/content/types";
 import { DISCIPLINES, LEVELS, LEVEL_ORDER } from "@/lib/disciplines";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -66,7 +67,7 @@ export function Catalogue({
 
   const facets = FACETS.filter((x) => x.key !== "progress" || viewer === "full");
   const results = useMemo(() => sortModules(filterModules(items, f, states), sort), [items, f, states, sort]);
-  const active = facets.filter(({ key }) => f[key]).length + (f.q.trim() ? 1 : 0);
+  const active = f.level.length + f.subject.length + f.length.length + (f.progress && viewer === "full" ? 1 : 0) + (f.q.trim() ? 1 : 0);
 
   useEffect(() => {
     if (typed === f.q) return;
@@ -88,9 +89,16 @@ export function Catalogue({
     setTyped(next.q);
     setShown(PAGE);
   };
-  const toggle = (k: Facet, v: string) => update({ ...f, [k]: f[k] === v ? null : v } as Filters);
-  /** How many modules an option would show, given the other filters. */
-  const count = (k: Facet, v: string) => filterModules(items, { ...f, [k]: v } as Filters, states).length;
+  const isMulti = (k: Facet): k is MultiFacet => k !== "progress";
+  const isOn = (k: Facet, v: string) => (isMulti(k) ? (f[k] as string[]).includes(v) : f[k] === v);
+  /** Tick or untick a value (level, subject, length); progress is one choice or none. */
+  const toggle = (k: Facet, v: string) => {
+    if (!isMulti(k)) return update({ ...f, progress: f.progress === v ? null : (v as Progress) });
+    const cur = f[k] as string[];
+    update({ ...f, [k]: cur.includes(v) ? cur.filter((x) => x !== v) : [...cur, v] } as Filters);
+  };
+  /** How many modules this option matches, given the other groups' filters. */
+  const count = (k: Facet, v: string) => filterModules(items, { ...f, [k]: isMulti(k) ? [v] : v } as Filters, states).length;
 
   const panel = (
     <div className="space-y-7">
@@ -99,13 +107,15 @@ export function Catalogue({
           <legend className="font-mono text-[11px] tracking-[0.08em] text-muted-foreground uppercase">{facet.label}</legend>
           <ul className="mt-2 space-y-0.5">
             {facet.options.map((o) => {
-              const on = f[facet.key] === o.value;
+              const on = isOn(facet.key, o.value);
+              const multi = isMulti(facet.key);
               const n = count(facet.key, o.value);
               return (
                 <li key={o.value}>
                   <button
                     type="button"
-                    aria-pressed={on}
+                    role={multi ? "checkbox" : "radio"}
+                    aria-checked={on}
                     disabled={!n && !on}
                     onClick={() => toggle(facet.key, o.value)}
                     className={cn(
@@ -113,12 +123,24 @@ export function Catalogue({
                       on && "font-semibold"
                     )}
                   >
-                    <span
-                      aria-hidden
-                      className={cn("inline-flex size-4 shrink-0 items-center justify-center rounded-full border", on ? "border-foreground" : "border-input")}
-                    >
-                      {on && <span className="size-2 rounded-full bg-foreground" />}
-                    </span>
+                    {multi ? (
+                      <span
+                        aria-hidden
+                        className={cn(
+                          "inline-flex size-4 shrink-0 items-center justify-center rounded-[4px] border",
+                          on ? "border-foreground bg-foreground text-background" : "border-input"
+                        )}
+                      >
+                        {on && <CheckIcon className="size-3" strokeWidth={3} />}
+                      </span>
+                    ) : (
+                      <span
+                        aria-hidden
+                        className={cn("inline-flex size-4 shrink-0 items-center justify-center rounded-full border", on ? "border-foreground" : "border-input")}
+                      >
+                        {on && <span className="size-2 rounded-full bg-foreground" />}
+                      </span>
+                    )}
                     <span className="flex-1">{o.label}</span>
                     <span className="font-mono text-xs text-muted-foreground tabular-nums">{n}</span>
                   </button>
@@ -133,9 +155,9 @@ export function Catalogue({
 
   const chips: { key: string; label: string; clear: () => void }[] = [
     ...(f.q.trim() ? [{ key: "q", label: `“${f.q.trim()}”`, clear: () => update({ ...f, q: "" }) }] : []),
-    ...(f.level ? [{ key: "level", label: LEVELS[f.level as Level].label, clear: () => update({ ...f, level: null }) }] : []),
-    ...(f.subject ? [{ key: "subject", label: DISCIPLINES[f.subject].label, clear: () => update({ ...f, subject: null }) }] : []),
-    ...(f.length ? [{ key: "length", label: LENGTHS[f.length].label, clear: () => update({ ...f, length: null }) }] : []),
+    ...f.level.map((v) => ({ key: `level-${v}`, label: LEVELS[v].label, clear: () => toggle("level", v) })),
+    ...f.subject.map((v) => ({ key: `subject-${v}`, label: DISCIPLINES[v].label, clear: () => toggle("subject", v) })),
+    ...f.length.map((v) => ({ key: `length-${v}`, label: LENGTHS[v].label, clear: () => toggle("length", v) })),
     ...(f.progress ? [{ key: "progress", label: PROGRESS[f.progress], clear: () => update({ ...f, progress: null }) }] : []),
   ];
 
