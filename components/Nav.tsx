@@ -98,8 +98,9 @@ export function Nav() {
 
   const full = user?.access === "enrolled" || user?.access === "guide";
   const links: { href: string; label: string; icon: LucideIcon; show: boolean }[] = [
-    { href: "/academy", label: tr("nav.academy"), icon: FlaskConicalIcon, show: true },
-    { href: "/modules", label: tr("nav.experiments"), icon: BoxesIcon, show: true },
+    // Visitors get the Academy page; signed-in students go straight to their modules.
+    { href: "/academy", label: tr("nav.academy"), icon: FlaskConicalIcon, show: !user },
+    { href: "/modules", label: tr("nav.experiments"), icon: BoxesIcon, show: !!user },
     { href: "/dashboard", label: tr("nav.dashboard"), icon: NotebookPenIcon, show: !!user },
     { href: "/guide", label: tr("nav.guide"), icon: GraduationCapIcon, show: user?.access === "guide" },
   ];

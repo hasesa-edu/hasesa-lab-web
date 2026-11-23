@@ -4,11 +4,8 @@ import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
 import { useLocale } from "@/components/LocaleProvider";
 import type { t as Dict } from "@/lib/i18n";
-import { CONTACT_EMAIL } from "@/lib/brand";
-import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Why } from "./landing/Why";
-import { Partners } from "./landing/Partners";
 import { SectionLabel } from "./landing/SectionLabel";
 import { StatusTag } from "./landing/StatusTag";
 
@@ -28,8 +25,6 @@ export function HomeClient({ moduleCount }: { moduleCount: number }) {
       <Exploring tr={tr} />
       <HowWeWork tr={tr} />
       <Programs tr={tr} moduleCount={moduleCount} />
-      <Partners tr={tr} />
-      <FinalCta tr={tr} />
     </div>
   );
 }
@@ -158,31 +153,6 @@ function Programs({ tr, moduleCount }: { tr: TR; moduleCount: number }) {
             </span>
           </div>
         </Link>
-      </div>
-    </section>
-  );
-}
-
-/* ──────────────────────────  FINAL CTA  ────────────────────────── */
-
-function FinalCta({ tr }: { tr: TR }) {
-  return (
-    <section className="mx-auto max-w-6xl px-4 pb-8">
-      <div className="flex flex-wrap items-end justify-between gap-8 rounded-lg bg-accent px-6 py-12 sm:px-10 sm:py-14">
-        <div className="max-w-2xl flex-[999_1_26rem]">
-          <h2 className="text-3xl leading-tight font-semibold sm:text-5xl">{tr("home.cta.title")}</h2>
-          <p className="mt-4 text-lg leading-relaxed text-foreground/75">{tr("home.cta.sub")}</p>
-        </div>
-        <div className="flex flex-wrap gap-3">
-          {CONTACT_EMAIL && (
-            <a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Hasesa")}`} className={buttonVariants({ size: "lg", variant: "ink" })}>
-              {tr("home.cta.contact")}
-            </a>
-          )}
-          <Link href="/academy" className={cn(buttonVariants({ size: "lg", variant: CONTACT_EMAIL ? "outline" : "ink" }))}>
-            {tr("home.cta.academy")}
-          </Link>
-        </div>
       </div>
     </section>
   );
