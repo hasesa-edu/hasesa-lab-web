@@ -12,7 +12,6 @@ type Props = {
   hours: number;
   steps: number;
   units: number;
-  khz?: number;
   status: ContentStatus;
   full: boolean;
   signedIn: boolean;
@@ -25,7 +24,7 @@ type Props = {
  * The module page's action panel: the one thing to do next, plus the facts.
  * It sits beside the story on desktop and stays in view while scrolling.
  */
-export function ModuleActions({ moduleId, hours, steps, units, khz, status, full, signedIn, guide, progress, sample }: Props) {
+export function ModuleActions({ moduleId, hours, steps, units, status, full, signedIn, guide, progress, sample }: Props) {
   const pct = progress && progress.stepsTotal ? Math.round((progress.stepsDone / progress.stepsTotal) * 100) : 0;
 
   return (
@@ -103,11 +102,6 @@ export function ModuleActions({ moduleId, hours, steps, units, khz, status, full
       </dl>
       <div className="mt-4 flex items-center justify-between gap-3 border-t border-border pt-4">
         <StatusBadge status={status} />
-        {khz && (
-          <span className="font-mono text-sm text-muted-foreground tabular-nums" aria-label={`Station ${khz} kilohertz`}>
-            {khz} kHz
-          </span>
-        )}
       </div>
     </div>
   );

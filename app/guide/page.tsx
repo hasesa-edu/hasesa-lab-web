@@ -29,15 +29,11 @@ export default async function GuidePage() {
         title="Student tracker"
         description={`${roster.length} student${roster.length === 1 ? "" : "s"}${flagged ? ` · ${flagged} need${flagged === 1 ? "s" : ""} attention` : ""}. Students who need attention are listed first.`}
       >
-        <div className="flex flex-wrap gap-2">
-          {getModules().map((m) => (
-            <Button key={m.id} asChild size="sm" variant="outline">
-              <Link href={`/modules/${m.id}/guide`}>
-                <GraduationCap aria-hidden /> {m.title}: guide&apos;s version
-              </Link>
-            </Button>
-          ))}
-        </div>
+        <Button asChild variant="outline">
+          <Link href="/guide/modules">
+            <GraduationCap aria-hidden /> Guide&apos;s versions ({getModules().length} modules)
+          </Link>
+        </Button>
       </PageHeader>
 
       <div className="mx-auto max-w-6xl px-4 pt-8 pb-16">

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Award, BookOpen, ChevronRight, ClipboardList, Compass, GraduationCap, MessageSquareQuote, RotateCcw } from "lucide-react";
+import { ArrowRight, Award, BookOpen, ChevronRight, ClipboardList, Compass, GraduationCap, MessageSquareQuote, RotateCcw } from "lucide-react";
 import { getConcept, getModule, getModules, summarize } from "@/lib/content";
 import { getAccess, hasFullAccess } from "@/lib/access";
 import { getStudentState } from "@/lib/progress";
@@ -11,8 +11,8 @@ import { formatDate } from "@/lib/format";
 import { BRAND } from "@/lib/brand";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
-import { LevelledStations } from "@/components/module/StationRows";
-import { assignStations } from "@/lib/stations";
+import { ModuleRows } from "@/components/module/ModuleRows";
+import { catalogueItem, suggestModules } from "@/lib/catalogue";
 import { FeedbackItem } from "@/components/module/FeedbackItem";
 import { EnrolCard, ProgressBar, SectionTitle, UnitStatusPill } from "@/components/module/ui";
 
@@ -31,6 +31,10 @@ export default async function DashboardPage() {
   const completed = progress.filter((x) => x.p.status === "completed");
   const dropped = progress.filter((x) => x.p.status === "dropped");
   const fresh = progress.filter((x) => x.p.status === "not-started");
+  const suggestions = suggestModules(
+    modules.map((m) => catalogueItem(summarize(m))),
+    Object.fromEntries(progress.map(({ m, p }) => [m.id, p.status]))
+  );
   const unitStatus = new Map(state.units.map((u) => [u.unitId, u.status]));
   const assignments = state.assignments.filter((a) => getConcept(a.unitId));
   const openAssignments = assignments.filter((a) => !isUnitDone(unitStatus.get(a.unitId)));
@@ -179,16 +183,15 @@ export default async function DashboardPage() {
         {fresh.length > 0 && (
           <section>
             <SectionTitle icon={Compass}>{active.length || completed.length ? "Start another module" : "Choose your first module"}</SectionTitle>
-            {!active.length && !completed.length && (
-              <p className="mt-2 text-sm text-muted-foreground">Start anywhere. If this is your first module, a beginner one is a good place to begin.</p>
-            )}
-            <div className="mt-6">
-              {/* Stations come from the full set so frequencies match everywhere else. */}
-              <LevelledStations
-                heading="h3"
-                stations={assignStations(modules.map(summarize)).filter((st) => fresh.some(({ m }) => m.id === st.module.id))}
-              />
-            </div>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {active.length || completed.length
+                ? "Suggested from what you've done so far. You can start any module."
+                : "A few beginner modules to start with. You can start any module."}
+            </p>
+            <ModuleRows items={suggestions} className="mt-5" />
+            <Link href="/modules" className="mt-5 inline-flex items-center gap-1.5 font-medium text-primary">
+              Browse all {modules.length} modules <ArrowRight aria-hidden className="size-4" />
+            </Link>
           </section>
         )}
       </div>

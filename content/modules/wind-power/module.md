@@ -3,6 +3,7 @@ title: Wind Power
 tagline: Build a wind turbine that makes real electricity
 disciplines: [physics, technology, mathematics]
 level: advanced
+featured: true
 hook: "Near Adama, rows of giant white turbines turn slowly in the wind and send electricity to homes hundreds of kilometres away. There's no fuel inside them, no battery and no fire. How does spinning a shaft in the wind make electricity?"
 goal: "Discover electromagnetic induction, build a generator from magnets and wire, design and test turbine blades, measure the power in the wind and how much of it your turbine captures, and turn its output into steady DC that lights LEDs and charges a battery pack."
 whatYouBuild: "A small horizontal-axis wind turbine with PVC blades and a salvaged stepper-motor generator, a rectifier circuit that turns its AC into DC, and a test log of voltage, current and power at different wind speeds. Along the way, a hand-spun coil-and-magnet generator that lights an LED."

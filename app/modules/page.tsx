@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { getModules, summarize } from "@/lib/content";
+import { catalogueItem, filtersQuery, parseFilters } from "@/lib/catalogue";
 import { getViewer } from "@/lib/viewer";
 import { moduleProgress } from "@/lib/summary";
 import { hasFullAccess } from "@/lib/access";
-import { assignStations } from "@/lib/stations";
 import { pageMeta } from "@/lib/seo";
 import { PageHeader } from "@/components/PageHeader";
-import { LevelledStations, type RowProgress } from "@/components/module/StationRows";
+import type { RowProgress } from "@/components/module/ModuleRows";
+import { Catalogue } from "@/components/module/Catalogue";
 import { EnrolCard } from "@/components/module/ui";
 
 export const metadata: Metadata = pageMeta({
@@ -18,10 +19,11 @@ export const dynamic = "force-dynamic";
 
 const STATUS: Record<string, string> = { active: "In progress", completed: "Signed off", dropped: "Dropped" };
 
-export default async function ModulesPage() {
+export default async function ModulesPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const { access, state } = await getViewer();
   const modules = getModules();
-  const stations = assignStations(modules.map(summarize));
+  const items = modules.map((m) => catalogueItem(summarize(m)));
+  const initial = parseFilters(await searchParams);
 
   // Where a signed-in student is in each module they've touched.
   const progress: Record<string, RowProgress> = {};
@@ -40,10 +42,10 @@ export default async function ModulesPage() {
     <div>
       <PageHeader
         title="Modules"
-        description="Each module is a station on the dial: a mystery or something to build. They run from beginner to advanced, and you can start anywhere, though a beginner module is a good first step. You learn the science and maths when the project needs it, and finish with something that works."
+        description="Each module is a mystery to solve or something to build. They run from beginner to advanced, and you can start anywhere, though a beginner module is a good first step. You learn the science and maths when the project needs it, and finish with something that works."
       />
       <div className="mx-auto max-w-6xl px-4 pt-10 pb-16">
-        <LevelledStations stations={stations} progress={progress} />
+        <Catalogue key={filtersQuery(initial)} items={items} progress={progress} initial={initial} />
         {!hasFullAccess(access) && <EnrolCard signedIn={!!access.userId} next="/modules" className="mt-14" />}
       </div>
     </div>
