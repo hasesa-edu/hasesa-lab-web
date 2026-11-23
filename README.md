@@ -1,6 +1,6 @@
 # Hasesa — Reimagining Education for the AI Era
 
-Hasesa (Amharic for "exploration") is building an education system for the AI era. AI is changing work, economies and society, and we can't keep educating students for the world of yesterday. Hasesa tries new ways of learning with real students, keeps what works and brings it to schools, in Ethiopia and beyond. The home page sets out this thesis and the open questions we're exploring.
+Hasesa (Amharic for "exploration") is building an education system for the AI era. AI is changing work, economies and society, and perhaps what it means to be human; we can't keep educating students for the world of yesterday. Hasesa tries new ways of learning with real students, keeps what works and brings it to schools, in Ethiopia and beyond. The home page sets out this thesis and the open questions we're exploring.
 
 **Hasesa Academy is our first program**, and it is what this app runs. The Academy teaches science through hands-on **modules**. Each module starts with a mystery or something to build, and students learn the theory when the project needs it, not before. Builds happen at the Academy with a guide; at home, students read concept units and solve problems on their phone or computer.
 
@@ -34,8 +34,8 @@ Content lives in `content/` as Markdown with YAML frontmatter. See `content/READ
 
 | Route | What it does |
 |---|---|
-| `/` | Hasesa home: the thesis, what we're exploring, programs |
-| `/academy` | Academy landing page (tuning dial, modules, enrolment) |
+| `/` | Hasesa home: the thesis, why now, what we're exploring (each question marked *testing* or *open*), how we work, our first program |
+| `/academy` | Academy page: the tuning dial, the modules, a sample problem to solve, how a module works (with the Dewey quote), for parents, pilot partners, sign-up |
 | `/login`, `/signup` | Google sign-in (the first sign-in creates the account) |
 | `/modules` | Module catalogue (public) |
 | `/modules/[id]` | Module preview, or the full module with progress when enrolled |
@@ -51,6 +51,13 @@ Content lives in `content/` as Markdown with YAML frontmatter. See `content/READ
 The **lab assistant** has no page of its own. Enrolled students and guides open it from any module, step or concept unit page: it docks on the right (a bottom sheet on phones), already knows which page they're on, and sees what they've done there (their notebook notes for a step, the problems they're stuck on in a unit, where they stopped in a module). There's one conversation per page, and selecting text offers "Ask about this". It allows 30 messages per student per day, reset at midnight Addis Ababa time.
 
 Retired routes redirect (see `next.config.js`): `/experiments`, `/lessons` → `/modules`; `/chat`, `/onboarding`, `/teacher`, `/join`, `/mock/*` → `/dashboard`.
+
+## The site
+
+- **Navigation:** visitors see **Academy**; signed-in students see **Modules** and **My dashboard**, and guides also see **Student tracker**.
+- **Footer:** on `/` and `/academy` it carries the contact note ("Across Ethiopia and beyond.") with a Get in touch button, shown only when `NEXT_PUBLIC_CONTACT_EMAIL` is set. Other pages get the plain footer bar.
+- **Copy:** all marketing and navigation text is in `lib/i18n.ts` (English only for now).
+- **Look:** clean and modern. Paper background, ink text, hairline borders and teal as the one accent; amber only for the logo's eyes and "open" tags. Geist for headings and UI, Geist Mono for labels and numbers, Atkinson Hyperlegible for lessons and the assistant, Noto Sans Ethiopic for Amharic. The tokens are in `app/globals.css`. Dark mode is off (`LIGHT_ONLY` in `components/ThemeProvider.tsx`).
 
 ## Stack
 
@@ -77,7 +84,7 @@ Open [http://localhost:3000](http://localhost:3000). For Google sign-in, registe
 ## Deploying to Vercel
 
 1. Import the repo on [vercel.com/new](https://vercel.com/new).
-2. Set the env vars from `.env.example` (including `CRON_SECRET` and `NEXT_PUBLIC_SITE_URL`), and add `<site>/api/auth/google/callback` to the Google OAuth client.
+2. Set the env vars from `.env.example` (including `CRON_SECRET`, `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_CONTACT_EMAIL`), and add `<site>/api/auth/google/callback` to the Google OAuth client.
 3. Run `npm run db:push` against the production database whenever `lib/db/schema.ts` changes.
 
 ## Not built yet
