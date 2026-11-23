@@ -3,6 +3,7 @@ title: Two seeds
 kind: hook
 minutes: 45
 units: [photosynthesis-and-growth]
+summary: "Compare two seeds that grew very differently, separate opinions from evidence, and predict why."
 ---
 ## Look
 

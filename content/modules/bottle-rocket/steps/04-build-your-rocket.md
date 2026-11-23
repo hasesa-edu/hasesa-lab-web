@@ -3,6 +3,7 @@ title: Build your rocket
 kind: build
 minutes: 90
 units: [forces-and-motion]
+summary: "Build your own rocket from a bottle with fins and a nose cone, balance it, and make its first flights."
 ---
 ## Check your bottle (5 minutes)
 

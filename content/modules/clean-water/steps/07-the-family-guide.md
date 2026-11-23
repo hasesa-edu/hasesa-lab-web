@@ -3,6 +3,7 @@ title: The family guide
 kind: finish
 minutes: 60
 units: []
+summary: "Run your whole treatment chain, solve the mystery, and make a water guide a family could follow."
 ---
 ## Run the whole chain (25 minutes)
 

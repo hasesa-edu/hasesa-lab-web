@@ -3,6 +3,7 @@ title: A week of data
 kind: investigate
 minutes: 150
 units: [graphs-and-relationships, fair-tests]
+summary: "Take careful readings every day for a week, graph them, and look for patterns."
 ---
 ## The rules (20 minutes, first day)
 

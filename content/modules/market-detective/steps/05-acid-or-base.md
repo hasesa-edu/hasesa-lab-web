@@ -4,6 +4,7 @@ kind: investigate
 minutes: 90
 video: { youtubeId: "PKUwxQI0wIo", credit: "The Royal Institution" }
 units: [acids-bases-ph, chemical-tests]
+summary: "Make a colour-changing indicator from red cabbage and use it to test the milk."
 ---
 ## Do: make a colour-changing potion (25 minutes)
 

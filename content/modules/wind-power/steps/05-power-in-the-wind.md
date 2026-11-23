@@ -3,6 +3,7 @@ title: Power in the wind
 kind: investigate
 minutes: 90
 units: [energy-and-power, rearranging-formulas]
+summary: "Measure the wind and your turbine's electrical power, and calculate how much it captures."
 ---
 ## The question
 

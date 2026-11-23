@@ -3,6 +3,7 @@ title: Sway and resonance
 kind: investigate
 minutes: 90
 units: [resonance, frequency-and-period]
+summary: "Find each tower's natural rhythm, measure it, and try ways to tame the sway."
 ---
 ## Do: towers have a rhythm (25 minutes)
 

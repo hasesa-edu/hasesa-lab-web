@@ -3,6 +3,7 @@ title: The product pitch
 kind: finish
 minutes: 90
 units: []
+summary: "Pitch your products, solve the mystery, and explain the chemistry to your guide."
 ---
 ## Prepare your pitch (35 minutes)
 

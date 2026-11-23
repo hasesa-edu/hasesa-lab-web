@@ -3,6 +3,7 @@ title: Push and push back
 kind: investigate
 minutes: 75
 units: [forces-and-motion]
+summary: "Race balloon rockets along a string and find the rule that pushes every rocket forward."
 ---
 ## Do: balloon rockets (30 minutes)
 

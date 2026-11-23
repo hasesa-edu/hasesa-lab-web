@@ -3,6 +3,7 @@ title: The shaking table
 kind: hook
 minutes: 45
 units: [earthquakes-and-the-rift]
+summary: "Watch one of two spaghetti towers fall on a shaking table, and find where Ethiopia sits on the map."
 ---
 ## Watch
 

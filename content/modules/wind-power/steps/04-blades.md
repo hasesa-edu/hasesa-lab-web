@@ -3,6 +3,7 @@ title: Blades
 kind: investigate
 minutes: 120
 units: [forces-and-motion, energy-and-power]
+summary: "Make turbine blades and test how many work best."
 ---
 ## Why blades turn (15 minutes)
 

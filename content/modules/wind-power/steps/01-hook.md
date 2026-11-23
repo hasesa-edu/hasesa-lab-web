@@ -3,6 +3,7 @@ title: No fuel, no fire
 kind: hook
 minutes: 45
 units: [electromagnetic-induction]
+summary: "Crank a hand-powered torch, look inside a dynamo, and predict how spinning makes electricity."
 ---
 ## Turn the handle
 

@@ -3,6 +3,7 @@ title: Inside a seed
 kind: investigate
 minutes: 60
 units: [photosynthesis-and-growth, cells, chemical-tests]
+summary: "Dissect a seed, test its food store, and see its cells under the microscope."
 ---
 ## Do: dissect a seed (20 minutes)
 

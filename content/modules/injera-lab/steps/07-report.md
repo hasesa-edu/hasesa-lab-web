@@ -3,6 +3,7 @@ title: Report
 kind: finish
 minutes: 75
 units: [fermentation-and-respiration, enzymes]
+summary: "Put the whole story together, solve the mystery, and present your findings."
 ---
 ## The whole story (30 minutes)
 

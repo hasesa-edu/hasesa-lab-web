@@ -3,6 +3,7 @@ title: The forecast
 kind: investigate
 minutes: 90
 units: [graphs-and-relationships]
+summary: "Make a forecasting rule from your data and keep score of how well it does."
 ---
 ## Make a forecasting rule (30 minutes)
 
