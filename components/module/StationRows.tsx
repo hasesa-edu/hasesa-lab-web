@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Station } from "@/lib/stations";
 import { mysteryOf } from "@/lib/stations";
-import { DISCIPLINES } from "@/lib/disciplines";
+import { DISCIPLINES, LEVELS, LEVEL_ORDER } from "@/lib/disciplines";
 import { cn } from "@/lib/utils";
 import { SUBJECT_STYLES } from "@/components/Subject";
 
@@ -39,7 +39,7 @@ export function StationRows({ stations, progress }: { stations: Station[]; progr
                   </span>
                 ))}
                 <span className="w-full font-mono text-xs text-muted-foreground lg:text-right">
-                  {m.stepCount} steps · ~{m.hours} h
+                  {LEVELS[m.level].label} · {m.stepCount} steps · ~{m.hours} h
                 </span>
                 {p && (
                   <span className="mt-1 w-full lg:text-right">
@@ -55,5 +55,41 @@ export function StationRows({ stations, progress }: { stations: Station[]; progr
         );
       })}
     </ul>
+  );
+}
+
+/**
+ * The same rows, filed under Beginner, Intermediate and Advanced, lowest
+ * station first. Levels are a suggestion: any module can be started.
+ */
+export function LevelledStations({
+  stations,
+  progress,
+  heading: Heading = "h2",
+}: {
+  stations: Station[];
+  progress?: Record<string, RowProgress>;
+  /** The level titles' heading tag, one below the section they sit in. */
+  heading?: "h2" | "h3";
+}) {
+  return (
+    <div className="space-y-14">
+      {LEVEL_ORDER.map((level) => {
+        const here = stations.filter((s) => s.module.level === level).sort((a, b) => a.khz - b.khz);
+        if (!here.length) return null;
+        return (
+          <section key={level} aria-labelledby={`level-${level}`}>
+            <div className="mb-4 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+              <Heading id={`level-${level}`} className="font-mono text-sm tracking-[0.08em] uppercase">
+                {LEVELS[level].label}
+                <span className="ml-3 text-muted-foreground tabular-nums">{here.length}</span>
+              </Heading>
+              <p className="max-w-xl text-sm text-muted-foreground">{LEVELS[level].blurb}</p>
+            </div>
+            <StationRows stations={here} progress={progress} />
+          </section>
+        );
+      })}
+    </div>
   );
 }

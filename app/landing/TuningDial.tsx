@@ -5,7 +5,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LogoMark } from "@/components/Logo";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { mysteryOf, type Station } from "@/lib/stations";
+import { LEVEL_BANDS, mysteryOf, type Station } from "@/lib/stations";
+import { LEVELS, LEVEL_ORDER } from "@/lib/disciplines";
 
 // The medium-wave band, the one the Radio module's crystal radio receives.
 export const MIN_KHZ = 530;
@@ -118,7 +119,7 @@ export function TuningDial({ stations }: { stations: Station[] }) {
       <div data-screen className="relative p-5 sm:p-8">
         <p className="flex items-baseline justify-between gap-4">
           <span className="font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase">
-            {tuned ? `Station found · ${tuned.module.title}` : "Between stations"}
+            {tuned ? `Station found · ${tuned.module.title} · ${LEVELS[tuned.module.level].label}` : "Between stations"}
           </span>
           <span className="min-w-[4.5ch] text-right font-mono text-3xl tracking-[-0.02em] text-foreground tabular-nums sm:text-5xl" aria-hidden>
             {khz}
@@ -169,7 +170,7 @@ export function TuningDial({ stations }: { stations: Station[] }) {
 
       {/* Announce stations, not every frequency step. */}
       <p className="sr-only" aria-live="polite">
-        {tuned && strength === 1 ? `Tuned to ${tuned.module.title}: ${mysteryOf(tuned.module)}` : ""}
+        {tuned && strength === 1 ? `Tuned to ${tuned.module.title}, ${LEVELS[tuned.module.level].label.toLowerCase()}: ${mysteryOf(tuned.module)}` : ""}
       </p>
 
       {/* The dial */}
@@ -232,6 +233,24 @@ export function TuningDial({ stations }: { stations: Station[] }) {
             <LogoMark size={36} className="-translate-y-1" />
             <span className="absolute top-4 bottom-0 left-1/2 w-0.5 -translate-x-1/2 bg-primary" />
           </div>
+        </div>
+
+        {/* the bands: the dial runs from beginner at the low end to advanced at the top */}
+        <div aria-hidden className="relative h-5">
+          {LEVEL_ORDER.map((level) => {
+            const [lo, hi] = LEVEL_BANDS[level];
+            const from = pct(Math.max(MIN_KHZ, lo - 20));
+            const to = pct(Math.min(MAX_KHZ, hi + 20));
+            return (
+              <span
+                key={level}
+                className="absolute top-0 truncate border-t border-foreground/25 pt-1 text-center font-mono text-[10px] tracking-[0.08em] text-muted-foreground uppercase"
+                style={{ left: `${from}%`, width: `${to - from}%` }}
+              >
+                {LEVELS[level].label}
+              </span>
+            );
+          })}
         </div>
 
         {/* station buttons, for tapping */}

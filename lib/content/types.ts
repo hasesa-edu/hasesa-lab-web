@@ -4,6 +4,9 @@
 
 export type ContentStatus = "ai-draft" | "expert-reviewed" | "classroom-tested";
 
+/** How much a module asks of a student: maths, tools and working on their own. */
+export type Level = "beginner" | "intermediate" | "advanced";
+
 export type Discipline = "physics" | "chemistry" | "biology" | "mathematics" | "technology";
 
 export type CurriculumRef = {
@@ -75,6 +78,7 @@ export type Module = {
   title: string;
   tagline: string;
   disciplines: Discipline[];
+  level: Level;
   /** The opening mystery or challenge, in a few sentences. */
   hook: string;
   goal: string;
@@ -99,6 +103,7 @@ export type ModuleSummary = {
   title: string;
   tagline: string;
   disciplines: Discipline[];
+  level: Level;
   hook: string;
   goal: string;
   whatYouBuild: string;

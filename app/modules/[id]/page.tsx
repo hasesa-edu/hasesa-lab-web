@@ -8,7 +8,7 @@ import { getViewer } from "@/lib/viewer";
 import { hasFullAccess } from "@/lib/access";
 import { isUnitDone, moduleProgress } from "@/lib/summary";
 import { stationFor } from "@/lib/stations";
-import { DISCIPLINES } from "@/lib/disciplines";
+import { DISCIPLINES, LEVELS } from "@/lib/disciplines";
 import { BRAND } from "@/lib/brand";
 import { SITE_URL, pageMeta } from "@/lib/seo";
 import { JsonLd } from "@/components/JsonLd";
@@ -45,7 +45,7 @@ export default async function ModulePage({ params }: Props) {
   const full = hasFullAccess(access);
   const signedIn = !!access.userId;
   const summary = summarize(m);
-  const khz = stationFor(m.id, getModules().map((x) => x.id));
+  const khz = stationFor(m.id, getModules());
   const progress = state ? moduleProgress(m, state) : null;
   const unitIds = moduleUnits(m);
   const doneSteps = new Set(state?.steps.filter((s) => s.moduleId === m.id && s.done).map((s) => s.stepId));
@@ -78,7 +78,7 @@ export default async function ModulePage({ params }: Props) {
             priceCurrency: "ETB",
             description: "A year at Hasesa Academy, Addis Ababa. Online modules and concept units are free during the pilot.",
           },
-          educationalLevel: "Ages 13–18",
+          educationalLevel: `${LEVELS[m.level].label}, ages 13–18`,
           about: m.disciplines.map((d) => DISCIPLINES[d].label),
           hasCourseInstance: {
             "@type": "CourseInstance",
@@ -91,7 +91,10 @@ export default async function ModulePage({ params }: Props) {
       <header className="border-b border-border bg-card">
         <div className="mx-auto max-w-6xl px-4 pt-6 pb-10 sm:pt-8 sm:pb-12">
           <BackLink href="/modules">← All modules</BackLink>
-          <div className="mt-5 flex flex-wrap gap-x-4 gap-y-1">
+          <div className="mt-5 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+            <span className="font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase" title={LEVELS[m.level].blurb}>
+              {LEVELS[m.level].label}
+            </span>
             {m.disciplines.map((d) => (
               <SubjectLabel key={d} subject={d} />
             ))}
