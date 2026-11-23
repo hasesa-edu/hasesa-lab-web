@@ -4,7 +4,7 @@
 **Date:** 2026-11-23
 **Owner:** TBD
 
-> **v0.6 change:** The module page was reorganised around what the viewer needs next (§5.8, FR-39): an action panel, a "pick up where you left off" view for returning students, and fewer sections. The footer shows the contact address in plain text.
+> **v0.6 change:** The module page was reorganised around what the viewer needs next (§5.8, FR-39): an action panel, a "pick up where you left off" view for returning students, and fewer sections. The footer has a "Get in touch" column with the email and, later, social links (FR-36).
 >
 > **v0.5 change:** The website now presents **Hasesa** first, an organisation building an education system for the AI era, with the Academy as its first program. `/` is Hasesa's home page and the Academy has its own page at `/academy` (§5.8). The whole site moved to a clean, modern look (paper, ink, hairlines, one teal accent; Geist type). Marketing copy was reviewed for accuracy against the pilot (free sign-up, draft content and curriculum tags).
 >
@@ -139,7 +139,7 @@ _The billing backend (Chapa, `payments`, `paid_until`) is still in the code but 
 - **FR-33** **Home page (`/`)** presents Hasesa, in this order: the thesis (with the ሐሰሳ "exploration" eyebrow), *Why now* (then / now / next), *What we're exploring* (six open questions, each tagged *Testing* when the Academy is trying an answer or *Open*), *How we work* (try it with real students, keep what works, bring it to schools) and *Our first program* (a card linking to the Academy).
 - **FR-34** **Academy page (`/academy`)**, in this order: the hero with the **tuning dial** (each station is a module; drag, arrow keys, Page Up/Down or station buttons; announced to screen readers), the module list, a public sample problem the visitor can solve, *How a module works* (with the Dewey quote), *For parents* (curriculum mapping, the guide, certificates), the pilot partners ("Piloted with"), and a sign-up call to action.
 - **FR-35** **Navigation** depends on sign-in: visitors see **Academy**; signed-in students see **Modules** and **My dashboard**; guides also see **Student tracker**.
-- **FR-36** **Footer:** on `/` and `/academy` it carries the contact note ("Across Ethiopia and beyond." and the `NEXT_PUBLIC_CONTACT_EMAIL` address in plain text, as a mail link with a Copy button; hidden when unset). Other pages show only the brand and legal links.
+- **FR-36** **Footer:** on `/` and `/academy` it carries the contact note ("Across Ethiopia and beyond.") and a "Get in touch" column with the `NEXT_PUBLIC_CONTACT_EMAIL` address and the social links in `SOCIAL_LINKS` (`lib/brand.ts`); the column hides when both are empty. Other pages show only the brand and legal links.
 - **FR-37** **Copy** lives in `lib/i18n.ts` and must match the facts: sign-up is free and opens everything during the pilot; content and curriculum tags are described as drafts until reviewed; partners are named only for what they actually did.
 - **FR-38** **Visual identity:** paper background, ink text, hairline borders and teal as the single accent; amber only for the logo's eyes and *Open* tags. Geist for headings and UI, Geist Mono for labels and numbers, Atkinson Hyperlegible for lessons and the assistant, Noto Sans Ethiopic for Amharic. Tokens are defined once in `app/globals.css`; pages don't hard-code colours.
 - **FR-39** **Module page (`/modules/[id]`):**

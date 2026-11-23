@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useLocale } from "./LocaleProvider";
 import { LogoMark } from "./Logo";
-import { BRAND, CONTACT_EMAIL } from "@/lib/brand";
+import { ArrowUpRightIcon, MailIcon } from "lucide-react";
+import { BRAND, CONTACT_EMAIL, SOCIAL_LINKS } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 
 export function Footer() {
@@ -16,6 +16,7 @@ export function Footer() {
   // Sign-in (student and admin) and payment-return pages fill the screen with their own background; let the footer sit flush under them.
   const flush =
     pathname === "/login" || pathname === "/admin/login" || pathname.startsWith("/billing");
+  const contactLinkClass = "inline-flex min-h-10 items-center gap-2 text-base break-all text-white/90 transition-colors hover:text-white";
   // Padded so each legal link is a comfortable tap target on phones.
   const legalLinkClass =
     "inline-flex min-h-10 items-center rounded-md px-3 text-white/75 transition-colors hover:bg-white/10 hover:text-white";
@@ -24,21 +25,33 @@ export function Footer() {
   return (
     <footer className={cn("bg-ink text-white/75", !flush && "mt-16")}>
       {showContact && (
-        <section className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-8 px-4 pt-14 pb-10 sm:pt-20 sm:pb-14">
+        <section className="mx-auto flex max-w-6xl flex-wrap justify-between gap-x-16 gap-y-10 px-4 pt-14 pb-10 sm:pt-20 sm:pb-14">
           <div className="max-w-2xl flex-[999_1_26rem]">
             <h2 className="text-3xl leading-tight font-semibold text-white sm:text-5xl">{tr("footer.contact.title")}</h2>
             <p className="mt-4 text-lg leading-relaxed text-white/75">{tr("footer.contact.body")}</p>
           </div>
-          {CONTACT_EMAIL && (
-            <p className="flex flex-wrap items-center gap-x-4 gap-y-2">
-              <a
-                href={`mailto:${CONTACT_EMAIL}`}
-                className="text-xl font-semibold break-all text-white underline-offset-4 hover:underline sm:text-2xl"
-              >
-                {CONTACT_EMAIL}
-              </a>
-              <CopyEmail email={CONTACT_EMAIL} />
-            </p>
+          {(CONTACT_EMAIL || SOCIAL_LINKS.length > 0) && (
+            <div className="min-w-56 flex-1 sm:pt-2">
+              <p className="font-mono text-xs tracking-[0.08em] text-white/60 uppercase">{tr("footer.contact.label")}</p>
+              <ul className="mt-4 space-y-1">
+                {CONTACT_EMAIL && (
+                  <li>
+                    <a href={`mailto:${CONTACT_EMAIL}`} className={contactLinkClass}>
+                      <MailIcon aria-hidden className="size-4 shrink-0 text-white/60" />
+                      {CONTACT_EMAIL}
+                    </a>
+                  </li>
+                )}
+                {SOCIAL_LINKS.map((l) => (
+                  <li key={l.href}>
+                    <a href={l.href} target="_blank" rel="noopener noreferrer" className={contactLinkClass}>
+                      {l.label}
+                      <ArrowUpRightIcon aria-hidden className="size-4 shrink-0 text-white/60" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
         </section>
       )}
@@ -67,27 +80,3 @@ export function Footer() {
   );
 }
 
-/** Copies the contact address; hidden where the clipboard API isn't available. */
-function CopyEmail({ email }: { email: string }) {
-  const [canCopy, setCanCopy] = useState(false);
-  const [copied, setCopied] = useState(false);
-  useEffect(() => setCanCopy(typeof navigator !== "undefined" && !!navigator.clipboard), []);
-  if (!canCopy) return null;
-  return (
-    <button
-      type="button"
-      onClick={async () => {
-        try {
-          await navigator.clipboard.writeText(email);
-          setCopied(true);
-          setTimeout(() => setCopied(false), 2000);
-        } catch {
-          /* ignore: the address is still visible to copy by hand */
-        }
-      }}
-      className="inline-flex min-h-9 items-center rounded-md border border-white/25 px-3 font-mono text-xs tracking-[0.08em] text-white/80 uppercase transition-colors hover:bg-white/10 hover:text-white"
-    >
-      <span aria-live="polite">{copied ? "Copied" : "Copy"}</span>
-    </button>
-  );
-}
