@@ -11,6 +11,7 @@ type Dict = Record<string, { en: string }>;
 export const t: Dict = {
   // Nav
   "nav.home": { en: "Home" },
+  "nav.academy": { en: "Academy" },
   "nav.experiments": { en: "Modules" },
   "nav.assistant": { en: "Lab Assistant" },
   "nav.dashboard": { en: "My dashboard" },
@@ -31,12 +32,63 @@ export const t: Dict = {
     en: "Learn by doing.",
   },
   "hero.sub": {
-    en: "Hasesa Academy is hands-on science for teenagers. Every module starts with a mystery and ends with something you built. Turn the dial to hear one.",
+    en: "Hasesa Academy, our first program, is hands-on science for teenagers. Every module starts with a mystery and ends with something you built. Turn the dial to hear one.",
   },
   "hero.cta.lessons": { en: "See the modules" },
   "hero.cta.sample": { en: "Try a free unit" },
   "hero.cta.signup": { en: "Sign up with Google" },
   "hero.cta.dashboard": { en: "Go to my dashboard" },
+
+  // Hasesa home page (/): the organisation, its thesis and what it is exploring
+  "home.eyebrow": { en: "ሐሰሳ · Hasesa means exploration" },
+  "home.title.a": { en: "Education for" },
+  "home.title.b": { en: "the world of tomorrow." },
+  "home.sub": {
+    en: "AI is changing work, economies and society, and perhaps what it means to be human. We can't keep educating students for the world of yesterday. Hasesa is exploring an education system built for the AI era, and testing it with real students.",
+  },
+  "home.cta.academy": { en: "Visit the Academy" },
+  "home.cta.exploring": { en: "What we're exploring" },
+
+  "home.exploring.title": { en: "What we're exploring" },
+  "home.exploring.sub": {
+    en: "We don't have all the answers yet. These are the questions we're working on, and what we're trying at the Academy to answer them.",
+  },
+  "home.status.testing": { en: "Testing at the Academy" },
+  "home.status.open": { en: "Open question" },
+  "home.q.graduate.title": { en: "What should a graduate be able to do?" },
+  "home.q.graduate.body": { en: "The abilities that matter when AI can recall any fact. This is the question every other answer depends on." },
+  "home.q.learning.title": { en: "How should learning happen?" },
+  "home.q.learning.body": { en: "Start by making something real, and learn the theory when the work needs it." },
+  "home.q.teacher.title": { en: "What is the teacher's role?" },
+  "home.q.teacher.body": { en: "A guide who runs the builds, follows every student and steps in when they're stuck." },
+  "home.q.ai.title": { en: "What role should AI play?" },
+  "home.q.ai.body": { en: "An assistant that knows the page a student is on and gives hints, not answers." },
+  "home.q.cost.title": { en: "Can any school afford it?" },
+  "home.q.cost.body": { en: "Builds use cheap, locally available materials instead of lab equipment." },
+  "home.q.evidence.title": { en: "How do we know it works?" },
+  "home.q.evidence.body": { en: "The Academy pilot runs to the end of 2027. We'll share what worked and what didn't." },
+
+  "home.how.title": { en: "We explore by building." },
+  "home.how.1.title": { en: "Try it with real students" },
+  "home.how.1.body": { en: "New ways of learning start as programs that students actually attend, not as papers." },
+  "home.how.2.title": { en: "Keep what works" },
+  "home.how.2.body": { en: "We watch closely, measure what students learn and change what doesn't work." },
+  "home.how.3.title": { en: "Bring it to schools" },
+  "home.how.3.body": { en: "What works is packaged so other schools and teachers can run it, in Ethiopia and beyond." },
+
+  "home.programs.eyebrow": { en: "Our first program" },
+  "home.programs.academy.title": { en: "Hasesa Academy" },
+  "home.programs.academy.body": {
+    en: "Hands-on science for teenagers. Students build a radio, control a robot claw with their muscles and catch food fakers, and learn the theory when the project needs it.",
+  },
+  "home.programs.academy.status": { en: "Pilot running" },
+  "home.programs.academy.cta": { en: "Explore the Academy" },
+
+  "home.cta.title": { en: "Across Ethiopia and beyond." },
+  "home.cta.sub": {
+    en: "Our goal is an education system that schools everywhere can use. If you run a school, teach, or want to support this work, we'd like to hear from you.",
+  },
+  "home.cta.contact": { en: "Get in touch" },
 
   // Can you solve it? (hero challenge)
   "solve.eyebrow": { en: "A real case from" },
@@ -57,7 +109,7 @@ export const t: Dict = {
   "why.now.body": { en: "Any phone can recite a formula or define density in a second. Remembering facts is no longer what makes you stand out." },
   "why.next.label": { en: "Next" },
   "why.next.line": { en: "So learn what AI can't do for you." },
-  "why.next.body": { en: "Get curious, build things, test them, work out why they failed and fix them, together with other people. That's what every Hasesa module trains." },
+  "why.next.body": { en: "Get curious, build things, test them, work out why they failed and fix them, together with other people. Hasesa is exploring what an education built around that looks like." },
 
   // Landing: marquee, how it works, showcase
   "how.title": { en: "Start by doing. The theory follows." },

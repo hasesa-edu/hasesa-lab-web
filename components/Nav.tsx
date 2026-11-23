@@ -6,6 +6,7 @@ import { useState } from "react";
 import {
   ChevronDownIcon,
   BoxesIcon,
+  FlaskConicalIcon,
   GraduationCapIcon,
   LogOutIcon,
   MenuIcon,
@@ -66,7 +67,8 @@ export function Nav() {
   }
 
   // Signing in from the header returns the visitor to the page they were on.
-  const signInHref = googleSignInHref(pathname === "/" ? null : pathname);
+  // From the two marketing pages it goes to the default destination instead.
+  const signInHref = googleSignInHref(pathname === "/" || pathname === "/academy" ? null : pathname);
 
   const isActive = (href: string) =>
     href.includes("#") ? false : href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -98,6 +100,7 @@ export function Nav() {
 
   const full = user?.access === "enrolled" || user?.access === "guide";
   const links: { href: string; label: string; icon: LucideIcon; show: boolean }[] = [
+    { href: "/academy", label: tr("nav.academy"), icon: FlaskConicalIcon, show: true },
     { href: "/modules", label: tr("nav.experiments"), icon: BoxesIcon, show: true },
     { href: "/dashboard", label: tr("nav.dashboard"), icon: NotebookPenIcon, show: !!user },
     { href: "/guide", label: tr("nav.guide"), icon: GraduationCapIcon, show: user?.access === "guide" },
@@ -186,8 +189,9 @@ export function Nav() {
           <ThemeToggle className="hidden" />
           {!user && (
             <>
-              <Link href="/modules" className={cn(navLinkClass("/modules"), "px-3")}>
-                {tr("nav.experiments")}
+              {/* Only room for one link next to Sign in on phones; the Academy page leads on to the modules. */}
+              <Link href="/academy" className={cn(navLinkClass("/academy"), "px-3")}>
+                {tr("nav.academy")}
               </Link>
               <a href={signInHref} className={cn(signInClass, "px-3")} aria-label={tr("nav.signin")}>
                 <GoogleIcon size={16} />

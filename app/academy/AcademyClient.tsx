@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
@@ -12,20 +11,21 @@ import { DISCIPLINES } from "@/lib/disciplines";
 import { CONTACT_EMAIL } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { TuningDial } from "./landing/TuningDial";
+import { TuningDial } from "../landing/TuningDial";
 import { StationRows } from "@/components/module/StationRows";
 import { assignStations, mysteryOf, type Station } from "@/lib/stations";
-import { SolveIt, type Challenge } from "./landing/SolveIt";
+import { SolveIt, type Challenge } from "../landing/SolveIt";
+import { Partners } from "../landing/Partners";
 
 type Key = keyof typeof Dict;
 type TR = (k: Key) => string;
 
-// "Tune in": the landing page is a radio. The hero is a tuning dial whose
+// The Academy's page (/academy). "Tune in": the page is a radio. The hero is a tuning dial whose
 // stations are the modules; the rest of the page stays quiet so the dial is
 // the one thing you remember. Enamel, teal signal and amber come from the
 // logo; Big Shoulders is the dial's numerals, Atkinson Hyperlegible the body.
 
-export function LandingClient({ modules, challenge }: { modules: ModuleSummary[]; challenge: Challenge | null }) {
+export function AcademyClient({ modules, challenge }: { modules: ModuleSummary[]; challenge: Challenge | null }) {
   const { tr } = useLocale();
   const { user, ready } = useUser();
   const primaryHref = user ? "/dashboard" : googleSignInHref("/modules");
@@ -53,7 +53,6 @@ export function LandingClient({ modules, challenge }: { modules: ModuleSummary[]
           />
         </section>
       )}
-      <Why tr={tr} />
       <Modules tr={tr} stations={stations} />
       <HowItWorks tr={tr} />
       <Academy tr={tr} />
@@ -97,50 +96,6 @@ function Hero({ tr, stations, sampleHref }: { tr: TR; stations: Station[]; sampl
             <TuningDial stations={stations} />
           </div>
         )}
-      </div>
-    </section>
-  );
-}
-
-/* ───────────────────────────  WHY  ─────────────────────────── */
-
-function Why({ tr }: { tr: TR }) {
-  // The story from the deck, told in three beats: then, now, next. It is a
-  // real sequence in time, so it gets a line running through it.
-  const beats: { label: Key; line: Key; body: Key }[] = [
-    { label: "why.then.label", line: "why.then.line", body: "why.then.body" },
-    { label: "why.now.label", line: "why.now.line", body: "why.now.body" },
-    { label: "why.next.label", line: "why.next.line", body: "why.next.body" },
-  ];
-  return (
-    <section className="border-t-2 border-ink/10">
-      <div className="mx-auto max-w-6xl px-4 py-20 sm:py-28">
-        <ol className="relative space-y-14 border-l-4 border-signal/30 pl-6 sm:space-y-20 sm:pl-12">
-          {beats.map((b, i) => {
-            const last = i === beats.length - 1;
-            return (
-              <li key={b.label} className="relative">
-                <span
-                  aria-hidden
-                  className={cn(
-                    "absolute top-3 -left-[calc(1.5rem+0.6rem)] size-4 rounded-full ring-4 ring-lab sm:-left-[calc(3rem+0.6rem)]",
-                    last ? "bg-sun" : "bg-signal"
-                  )}
-                />
-                <p className={cn("text-sm font-bold", last ? "text-chemistry" : "text-primary")}>{tr(b.label)}</p>
-                <h2
-                  className={cn(
-                    "mt-1 max-w-4xl font-dial leading-[0.95] font-bold",
-                    last ? "text-5xl text-ink sm:text-7xl lg:text-8xl" : "text-4xl text-ink/70 sm:text-6xl"
-                  )}
-                >
-                  {tr(b.line)}
-                </h2>
-                <p className={cn("mt-4 max-w-2xl text-lg leading-relaxed", last ? "text-ink/85" : "text-ink/60")}>{tr(b.body)}</p>
-              </li>
-            );
-          })}
-        </ol>
       </div>
     </section>
   );
@@ -275,42 +230,6 @@ function Parents({ tr, modules, sampleHref }: { tr: TR; modules: ModuleSummary[]
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
-
-/* ───────────────────────────  PARTNERS  ─────────────────────────── */
-
-function Partners({ tr }: { tr: TR }) {
-  const partners = [
-    { href: "https://www.thesciencebasement.org/", logo: "/partners/science-basement.png", name: "The Science Basement", tag: tr("partners.sb.tag") },
-    { href: "https://bekurguide.com/organization/magic-carpet-schools", logo: "/partners/magic-carpet.jpg", name: "Magic Carpet Schools", tag: tr("partners.mcs.tag") },
-  ];
-  return (
-    <section className="border-t-2 border-ink/10">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-12 md:flex-row md:items-center md:justify-between">
-        <h2 className="font-bold text-ink/60">{tr("partners.eyebrow")}</h2>
-        <ul className="grid gap-4 sm:grid-cols-2">
-          {partners.map((p) => (
-            <li key={p.name}>
-              <a
-                href={p.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex min-h-14 items-center gap-3 rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-signal/50"
-              >
-                <span className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white ring-1 ring-ink/10">
-                  <Image src={p.logo} alt={`${p.name} logo`} width={96} height={96} className="size-full object-contain" loading="lazy" />
-                </span>
-                <span>
-                  <span className="block font-bold group-hover:text-primary">{p.name}</span>
-                  <span className="block text-sm text-ink/65">{p.tag}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
   );
