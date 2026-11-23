@@ -32,7 +32,7 @@ export const t: Dict = {
     en: "Learn by doing.",
   },
   "hero.sub": {
-    en: "Hands-on science for teenagers. Every module starts with a mystery and ends with something you built. Turn the dial to hear one.",
+    en: "Hands-on science for teenagers. Every module starts with a mystery and ends with something you built or solved. Turn the dial to hear one.",
   },
   "hero.cta.lessons": { en: "See the modules" },
   "academy.eyebrow": { en: "Hasesa Academy · our first program" },
@@ -47,7 +47,6 @@ export const t: Dict = {
   "label.program": { en: "Our first program" },
   "label.modules": { en: "On air now" },
   "label.method": { en: "How a module works" },
-  "label.academy": { en: "At the Academy" },
   "label.parents": { en: "For parents" },
   "label.solve": { en: "Try one" },
 
@@ -55,7 +54,7 @@ export const t: Dict = {
   "home.eyebrow": { en: "Hasesa means exploration" },
   "home.title": { en: "Education for the world of tomorrow." },
   "home.sub": {
-    en: "AI is changing work, economies and society, and perhaps what it means to be human. We can't keep educating students for the world of yesterday. Hasesa is exploring an education system built for the AI era, and testing it with real students.",
+    en: "AI is changing work, economies and society. We can't keep educating students for the world of yesterday. Hasesa is exploring an education system built for the AI era, and testing it with real students.",
   },
   "home.cta.academy": { en: "Visit the Academy" },
   "home.cta.exploring": { en: "What we're exploring" },
@@ -95,11 +94,6 @@ export const t: Dict = {
   "home.programs.academy.status": { en: "Pilot running" },
   "home.programs.academy.cta": { en: "Explore the Academy" },
 
-  "home.cta.title": { en: "Across Ethiopia and beyond." },
-  "home.cta.sub": {
-    en: "Our goal is an education system that schools everywhere can use. If you run a school, teach, or want to support this work, we'd like to hear from you.",
-  },
-  "home.cta.contact": { en: "Get in touch" },
 
   // Can you solve it? (hero challenge)
   "solve.eyebrow": { en: "A real case from" },
@@ -113,7 +107,7 @@ export const t: Dict = {
 
   // Landing: why — the deck's story in three beats, for students and parents
   "why.then.label": { en: "Then" },
-  "why.then.line": { en: "School was built for factories." },
+  "why.then.line": { en: "School was built to pass on knowledge." },
   "why.then.body": { en: "Same lessons, same pace and the same exam for everyone. Memorize it, write it down, move on." },
   "why.now.label": { en: "Now" },
   "why.now.line": { en: "AI can recall it faster than you." },
@@ -127,9 +121,9 @@ export const t: Dict = {
   "how.1.title": { en: "Meet the mystery" },
   "how.1.body": { en: "Every module opens with something that makes you curious: a radio with no battery, a claw that obeys your muscles." },
   "how.2.title": { en: "Build and investigate" },
-  "how.2.body": { en: "At the Academy, with a guide, you test, build and measure, using real tools and local materials." },
+  "how.2.body": { en: "At the Academy, in small groups with a guide, you test, build and measure, using real tools and local materials." },
   "how.3.title": { en: "Learn just enough" },
-  "how.3.body": { en: "At home, read the concept units the project needs and solve real problems. Already know one? Test out." },
+  "how.3.body": { en: "At home, read the concept units the project needs and solve real problems, with a lab assistant that gives hints, not answers. Already know one? Test out." },
   "how.4.title": { en: "Finish and get signed off" },
   "how.4.body": { en: "Make it work, explain how, and your guide signs you off with a certificate." },
   "showcase.title": { en: "Three mysteries, on air now" },
@@ -138,23 +132,10 @@ export const t: Dict = {
   "showcase.steps": { en: "steps" },
   "showcase.all": { en: "See every module" },
 
-  // What you get at the Academy
-  "pillars.title": { en: "Everything a module needs." },
-  "pillars.sub": { en: "Hands-on work with a guide, theory at your own pace, and help whenever you're stuck." },
-  "pillars.hands.title": { en: "Hands-on" },
-  "pillars.hands.body": { en: "Build real things with real tools and local materials: a radio, a robot claw, a forensic lab." },
-  "pillars.paths.title": { en: "Your own path" },
-  "pillars.paths.body": { en: "Concept units you study at home, at your pace. Already know one? Test out and move on." },
-  "pillars.guide.title": { en: "A guide" },
-  "pillars.guide.body": { en: "A trained guide follows your progress, gives feedback and signs you off when your build works." },
-  "pillars.together.title": { en: "Build together" },
-  "pillars.together.body": { en: "Builds happen in groups at the Academy, so you learn from each other as much as from the steps." },
-  "pillars.ai.title": { en: "AI support" },
-  "pillars.ai.body": { en: "A lab assistant that knows the step you're on and gives hints, not answers." },
 
   // For parents
   "parents.title": { en: "Fun, and it counts." },
-  "parents.sub": { en: "Every module connects to the national curriculum, so what your child builds here shows up again in class and in exams." },
+  "parents.sub": { en: "Every module is mapped to the national curriculum (a draft that subject teachers are checking), so what your child builds connects to what they study in class." },
   "parents.curriculum.title": { en: "curriculum topics, used for real" },
   "parents.curriculum.body": { en: "Each concept unit is tagged with where it appears in the school curriculum." },
   "parents.guide.title": { en: "A guide who follows every student" },
@@ -171,7 +152,7 @@ export const t: Dict = {
     en: "A school in Addis Ababa serving students at scale.",
   },
 
-  // Dewey quote (lives in the Footer)
+  // Dewey quote (pull quote in the Academy's "How a module works")
   "dewey.quote": {
     en: "Give the pupils something to do, not something to learn; and the doing is of such a nature as to demand thinking; learning naturally results.",
   },
@@ -181,9 +162,8 @@ export const t: Dict = {
 
   // CTA strip
   "cta.title": { en: "Ready to build something?" },
-  "cta.enrol": { en: "Contact us to enrol" },
   "cta.sub": {
-    en: "Sign up with Google to browse every module and try a concept unit. Enrol at the Academy to start building.",
+    en: "Sign up with Google. It's free during the pilot and opens every module, concept unit and the lab assistant.",
   },
 
   // Chat (lab assistant)
@@ -213,6 +193,11 @@ export const t: Dict = {
   "footer.motto": {
     en: "Reimagining Education for the AI Era",
   },
+  "footer.contact.title": { en: "Across Ethiopia and beyond." },
+  "footer.contact.body": {
+    en: "Our goal is an education system that schools everywhere can use. If you run a school, teach, or want to support this work, we'd like to hear from you.",
+  },
+  "footer.contact.cta": { en: "Get in touch" },
   "footer.terms": { en: "Terms" },
   "footer.privacy": { en: "Privacy" },
 };
