@@ -1,16 +1,18 @@
 # Hasesa Academy — Hands-on Science Modules for Ethiopian Students — Requirements
 
-**Version:** 0.4 (Draft)
+**Version:** 0.5 (Draft)
 **Date:** 2026-11-23
 **Owner:** TBD
 
+> **v0.5 change:** The website now presents **Hasesa** first, an organisation building an education system for the AI era, with the Academy as its first program. `/` is Hasesa's home page and the Academy has its own page at `/academy` (§5.8). The whole site moved to a clean, modern look (paper, ink, hairlines, one teal accent; Geist type). Marketing copy was reviewed for accuracy against the pilot (free sign-up, draft content and curriculum tags).
+>
 > **v0.4 change:** Hasesa has moved from a self-serve catalogue of grade 9–12 experiments to **Hasesa Academy**: project-based **modules** where students build at the Academy with a **guide** and study **shared concept units** at home. These parts of v0.3 have been dropped or replaced: the per-experiment catalogue and its routes (`/experiments`, `/onboarding`), the onboarding questions on grade and subjects, end-of-experiment concept checks (replaced by graded practice problems in concept units), the standalone `/chat` page (the assistant now lives on each course page), and the "no teachers" rule (guides are now a core role). Billing remains paused; during the pilot every new sign-up is enrolled until the end of 2027.
 
 ---
 
 ## 1. Purpose
 
-**Hasesa and the Academy.** Hasesa (Amharic for "exploration") is building an education system for the AI era. The goal is a system that schools across Ethiopia and beyond can use. Hasesa develops new ways of learning, tests them with real students, keeps what works and brings it to schools. **Hasesa Academy is its first program** and the place where the model is tested. The website's home page (`/`) presents Hasesa: its thesis, the questions it is exploring (each marked *testing at the Academy* or *open*) and its programs. The Academy has its own landing page at `/academy`. The rest of this document specifies the Academy.
+**Hasesa and the Academy.** Hasesa (Amharic for "exploration") is building an education system for the AI era. The goal is a system that schools across Ethiopia and beyond can use. Hasesa develops new ways of learning, tests them with real students, keeps what works and brings it to schools. **Hasesa Academy is its first program** and the place where the model is tested. The website's home page (`/`) presents Hasesa: its thesis, the questions it is exploring (each marked *testing* or *open*), how it works and its programs. The Academy has its own page at `/academy` (see §5.8). The rest of this document specifies the Academy.
 
 Hasesa Academy teaches high-school science through hands-on modules. Each module starts with a mystery or something to build. Students learn the theory when the project needs it, not before. Builds happen at the Academy with a guide. At home, students read concept units and solve practice problems on their phone or computer. An AI lab assistant, available on every course page, helps them understand the material and troubleshoot their own work.
 
@@ -120,7 +122,7 @@ Students today rely on YouTube demos (generic, often needing lab equipment they 
 
 | Level | Gets |
 |---|---|
-| Public (signed out) | Landing, module catalogue and previews, each module's public sample unit, certificates |
+| Public (signed out) | Home and Academy pages, module catalogue and previews, each module's public sample unit, certificates |
 | Signed in, not enrolled | The same, with progress saved |
 | Enrolled (`paid_until` in the future) | Full modules, all concept units, the lab assistant |
 | Guide (role set by the admin) | Everything enrolled students get, plus the guide tracker and guide's versions |
@@ -130,6 +132,14 @@ Students today rely on YouTube demos (generic, often needing lab equipment they 
 
 ### 5.6a Pricing & Billing (paused)
 _The billing backend (Chapa, `payments`, `paid_until`) is still in the code but unused, and no pricing appears in the UI. The previous plan was a prepaid 30-day pass for 300 ETB through Chapa, with stacking days and server-side verification. Pricing will be revisited after the pilot._
+
+### 5.8 Website & Brand
+- **FR-33** **Home page (`/`)** presents Hasesa, in this order: the thesis (with the ሐሰሳ "exploration" eyebrow), *Why now* (then / now / next), *What we're exploring* (six open questions, each tagged *Testing* when the Academy is trying an answer or *Open*), *How we work* (try it with real students, keep what works, bring it to schools) and *Our first program* (a card linking to the Academy).
+- **FR-34** **Academy page (`/academy`)**, in this order: the hero with the **tuning dial** (each station is a module; drag, arrow keys, Page Up/Down or station buttons; announced to screen readers), the module list, a public sample problem the visitor can solve, *How a module works* (with the Dewey quote), *For parents* (curriculum mapping, the guide, certificates), the pilot partners ("Piloted with"), and a sign-up call to action.
+- **FR-35** **Navigation** depends on sign-in: visitors see **Academy**; signed-in students see **Modules** and **My dashboard**; guides also see **Student tracker**.
+- **FR-36** **Footer:** on `/` and `/academy` it carries the contact note ("Across Ethiopia and beyond." and a Get in touch link to `NEXT_PUBLIC_CONTACT_EMAIL`, hidden when unset). Other pages show only the brand and legal links.
+- **FR-37** **Copy** lives in `lib/i18n.ts` and must match the facts: sign-up is free and opens everything during the pilot; content and curriculum tags are described as drafts until reviewed; partners are named only for what they actually did.
+- **FR-38** **Visual identity:** paper background, ink text, hairline borders and teal as the single accent; amber only for the logo's eyes and *Open* tags. Geist for headings and UI, Geist Mono for labels and numbers, Atkinson Hyperlegible for lessons and the assistant, Noto Sans Ethiopic for Amharic. Tokens are defined once in `app/globals.css`; pages don't hard-code colours.
 
 ### 5.7 Offline Access (post-MVP)
 - **FR-30** Students can save steps and concept units (text and images) for offline use. Videos are optional downloads.
@@ -153,7 +163,7 @@ Network baselines: **2G** = 400 Kbps / 400 ms RTT, **3G** = 1.6 Mbps / 300 ms RT
 - **NFR-5** Capacity planning assumes about 3 assistant turns per active student per day, with peaks around Academy sessions.
 
 ### 6.3 Accessibility & Localisation
-- **NFR-6** WCAG 2.1 AA for colour contrast, keyboard navigation and screen-reader labels. Light and dark themes.
+- **NFR-6** WCAG 2.1 AA for colour contrast, keyboard navigation and screen-reader labels. Light theme only for now; dark tokens exist but are switched off (`LIGHT_ONLY` in `components/ThemeProvider.tsx`).
 - **NFR-7** English at launch. Amharic and Afaan Oromo follow, rendering correctly in Ge'ez and Qubee scripts on Android 8+ system fonts.
 - **NFR-8** Course content renders maths with KaTeX. Assistant answers use plain-text formulas (no LaTeX), for low-end devices; tables are allowed.
 
