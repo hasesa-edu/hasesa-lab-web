@@ -2,6 +2,7 @@
 title: Market Detective
 tagline: Fake or real? Catch the food fakers
 disciplines: [chemistry, physics, mathematics]
+level: beginner
 hook: "A case file has arrived at the Academy: honey, berbere, milk and kibe, four samples of each. Some are genuine. Some have been faked. Which ones, and can you prove it?"
 goal: "Find every faked sample in the case file and prove each verdict with measured, fair-tested evidence."
 whatYouBuild: "A forensic case report with evidence for every sample, presented to the class like a detective closing the case."

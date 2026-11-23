@@ -56,6 +56,7 @@ export function summarize(m: Module): ModuleSummary {
     title: m.title,
     tagline: m.tagline,
     disciplines: m.disciplines,
+    level: m.level,
     hook: m.hook,
     goal: m.goal,
     whatYouBuild: m.whatYouBuild,

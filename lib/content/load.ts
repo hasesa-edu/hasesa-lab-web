@@ -5,11 +5,13 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { z } from "zod";
-import type { Concept, CurriculumRef, Module, Step } from "./types";
+import type { Concept, CurriculumRef, Level, Module, Step } from "./types";
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 
 const status = z.enum(["ai-draft", "expert-reviewed", "classroom-tested"]);
+const LEVELS = ["beginner", "intermediate", "advanced"] as const satisfies readonly Level[];
+const level = z.enum(LEVELS);
 const discipline = z.enum(["physics", "chemistry", "biology", "mathematics", "technology"]);
 const video = z.object({ youtubeId: z.string().optional(), src: z.string().optional(), credit: z.string().optional() });
 
@@ -63,6 +65,7 @@ const moduleFm = z.object({
   title: z.string().min(1),
   tagline: z.string().min(1),
   disciplines: z.array(discipline).min(1),
+  level,
   hook: z.string().min(1),
   goal: z.string().min(1),
   whatYouBuild: z.string().min(1),
@@ -162,10 +165,13 @@ export function loadContent(root = CONTENT_DIR): Content {
         .map((d) => d.name)
         .sort()
     : [];
-  const modules = ids.map((id) => {
-    if (!SLUG.test(id)) throw new Error(`Module folder must be a lowercase slug: ${id}`);
-    return loadModule(path.join(modulesDir, id), id, concepts);
-  });
+  // Content order: easiest first, then by id.
+  const modules = ids
+    .map((id) => {
+      if (!SLUG.test(id)) throw new Error(`Module folder must be a lowercase slug: ${id}`);
+      return loadModule(path.join(modulesDir, id), id, concepts);
+    })
+    .sort((a, b) => LEVELS.indexOf(a.level) - LEVELS.indexOf(b.level) || a.id.localeCompare(b.id));
   // A public sample concept must actually be open to the public.
   for (const m of modules) {
     if (!concepts.get(m.publicSample)!.public) {
