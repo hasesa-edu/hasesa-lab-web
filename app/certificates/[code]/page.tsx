@@ -36,9 +36,9 @@ export default async function CertificatePage({ params }: Props) {
           <p className="mt-5 font-mono text-xs tracking-[0.16em] text-primary uppercase">{BRAND} Academy</p>
           <h1 className="mt-6 text-3xl font-semibold sm:text-4xl">Certificate of completion</h1>
           <p className="mt-8 text-base text-muted-foreground">This certifies that</p>
-          <p className="mt-2 font-heading text-4xl font-semibold tracking-[-0.03em] sm:text-5xl">{cert.student}</p>
+          <p className="mt-2 font-display text-4xl font-semibold tracking-[-0.03em] sm:text-5xl">{cert.student}</p>
           <p className="mt-6 text-base text-muted-foreground">built, investigated and explained</p>
-          <p className="mt-2 font-heading text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">
+          <p className="mt-2 font-display text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">
             {m.title}: {m.tagline}
           </p>
           <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground">{m.whatYouBuild}</p>

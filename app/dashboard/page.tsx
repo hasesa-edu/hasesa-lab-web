@@ -51,7 +51,7 @@ export default async function DashboardPage() {
         }
       >
         {access.level === "guide" && (
-          <Button asChild className="bg-sun font-semibold text-deep hover:bg-sun/90">
+          <Button asChild variant="ink">
             <Link href="/guide">
               <GraduationCap aria-hidden /> Open the student tracker
             </Link>
@@ -92,7 +92,7 @@ export default async function DashboardPage() {
                 const c = getConcept(a.unitId)!;
                 return (
                   <li key={a.id}>
-                    <Link href={`/concepts/${c.id}`} className="flex h-full items-start gap-3 rounded-2xl bg-card p-4 shadow-card ring-1 ring-border transition hover:ring-primary/50">
+                    <Link href={`/concepts/${c.id}`} className="flex h-full items-start gap-3 rounded-lg bg-card p-4 shadow-card ring-1 ring-border transition hover:ring-primary/50">
                       <BookOpen aria-hidden className="mt-0.5 size-5 shrink-0 text-primary" />
                       <span className="min-w-0 flex-1">
                         <span className="block font-semibold text-foreground">{c.title}</span>
@@ -112,7 +112,7 @@ export default async function DashboardPage() {
             <SectionTitle icon={Compass}>Pick up where you stopped</SectionTitle>
             <ul className="mt-4 space-y-3">
               {active.map(({ m, p }) => (
-                <li key={m.id} className="rounded-2xl bg-card p-5 shadow-card ring-1 ring-border">
+                <li key={m.id} className="rounded-lg bg-card p-5 shadow-card ring-1 ring-border">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0">
                       <Link href={`/modules/${m.id}`} className="text-xl font-extrabold tracking-tight text-foreground hover:text-primary-strong">
@@ -148,7 +148,7 @@ export default async function DashboardPage() {
                 <li key={m.id}>
                   <Link
                     href={`/certificates/${p.certificateCode}`}
-                    className="flex items-center gap-3 rounded-2xl bg-emerald-50 p-4 ring-1 ring-emerald-300 transition hover:ring-emerald-500 dark:bg-emerald-950/40 dark:ring-emerald-800"
+                    className="flex items-center gap-3 rounded-lg bg-emerald-50 p-4 ring-1 ring-emerald-300 transition hover:ring-emerald-500 dark:bg-emerald-950/40 dark:ring-emerald-800"
                   >
                     <Award aria-hidden className="size-6 shrink-0 text-emerald-600" />
                     <span className="flex-1 font-semibold text-foreground">{m.title}</span>

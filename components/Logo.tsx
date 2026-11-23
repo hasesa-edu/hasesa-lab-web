@@ -45,7 +45,7 @@ export function Logo({ className = "", tone = "brand" }: { className?: string; t
       <LogoMark size={36} tone={tone} className="mt-0.5" />
       <span
         className={cn(
-          "font-heading text-lg leading-none font-semibold tracking-[-0.02em]",
+          "font-display text-lg leading-none font-semibold tracking-[-0.02em]",
           tone === "light" ? "text-white" : "text-foreground"
         )}
       >

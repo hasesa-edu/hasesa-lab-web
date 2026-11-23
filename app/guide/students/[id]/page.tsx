@@ -52,7 +52,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
 
       <div className="mx-auto max-w-6xl px-4 pt-8 pb-16">
         <div className="grid gap-4 lg:grid-cols-2">
-          <section className="rounded-2xl bg-card p-5 shadow-card ring-1 ring-border sm:p-6">
+          <section className="rounded-lg bg-card p-5 shadow-card ring-1 ring-border sm:p-6">
             <SectionTitle icon={MessageSquareQuote} className="text-lg sm:text-xl">
               Give feedback
             </SectionTitle>
@@ -60,7 +60,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
               <FeedbackForm studentId={user.id} places={places} />
             </div>
           </section>
-          <section className="rounded-2xl bg-card p-5 shadow-card ring-1 ring-border sm:p-6">
+          <section className="rounded-lg bg-card p-5 shadow-card ring-1 ring-border sm:p-6">
             <SectionTitle icon={ClipboardList} className="text-lg sm:text-xl">
               Assign a concept unit
             </SectionTitle>
@@ -96,7 +96,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
         </div>
 
         {touched.length === 0 && (
-          <p className="mt-10 rounded-2xl bg-card p-6 text-muted-foreground shadow-soft ring-1 ring-border">This student hasn&apos;t started a module yet.</p>
+          <p className="mt-10 rounded-lg bg-card p-6 text-muted-foreground shadow-soft ring-1 ring-border">This student hasn&apos;t started a module yet.</p>
         )}
 
         {touched.map(({ m, p }) => {
@@ -116,7 +116,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
               </p>
 
               <div className="mt-5 grid gap-4 lg:grid-cols-2">
-                <div className="rounded-2xl bg-card p-5 shadow-card ring-1 ring-border">
+                <div className="rounded-lg bg-card p-5 shadow-card ring-1 ring-border">
                   <h3 className="flex items-center gap-2 font-bold text-foreground">
                     <NotebookPen aria-hidden className="size-4 text-primary" /> Steps and notebook
                   </h3>
@@ -146,7 +146,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
                 </div>
 
                 <div className="space-y-4">
-                  <div className="rounded-2xl bg-card p-5 shadow-card ring-1 ring-border">
+                  <div className="rounded-lg bg-card p-5 shadow-card ring-1 ring-border">
                     <h3 className="flex items-center gap-2 font-bold text-foreground">
                       <BookOpen aria-hidden className="size-4 text-primary" /> Concept units
                     </h3>
@@ -167,7 +167,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
                   </div>
 
                   {p.status !== "completed" && p.status !== "not-started" && (
-                    <div className="rounded-2xl bg-card p-5 shadow-card ring-1 ring-border">
+                    <div className="rounded-lg bg-card p-5 shadow-card ring-1 ring-border">
                       <h3 className="flex items-center gap-2 font-bold text-foreground">
                         <Flag aria-hidden className="size-4 text-amber-600" /> {p.flagged ? "Flagged" : "Needs attention?"}
                       </h3>
@@ -178,7 +178,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
                     </div>
                   )}
 
-                  <div className="rounded-2xl bg-card p-5 shadow-card ring-1 ring-border">
+                  <div className="rounded-lg bg-card p-5 shadow-card ring-1 ring-border">
                     <h3 className="flex items-center gap-2 font-bold text-foreground">
                       <Award aria-hidden className="size-4 text-emerald-600" /> Sign-off
                     </h3>
@@ -220,7 +220,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
                 const mine = attempts.filter((a) => a.unitId === u);
                 const row = unitStatus.get(u);
                 return (
-                  <details key={u} id={`unit-${u}`} className="group scroll-mt-24 rounded-2xl bg-card shadow-card ring-1 ring-border open:ring-primary/40">
+                  <details key={u} id={`unit-${u}`} className="group scroll-mt-24 rounded-lg bg-card shadow-card ring-1 ring-border open:ring-primary/40">
                     <summary className="flex min-h-14 cursor-pointer list-none flex-wrap items-center gap-x-3 gap-y-1 px-5 py-3 [&::-webkit-details-marker]:hidden">
                       <span className="flex-1 font-semibold text-foreground">{c.title}</span>
                       <span className="text-xs text-muted-foreground">{mine.length} answers</span>

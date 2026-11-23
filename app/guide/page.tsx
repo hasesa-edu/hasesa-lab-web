@@ -43,7 +43,7 @@ export default async function GuidePage() {
       <div className="mx-auto max-w-6xl px-4 pt-8 pb-16">
         <SectionTitle icon={Users}>Students</SectionTitle>
         {roster.length === 0 ? (
-          <p className="mt-4 rounded-2xl bg-card p-6 text-muted-foreground shadow-soft ring-1 ring-border">
+          <p className="mt-4 rounded-lg bg-card p-6 text-muted-foreground shadow-soft ring-1 ring-border">
             No students yet. Students appear here once the admin enrols them.
           </p>
         ) : (
@@ -53,7 +53,7 @@ export default async function GuidePage() {
                 <Link
                   href={`/guide/students/${s.id}`}
                   className={cn(
-                    "block rounded-2xl bg-card p-5 shadow-card ring-1 transition hover:ring-primary/50",
+                    "block rounded-lg bg-card p-5 shadow-card ring-1 transition hover:ring-primary/50",
                     s.flags.length ? "ring-amber-300 dark:ring-amber-800" : "ring-border"
                   )}
                 >
@@ -76,7 +76,7 @@ export default async function GuidePage() {
                   {s.flags.length > 0 && (
                     <ul className="mt-3 flex flex-wrap gap-2">
                       {s.flags.map((f) => (
-                        <li key={f} className="inline-flex min-h-7 items-center gap-1.5 rounded-full bg-sun-soft px-2.5 py-0.5 text-xs font-semibold text-amber-800 dark:text-sun">
+                        <li key={f} className="inline-flex min-h-7 items-center gap-1.5 rounded-full border border-sun/60 px-2.5 py-0.5 font-mono text-[11px] tracking-[0.06em] text-sun-strong uppercase">
                           <Flag aria-hidden className="size-3.5" /> {f}
                         </li>
                       ))}
@@ -85,7 +85,7 @@ export default async function GuidePage() {
                   {s.modules.length > 0 && (
                     <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                       {s.modules.map((p) => (
-                        <li key={p.moduleId} className="rounded-xl bg-muted/50 p-3">
+                        <li key={p.moduleId} className="rounded-lg bg-muted p-3">
                           <div className="flex items-center justify-between text-xs font-semibold">
                             <span className="text-foreground">{p.title}</span>
                             <span className="text-muted-foreground capitalize">{p.status === "completed" ? "Signed off" : p.status}</span>
