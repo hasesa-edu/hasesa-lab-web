@@ -193,9 +193,8 @@ export const t: Dict = {
   "footer.motto": {
     en: "Reimagining Education for the AI Era",
   },
-  "footer.contact.title": { en: "Across Ethiopia and beyond." },
   "footer.contact.body": {
-    en: "Our goal is an education system that schools everywhere can use. If you run a school, teach, or want to support this work, we'd like to hear from you.",
+    en: "Our goal is an education system that schools in Ethiopia and beyond can use. If you run a school, teach, or want to support this work, we'd like to hear from you.",
   },
   "footer.contact.label": { en: "Get in touch" },
   "footer.terms": { en: "Terms" },
