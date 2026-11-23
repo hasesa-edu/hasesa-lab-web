@@ -3,6 +3,7 @@ title: DNA Detective
 tagline: Pull DNA out of a banana, then use it to solve a case
 disciplines: [biology, chemistry, mathematics]
 level: advanced
+featured: true
 hook: "Every cell of a banana, a strawberry and your own cheek carries a full set of instructions, written in a molecule called DNA. One strand is far too thin to see under any school microscope. Yet by the end of the first session, you'll be holding a white clump of it on a stick. How can something invisible become something you can pick up?"
 goal: "Extract DNA from fruit and work out what each step of the method does, build a DNA model and use base pairing, predict inheritance with Punnett squares and test the predictions, and run a gel electrophoresis 'fingerprint' to solve a mock case."
 whatYouBuild: "A tube of your own extracted DNA, a working double-helix model with a coded message, a probability experiment on inheritance, and a home-made gel electrophoresis rig (agar gel, baking-soda buffer and batteries) that separates coloured dyes in a mock forensic case."

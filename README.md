@@ -37,14 +37,15 @@ Content lives in `content/` as Markdown with YAML frontmatter. See `content/READ
 | Route | What it does |
 |---|---|
 | `/` | Hasesa home: the thesis, why now, what we're exploring (each question marked *testing* or *open*), how we work, our first program |
-| `/academy` | Academy page: the tuning dial (stations laid out by level, beginner at the low end), the modules grouped by level, a sample problem to solve, how a module works (with the Dewey quote), for parents, pilot partners, sign-up |
+| `/academy` | Academy page: a finder (search and a tile for each level), a short preview of each level's modules, a sample problem to solve, how a module works (with the Dewey quote), for parents, pilot partners, sign-up |
 | `/login`, `/signup` | Google sign-in (the first sign-in creates the account) |
-| `/modules` | Module catalogue (public), grouped by level |
+| `/modules` | Module catalogue (public): search and filters for level, subject and length, kept in the URL |
 | `/modules/[id]` | Module page: the story (mystery, goal, build, trailer), steps, theory with curriculum tags, how you finish, materials and safety. An action panel beside it (sign up, start, continue, certificate) stays in view on desktop; visitors get a sign-up bar on phones. Returning students open on "Pick up where you left off" |
 | `/modules/[id]/[step]` | A step: instructions, its concept units, and the workbench panel (lab notebook + assistant) |
 | `/modules/[id]/guide` | The guide's version (guides only) |
+| `/guide/modules` | Every guide's version, searchable (guides only) |
 | `/concepts/[id]` | Concept unit: theory, practice problems, test-out |
-| `/dashboard` | Student: where you stopped, guide feedback, assigned units, certificates |
+| `/dashboard` | Student: where you stopped, guide feedback, assigned units, certificates, suggested modules |
 | `/account` | Google profile and enrolment status |
 | `/guide`, `/guide/students/[id]` | Guide: every student's progress, notes and answers; feedback, assignments, flags, sign-off |
 | `/certificates/[code]` | Public printable certificate |

@@ -56,7 +56,7 @@ The theory, in Markdown. Use $...$ for maths, e.g. $T = \frac{1}{f}$.
 
 ## Module: `modules/<id>/module.md`
 
-`level` is how much a module asks of a student, by skill rather than age: **beginner** (kitchen-table materials, simple measuring and arithmetic), **intermediate** (longer builds, formulas to rearrange, data to graph) or **advanced** (electronics, heat or stronger chemicals with a guide, more independent work). Modules are listed easiest first, and each level has its own stretch of the tuning dial. `hours` can be anything from 1 to 40; the steps' minutes must add up to within 25% of it.
+`level` is how much a module asks of a student, by skill rather than age: **beginner** (kitchen-table materials, simple measuring and arithmetic), **intermediate** (longer builds, formulas to rearrange, data to graph) or **advanced** (electronics, heat or stronger chemicals with a guide, more independent work). Modules are listed easiest first. Set `featured: true` (optional) to show a module in the Academy page's short preview of its level; without it, the first modules of each level are shown. `hours` can be anything from 1 to 40; the steps' minutes must add up to within 25% of it.
 
 ```yaml
 ---
