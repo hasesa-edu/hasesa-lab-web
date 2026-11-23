@@ -21,6 +21,10 @@ export type CatalogueItem = {
   hours: number;
   stepCount: number;
   featured: boolean;
+  /** Where Start takes a student. */
+  firstStepId: string;
+  /** The free public unit, for visitors. */
+  sampleId: string;
 };
 
 export function catalogueItem(m: ModuleSummary): CatalogueItem {
@@ -34,6 +38,8 @@ export function catalogueItem(m: ModuleSummary): CatalogueItem {
     hours: m.hours,
     stepCount: m.stepCount,
     featured: m.featured,
+    firstStepId: m.steps[0]?.id ?? "",
+    sampleId: m.publicSample.id,
   };
 }
 
@@ -130,4 +136,60 @@ export function suggestModules<T extends CatalogueItem>(items: T[], status: Reco
     .sort((a, b) => levelOrder(a.m.level) - levelOrder(b.m.level) || overlap(b.m) - overlap(a.m) || Number(b.m.featured) - Number(a.m.featured) || a.i - b.i)
     .slice(0, count)
     .map(({ m }) => m);
+}
+
+/** Catalogue sort orders. "suggested" is easiest first, featured first within a level. */
+export const SORTS = { suggested: "Suggested", short: "Shortest first", az: "A–Z" } as const;
+export type Sort = keyof typeof SORTS;
+
+export function parseSort(params: Params): Sort {
+  return oneOf(first(params.sort), Object.keys(SORTS) as Sort[]) ?? "suggested";
+}
+
+export function sortModules<T extends CatalogueItem>(items: T[], sort: Sort): T[] {
+  const rank = (l: Level) => LEVEL_ORDER.indexOf(l);
+  const indexed = items.map((m, i) => ({ m, i }));
+  const by: Record<Sort, (a: { m: T; i: number }, b: { m: T; i: number }) => number> = {
+    suggested: (a, b) => rank(a.m.level) - rank(b.m.level) || Number(b.m.featured) - Number(a.m.featured) || a.i - b.i,
+    short: (a, b) => a.m.hours - b.m.hours || rank(a.m.level) - rank(b.m.level) || a.i - b.i,
+    az: (a, b) => a.m.title.localeCompare(b.m.title),
+  };
+  return indexed.sort(by[sort]).map(({ m }) => m);
+}
+
+/** The catalogue's full query string: filters plus a sort other than the default. */
+export function catalogueQuery(f: Filters, sort: Sort): string {
+  const q = filtersQuery(f);
+  if (sort === "suggested") return q;
+  return `${q ? `${q}&` : "?"}sort=${sort}`;
+}
+
+/** Where a viewer stands with a module, for a card's button. */
+export type CardState = {
+  status: Status;
+  stepsDone: number;
+  stepsTotal: number;
+  nextStepId: string | null;
+  certificateCode: string | null;
+};
+
+/** Who is looking: a visitor, signed in without full access, or able to start modules. */
+export type Viewer = "visitor" | "limited" | "full";
+
+/** Generated cover designs. A module always gets the same one. */
+export const COVER_PATTERNS = ["rings", "waves", "dots", "rays"] as const;
+export type CoverPattern = (typeof COVER_PATTERNS)[number];
+
+/** A small stable hash of a module id (FNV-1a). */
+export function hashId(id: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < id.length; i++) {
+    h ^= id.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+export function coverPattern(id: string): CoverPattern {
+  return COVER_PATTERNS[hashId(id) % COVER_PATTERNS.length];
 }

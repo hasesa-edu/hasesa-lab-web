@@ -3,6 +3,7 @@
 
 import type { Module } from "@/lib/content/types";
 import { moduleUnits } from "@/lib/content/load";
+import type { CardState } from "@/lib/catalogue";
 
 type EnrollmentLike = { moduleId: string; status: "active" | "dropped" | "completed"; updatedAt: Date; flagged: boolean; flagNote: string | null };
 type StepLike = { moduleId: string; stepId: string; done: boolean; notes: string | null; updatedAt: Date };
@@ -84,4 +85,15 @@ export const INACTIVE_DAYS = 7;
 
 export function isInactive(last: Date | null, now = new Date()): boolean {
   return !!last && now.getTime() - last.getTime() > INACTIVE_DAYS * 86_400_000;
+}
+
+/** Each module's card state (status, progress, where to continue), for the module cards. */
+export function cardStates(modules: Module[], state: StateLike | null | undefined): Record<string, CardState> {
+  const out: Record<string, CardState> = {};
+  if (!state) return out;
+  for (const m of modules) {
+    const p = moduleProgress(m, state);
+    out[m.id] = { status: p.status, stepsDone: p.stepsDone, stepsTotal: p.stepsTotal, nextStepId: p.nextStep?.id ?? null, certificateCode: p.certificateCode };
+  }
+  return out;
 }

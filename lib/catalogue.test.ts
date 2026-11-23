@@ -1,5 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { type CatalogueItem, NO_FILTERS, filterModules, filtersQuery, mysteryOf, parseFilters, previewModules, suggestModules } from "./catalogue";
+import {
+  COVER_PATTERNS,
+  type CatalogueItem,
+  NO_FILTERS,
+  catalogueQuery,
+  coverPattern,
+  filterModules,
+  filtersQuery,
+  mysteryOf,
+  parseFilters,
+  parseSort,
+  previewModules,
+  sortModules,
+  suggestModules,
+} from "./catalogue";
 import { loadContent } from "./content/load";
 
 const item = (id: string, level: CatalogueItem["level"], disciplines: CatalogueItem["disciplines"], hours = 10, featured = false): CatalogueItem => ({
@@ -12,6 +26,8 @@ const item = (id: string, level: CatalogueItem["level"], disciplines: CatalogueI
   hours,
   stepCount: 7,
   featured,
+  firstStepId: "01-hook",
+  sampleId: "sample",
 });
 
 const items = [
@@ -84,5 +100,33 @@ describe("suggestModules", () => {
 describe("content", () => {
   it("finds every module's mystery in its hook", () => {
     for (const m of loadContent().modules) expect(mysteryOf(m), m.id).toMatch(/\?$/);
+  });
+});
+
+describe("sorting", () => {
+  it("reads the sort from the URL, defaulting to suggested", () => {
+    expect(parseSort({ sort: "az" })).toBe("az");
+    expect(parseSort({ sort: "newest" })).toBe("suggested");
+    expect(parseSort({})).toBe("suggested");
+  });
+
+  it("orders by level and featured, by length, or by title", () => {
+    expect(ids(sortModules(items, "suggested"))).toEqual(["rocket", "water", "seeds", "radio", "injera", "wind", "dna"]);
+    expect(ids(sortModules(items, "short"))).toEqual(["rocket", "water", "seeds", "injera", "radio", "dna", "wind"]);
+    expect(ids(sortModules(items, "az"))).toEqual(["dna", "injera", "radio", "rocket", "seeds", "water", "wind"]);
+  });
+
+  it("adds a sort to the query only when it isn't the default", () => {
+    expect(catalogueQuery({ ...NO_FILTERS, level: "beginner" }, "suggested")).toBe("?level=beginner");
+    expect(catalogueQuery({ ...NO_FILTERS, level: "beginner" }, "short")).toBe("?level=beginner&sort=short");
+    expect(catalogueQuery(NO_FILTERS, "az")).toBe("?sort=az");
+  });
+});
+
+describe("covers", () => {
+  it("gives each module the same cover every time, and uses every design", () => {
+    const content = loadContent().modules;
+    for (const m of content) expect(coverPattern(m.id)).toBe(coverPattern(m.id));
+    expect(new Set(content.map((m) => coverPattern(m.id))).size).toBe(COVER_PATTERNS.length);
   });
 });

@@ -1,147 +1,224 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { SearchIcon, XIcon } from "lucide-react";
-import { type CatalogueItem, type Filters, LENGTHS, type Length, NO_FILTERS, filterModules, filtersQuery, isFiltered } from "@/lib/catalogue";
+import { SlidersHorizontal, XIcon } from "lucide-react";
+import {
+  type CardState,
+  type CatalogueItem,
+  type Filters,
+  LENGTHS,
+  type Length,
+  NO_FILTERS,
+  SORTS,
+  type Sort,
+  type Viewer,
+  catalogueQuery,
+  filterModules,
+  isFiltered,
+  sortModules,
+} from "@/lib/catalogue";
 import type { Discipline, Level } from "@/lib/content/types";
 import { DISCIPLINES, LEVELS, LEVEL_ORDER } from "@/lib/disciplines";
 import { cn } from "@/lib/utils";
-import { LevelHeading, ModuleRows, type RowProgress } from "./ModuleRows";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { CardGrid, ModuleCard } from "./ModuleCard";
 
-/** How many modules each level shows before "Show all". */
-const PER_LEVEL = 6;
+/** Cards shown at first, and added by each "Show more". */
+const PAGE = 12;
+
+type Facet = "level" | "subject" | "length";
+const FACETS: { key: Facet; label: string; options: { value: string; label: string }[] }[] = [
+  { key: "level", label: "Level", options: LEVEL_ORDER.map((l) => ({ value: l, label: LEVELS[l].label })) },
+  { key: "subject", label: "Subject", options: (Object.keys(DISCIPLINES) as Discipline[]).map((d) => ({ value: d, label: DISCIPLINES[d].label })) },
+  { key: "length", label: "Length", options: (Object.keys(LENGTHS) as Length[]).map((l) => ({ value: l, label: LENGTHS[l].label })) },
+];
 
 /**
- * The module catalogue: search, filter chips and the results. Filters live in
- * the URL (`?q=&level=&subject=&length=`) so they can be linked and shared.
- * With no filters, modules are grouped by level and each level is trimmed to
- * a few; with any filter, matches are listed together, easiest first.
+ * The catalogue: filters (a sidebar on desktop, a sheet on phones), sort, and
+ * the matching modules as cards. Search comes from the header (`?q=`). Every
+ * choice is kept in the URL, so a filtered view can be linked and shared.
  */
-export function Catalogue({ items, progress, initial }: { items: CatalogueItem[]; progress?: Record<string, RowProgress>; initial: Filters }) {
+export function Catalogue({
+  items,
+  states,
+  viewer,
+  initial,
+  initialSort,
+}: {
+  items: CatalogueItem[];
+  states: Record<string, CardState>;
+  viewer: Viewer;
+  initial: Filters;
+  initialSort: Sort;
+}) {
   const [f, setF] = useState<Filters>(initial);
-  const [open, setOpen] = useState<Partial<Record<Level, boolean>>>({});
-  const results = useMemo(() => filterModules(items, f), [items, f]);
-  const filtered = isFiltered(f);
+  const [sort, setSort] = useState<Sort>(initialSort);
+  const [shown, setShown] = useState(PAGE);
+  const [sheet, setSheet] = useState(false);
 
-  // Keep the address bar in step, without a navigation or a history entry per keystroke.
+  const results = useMemo(() => sortModules(filterModules(items, f), sort), [items, f, sort]);
+  const active = FACETS.filter(({ key }) => f[key]).length + (f.q.trim() ? 1 : 0);
+
+  // Keep the address bar in step, without a navigation or a history entry per click.
   useEffect(() => {
-    const url = `${window.location.pathname}${filtersQuery(f)}`;
+    const url = `${window.location.pathname}${catalogueQuery(f, sort)}`;
     if (url !== `${window.location.pathname}${window.location.search}`) window.history.replaceState(window.history.state, "", url);
-  }, [f]);
+  }, [f, sort]);
 
-  // A chip toggles its value on and off.
-  const set = (k: "level" | "subject" | "length", v: string) => setF((prev) => ({ ...prev, [k]: prev[k] === v ? null : v }) as Filters);
+  const update = (next: Filters) => {
+    setF(next);
+    setShown(PAGE);
+  };
+  const toggle = (k: Facet, v: string) => update({ ...f, [k]: f[k] === v ? null : v } as Filters);
+  /** How many modules an option would show, given the other filters. */
+  const count = (k: Facet, v: string) => filterModules(items, { ...f, [k]: v } as Filters).length;
 
-  return (
-    <div>
-      <div className="space-y-4">
-        <label className="relative block max-w-xl">
-          <span className="sr-only">Search modules</span>
-          <SearchIcon aria-hidden className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" />
-          <input
-            type="search"
-            value={f.q}
-            onChange={(e) => setF((prev) => ({ ...prev, q: e.target.value }))}
-            placeholder="Search: rocket, coffee, electricity, DNA…"
-            className="h-12 w-full rounded-lg border border-input bg-card pr-3 pl-10 text-base outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-          />
-        </label>
-
-        <ChipGroup label="Level">
-          {LEVEL_ORDER.map((l) => (
-            <Chip key={l} on={f.level === l} onClick={() => set("level", l)}>
-              {LEVELS[l].label}
-            </Chip>
-          ))}
-        </ChipGroup>
-        <ChipGroup label="Subject">
-          {(Object.keys(DISCIPLINES) as Discipline[]).map((d) => (
-            <Chip key={d} on={f.subject === d} onClick={() => set("subject", d)}>
-              {DISCIPLINES[d].label}
-            </Chip>
-          ))}
-        </ChipGroup>
-        <ChipGroup label="Length">
-          {(Object.keys(LENGTHS) as Length[]).map((l) => (
-            <Chip key={l} on={f.length === l} onClick={() => set("length", l)}>
-              {LENGTHS[l].label}
-            </Chip>
-          ))}
-        </ChipGroup>
-      </div>
-
-      <div className="mt-6 flex min-h-9 flex-wrap items-center justify-between gap-3 border-b border-border pb-4">
-        <p className="font-mono text-xs tracking-[0.06em] text-muted-foreground uppercase" aria-live="polite">
-          {filtered ? `${results.length} of ${items.length} modules` : `${items.length} modules`}
-        </p>
-        {filtered && (
-          <button
-            type="button"
-            onClick={() => setF(NO_FILTERS)}
-            className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-sm font-medium text-primary hover:bg-muted"
-          >
-            <XIcon aria-hidden className="size-4" /> Clear filters
-          </button>
-        )}
-      </div>
-
-      {results.length === 0 ? (
-        <div className="py-16 text-center">
-          <p className="text-lg font-semibold">No modules match.</p>
-          <p className="mt-1 text-muted-foreground">Try fewer words, or clear a filter.</p>
-        </div>
-      ) : filtered ? (
-        <ModuleRows items={results} progress={progress} className="border-t-0" />
-      ) : (
-        <div className="mt-10 space-y-14">
-          {LEVEL_ORDER.map((level) => {
-            const here = results.filter((m) => m.level === level);
-            if (!here.length) return null;
-            const shown = open[level] ? here : here.slice(0, PER_LEVEL);
-            return (
-              <section key={level} aria-labelledby={`level-${level}`}>
-                <LevelHeading level={level} count={here.length} />
-                <ModuleRows items={shown} progress={progress} showLevel={false} />
-                {here.length > PER_LEVEL && (
+  const panel = (
+    <div className="space-y-7">
+      {FACETS.map((facet) => (
+        <fieldset key={facet.key}>
+          <legend className="font-mono text-[11px] tracking-[0.08em] text-muted-foreground uppercase">{facet.label}</legend>
+          <ul className="mt-2 space-y-0.5">
+            {facet.options.map((o) => {
+              const on = f[facet.key] === o.value;
+              const n = count(facet.key, o.value);
+              return (
+                <li key={o.value}>
                   <button
                     type="button"
-                    aria-expanded={!!open[level]}
-                    onClick={() => setOpen((o) => ({ ...o, [level]: !o[level] }))}
-                    className="mt-4 rounded-md px-2 py-1 text-sm font-medium text-primary hover:bg-muted"
+                    aria-pressed={on}
+                    disabled={!n && !on}
+                    onClick={() => toggle(facet.key, o.value)}
+                    className={cn(
+                      "flex min-h-9 w-full items-center gap-2.5 rounded-md px-2 text-left text-sm transition-colors hover:bg-muted disabled:pointer-events-none disabled:opacity-40",
+                      on && "font-semibold"
+                    )}
                   >
-                    {open[level] ? `Show fewer` : `Show all ${here.length} ${LEVELS[level].label.toLowerCase()} modules`}
+                    <span
+                      aria-hidden
+                      className={cn("inline-flex size-4 shrink-0 items-center justify-center rounded-full border", on ? "border-foreground" : "border-input")}
+                    >
+                      {on && <span className="size-2 rounded-full bg-foreground" />}
+                    </span>
+                    <span className="flex-1">{o.label}</span>
+                    <span className="font-mono text-xs text-muted-foreground tabular-nums">{n}</span>
                   </button>
-                )}
-              </section>
-            );
-          })}
+                </li>
+              );
+            })}
+          </ul>
+        </fieldset>
+      ))}
+    </div>
+  );
+
+  const chips: { key: string; label: string; clear: () => void }[] = [
+    ...(f.q.trim() ? [{ key: "q", label: `“${f.q.trim()}”`, clear: () => update({ ...f, q: "" }) }] : []),
+    ...(f.level ? [{ key: "level", label: LEVELS[f.level as Level].label, clear: () => update({ ...f, level: null }) }] : []),
+    ...(f.subject ? [{ key: "subject", label: DISCIPLINES[f.subject].label, clear: () => update({ ...f, subject: null }) }] : []),
+    ...(f.length ? [{ key: "length", label: LENGTHS[f.length].label, clear: () => update({ ...f, length: null }) }] : []),
+  ];
+
+  return (
+    <div className="grid gap-8 md:grid-cols-[13rem_minmax(0,1fr)] lg:gap-10">
+      <aside aria-label="Filters" className="hidden md:block">
+        <div className="sticky top-24">{panel}</div>
+      </aside>
+
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p className="text-sm text-muted-foreground" aria-live="polite">
+            <span className="font-semibold text-foreground tabular-nums">{results.length}</span>{" "}
+            {results.length === 1 ? "module" : "modules"}
+            {isFiltered(f) && ` of ${items.length}`}
+          </p>
+          <div className="flex items-center gap-2">
+            <Sheet open={sheet} onOpenChange={setSheet}>
+              <SheetTrigger asChild>
+                <Button variant="outline" className="md:hidden">
+                  <SlidersHorizontal aria-hidden /> Filters{active ? ` (${active})` : ""}
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="bottom" className="max-h-[85dvh] overflow-y-auto rounded-t-2xl bg-background px-5 pt-6 pb-5">
+                <SheetHeader className="p-0">
+                  <SheetTitle>Filters</SheetTitle>
+                  <SheetDescription className="sr-only">Narrow the modules by level, subject and length</SheetDescription>
+                </SheetHeader>
+                {panel}
+                <div className="sticky bottom-0 flex gap-2 bg-background pt-3">
+                  <Button variant="outline" className="flex-1" onClick={() => update({ ...NO_FILTERS, q: f.q })}>
+                    Reset
+                  </Button>
+                  <Button variant="ink" className="flex-1" onClick={() => setSheet(false)}>
+                    Show {results.length} {results.length === 1 ? "module" : "modules"}
+                  </Button>
+                </div>
+              </SheetContent>
+            </Sheet>
+            <label className="flex items-center gap-2 text-sm">
+              <span className="text-muted-foreground">Sort</span>
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value as Sort)}
+                className="h-10 rounded-lg border border-input bg-card px-2.5 text-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+              >
+                {(Object.keys(SORTS) as Sort[]).map((s) => (
+                  <option key={s} value={s}>
+                    {SORTS[s]}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
         </div>
-      )}
-    </div>
-  );
-}
 
-function ChipGroup({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div role="group" aria-label={label} className="flex flex-wrap items-center gap-2">
-      <span className="w-16 shrink-0 font-mono text-[11px] tracking-[0.08em] text-muted-foreground uppercase">{label}</span>
-      {children}
-    </div>
-  );
-}
+        {chips.length > 0 && (
+          <ul className="mt-4 flex flex-wrap items-center gap-2">
+            {chips.map((c) => (
+              <li key={c.key}>
+                <button
+                  type="button"
+                  onClick={c.clear}
+                  aria-label={`Remove filter ${c.label}`}
+                  className="inline-flex min-h-8 items-center gap-1.5 rounded-full bg-foreground py-1 pr-2.5 pl-3 text-sm text-background"
+                >
+                  {c.label} <XIcon aria-hidden className="size-3.5" />
+                </button>
+              </li>
+            ))}
+            <li>
+              <button type="button" onClick={() => update(NO_FILTERS)} className="rounded-md px-2 py-1 text-sm font-medium text-primary hover:bg-muted">
+                Clear all
+              </button>
+            </li>
+          </ul>
+        )}
 
-function Chip({ on, onClick, children }: { on: boolean; onClick: () => void; children: React.ReactNode }) {
-  return (
-    <button
-      type="button"
-      aria-pressed={on}
-      onClick={onClick}
-      className={cn(
-        "min-h-9 rounded-full border px-3.5 text-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-        on ? "border-foreground bg-foreground text-background" : "border-border bg-card text-foreground hover:border-foreground/40"
-      )}
-    >
-      {children}
-    </button>
+        {results.length === 0 ? (
+          <div className="mt-10 rounded-xl border border-dashed border-border py-16 text-center">
+            <p className="text-lg font-semibold">No modules match.</p>
+            <p className="mt-1 text-muted-foreground">Try other words, or remove a filter.</p>
+          </div>
+        ) : (
+          <>
+            <CardGrid className="mt-6">
+              {results.slice(0, shown).map((m) => (
+                <li key={m.id}>
+                  <ModuleCard item={m} state={states[m.id]} viewer={viewer} />
+                </li>
+              ))}
+            </CardGrid>
+            {results.length > shown && (
+              <div className="mt-8 text-center">
+                <Button variant="outline" size="lg" onClick={() => setShown((n) => n + PAGE)}>
+                  Show more ({results.length - shown} left)
+                </Button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
   );
 }

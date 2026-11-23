@@ -14,7 +14,7 @@ export const t: Dict = {
   "nav.academy": { en: "Academy" },
   "nav.experiments": { en: "Modules" },
   "nav.assistant": { en: "Lab Assistant" },
-  "nav.dashboard": { en: "My dashboard" },
+  "nav.dashboard": { en: "My learning" },
   "nav.guide": { en: "Student tracker" },
   "nav.signin": { en: "Continue with Google" },
   "nav.signup": { en: "Get started" },
@@ -134,12 +134,14 @@ export const t: Dict = {
   "showcase.allLevel": { en: "All {n} {level} modules" },
 
   // The Academy hero's finder
-  "finder.search": { en: "Search modules" },
-  "finder.placeholder": { en: "Try rocket, coffee, electricity, DNA…" },
-  "finder.go": { en: "Search" },
-  "finder.module": { en: "module" },
+    "finder.module": { en: "module" },
   "finder.modules": { en: "modules" },
   "finder.browse": { en: "Browse" },
+  "finder.popular": { en: "Popular:" },
+  "rows.start": { en: "Start here" },
+  "rows.start.sub": { en: "Beginner modules: kitchen-table materials and simple maths." },
+  "rows.featured": { en: "Featured" },
+  "rows.levels": { en: "Browse by level" },
 
 
   // For parents

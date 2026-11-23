@@ -1,25 +1,33 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowRight, Award, BookOpen, ChevronRight, ClipboardList, Compass, GraduationCap, MessageSquareQuote, RotateCcw } from "lucide-react";
+import { BookOpen, ClipboardList, GraduationCap, MessageSquareQuote } from "lucide-react";
 import { getConcept, getModule, getModules, summarize } from "@/lib/content";
 import { getAccess, hasFullAccess } from "@/lib/access";
 import { getStudentState } from "@/lib/progress";
 import { getUserDTO } from "@/lib/auth/users";
-import { isUnitDone, moduleProgress } from "@/lib/summary";
+import { cardStates, isUnitDone, moduleProgress } from "@/lib/summary";
 import { formatDate } from "@/lib/format";
 import { BRAND } from "@/lib/brand";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
-import { ModuleRows } from "@/components/module/ModuleRows";
-import { catalogueItem, suggestModules } from "@/lib/catalogue";
+import { CardGrid, ModuleCard } from "@/components/module/ModuleCard";
+import { CardRow } from "@/components/module/CardRow";
+import { type Viewer, catalogueItem, suggestModules } from "@/lib/catalogue";
 import { FeedbackItem } from "@/components/module/FeedbackItem";
-import { EnrolCard, ProgressBar, SectionTitle, UnitStatusPill } from "@/components/module/ui";
+import { EnrolCard, SectionTitle, UnitStatusPill } from "@/components/module/ui";
 
-export const metadata: Metadata = { title: `My dashboard · ${BRAND}`, robots: { index: false } };
+export const metadata: Metadata = { title: `My learning · ${BRAND}`, robots: { index: false } };
 export const dynamic = "force-dynamic";
 
-export default async function DashboardPage() {
+type Tab = "in-progress" | "completed" | "dropped";
+const EMPTY: Record<Tab, string> = {
+  "in-progress": "Nothing in progress. Pick a module below to start.",
+  completed: "No modules signed off yet. Your certificates will appear here.",
+  dropped: "No dropped modules.",
+};
+
+export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
   const access = await getAccess();
   if (!access.userId) redirect("/login?next=/dashboard");
   const [user, state] = await Promise.all([getUserDTO(access.userId), getStudentState(access.userId)]);
@@ -30,11 +38,21 @@ export default async function DashboardPage() {
   const active = progress.filter((x) => x.p.status === "active").sort((a, b) => (b.p.lastActivity?.getTime() ?? 0) - (a.p.lastActivity?.getTime() ?? 0));
   const completed = progress.filter((x) => x.p.status === "completed");
   const dropped = progress.filter((x) => x.p.status === "dropped");
-  const fresh = progress.filter((x) => x.p.status === "not-started");
-  const suggestions = suggestModules(
-    modules.map((m) => catalogueItem(summarize(m))),
-    Object.fromEntries(progress.map(({ m, p }) => [m.id, p.status]))
-  );
+  const items = modules.map((m) => catalogueItem(summarize(m)));
+  const byId = new Map(items.map((i) => [i.id, i]));
+  const states = cardStates(modules, state);
+  const viewer: Viewer = hasFullAccess(access) ? "full" : "limited";
+  const suggestions = suggestModules(items, Object.fromEntries(progress.map(({ m, p }) => [m.id, p.status])), 8);
+
+  // My modules, in tabs. The tab lives in the URL so the page renders on the server.
+  const tabs: { key: Tab; label: string; items: typeof items }[] = [
+    { key: "in-progress", label: "In progress", items: active.map(({ m }) => byId.get(m.id)!) },
+    { key: "completed", label: "Completed", items: completed.map(({ m }) => byId.get(m.id)!) },
+    { key: "dropped", label: "Dropped", items: dropped.map(({ m }) => byId.get(m.id)!) },
+  ];
+  const asked = (await searchParams).tab;
+  const tab: Tab = tabs.find((t) => t.key === asked)?.key ?? tabs.find((t) => t.items.length)?.key ?? "in-progress";
+  const current = tabs.find((t) => t.key === tab)!.items;
   const unitStatus = new Map(state.units.map((u) => [u.unitId, u.status]));
   const assignments = state.assignments.filter((a) => getConcept(a.unitId));
   const openAssignments = assignments.filter((a) => !isUnitDone(unitStatus.get(a.unitId)));
@@ -44,8 +62,8 @@ export default async function DashboardPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="My dashboard"
-        title={`Hello, ${firstName}`}
+        eyebrow={`Hello, ${firstName}`}
+        title="My learning"
         description={
           access.level === "guide"
             ? "You're the Academy's guide."
@@ -111,88 +129,55 @@ export default async function DashboardPage() {
           </section>
         )}
 
-        {active.length > 0 && (
-          <section className="mb-12">
-            <SectionTitle icon={Compass}>Pick up where you stopped</SectionTitle>
-            <ul className="mt-4 space-y-3">
-              {active.map(({ m, p }) => (
-                <li key={m.id} className="rounded-lg bg-card p-5 shadow-card ring-1 ring-border">
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <Link href={`/modules/${m.id}`} className="text-xl font-extrabold tracking-tight text-foreground hover:text-primary-strong">
-                        {m.title}
-                      </Link>
-                      <p className="text-sm text-muted-foreground">
-                        {p.stepsDone}/{p.stepsTotal} steps · {p.unitsDone}/{p.unitsTotal} concept units
-                        {p.lastActivity ? ` · last active ${formatDate(p.lastActivity)}` : ""}
-                      </p>
-                    </div>
-                    {p.nextStep ? (
-                      <Button asChild>
-                        <Link href={`/modules/${m.id}/${p.nextStep.id}`}>
-                          Next: {p.nextStep.title} <ChevronRight aria-hidden />
-                        </Link>
-                      </Button>
-                    ) : (
-                      <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">All steps done. Ask your guide to sign you off.</span>
-                    )}
-                  </div>
-                  <ProgressBar pct={p.stepsTotal ? Math.round((p.stepsDone / p.stepsTotal) * 100) : 0} className="mt-4" />
-                </li>
+        {tabs.some((t) => t.items.length) && (
+          <section className="mb-14">
+            <nav aria-label="My modules" className="flex gap-1 overflow-x-auto border-b border-border [scrollbar-width:none]">
+              {tabs.map((t) => (
+                <Link
+                  key={t.key}
+                  href={`/dashboard?tab=${t.key}`}
+                  scroll={false}
+                  aria-current={tab === t.key ? "page" : undefined}
+                  className={
+                    "relative inline-flex min-h-11 shrink-0 items-center gap-2 px-3 text-sm font-medium transition-colors after:absolute after:inset-x-3 after:bottom-0 after:h-0.5 " +
+                    (tab === t.key ? "text-foreground after:bg-foreground" : "text-muted-foreground hover:text-foreground")
+                  }
+                >
+                  {t.label}
+                  <span className="rounded-full bg-muted px-1.5 font-mono text-[11px] tabular-nums">{t.items.length}</span>
+                </Link>
               ))}
-            </ul>
+            </nav>
+            {current.length ? (
+              <CardGrid className="mt-6">
+                {current.map((m) => (
+                  <li key={m.id}>
+                    <ModuleCard item={m} state={states[m.id]} viewer={viewer} />
+                  </li>
+                ))}
+              </CardGrid>
+            ) : (
+              <p className="mt-6 text-muted-foreground">{EMPTY[tab]}</p>
+            )}
           </section>
         )}
 
-        {completed.length > 0 && (
-          <section className="mb-12">
-            <SectionTitle icon={Award}>Certificates</SectionTitle>
-            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-              {completed.map(({ m, p }) => (
-                <li key={m.id}>
-                  <Link
-                    href={`/certificates/${p.certificateCode}`}
-                    className="flex items-center gap-3 rounded-lg bg-emerald-50 p-4 ring-1 ring-emerald-300 transition hover:ring-emerald-500 dark:bg-emerald-950/40 dark:ring-emerald-800"
-                  >
-                    <Award aria-hidden className="size-6 shrink-0 text-emerald-600" />
-                    <span className="flex-1 font-semibold text-foreground">{m.title}</span>
-                    <ChevronRight aria-hidden className="size-4 text-emerald-600" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-
-        {dropped.length > 0 && (
-          <section className="mb-12">
-            <SectionTitle icon={RotateCcw}>Dropped</SectionTitle>
-            <p className="mt-2 text-sm text-muted-foreground">Your notes and progress are kept. Restart any time.</p>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {dropped.map(({ m }) => (
-                <li key={m.id}>
-                  <Button asChild variant="outline">
-                    <Link href={`/modules/${m.id}`}>{m.title}</Link>
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-
-        {fresh.length > 0 && (
-          <section>
-            <SectionTitle icon={Compass}>{active.length || completed.length ? "Start another module" : "Choose your first module"}</SectionTitle>
-            <p className="mt-2 text-sm text-muted-foreground">
-              {active.length || completed.length
-                ? "Suggested from what you've done so far. You can start any module."
-                : "A few beginner modules to start with. You can start any module."}
-            </p>
-            <ModuleRows items={suggestions} className="mt-5" />
-            <Link href="/modules" className="mt-5 inline-flex items-center gap-1.5 font-medium text-primary">
-              Browse all {modules.length} modules <ArrowRight aria-hidden className="size-4" />
-            </Link>
-          </section>
+        {suggestions.length > 0 && (
+          <CardRow
+            title={active.length || completed.length ? "Recommended for you" : "Start here"}
+            sub={
+              active.length || completed.length
+                ? "Picked from your level and the subjects you've tried. You can start any module."
+                : "A few beginner modules to start with. You can start any module."
+            }
+            seeAll={{ href: "/modules", label: `Browse all ${modules.length}` }}
+          >
+            {suggestions.map((m) => (
+              <li key={m.id}>
+                <ModuleCard item={m} state={states[m.id]} viewer={viewer} />
+              </li>
+            ))}
+          </CardRow>
         )}
       </div>
     </div>
