@@ -197,6 +197,10 @@ export const t: Dict = {
     en: "Our goal is an education system that schools in Ethiopia and beyond can use. If you run a school, teach, or want to support this work, we'd like to hear from you.",
   },
   "footer.contact.label": { en: "Get in touch" },
+  "footer.explore.label": { en: "Explore" },
+  "footer.explore.home": { en: "Hasesa" },
+  "footer.explore.academy": { en: "The Academy" },
+  "footer.explore.modules": { en: "Modules" },
   "footer.terms": { en: "Terms" },
   "footer.privacy": { en: "Privacy" },
 };

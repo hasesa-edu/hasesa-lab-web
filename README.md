@@ -55,7 +55,7 @@ Retired routes redirect (see `next.config.js`): `/experiments`, `/lessons` → `
 ## The site
 
 - **Navigation:** visitors see **Academy**; signed-in students see **Modules** and **My dashboard**, and guides also see **Student tracker**.
-- **Footer:** on `/` and `/academy` it carries a short contact note and a "Get in touch" column: the email (`NEXT_PUBLIC_CONTACT_EMAIL`) and any social links listed in `SOCIAL_LINKS` in `lib/brand.ts`. Other pages get the plain footer bar.
+- **Footer:** on `/` and `/academy`, a full footer on one grid: the logo with a short contact note, an **Explore** column (Hasesa, The Academy, Modules) and a **Get in touch** column (the email from `NEXT_PUBLIC_CONTACT_EMAIL` and any social links in `SOCIAL_LINKS` in `lib/brand.ts`), above a thin bar with ©, the motto, Terms and Privacy. Other pages get only that bar, with the logo.
 - **Copy:** all marketing and navigation text is in `lib/i18n.ts` (English only for now).
 - **Look:** clean and modern. Paper background, ink text, hairline borders and teal as the one accent; amber only for the logo's eyes and "open" tags. Geist for headings and UI, Geist Mono for labels and numbers, Atkinson Hyperlegible for lessons and the assistant, Noto Sans Ethiopic for Amharic. The tokens are in `app/globals.css`. Dark mode is off (`LIGHT_ONLY` in `components/ThemeProvider.tsx`).
 
