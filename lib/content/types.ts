@@ -91,6 +91,8 @@ export type Module = {
   signoff: SignoffItem[];
   /** Concept unit anyone can open, to try the course. */
   publicSample: string;
+  /** Shown in the Academy page's short preview of each level. */
+  featured: boolean;
   body: string;
   steps: Step[];
   /** The guide's version (guide.md). Only ever sent to guides. */
@@ -114,6 +116,7 @@ export type ModuleSummary = {
   steps: { id: string; title: string; kind: StepKind; minutes: number }[];
   curriculum: CurriculumRef[];
   publicSample: { id: string; title: string };
+  featured: boolean;
 };
 
 export type ConceptSummary = { id: string; title: string; summary: string; problemCount: number };

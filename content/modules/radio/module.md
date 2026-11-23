@@ -3,6 +3,7 @@ title: Radio
 tagline: Build a radio that needs no battery
 disciplines: [physics, mathematics, technology]
 level: intermediate
+featured: true
 hook: "The guide's radio is playing… but there's no battery, no plug and no solar panel. Where is the energy coming from?"
 goal: "Build a working crystal radio, tune in a real station, and explain how every part turns an invisible radio wave into sound you can hear."
 whatYouBuild: "A crystal radio on a wooden board: a long-wire antenna and ground, a hand-wound tuning coil, a variable capacitor, a germanium diode and a crystal earpiece. Along the way, a paper-cup speaker you can plug into your phone."

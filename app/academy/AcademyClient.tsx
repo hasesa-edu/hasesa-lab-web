@@ -7,24 +7,24 @@ import { googleSignInHref } from "@/components/GoogleButton";
 import { SUBJECT_STYLES } from "@/components/Subject";
 import type { t as Dict } from "@/lib/i18n";
 import type { ModuleSummary } from "@/lib/content/types";
-import { DISCIPLINES } from "@/lib/disciplines";
+import { DISCIPLINES, LEVELS, LEVEL_ORDER } from "@/lib/disciplines";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { TuningDial } from "../landing/TuningDial";
-import { LevelledStations } from "@/components/module/StationRows";
-import { assignStations, type Station } from "@/lib/stations";
+import { LevelHeading, ModuleRows } from "@/components/module/ModuleRows";
+import { type CatalogueItem, catalogueItem, previewModules } from "@/lib/catalogue";
 import { SolveIt, type Challenge } from "../landing/SolveIt";
 import { Partners } from "../landing/Partners";
 import { SectionLabel } from "../landing/SectionLabel";
-import { ArrowRightIcon, PlusIcon } from "lucide-react";
+import { ArrowRightIcon, PlusIcon, SearchIcon } from "lucide-react";
 import { FAQ_KEYS } from "./faq";
 
 type Key = keyof typeof Dict;
 type TR = (k: Key) => string;
 
 // The Academy's page (/academy), in the site's clean look. The hero is a
-// tuning dial, drawn as a light instrument panel, whose stations are the
-// modules; the rest of the page uses the same numbered mono labels and
+// finder (search, or start from a level) and the modules section is a short
+// preview of each level, so the page stays the same length however many
+// modules there are. The rest uses the same numbered mono labels and
 // hairlines as the Hasesa home page.
 
 export function AcademyClient({ modules, challenge }: { modules: ModuleSummary[]; challenge: Challenge | null }) {
@@ -32,13 +32,13 @@ export function AcademyClient({ modules, challenge }: { modules: ModuleSummary[]
   const { user, ready } = useUser();
   const primaryHref = user ? "/dashboard" : googleSignInHref("/modules");
   const primaryLabel = ready && user ? tr("hero.cta.dashboard") : tr("hero.cta.signup");
-  const stations = assignStations(modules);
+  const items = modules.map(catalogueItem);
   const sampleHref = modules[0] ? `/concepts/${modules[0].publicSample.id}` : "/modules";
 
   return (
     <div className="bg-background">
-      <Hero tr={tr} stations={stations} sampleHref={sampleHref} />
-      <Modules tr={tr} stations={stations} />
+      <Hero tr={tr} items={items} sampleHref={sampleHref} />
+      <Modules tr={tr} items={items} />
       {challenge && (
         <section className="border-t border-border">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:py-24">
@@ -70,10 +70,10 @@ export function AcademyClient({ modules, challenge }: { modules: ModuleSummary[]
 
 /* ─────────────────────────────  HERO  ───────────────────────────── */
 
-function Hero({ tr, stations, sampleHref }: { tr: TR; stations: Station[]; sampleHref: string }) {
-  // The panel (screen + dial) should fit on the first screen. On phones the
-  // intro and buttons move below the dial; on desktop they sit beside the
-  // headline.
+function Hero({ tr, items, sampleHref }: { tr: TR; items: CatalogueItem[]; sampleHref: string }) {
+  // The finder (search and the three levels) should fit on the first screen.
+  // On phones the intro and buttons move below it; on desktop they sit beside
+  // the headline.
   return (
     <section className="mx-auto grid max-w-6xl grid-cols-1 gap-x-10 gap-y-5 px-4 pt-10 pb-14 sm:gap-y-8 sm:pt-16 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:pb-20">
       <div>
@@ -93,18 +93,66 @@ function Hero({ tr, stations, sampleHref }: { tr: TR; stations: Station[]; sampl
           </Link>
         </div>
       </div>
-      {stations.length > 0 && (
+      {items.length > 0 && (
         <div className="order-2 min-w-0 lg:order-none lg:col-span-2 lg:mt-2">
-          <TuningDial stations={stations} />
+          <Finder tr={tr} items={items} />
         </div>
       )}
     </section>
   );
 }
 
+/** Search every module, or start from a level. Both open the catalogue, filtered. */
+function Finder({ tr, items }: { tr: TR; items: CatalogueItem[] }) {
+  return (
+    <div className="rounded-xl border border-border bg-card p-4 shadow-soft sm:p-6">
+      <form action="/modules" role="search" className="flex gap-2">
+        <label className="relative min-w-0 flex-1">
+          <span className="sr-only">{tr("finder.search")}</span>
+          <SearchIcon aria-hidden className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" />
+          <input
+            type="search"
+            name="q"
+            placeholder={tr("finder.placeholder")}
+            className="h-12 w-full rounded-lg border border-input bg-background pr-3 pl-10 text-base outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+          />
+        </label>
+        <button type="submit" className={cn(buttonVariants({ size: "lg", variant: "ink" }), "h-12")}>
+          {tr("finder.go")}
+        </button>
+      </form>
+      <ul className="mt-4 grid gap-3 sm:grid-cols-3">
+        {LEVEL_ORDER.map((level) => {
+          const n = items.filter((m) => m.level === level).length;
+          return (
+            <li key={level}>
+              <Link
+                href={`/modules?level=${level}`}
+                className="group flex h-full flex-col rounded-lg border border-border p-4 transition-colors hover:border-primary/60 focus-visible:border-primary"
+              >
+                <span className="flex items-baseline justify-between gap-3">
+                  <span className="font-mono text-xs tracking-[0.08em] uppercase">{LEVELS[level].label}</span>
+                  <span className="font-mono text-xs text-muted-foreground tabular-nums">
+                    {n} {n === 1 ? tr("finder.module") : tr("finder.modules")}
+                  </span>
+                </span>
+                <span className="mt-2 flex-1 text-sm text-muted-foreground">{LEVELS[level].blurb}</span>
+                <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                  {tr("finder.browse")} <ArrowRightIcon aria-hidden className="size-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
 /* ───────────────────────────  MODULES  ─────────────────────────── */
 
-function Modules({ tr, stations }: { tr: TR; stations: Station[] }) {
+function Modules({ tr, items }: { tr: TR; items: CatalogueItem[] }) {
+  const preview = previewModules(items);
   return (
     <section className="border-t border-border bg-card">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:py-24">
@@ -115,13 +163,30 @@ function Modules({ tr, stations }: { tr: TR; stations: Station[] }) {
             <p className="mt-3 max-w-xl text-lg text-muted-foreground">{tr("showcase.sub")}</p>
           </div>
           <Link href="/modules" className="inline-flex items-center gap-2 font-medium text-primary">
-            {tr("showcase.all")}
+            {tr("showcase.all").replace("{n}", String(items.length))}
             <ArrowRightIcon className="size-4" />
           </Link>
         </div>
 
-        <div className="mt-10">
-          <LevelledStations stations={stations} heading="h3" />
+        <div className="mt-10 space-y-12">
+          {LEVEL_ORDER.map((level) => {
+            const total = items.filter((m) => m.level === level).length;
+            const shown = preview.filter((m) => m.level === level);
+            if (!shown.length) return null;
+            return (
+              <section key={level} aria-labelledby={`level-${level}`}>
+                <LevelHeading level={level} count={total} as="h3">
+                  {total > shown.length && (
+                    <Link href={`/modules?level=${level}`} className="inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                      {tr("showcase.allLevel").replace("{n}", String(total)).replace("{level}", LEVELS[level].label.toLowerCase())}
+                      <ArrowRightIcon aria-hidden className="size-4" />
+                    </Link>
+                  )}
+                </LevelHeading>
+                <ModuleRows items={shown} showLevel={false} />
+              </section>
+            );
+          })}
         </div>
       </div>
     </section>

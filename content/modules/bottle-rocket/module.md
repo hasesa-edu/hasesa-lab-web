@@ -3,6 +3,7 @@ title: Bottle Rocket
 tagline: Launch a rocket with nothing but water and air
 disciplines: [physics, mathematics, technology]
 level: beginner
+featured: true
 hook: "A fizzy-drink bottle, a cup of water and a bicycle pump. The guide pumps, pulls a string, and the bottle shoots higher than the school building. There's no fuel and no fire. What pushed it up?"
 goal: "Build a water rocket, launch it safely, measure how high it flies, and use a fair test to find the best amount of water to put in it."
 whatYouBuild: "A water rocket from a 1.5–2 L fizzy-drink bottle with cardboard fins and a nose cone, and a clinometer made from a protractor and a straw to measure its height. The guide provides the launcher."

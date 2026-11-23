@@ -2,12 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Award, Check, ChevronRight, Lock } from "lucide-react";
-import { getConcept, getModule, getModules, moduleUnits, summarize } from "@/lib/content";
+import { getConcept, getModule, moduleUnits, summarize } from "@/lib/content";
 import type { Module } from "@/lib/content/types";
 import { getViewer } from "@/lib/viewer";
 import { hasFullAccess } from "@/lib/access";
 import { isUnitDone, moduleProgress } from "@/lib/summary";
-import { stationFor } from "@/lib/stations";
 import { DISCIPLINES, LEVELS } from "@/lib/disciplines";
 import { BRAND } from "@/lib/brand";
 import { SITE_URL, pageMeta } from "@/lib/seo";
@@ -45,7 +44,6 @@ export default async function ModulePage({ params }: Props) {
   const full = hasFullAccess(access);
   const signedIn = !!access.userId;
   const summary = summarize(m);
-  const khz = stationFor(m.id, getModules());
   const progress = state ? moduleProgress(m, state) : null;
   const unitIds = moduleUnits(m);
   const doneSteps = new Set(state?.steps.filter((s) => s.moduleId === m.id && s.done).map((s) => s.stepId));
@@ -326,7 +324,6 @@ export default async function ModulePage({ params }: Props) {
               hours={m.hours}
               steps={m.steps.length}
               units={unitIds.length}
-              khz={khz}
               status={m.status}
               full={full}
               signedIn={signedIn}
