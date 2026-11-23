@@ -11,7 +11,7 @@ import { DISCIPLINES } from "@/lib/disciplines";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { TuningDial } from "../landing/TuningDial";
-import { StationRows } from "@/components/module/StationRows";
+import { LevelledStations } from "@/components/module/StationRows";
 import { assignStations, type Station } from "@/lib/stations";
 import { SolveIt, type Challenge } from "../landing/SolveIt";
 import { Partners } from "../landing/Partners";
@@ -121,7 +121,7 @@ function Modules({ tr, stations }: { tr: TR; stations: Station[] }) {
         </div>
 
         <div className="mt-10">
-          <StationRows stations={stations} />
+          <LevelledStations stations={stations} heading="h3" />
         </div>
       </div>
     </section>

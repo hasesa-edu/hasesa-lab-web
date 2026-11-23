@@ -2,6 +2,7 @@
 title: Mind over Machine
 tagline: Control a robot claw with your muscles
 disciplines: [biology, physics, technology]
+level: advanced
 hook: "The guide clenches a fist — and a cardboard robot claw on the table snaps shut. Nobody touched it. How does a thought become a movement, and how did a machine 'hear' it?"
 goal: "Build a robot claw that opens and closes when you clench your own forearm muscles, use it to pick up an object, and explain every link in the chain from your brain to the motor."
 whatYouBuild: "A cardboard robot hand with straw-and-string tendons, pulled by a servo motor, controlled by an Arduino that reads your muscle's electrical signal through skin electrodes."

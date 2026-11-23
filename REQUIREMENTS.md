@@ -1,9 +1,11 @@
 # Hasesa Academy — Hands-on Science Modules for Ethiopian Students — Requirements
 
-**Version:** 0.7 (Draft)
+**Version:** 0.8 (Draft)
 **Date:** 2026-11-23
 **Owner:** TBD
 
+> **v0.8 change:** The Academy now has **fourteen modules**, organised into three **levels** (beginner, intermediate, advanced) by skill rather than age (FR-2a). Beginner modules are a suggested first step, not a requirement. Module lists group by level, the module page shows it, and the tuning dial lays stations out by level across the band (FR-34). Modules run 8–14 hours. The FAQ gained "Which module should my child start with?".
+>
 > **v0.7 change:** Pricing is set: a place at the Academy costs 12,000 ETB a year (hands-on sessions at partner schools in Addis Ababa), while online access stays free during the pilot (§5.6a). The Academy page gained an FAQ for parents (FR-34), and the site was made visible to search engines and AI answer engines: canonical URLs, structured data, `llms.txt`, and Google and Bing verification (FR-40).
 >
 > **v0.6 change:** The module page was reorganised around what the viewer needs next (§5.8, FR-39): an action panel, a "pick up where you left off" view for returning students, and fewer sections. The footer has a "Get in touch" column with the email and, later, social links (FR-36).
@@ -63,8 +65,11 @@ Students today rely on YouTube demos (generic, often needing lab equipment they 
 ## 4. Scope
 
 ### 4.1 In Scope (MVP)
-- Three modules: **Radio** (a radio that needs no battery), **Mind over Machine** (a robot claw controlled by muscle signals) and **Market Detective** (catching food adulteration).
-- For each module: a hook, a goal, what you build, materials, safety notes, a trailer, about 10 hours of steps and a sign-off checklist.
+- Fourteen modules in three levels:
+  - **Beginner:** Bottle Rocket, Clean Water, Market Detective, Seed Lab, Sun Oven.
+  - **Intermediate:** Bean to Cup, Injera Lab, Radio, Rift Valley Shake, Weather Station.
+  - **Advanced:** DNA Detective, Mind over Machine, Soap & Bioplastic, Wind Power.
+- For each module: a hook, a goal, what you build, materials, safety notes, an optional trailer, 8–14 hours of steps (depending on the module) and a sign-off checklist.
 - Shared concept units with theory, maths and server-graded practice problems, tagged to the national curriculum, with a test-out option.
 - A per-step lab notebook that the guide can read.
 - A guide's version of each module and a guide tracker.
@@ -87,7 +92,8 @@ Students today rely on YouTube demos (generic, often needing lab equipment they 
 
 ### 5.1 Module Content
 - **FR-1** Content is Markdown with YAML frontmatter under `content/` (format in `content/README.md`). It is validated at build and test time, and an invalid header names the file and field.
-- **FR-2** A module defines its title, tagline, disciplines, hook, goal, what you build, hours, optional trailer, status, one public sample unit, materials (with local sources), safety notes and a sign-off checklist.
+- **FR-2** A module defines its title, tagline, disciplines, level, hook, goal, what you build, hours, optional trailer, status, one public sample unit, materials (with local sources), safety notes and a sign-off checklist.
+- **FR-2a** **Levels.** Every module is `beginner`, `intermediate` or `advanced`, judged by skill (how much maths, how risky the tools and materials, how much independent work), not by age. Beginner is a suggested starting point; any enrolled student can start any module. Modules are listed easiest first; the module list, the Academy page and the dashboard's "Choose your first module" group them under their level with a one-line description of each level; the module page shows the level beside the disciplines.
 - **FR-3** A module has ordered steps. Each step has a kind (hook, investigate, build or finish), an estimated time, the concept units it relies on and an optional demo video. Long steps are shown one phase at a time.
 - **FR-4** Each module has a guide's version (preparation, timing, answer keys, expected results, common sticking points, safety briefing, how to judge each sign-off item). Only guides can see it.
 - **FR-5** Every module and concept unit has a status: `ai-draft`, `expert-reviewed` or `classroom-tested`. Content that has not been expert-reviewed is clearly labelled.
@@ -141,7 +147,7 @@ Students today rely on YouTube demos (generic, often needing lab equipment they 
 
 ### 5.8 Website & Brand
 - **FR-33** **Home page (`/`)** presents Hasesa, in this order: the thesis (with the ሐሰሳ "exploration" eyebrow), *Why now* (then / now / next), *What we're exploring* (six open questions, each tagged *Testing* when the Academy is trying an answer or *Open*), *How we work* (try it with real students, keep what works, bring it to schools) and *Our first program* (a card linking to the Academy).
-- **FR-34** **Academy page (`/academy`)**, in this order: the hero with the **tuning dial** (each station is a module; drag, arrow keys, Page Up/Down or station buttons; announced to screen readers), the module list, a public sample problem the visitor can solve, *How a module works* (with the Dewey quote), *For parents* (curriculum mapping, the guide, certificates), *Questions parents ask* (an FAQ at `/academy#faq`: who it's for (ages 13–18), where sessions happen (partner schools in Addis Ababa), cost (12,000 ETB a year; online access free during the pilot), module length, what to bring, certificates), the pilot partners ("Piloted with"), and a sign-up call to action.
+- **FR-34** **Academy page (`/academy`)**, in this order: the hero with the **tuning dial** (each station is a module; stations are spread across the medium-wave band by level, beginner at the low end and advanced at the top, with the levels marked under the scale; drag, arrow keys, Page Up/Down or station buttons; announced to screen readers), the module list grouped by level, a public sample problem the visitor can solve, *How a module works* (with the Dewey quote), *For parents* (curriculum mapping, the guide, certificates), *Questions parents ask* (an FAQ at `/academy#faq`: who it's for (ages 13–18), where sessions happen (partner schools in Addis Ababa), cost (12,000 ETB a year; online access free during the pilot), module length, which module to start with, what to bring, certificates), the pilot partners ("Piloted with"), and a sign-up call to action.
 - **FR-35** **Navigation** depends on sign-in: visitors see **Academy**; signed-in students see **Modules** and **My dashboard**; guides also see **Student tracker**.
 - **FR-36** **Footer:** on `/` and `/academy`, a full footer on one 12-column grid, left-aligned at every width: the logo with a short contact note (the goal of reaching schools in Ethiopia and beyond, and an invitation to get in touch); an **Explore** column (Hasesa, The Academy, Modules); and a **Get in touch** column with the `NEXT_PUBLIC_CONTACT_EMAIL` address and the social links in `SOCIAL_LINKS` (`lib/brand.ts`), hidden when both are empty; the Explore column also links to the Academy FAQ. Below it, a thin bar with ©, the motto and the legal links. Other pages show only that bar, with the logo.
 - **FR-37** **Copy** lives in `lib/i18n.ts` and must match the facts: online sign-up is free and opens everything during the pilot, while an Academy place costs 12,000 ETB a year; content and curriculum tags are described as drafts until reviewed; partners are named only for what they actually did.
@@ -244,8 +250,8 @@ Network baselines: **2G** = 400 Kbps / 400 ms RTT, **3G** = 1.6 Mbps / 300 ms RT
 |---|---|---|
 | Pilot (done, June 2026) | Strawberry DNA extraction with Grade 11 students, guided live | Showed demand for hands-on, low-cost science |
 | v0.3 experiment catalogue (retired, 2026-10/11) | Self-serve experiment guides, lab assistant, notebook | Replaced by the Academy model |
-| Academy pilot (current, to end of 2027) | Three AI-drafted modules, shared units, guide tools, certificates, embedded assistant; English; free online access, Academy places at 12,000 ETB a year | Students earn certificates; ≥ 50% of starters finish a module; no P0 bugs |
-| Expert-reviewed release | All three modules `expert-reviewed`, then `classroom-tested`; own videos | Assistant meets the §2 quality and safety targets |
+| Academy pilot (current, to end of 2027) | Fourteen AI-drafted modules in three levels, shared units, guide tools, certificates, embedded assistant; English; free online access, Academy places at 12,000 ETB a year | Students earn certificates; ≥ 50% of starters finish a module; no P0 bugs |
+| Expert-reviewed release | All modules `expert-reviewed` (Soap & Bioplastic and Wind Power first, for safety), then `classroom-tested`; own videos | Assistant meets the §2 quality and safety targets |
 | Public launch | Amharic UI, offline steps and units, more modules, pricing decision | Privacy and legal sign-off; AI cost within budget at target scale |
 
 ## 12. Approval
@@ -261,7 +267,8 @@ Network baselines: **2G** = 400 Kbps / 400 ms RTT, **3G** = 1.6 Mbps / 300 ms RT
 
 | Term | Meaning |
 |---|---|
-| **Module** | A project-based course built around one build or mystery, made of ordered steps (about 10 hours) |
+| **Module** | A project-based course built around one build or mystery, made of ordered steps (8–14 hours), at one of three levels |
+| **Level** | How much a module asks of a student (beginner, intermediate or advanced), by skill rather than age |
 | **Step** | One session of a module: what to do, what to notice, the concept units it needs |
 | **Concept unit** | Shared theory plus server-graded practice problems, tagged to the curriculum |
 | **Test-out** | Skipping a unit by scoring at least 80% on its problems |

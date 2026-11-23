@@ -11,7 +11,7 @@ import { formatDate } from "@/lib/format";
 import { BRAND } from "@/lib/brand";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
-import { StationRows } from "@/components/module/StationRows";
+import { LevelledStations } from "@/components/module/StationRows";
 import { assignStations } from "@/lib/stations";
 import { FeedbackItem } from "@/components/module/FeedbackItem";
 import { EnrolCard, ProgressBar, SectionTitle, UnitStatusPill } from "@/components/module/ui";
@@ -179,9 +179,15 @@ export default async function DashboardPage() {
         {fresh.length > 0 && (
           <section>
             <SectionTitle icon={Compass}>{active.length || completed.length ? "Start another module" : "Choose your first module"}</SectionTitle>
+            {!active.length && !completed.length && (
+              <p className="mt-2 text-sm text-muted-foreground">Start anywhere. If this is your first module, a beginner one is a good place to begin.</p>
+            )}
             <div className="mt-6">
               {/* Stations come from the full set so frequencies match everywhere else. */}
-              <StationRows stations={assignStations(modules.map(summarize)).filter((st) => fresh.some(({ m }) => m.id === st.module.id))} />
+              <LevelledStations
+                heading="h3"
+                stations={assignStations(modules.map(summarize)).filter((st) => fresh.some(({ m }) => m.id === st.module.id))}
+              />
             </div>
           </section>
         )}

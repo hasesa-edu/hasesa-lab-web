@@ -6,12 +6,12 @@ import { hasFullAccess } from "@/lib/access";
 import { assignStations } from "@/lib/stations";
 import { pageMeta } from "@/lib/seo";
 import { PageHeader } from "@/components/PageHeader";
-import { StationRows, type RowProgress } from "@/components/module/StationRows";
+import { LevelledStations, type RowProgress } from "@/components/module/StationRows";
 import { EnrolCard } from "@/components/module/ui";
 
 export const metadata: Metadata = pageMeta({
   title: `Modules · Hasesa Academy`,
-  description: "Hands-on Academy modules: build a radio, control a robot claw with your muscles, catch food fakers. Theory comes when the project needs it.",
+  description: "Hands-on Academy modules from beginner to advanced: launch a water rocket, clean muddy water, build a radio, make a wind generator, extract DNA. Theory comes when the project needs it.",
   path: "/modules",
 });
 export const dynamic = "force-dynamic";
@@ -40,10 +40,10 @@ export default async function ModulesPage() {
     <div>
       <PageHeader
         title="Modules"
-        description="Each module is a station on the dial: a mystery or something to build. You learn the science and maths when the project needs it, and finish with something that works."
+        description="Each module is a station on the dial: a mystery or something to build. They run from beginner to advanced, and you can start anywhere, though a beginner module is a good first step. You learn the science and maths when the project needs it, and finish with something that works."
       />
       <div className="mx-auto max-w-6xl px-4 pt-10 pb-16">
-        <StationRows stations={stations} progress={progress} />
+        <LevelledStations stations={stations} progress={progress} />
         {!hasFullAccess(access) && <EnrolCard signedIn={!!access.userId} next="/modules" className="mt-14" />}
       </div>
     </div>
