@@ -55,20 +55,33 @@ export type Length = keyof typeof LENGTHS;
 export const PROGRESS = { "not-started": "Not started", active: "In progress", completed: "Done" } as const;
 export type Progress = keyof typeof PROGRESS;
 
-export type Filters = { q: string; level: Level | null; subject: Discipline | null; length: Length | null; progress: Progress | null };
-export const NO_FILTERS: Filters = { q: "", level: null, subject: null, length: null, progress: null };
+/**
+ * Level, subject and length take several values: a module matches if it fits
+ * any of them (Physics or Chemistry). Groups combine with "and". Progress is
+ * one value or none.
+ */
+export type Filters = { q: string; level: Level[]; subject: Discipline[]; length: Length[]; progress: Progress | null };
+export const NO_FILTERS: Filters = { q: "", level: [], subject: [], length: [], progress: null };
+
+/** The filter groups that take several values. */
+export type MultiFacet = "level" | "subject" | "length";
 
 type Params = Record<string, string | string[] | undefined>;
 const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) ?? "";
 const oneOf = <T extends string>(v: string, allowed: readonly T[]): T | null => (allowed.includes(v as T) ? (v as T) : null);
+/** Known values from `?k=a,b` or `?k=a&k=b`, once each, in the allowed order. */
+const someOf = <T extends string>(v: string | string[] | undefined, allowed: readonly T[]): T[] => {
+  const given = new Set((Array.isArray(v) ? v : [v ?? ""]).flatMap((x) => x.split(",")).map((x) => x.trim()));
+  return allowed.filter((a) => given.has(a));
+};
 
-/** Filters from a URL's query (`?q=&level=&subject=&length=&progress=`). Unknown values are ignored. */
+/** Filters from a URL's query (`?q=&level=&subject=a,b&length=&progress=`). Unknown values are ignored. */
 export function parseFilters(params: Params): Filters {
   return {
     q: first(params.q).trim().slice(0, 100),
-    level: oneOf(first(params.level), LEVEL_ORDER),
-    subject: oneOf(first(params.subject), Object.keys(DISCIPLINES) as Discipline[]),
-    length: oneOf(first(params.length), Object.keys(LENGTHS) as Length[]),
+    level: someOf(params.level, LEVEL_ORDER),
+    subject: someOf(params.subject, Object.keys(DISCIPLINES) as Discipline[]),
+    length: someOf(params.length, Object.keys(LENGTHS) as Length[]),
     progress: oneOf(first(params.progress), Object.keys(PROGRESS) as Progress[]),
   };
 }
@@ -77,15 +90,16 @@ export function parseFilters(params: Params): Filters {
 export function filtersQuery(f: Filters): string {
   const p = new URLSearchParams();
   if (f.q.trim()) p.set("q", f.q.trim());
-  if (f.level) p.set("level", f.level);
-  if (f.subject) p.set("subject", f.subject);
-  if (f.length) p.set("length", f.length);
+  if (f.level.length) p.set("level", f.level.join(","));
+  if (f.subject.length) p.set("subject", f.subject.join(","));
+  if (f.length.length) p.set("length", f.length.join(","));
   if (f.progress) p.set("progress", f.progress);
-  const s = p.toString();
+  // Commas stay readable in shared links: ?subject=physics,chemistry
+  const s = p.toString().replace(/%2C/g, ",");
   return s ? `?${s}` : "";
 }
 
-export const isFiltered = (f: Filters) => !!(f.q.trim() || f.level || f.subject || f.length || f.progress);
+export const isFiltered = (f: Filters) => !!(f.q.trim() || f.level.length || f.subject.length || f.length.length || f.progress);
 
 const fold = (s: string) => s.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "");
 
@@ -110,9 +124,9 @@ export function progressOf(status: Status | undefined): Progress {
 export function filterModules<T extends CatalogueItem>(items: T[], f: Filters, states: Record<string, { status: Status }> = {}): T[] {
   return items.filter(
     (m) =>
-      (!f.level || m.level === f.level) &&
-      (!f.subject || m.disciplines.includes(f.subject)) &&
-      (!f.length || LENGTHS[f.length].fits(m.hours)) &&
+      (!f.level.length || f.level.includes(m.level)) &&
+      (!f.subject.length || f.subject.some((d) => m.disciplines.includes(d))) &&
+      (!f.length.length || f.length.some((l) => LENGTHS[l].fits(m.hours))) &&
       (!f.progress || progressOf(states[m.id]?.status) === f.progress) &&
       matchesQuery(m, f.q)
   );
