@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { LogoMark } from "@/components/Logo";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-export const metadata: Metadata = { title: `Sign in · ${BRAND}` };
+export const metadata: Metadata = { title: `Sign in · ${BRAND}`, alternates: { canonical: "/login" } };
 
 const ERRORS: Record<string, string> = {
   cancelled: "Google sign-in was cancelled. Try again when you're ready.",

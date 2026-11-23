@@ -4,15 +4,16 @@ import { getViewer } from "@/lib/viewer";
 import { moduleProgress } from "@/lib/summary";
 import { hasFullAccess } from "@/lib/access";
 import { assignStations } from "@/lib/stations";
-import { BRAND } from "@/lib/brand";
+import { pageMeta } from "@/lib/seo";
 import { PageHeader } from "@/components/PageHeader";
 import { StationRows, type RowProgress } from "@/components/module/StationRows";
 import { EnrolCard } from "@/components/module/ui";
 
-export const metadata: Metadata = {
-  title: `Modules · ${BRAND}`,
+export const metadata: Metadata = pageMeta({
+  title: `Modules · Hasesa Academy`,
   description: "Hands-on Academy modules: build a radio, control a robot claw with your muscles, catch food fakers. Theory comes when the project needs it.",
-};
+  path: "/modules",
+});
 export const dynamic = "force-dynamic";
 
 const STATUS: Record<string, string> = { active: "In progress", completed: "Signed off", dropped: "Dropped" };
