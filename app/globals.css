@@ -15,71 +15,74 @@
   color-scheme: light;
 
   /*
-   * Hasesa brand palette (shared by every page):
-   *   enamel #0E3B4A  dark bands: hero, headers, footer
-   *   teal   #14A098  the logo line, the dial needle, rules, marks
-   *   deep teal #0B7A73  teal text, links and buttons on light (passes AA)
-   *   amber  #F59E0B  the logo's eyes, highlights, calls to action (never text on white)
-   *   lab    #F2F5F4  page background
-   *   ink    #12303A  text
+   * Hasesa palette, "clean and modern research lab":
+   *   paper  #FAFAF8  page background
+   *   ink    #13171C  text, primary buttons, the footer
+   *   muted  #5B6470  secondary text (passes AA on paper and white)
+   *   hairline #E4E4DF  rules and card borders, instead of shadows
+   *   teal   #0B7A73  the one accent: links, accent buttons, active states
+   *   amber  #F59E0B  the logo's eyes and "open question" marks only (never text)
    */
-  --background: rgb(242 245 244);
-  --foreground: rgb(18 48 58);
+  --background: rgb(250 250 248);
+  --foreground: rgb(19 23 28);
   --card: rgb(255 255 255);
-  --card-foreground: rgb(18 48 58);
+  --card-foreground: rgb(19 23 28);
   --popover: rgb(255 255 255);
-  --popover-foreground: rgb(18 48 58);
+  --popover-foreground: rgb(19 23 28);
   --primary: rgb(11 122 115);
   --primary-foreground: rgb(255 255 255);
-  --secondary: rgb(230 237 236);
-  --secondary-foreground: rgb(18 48 58);
-  --muted: rgb(230 237 236);
-  --muted-foreground: rgb(75 98 106);
+  --secondary: rgb(241 241 237);
+  --secondary-foreground: rgb(19 23 28);
+  --muted: rgb(241 241 237);
+  --muted-foreground: rgb(91 100 112);
   --accent: rgb(227 241 239);
-  --accent-foreground: rgb(11 122 115);
+  --accent-foreground: rgb(11 101 96);
   --destructive: rgb(220 38 38);
-  --border: rgb(217 226 225);
-  --input: rgb(195 208 207);
-  --ring: rgb(20 160 152);
-  --radius: 0.625rem;
+  --border: rgb(228 228 223);
+  --input: rgb(211 211 205);
+  --ring: rgb(11 122 115);
+  --radius: 0.375rem;
 
-  --chart-1: rgb(20 160 152);
+  --chart-1: rgb(11 122 115);
   --chart-2: rgb(245 158 11);
-  --chart-3: rgb(92 201 191);
-  --chart-4: rgb(11 122 115);
-  --chart-5: rgb(126 146 152);
+  --chart-3: rgb(91 100 112);
+  --chart-4: rgb(67 82 196);
+  --chart-5: rgb(180 83 10);
 
-  --primary-soft: rgb(220 239 236);
-  --primary-strong: rgb(10 95 90);
+  --primary-soft: rgb(227 241 239);
+  --primary-strong: rgb(11 101 96);
   --sun: rgb(245 158 11);
   --sun-soft: rgb(254 243 199);
-  --subtle-foreground: rgb(126 146 152);
+  /* Amber that is dark enough for text (the "open" tag). */
+  --sun-strong: rgb(138 82 7);
+  --subtle-foreground: rgb(128 135 145);
 
-  /* Dark bands (page headers, panels). Same as enamel, kept for older class names. */
-  --deep: rgb(14 59 74);
-  --deep-foreground: rgb(234 244 243);
-  --enamel: rgb(14 59 74);
-  --enamel-foreground: rgb(234 244 243);
+  /* Legacy names from the radio look, retired page by page in the rebrand.
+     Until then the old dark bands render as ink. */
+  --deep: rgb(19 23 28);
+  --deep-foreground: rgb(243 244 246);
+  --enamel: rgb(19 23 28);
+  --enamel-foreground: rgb(228 231 235);
   --signal: rgb(20 160 152);
-  --lab: rgb(242 245 244);
-  --ink: rgb(18 48 58);
+  --lab: rgb(250 250 248);
+  --ink: rgb(19 23 28);
 
-  /* One color per subject, used for icon tiles, chips and card accents. */
-  --physics: rgb(79 70 229);
-  --physics-soft: rgb(238 242 255);
-  --chemistry: rgb(217 119 6);
-  --chemistry-soft: rgb(255 247 237);
-  --biology: rgb(5 150 105);
-  --biology-soft: rgb(236 253 245);
+  /* One color per subject, toned for light surfaces. */
+  --physics: rgb(67 82 196);
+  --physics-soft: rgb(238 240 252);
+  --chemistry: rgb(180 83 10);
+  --chemistry-soft: rgb(253 244 234);
+  --biology: rgb(15 122 83);
+  --biology-soft: rgb(233 246 239);
 
-  --sidebar: rgb(242 245 244);
-  --sidebar-foreground: rgb(18 48 58);
+  --sidebar: rgb(250 250 248);
+  --sidebar-foreground: rgb(19 23 28);
   --sidebar-primary: rgb(11 122 115);
   --sidebar-primary-foreground: rgb(255 255 255);
   --sidebar-accent: rgb(227 241 239);
-  --sidebar-accent-foreground: rgb(11 122 115);
-  --sidebar-border: rgb(217 226 225);
-  --sidebar-ring: rgb(20 160 152);
+  --sidebar-accent-foreground: rgb(11 101 96);
+  --sidebar-border: rgb(228 228 223);
+  --sidebar-ring: rgb(11 122 115);
 }
 
 .dark {
@@ -142,14 +145,18 @@
 }
 
 @theme inline {
+  /* Geist for headings and UI, Geist Mono for labels and numbers,
+     Atkinson Hyperlegible for anything students read at length. */
   --font-sans:
-    var(--font-atkinson), var(--font-geist), system-ui, -apple-system, Segoe UI, Roboto,
-    Noto Sans Ethiopic, sans-serif;
-  --font-dial: var(--font-shoulders), "Arial Narrow", sans-serif;
-  --font-legible: var(--font-atkinson), var(--font-geist), system-ui, Noto Sans Ethiopic, sans-serif;
-  --font-heading:
-    var(--font-bricolage), var(--font-geist), system-ui, -apple-system,
-    Segoe UI, Roboto, Noto Sans Ethiopic, sans-serif;
+    var(--font-geist), system-ui, -apple-system, Segoe UI, Roboto,
+    var(--font-ethiopic), Noto Sans Ethiopic, sans-serif;
+  --font-display: var(--font-geist), system-ui, var(--font-ethiopic), sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-legible: var(--font-atkinson), var(--font-geist), system-ui, var(--font-ethiopic), Noto Sans Ethiopic, sans-serif;
+  --font-ethiopic: var(--font-noto-ethiopic), Noto Sans Ethiopic, sans-serif;
+  /* Legacy names, kept so older pages keep working until they are restyled. */
+  --font-dial: var(--font-display);
+  --font-heading: var(--font-display);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -187,6 +194,7 @@
   --color-primary-strong: var(--primary-strong);
   --color-sun: var(--sun);
   --color-sun-soft: var(--sun-soft);
+  --color-sun-strong: var(--sun-strong);
   --color-subtle-foreground: var(--subtle-foreground);
   --color-deep: var(--deep);
   --color-enamel: var(--enamel);
@@ -202,7 +210,6 @@
   --color-biology: var(--biology);
   --color-biology-soft: var(--biology-soft);
 
-  --animate-marquee: marquee 40s linear infinite;
   --animate-float: float 6s ease-in-out infinite;
 
   --radius-sm: calc(var(--radius) * 0.6);
@@ -213,42 +220,31 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 
-  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.04), 0 1px 1px rgb(0 0 0 / 0.03);
-  --shadow-card: 0 1px 3px rgb(0 0 0 / 0.06), 0 1px 2px rgb(0 0 0 / 0.04);
-  --shadow-pop: 0 8px 24px -8px rgb(0 0 0 / 0.18), 0 2px 6px rgb(0 0 0 / 0.06);
+  /* Hairlines do the work; shadows are only for things that float (menus, sheets). */
+  --shadow-soft: 0 0 #0000;
+  --shadow-card: 0 0 #0000;
+  --shadow-pop: 0 12px 32px -12px rgb(19 23 28 / 0.18), 0 1px 2px rgb(19 23 28 / 0.06);
 }
 
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
 @keyframes float {
   0%, 100% { transform: translateY(0) rotate(var(--tilt, 0deg)); }
   50% { transform: translateY(-8px) rotate(var(--tilt, 0deg)); }
 }
 
-/* Lab-notebook grid. Color comes from currentColor, so set text-* on the element. */
-@utility bg-grid {
-  background-image:
-    linear-gradient(to right, color-mix(in oklab, currentColor 12%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, currentColor 12%, transparent) 1px, transparent 1px);
-  background-size: 28px 28px;
-}
 @utility bg-dots {
   background-image: radial-gradient(color-mix(in oklab, currentColor 18%, transparent) 1px, transparent 1px);
   background-size: 18px 18px;
 }
 
 @layer base {
-  /* Big headings use the dial face; small headings stay in the body face,
-     bold, which reads better at small sizes than condensed type. */
+  /* Headings: Geist, tightly tracked. */
   h1, h2 {
-    font-family: var(--font-dial);
-    letter-spacing: 0;
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
   }
   h3 {
-    font-family: var(--font-sans);
-    letter-spacing: -0.01em;
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -288,37 +284,10 @@
   }
 }
 
-.prose-edu p {
-  margin: 0.6rem 0;
-  line-height: 1.7;
-  color: var(--muted-foreground);
-}
-.prose-edu h3 {
-  font-size: 1.05rem;
-  font-weight: 600;
-  margin-top: 1.5rem;
-  margin-bottom: 0.4rem;
-  color: var(--foreground);
-  letter-spacing: -0.01em;
-}
-.prose-edu ul {
-  list-style: disc;
-  padding-left: 1.25rem;
-  color: var(--muted-foreground);
-}
-.prose-edu code {
-  background: color-mix(in oklab, var(--primary-soft) 50%, transparent);
-  color: var(--primary-strong);
-  padding: 0.1rem 0.35rem;
-  border-radius: 0.3rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.9em;
-}
-.dark .prose-edu code {
-  color: var(--primary);
-}
-
 /* Chat assistant markdown */
+.chat-prose {
+  font-family: var(--font-legible);
+}
 .chat-prose > * + * {
   margin-top: 0.6rem;
 }
@@ -353,7 +322,7 @@
   color: var(--foreground);
   padding: 0.08rem 0.32rem;
   border-radius: 0.3rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.88em;
 }
 .chat-prose pre {
@@ -449,6 +418,7 @@
 
 /* Module steps, concept units and the guide's version (Markdown from content/) */
 .lesson-prose {
+  font-family: var(--font-legible);
   color: var(--foreground);
   font-size: 1rem;
   line-height: 1.75;
@@ -464,10 +434,10 @@
 .lesson-prose h2,
 .lesson-prose h3,
 .lesson-prose h4 {
-  font-family: var(--font-sans, inherit);
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-weight: 600;
   color: var(--foreground);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   line-height: 1.3;
 }
 .lesson-prose h1 { font-size: 1.5rem; margin-top: 2rem; }
@@ -485,9 +455,9 @@
 .lesson-prose li > p { margin: 0; }
 .lesson-prose a { color: var(--primary); text-decoration: underline; text-underline-offset: 3px; }
 .lesson-prose blockquote {
-  border-left: 4px solid var(--sun);
-  background: var(--sun-soft);
-  border-radius: 0 0.75rem 0.75rem 0;
+  border: 1px solid var(--border);
+  background: var(--accent);
+  border-radius: var(--radius);
   padding: 0.75rem 1rem;
 }
 .lesson-prose blockquote p { color: var(--foreground); }
@@ -495,20 +465,20 @@
   background: var(--muted);
   padding: 0.08rem 0.32rem;
   border-radius: 0.3rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.88em;
 }
 .lesson-prose pre {
-  background: var(--deep, #0E3B4A);
-  color: #e6f4f1;
-  border-radius: 0.75rem;
+  background: var(--ink);
+  color: var(--deep-foreground);
+  border-radius: var(--radius);
   padding: 0.9rem 1rem;
   overflow-x: auto;
   font-size: 0.85rem;
   line-height: 1.55;
 }
 .lesson-prose pre code { background: transparent; padding: 0; color: inherit; font-size: inherit; }
-.lesson-prose .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 0.75rem; }
+.lesson-prose .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
 .lesson-prose table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
 .lesson-prose th,
 .lesson-prose td { padding: 0.5rem 0.75rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border); }
@@ -516,7 +486,7 @@
 .lesson-prose tr:last-child td { border-bottom: 0; }
 .lesson-prose hr { border: 0; border-top: 1px solid var(--border); margin: 1.5rem 0; }
 .lesson-prose .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.25rem 0; }
-.lesson-prose img { border-radius: 0.75rem; }
+.lesson-prose img { border-radius: var(--radius); }
 
 /* Certificates print on one clean page */
 @media print {

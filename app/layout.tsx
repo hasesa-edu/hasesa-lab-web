@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Atkinson_Hyperlegible_Next, Big_Shoulders, Bricolage_Grotesque, Geist } from "next/font/google";
+import { Atkinson_Hyperlegible_Next, Geist, Geist_Mono, Noto_Sans_Ethiopic } from "next/font/google";
 import "./globals.css";
 // KaTeX CSS (~200KB) is loaded only on the page that renders math, /chat.
 import { LocaleProvider } from "@/components/LocaleProvider";
@@ -11,30 +11,29 @@ import { PageViewTracker } from "@/components/PageViewTracker";
 import { ThemeProvider, themeBootstrapScript } from "@/components/ThemeProvider";
 import { BRAND, MOTTO } from "@/lib/brand";
 
+// Geist for headings and UI, Geist Mono for labels and numbers, Atkinson
+// Hyperlegible for long reading (lessons, the assistant) on low-end phones,
+// and Noto Sans Ethiopic for Amharic (ሐሰሳ).
 const geist = Geist({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-geist",
 });
-
-// Display face for headings: warm and a little playful, to suit a hands-on science brand.
-const bricolage = Bricolage_Grotesque({
+const geistMono = Geist_Mono({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-bricolage",
-});
-
-// Landing page: condensed radio-dial numerals for display, and a typeface
-// designed for legibility for body text (low-end phones, young readers).
-const shoulders = Big_Shoulders({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-shoulders",
+  variable: "--font-geist-mono",
 });
 const atkinson = Atkinson_Hyperlegible_Next({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-atkinson",
+});
+const ethiopic = Noto_Sans_Ethiopic({
+  subsets: ["ethiopic"],
+  weight: ["500", "700"],
+  display: "swap",
+  variable: "--font-noto-ethiopic",
 });
 
 const TITLE = `${BRAND} · ${MOTTO}`;
@@ -64,8 +63,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#0E3B4A" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0e0d" },
+    { media: "(prefers-color-scheme: light)", color: "#FFFFFF" },
+    { media: "(prefers-color-scheme: dark)", color: "#13171C" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -73,7 +72,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geist.variable} ${bricolage.variable} ${shoulders.variable} ${atkinson.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${geist.variable} ${geistMono.variable} ${atkinson.variable} ${ethiopic.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
       </head>

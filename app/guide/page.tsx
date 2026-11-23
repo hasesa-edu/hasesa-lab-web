@@ -31,7 +31,7 @@ export default async function GuidePage() {
       >
         <div className="flex flex-wrap gap-2">
           {getModules().map((m) => (
-            <Button key={m.id} asChild size="sm" variant="ghost" className="bg-white/10 text-deep-foreground ring-1 ring-white/15 hover:bg-white/20 hover:text-deep-foreground">
+            <Button key={m.id} asChild size="sm" variant="outline">
               <Link href={`/modules/${m.id}/guide`}>
                 <GraduationCap aria-hidden /> {m.title}: guide&apos;s version
               </Link>
