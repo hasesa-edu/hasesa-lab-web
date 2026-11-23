@@ -85,7 +85,7 @@ export function ProblemSet({
       )}
 
       {mode === "practice" ? (
-        <ol className="mt-6 border-t-2 border-ink">
+        <ol className="mt-6 border-t border-border">
           {problems.map((p, i) => (
             <PracticeItem key={p.id} unitId={unitId} problem={p} index={i} alreadySolved={solved.includes(p.id)} onUnit={onUnit} />
           ))}
@@ -100,7 +100,7 @@ export function ProblemSet({
 function QuestionText({ index, q }: { index: number; q: string }) {
   return (
     <div className="flex gap-3">
-      <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-enamel font-dial text-base font-bold text-sun">
+      <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-input bg-card font-mono text-sm text-foreground">
         {index + 1}
       </span>
       <Markdown inline className="min-w-0 flex-1 pt-1 font-semibold leading-snug">
@@ -269,7 +269,7 @@ function PracticeItem({
   const revealed = !!result && (result.correct || tries >= 2 || showSolution);
 
   return (
-    <li className="border-b border-ink/15 py-6">
+    <li className="border-b border-border py-6">
       <div className="flex items-start justify-between gap-3">
         <QuestionText index={index} q={problem.q} />
         {alreadySolved && !result && (
@@ -354,8 +354,8 @@ function TestOut({ unitId, problems, onUnit, onDone }: { unitId: string; problem
         <div
           role="status"
           className={cn(
-            "mb-5 flex items-start gap-3 rounded-2xl p-5 ring-1",
-            outcome.passed ? "bg-emerald-50 ring-emerald-300 dark:bg-emerald-950/40 dark:ring-emerald-800" : "bg-sun-soft ring-sun/40"
+            "mb-5 flex items-start gap-3 rounded-lg p-5 ring-1",
+            outcome.passed ? "bg-emerald-50 ring-emerald-300 dark:bg-emerald-950/40 dark:ring-emerald-800" : "bg-muted ring-border"
           )}
         >
           <GraduationCap aria-hidden className={cn("mt-0.5 size-6 shrink-0", outcome.passed ? "text-emerald-600" : "text-amber-600")} />
@@ -376,9 +376,9 @@ function TestOut({ unitId, problems, onUnit, onDone }: { unitId: string; problem
           </div>
         </div>
       )}
-      <ol className="border-t-2 border-ink">
+      <ol className="border-t border-border">
         {problems.map((p, i) => (
-          <li key={p.id} className="border-b border-ink/15 py-6">
+          <li key={p.id} className="border-b border-border py-6">
             <QuestionText index={i} q={p.q} />
             <AnswerInput
               problem={p}

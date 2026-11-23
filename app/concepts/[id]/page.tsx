@@ -52,12 +52,12 @@ export default async function ConceptPage({ params, searchParams }: Props) {
   if (!c.public && !full) {
     return (
       <div>
-        <header className="relative overflow-hidden bg-deep text-deep-foreground">
+        <header className="border-b border-border bg-card">
           <div className="relative mx-auto max-w-6xl px-4 [&>*]:max-w-3xl pt-6 pb-9 sm:pt-8">
             <BackLink href={back.href}>{back.label}</BackLink>
-            <p className="mt-4 text-sm font-bold text-sun">Concept unit</p>
-            <h1 className="font-dial mt-2 text-5xl font-extrabold sm:text-7xl leading-[0.95]">{c.title}</h1>
-            <p className="mt-3 text-lg text-deep-foreground/80">{c.summary}</p>
+            <p className="mt-4 font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase">Concept unit</p>
+            <h1 className="mt-3 text-4xl font-semibold sm:text-6xl leading-[1.02] tracking-[-0.04em]">{c.title}</h1>
+            <p className="mt-3 text-lg text-muted-foreground">{c.summary}</p>
           </div>
         </header>
         <div className="mx-auto max-w-6xl px-4 [&>*]:max-w-3xl py-10">
@@ -73,18 +73,18 @@ export default async function ConceptPage({ params, searchParams }: Props) {
 
   return (
     <article data-ask-scope>
-      <header className="relative overflow-hidden bg-deep text-deep-foreground">
+      <header className="border-b border-border bg-card">
         <div className="relative mx-auto max-w-6xl px-4 [&>*]:max-w-3xl pt-6 pb-9 sm:pt-8">
           <BackLink href={back.href}>{back.label}</BackLink>
-          <p className="mt-4 text-sm font-bold text-sun">
+          <p className="mt-4 font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase">
             Concept unit{c.public && !full ? " · free sample" : ""}
           </p>
-          <h1 className="font-dial mt-2 text-5xl leading-[0.95] font-extrabold text-balance sm:text-7xl">{c.title}</h1>
-          <p className="mt-3 text-lg text-deep-foreground/80">{c.summary}</p>
+          <h1 className="mt-3 text-4xl leading-[1.02] font-semibold text-balance sm:text-6xl tracking-[-0.04em]">{c.title}</h1>
+          <p className="mt-3 text-lg text-muted-foreground">{c.summary}</p>
           <div className="mt-5 flex flex-wrap items-center gap-2">
-            <StatusBadge status={c.status} onDark />
-            <a href="#problems" className="inline-flex min-h-8 items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-sm ring-1 ring-white/15 hover:bg-white/15">
-              <Puzzle aria-hidden className="size-4 text-sun" /> {c.problems.length} problems
+            <StatusBadge status={c.status} />
+            <a href="#problems" className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-sm hover:bg-muted">
+              <Puzzle aria-hidden className="size-4 text-muted-foreground" /> {c.problems.length} problems
             </a>
           </div>
         </div>
@@ -110,7 +110,7 @@ export default async function ConceptPage({ params, searchParams }: Props) {
 
         <div className="mt-16 grid gap-10 sm:grid-cols-2">
           {usage.length > 0 && (
-            <section className="border-t-2 border-ink pt-4">
+            <section className="border-t border-border pt-4">
               <h2 className="text-sm font-bold text-subtle-foreground">Used in</h2>
               <ul className="mt-3 space-y-2 text-sm">
                 {usage.map(({ module, steps }) => (
@@ -125,7 +125,7 @@ export default async function ConceptPage({ params, searchParams }: Props) {
             </section>
           )}
           {c.curriculum.length > 0 && (
-            <section className="border-t-2 border-ink pt-4">
+            <section className="border-t border-border pt-4">
               <h2 className="flex items-center gap-1.5 text-sm font-bold text-subtle-foreground">
                 <GraduationCap aria-hidden className="size-4" /> In your school curriculum
               </h2>

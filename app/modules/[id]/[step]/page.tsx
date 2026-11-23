@@ -58,34 +58,34 @@ export default async function StepPage({ params }: Props) {
 
   return (
     <article data-ask-scope>
-      <header className="bg-enamel text-enamel-foreground">
+      <header className="border-b border-border bg-card">
         <div className="mx-auto max-w-6xl px-4 pt-5 pb-8 [&>*]:max-w-3xl">
           <BackLink href={`/modules/${m.id}`}>← {m.title}</BackLink>
-          <p className="mt-3 text-sm text-enamel-foreground/75">
+          <p className="mt-3 font-mono text-xs tracking-[0.06em] text-muted-foreground uppercase">
             Step {index + 1} of {m.steps.length}, {KIND_LABEL[step.kind].toLowerCase()}, about {step.minutes} min
             {saved?.done && (
-              <span className="ml-2 inline-flex items-center gap-1 font-bold text-sun">
+              <span className="ml-2 inline-flex items-center gap-1 text-primary">
                 <Check aria-hidden className="size-4" strokeWidth={3} /> Done
               </span>
             )}
           </p>
-          <h1 className="mt-1 font-dial text-5xl leading-[0.95] font-extrabold text-white sm:text-6xl">{step.title}</h1>
-          <StatusBadge status={m.status} onDark className="mt-3" />
+          <h1 className="mt-2 text-4xl leading-[1.05] font-semibold tracking-[-0.035em] sm:text-5xl">{step.title}</h1>
+          <StatusBadge status={m.status} className="mt-3" />
         </div>
       </header>
 
       <div className="mx-auto max-w-6xl px-4 pb-16 [&>*]:max-w-3xl">
         {feedback.map((f) => (
-          <p key={f.id} className="mt-6 border-l-4 border-sun py-1 pl-4 whitespace-pre-wrap">
-            <span className="block text-sm font-bold text-chemistry">Your guide says</span>
+          <p key={f.id} className="mt-6 rounded-lg border border-border bg-accent px-4 py-3 whitespace-pre-wrap">
+            <span className="block font-mono text-[11px] tracking-[0.08em] text-accent-foreground uppercase">Your guide says</span>
             {f.body}
           </p>
         ))}
 
         {safety.length > 0 && (
-          <section className="mt-6 border-l-4 border-red-500 bg-red-50 py-3 pr-4 pl-4 dark:bg-red-950/30">
-            <p className="text-sm font-bold text-red-800 dark:text-red-300">Safety</p>
-            <Markdown className="[&_p]:m-0 [&_p]:text-ink">{safety.map((x) => x.body).join("\n\n")}</Markdown>
+          <section className="mt-6 rounded-lg border border-red-300 bg-red-50 px-4 py-3">
+            <p className="font-mono text-[11px] tracking-[0.08em] text-red-800 uppercase">Safety</p>
+            <Markdown className="[&_p]:m-0 [&_p]:text-foreground">{safety.map((x) => x.body).join("\n\n")}</Markdown>
           </section>
         )}
 
@@ -116,16 +116,16 @@ export default async function StepPage({ params }: Props) {
 
         {step.units.length > 0 && (
           <section className="mt-16">
-            <h2 className="font-dial text-3xl font-bold">The theory behind this step</h2>
-            <p className="mt-1 text-ink/65">Read these at home after you&apos;ve tried the step.</p>
-            <ul className="mt-4 border-t-2 border-ink">
+            <h2 className="text-2xl font-semibold sm:text-3xl">The theory behind this step</h2>
+            <p className="mt-1 text-muted-foreground">Read these at home after you&apos;ve tried the step.</p>
+            <ul className="mt-4 border-t border-border">
               {step.units.map((u) => {
                 const c = getConcept(u)!;
                 return (
                   <li key={u}>
                     <Link
                       href={`/concepts/${u}?from=${m.id}&step=${step.id}`}
-                      className="group flex items-center gap-4 border-b border-ink/15 py-3.5"
+                      className="group flex items-center gap-4 border-b border-border py-3.5"
                     >
                       <span className="min-w-0 flex-1 font-bold group-hover:text-primary">{c.title}</span>
                       <UnitStatusPill status={unitStatus.get(u)} />
@@ -137,17 +137,17 @@ export default async function StepPage({ params }: Props) {
           </section>
         )}
 
-        <nav aria-label="Between steps" className="mt-14 flex flex-wrap items-baseline justify-between gap-4 border-t border-ink/15 pt-6">
+        <nav aria-label="Between steps" className="mt-14 flex flex-wrap items-baseline justify-between gap-4 border-t border-border pt-6">
           {prev ? (
             <Link href={`/modules/${m.id}/${prev.id}`} className="group">
-              <span className="block text-sm text-ink/55">Previous step</span>
+              <span className="block text-sm text-muted-foreground">Previous step</span>
               <span className="font-bold group-hover:text-primary">{prev.title}</span>
             </Link>
           ) : (
             <span />
           )}
           <Link href={next ? `/modules/${m.id}/${next.id}` : `/modules/${m.id}`} className="group text-right">
-            <span className="block text-sm text-ink/55">{next ? "Next step" : "All steps done?"}</span>
+            <span className="block text-sm text-muted-foreground">{next ? "Next step" : "All steps done?"}</span>
             <span className="font-bold group-hover:text-primary">{next ? next.title : `Back to ${m.title}`}</span>
           </Link>
         </nav>
