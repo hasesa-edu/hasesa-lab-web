@@ -38,7 +38,7 @@ Content lives in `content/` as Markdown with YAML frontmatter. See `content/READ
 | `/academy` | Academy page: the tuning dial, the modules, a sample problem to solve, how a module works (with the Dewey quote), for parents, pilot partners, sign-up |
 | `/login`, `/signup` | Google sign-in (the first sign-in creates the account) |
 | `/modules` | Module catalogue (public) |
-| `/modules/[id]` | Module preview, or the full module with progress when enrolled |
+| `/modules/[id]` | Module page: the story (mystery, goal, build, trailer), steps, theory with curriculum tags, how you finish, materials and safety. An action panel beside it (sign up, start, continue, certificate) stays in view on desktop; visitors get a sign-up bar on phones. Returning students open on "Pick up where you left off" |
 | `/modules/[id]/[step]` | A step: instructions, its concept units, and the workbench panel (lab notebook + assistant) |
 | `/modules/[id]/guide` | The guide's version (guides only) |
 | `/concepts/[id]` | Concept unit: theory, practice problems, test-out |
@@ -55,7 +55,7 @@ Retired routes redirect (see `next.config.js`): `/experiments`, `/lessons` → `
 ## The site
 
 - **Navigation:** visitors see **Academy**; signed-in students see **Modules** and **My dashboard**, and guides also see **Student tracker**.
-- **Footer:** on `/` and `/academy` it carries the contact note ("Across Ethiopia and beyond.") with a Get in touch button, shown only when `NEXT_PUBLIC_CONTACT_EMAIL` is set. Other pages get the plain footer bar.
+- **Footer:** on `/` and `/academy` it carries the contact note ("Across Ethiopia and beyond.") and a "Get in touch" column: the email (`NEXT_PUBLIC_CONTACT_EMAIL`) and any social links listed in `SOCIAL_LINKS` in `lib/brand.ts`. Other pages get the plain footer bar.
 - **Copy:** all marketing and navigation text is in `lib/i18n.ts` (English only for now).
 - **Look:** clean and modern. Paper background, ink text, hairline borders and teal as the one accent; amber only for the logo's eyes and "open" tags. Geist for headings and UI, Geist Mono for labels and numbers, Atkinson Hyperlegible for lessons and the assistant, Noto Sans Ethiopic for Amharic. The tokens are in `app/globals.css`. Dark mode is off (`LIGHT_ONLY` in `components/ThemeProvider.tsx`).
 
