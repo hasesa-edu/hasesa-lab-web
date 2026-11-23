@@ -8,7 +8,6 @@ import { SUBJECT_STYLES } from "@/components/Subject";
 import type { t as Dict } from "@/lib/i18n";
 import type { ModuleSummary } from "@/lib/content/types";
 import { DISCIPLINES } from "@/lib/disciplines";
-import { CONTACT_EMAIL } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { TuningDial } from "../landing/TuningDial";
@@ -60,7 +59,6 @@ export function AcademyClient({ modules, challenge }: { modules: ModuleSummary[]
         </section>
       )}
       <HowItWorks tr={tr} />
-      <Academy tr={tr} />
       <Parents tr={tr} modules={modules} sampleHref={sampleHref} />
       <Partners tr={tr} />
       <FinalCta tr={tr} primaryHref={primaryHref} primaryLabel={primaryLabel} />
@@ -142,6 +140,15 @@ function HowItWorks({ tr }: { tr: TR }) {
       <div className="mx-auto max-w-6xl px-4 py-16 sm:py-24">
         <SectionLabel n="03">{tr("label.method")}</SectionLabel>
         <h2 className="mt-4 max-w-3xl text-3xl leading-tight font-semibold sm:text-5xl">{tr("how.title")}</h2>
+        {/* The idea the method rests on, a century old. */}
+        <figure className="mt-8 max-w-3xl border-l-2 border-primary pl-5 sm:pl-6">
+          <blockquote className="text-xl leading-snug font-medium tracking-[-0.015em] text-foreground/85 sm:text-2xl">
+            &ldquo;{tr("dewey.quote")}&rdquo;
+          </blockquote>
+          <figcaption className="mt-3 font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase">
+            — {tr("dewey.attribution")}
+          </figcaption>
+        </figure>
         <ol className="mt-10 grid gap-10 sm:grid-cols-2 md:grid-cols-4 md:gap-8">
           {steps.map((s, i) => (
             <li key={s.title} className="border-t border-input pt-5">
@@ -151,37 +158,6 @@ function HowItWorks({ tr }: { tr: TR }) {
             </li>
           ))}
         </ol>
-      </div>
-    </section>
-  );
-}
-
-/* ───────────────────────────  THE ACADEMY  ─────────────────────────── */
-
-function Academy({ tr }: { tr: TR }) {
-  const items: { title: Key; body: Key }[] = [
-    { title: "pillars.hands.title", body: "pillars.hands.body" },
-    { title: "pillars.guide.title", body: "pillars.guide.body" },
-    { title: "pillars.paths.title", body: "pillars.paths.body" },
-    { title: "pillars.together.title", body: "pillars.together.body" },
-    { title: "pillars.ai.title", body: "pillars.ai.body" },
-  ];
-  return (
-    <section className="border-y border-border bg-card">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:py-24 lg:grid-cols-[0.8fr_1.2fr]">
-        <div>
-          <SectionLabel n="04">{tr("label.academy")}</SectionLabel>
-          <h2 className="mt-4 text-3xl leading-tight font-semibold sm:text-5xl">{tr("pillars.title")}</h2>
-          <p className="mt-4 max-w-md text-lg leading-relaxed text-muted-foreground">{tr("pillars.sub")}</p>
-        </div>
-        <dl className="grid border-t border-l border-border sm:grid-cols-2">
-          {items.map((it) => (
-            <div key={it.title} className="border-r border-b border-border p-6">
-              <dt className="text-lg font-semibold">{tr(it.title)}</dt>
-              <dd className="mt-2 leading-relaxed text-muted-foreground">{tr(it.body)}</dd>
-            </div>
-          ))}
-        </dl>
       </div>
     </section>
   );
@@ -200,7 +176,7 @@ function Parents({ tr, modules, sampleHref }: { tr: TR; modules: ModuleSummary[]
     <section className="mx-auto max-w-6xl px-4 py-16 sm:py-24">
       <div className="grid gap-12 lg:grid-cols-2">
         <div>
-          <SectionLabel n="05">{tr("label.parents")}</SectionLabel>
+          <SectionLabel n="04">{tr("label.parents")}</SectionLabel>
           <h2 className="mt-4 text-3xl leading-tight font-semibold sm:text-5xl">{tr("parents.title")}</h2>
           <p className="mt-4 max-w-lg text-lg leading-relaxed text-muted-foreground">{tr("parents.sub")}</p>
           <Link href={sampleHref} className={cn(buttonVariants({ size: "lg", variant: "ink" }), "mt-8")}>
@@ -254,14 +230,6 @@ function FinalCta({ tr, primaryHref, primaryLabel }: { tr: TR; primaryHref: stri
           <a href={primaryHref} className={buttonVariants({ size: "lg", variant: "ink" })}>
             {primaryLabel}
           </a>
-          {CONTACT_EMAIL && (
-            <a
-              href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Enrolling at Hasesa Academy")}`}
-              className={buttonVariants({ size: "lg", variant: "outline" })}
-            >
-              {tr("cta.enrol")}
-            </a>
-          )}
         </div>
       </div>
     </section>

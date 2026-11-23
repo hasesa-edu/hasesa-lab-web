@@ -119,11 +119,12 @@ export function EnrolCard({ signedIn, next, className }: { signedIn: boolean; ne
           <Lock aria-hidden className="size-5" />
         </span>
         <h2 className="mt-4 text-2xl font-semibold">
-          {signedIn ? "Enrol at the Academy to unlock everything" : "Sign up, then enrol at the Academy"}
+          {signedIn ? "Your access isn't active" : "Sign up free to unlock everything"}
         </h2>
         <p className="mt-2 max-w-xl text-foreground/75">
-          Enrolled students get every step, every concept unit and its problems, the lab assistant, a guide who tracks their
-          progress, and a certificate for each finished module.
+          {signedIn
+            ? "Contact us and we'll open it."
+            : "During the pilot, signing up opens every step, every concept unit and its problems, the lab assistant, a guide who tracks your progress, and a certificate for each finished module."}
         </p>
         <div className="mt-5 flex flex-wrap gap-2">
           {!signedIn && (
@@ -133,19 +134,14 @@ export function EnrolCard({ signedIn, next, className }: { signedIn: boolean; ne
               </a>
             </Button>
           )}
-          {CONTACT_EMAIL && (
-            <Button asChild size="lg" variant={signedIn ? "ink" : "outline"}>
-              <a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Enrolling at Hasesa Academy")}`}>
-                <Sparkles aria-hidden /> Contact us to enrol
+          {signedIn && CONTACT_EMAIL && (
+            <Button asChild size="lg" variant="ink">
+              <a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Opening my Hasesa Academy access")}`}>
+                <Sparkles aria-hidden /> Contact us
               </a>
             </Button>
           )}
         </div>
-        {signedIn && (
-          <p className="mt-4 text-sm text-muted-foreground">
-            Already paid? Your access opens as soon as the Academy marks you enrolled. Refresh this page after that.
-          </p>
-        )}
       </div>
     </div>
   );
