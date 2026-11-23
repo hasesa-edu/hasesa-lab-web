@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
 import { googleSignInHref } from "@/components/GoogleButton";
-import { SUBJECT_STYLES } from "@/components/Subject";
+import { SUBJECT_STYLES, SubjectTile } from "@/components/Subject";
 import type { t as Dict } from "@/lib/i18n";
 import type { ModuleSummary } from "@/lib/content/types";
 import { DISCIPLINES, LEVELS, LEVEL_ORDER } from "@/lib/disciplines";
@@ -13,7 +13,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { ModuleCard } from "@/components/module/ModuleCard";
 import { CardRow } from "@/components/module/CardRow";
 import { HeaderSearch } from "@/components/HeaderSearch";
-import { type CatalogueItem, type Viewer, catalogueItem, sortModules } from "@/lib/catalogue";
+import { type CardState, type CatalogueItem, type Viewer, catalogueItem, sortModules } from "@/lib/catalogue";
 import type { Discipline } from "@/lib/content/types";
 import { SolveIt, type Challenge } from "../landing/SolveIt";
 import { Partners } from "../landing/Partners";
@@ -25,25 +25,33 @@ type Key = keyof typeof Dict;
 type TR = (k: Key) => string;
 
 // The Academy's page (/academy), in the site's clean look. The hero leads with
-// search; the modules section is rows of cards to browse (where to start,
-// featured, by level, by subject), each capped and linked to the full
-// catalogue, so the page works however many modules there are. The rest uses
-// the same numbered mono labels and hairlines as the Hasesa home page.
+// search; the modules section is a short preview (what you're doing, where to
+// start, featured) plus tiles into the catalogue by level and by subject, so
+// the page stays short however many modules there are. The rest uses the same
+// numbered mono labels and hairlines as the Hasesa home page.
 
-export function AcademyClient({ modules, challenge }: { modules: ModuleSummary[]; challenge: Challenge | null }) {
+export function AcademyClient({
+  modules,
+  states,
+  viewer,
+  challenge,
+}: {
+  modules: ModuleSummary[];
+  states: Record<string, CardState>;
+  viewer: Viewer;
+  challenge: Challenge | null;
+}) {
   const { tr } = useLocale();
   const { user, ready } = useUser();
   const primaryHref = user ? "/dashboard" : googleSignInHref("/modules");
   const primaryLabel = ready && user ? tr("hero.cta.dashboard") : tr("hero.cta.signup");
   const items = modules.map(catalogueItem);
-  // This page is the same for everyone, so cards offer Start (signed in) or Sign up (visitors).
-  const viewer: Viewer = !user ? "visitor" : user.access === "enrolled" || user.access === "guide" ? "full" : "limited";
   const sampleHref = modules[0] ? `/concepts/${modules[0].publicSample.id}` : "/modules";
 
   return (
     <div className="bg-background">
       <Hero tr={tr} sampleHref={sampleHref} />
-      <Modules tr={tr} items={items} viewer={viewer} />
+      <Modules tr={tr} items={items} states={states} viewer={viewer} />
       {challenge && (
         <section className="border-t border-border">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:py-24">
@@ -96,33 +104,31 @@ function Hero({ tr, sampleHref }: { tr: TR; sampleHref: string }) {
           ))}
         </div>
       </div>
-      <div className="mt-7 flex flex-wrap gap-3">
-        <Link href="/modules" className={buttonVariants({ size: "lg", variant: "ink" })}>
-          {tr("hero.cta.lessons")}
-        </Link>
-        <Link href={sampleHref} className={buttonVariants({ size: "lg", variant: "outline" })}>
-          {tr("hero.cta.sample")}
-        </Link>
-      </div>
+      <Link href={sampleHref} className="group mt-6 inline-flex items-center gap-1.5 font-medium text-primary">
+        {tr("hero.sample.link")}
+        <ArrowRightIcon aria-hidden className="size-4 transition-transform group-hover:translate-x-0.5" />
+      </Link>
     </section>
   );
 }
 
 /* ───────────────────────────  MODULES  ─────────────────────────── */
 
-/** Rows of cards to browse: where to start, featured, by level and by subject. */
-function Modules({ tr, items, viewer }: { tr: TR; items: CatalogueItem[]; viewer: Viewer }) {
+/** A short preview to browse (what you're doing, where to start, featured), then tiles into the catalogue. */
+function Modules({ tr, items, states, viewer }: { tr: TR; items: CatalogueItem[]; states: Record<string, CardState>; viewer: Viewer }) {
   const card = (m: CatalogueItem) => (
     <li key={m.id}>
-      <ModuleCard item={m} viewer={viewer} />
+      <ModuleCard item={m} state={states[m.id]} viewer={viewer} />
     </li>
   );
+  const doing = viewer === "full" ? items.filter((m) => states[m.id]?.status === "active") : [];
   const beginners = sortModules(items.filter((m) => m.level === "beginner"), "suggested");
   const featured = sortModules(items.filter((m) => m.featured), "suggested");
+  const count = (n: number) => `${n} ${n === 1 ? tr("finder.module") : tr("finder.modules")}`;
   const subjects = (Object.keys(DISCIPLINES) as Discipline[])
-    .map((d) => ({ d, here: sortModules(items.filter((m) => m.disciplines.includes(d)), "suggested") }))
-    .filter(({ here }) => here.length >= 2)
-    .sort((a, b) => b.here.length - a.here.length);
+    .map((d) => ({ d, n: items.filter((m) => m.disciplines.includes(d)).length }))
+    .filter(({ n }) => n > 0)
+    .sort((a, b) => b.n - a.n);
 
   return (
     <section className="border-t border-border bg-card">
@@ -139,6 +145,11 @@ function Modules({ tr, items, viewer }: { tr: TR; items: CatalogueItem[]; viewer
           </Link>
         </div>
 
+        {doing.length > 0 && (
+          <CardRow title={tr("rows.continue")} sub={tr("rows.continue.sub")} seeAll={{ href: "/modules?progress=active" }}>
+            {doing.map(card)}
+          </CardRow>
+        )}
         {beginners.length > 0 && (
           <CardRow title={tr("rows.start")} sub={tr("rows.start.sub")} seeAll={{ href: "/modules?level=beginner" }}>
             {beginners.slice(0, 10).map(card)}
@@ -150,41 +161,52 @@ function Modules({ tr, items, viewer }: { tr: TR; items: CatalogueItem[]; viewer
           </CardRow>
         )}
 
-        <section>
-          <h2 className="text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">{tr("rows.levels")}</h2>
-          <ul className="mt-5 grid gap-4 sm:grid-cols-3">
-            {LEVEL_ORDER.map((level) => {
-              const n = items.filter((m) => m.level === level).length;
-              return (
+        <div className="grid gap-12 lg:grid-cols-[3fr_2fr]">
+          <section>
+            <h2 className="text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">{tr("rows.levels")}</h2>
+            <ul className="mt-5 grid gap-3">
+              {LEVEL_ORDER.map((level) => (
                 <li key={level}>
-                  <Link
-                    href={`/modules?level=${level}`}
-                    className="group flex h-full flex-col rounded-xl border border-border bg-background p-5 transition hover:border-foreground/25 hover:shadow-card"
-                  >
-                    <span className="flex items-baseline justify-between gap-3">
-                      <span className="font-display text-xl font-semibold">{LEVELS[level].label}</span>
-                      <span className="font-mono text-xs text-muted-foreground tabular-nums">
-                        {n} {n === 1 ? tr("finder.module") : tr("finder.modules")}
-                      </span>
-                    </span>
-                    <span className="mt-2 flex-1 text-sm text-muted-foreground">{LEVELS[level].blurb}</span>
-                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
-                      {tr("finder.browse")} <ArrowRightIcon aria-hidden className="size-4 transition-transform group-hover:translate-x-0.5" />
-                    </span>
-                  </Link>
+                  <BrowseTile href={`/modules?level=${level}`} title={LEVELS[level].label} meta={count(items.filter((m) => m.level === level).length)}>
+                    {LEVELS[level].blurb}
+                  </BrowseTile>
                 </li>
-              );
-            })}
-          </ul>
-        </section>
-
-        {subjects.map(({ d, here }) => (
-          <CardRow key={d} title={DISCIPLINES[d].label} seeAll={{ href: `/modules?subject=${d}`, label: `See all ${here.length}` }}>
-            {here.slice(0, 10).map(card)}
-          </CardRow>
-        ))}
+              ))}
+            </ul>
+          </section>
+          <section>
+            <h2 className="text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">{tr("rows.subjects")}</h2>
+            <ul className="mt-5 grid gap-3">
+              {subjects.map(({ d, n }) => (
+                <li key={d}>
+                  <BrowseTile href={`/modules?subject=${d}`} title={DISCIPLINES[d].label} meta={count(n)} icon={<SubjectTile subject={d} size="sm" />} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
       </div>
     </section>
+  );
+}
+
+/** A link into the catalogue, filtered: a level or a subject, with how many modules it holds. */
+function BrowseTile({ href, title, meta, icon, children }: { href: string; title: string; meta: string; icon?: React.ReactNode; children?: React.ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="group flex items-center gap-4 rounded-xl border border-border bg-background px-4 py-3.5 transition hover:border-foreground/25 hover:shadow-card"
+    >
+      {icon}
+      <span className="min-w-0 flex-1">
+        <span className="flex items-baseline justify-between gap-3">
+          <span className="font-display text-lg font-semibold">{title}</span>
+          <span className="font-mono text-xs text-muted-foreground tabular-nums">{meta}</span>
+        </span>
+        {children && <span className="mt-0.5 block text-sm text-muted-foreground">{children}</span>}
+      </span>
+      <ArrowRightIcon aria-hidden className="size-4 shrink-0 text-primary transition-transform group-hover:translate-x-0.5" />
+    </Link>
   );
 }
 
