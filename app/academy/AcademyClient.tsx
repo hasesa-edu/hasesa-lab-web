@@ -16,7 +16,8 @@ import { assignStations, type Station } from "@/lib/stations";
 import { SolveIt, type Challenge } from "../landing/SolveIt";
 import { Partners } from "../landing/Partners";
 import { SectionLabel } from "../landing/SectionLabel";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, PlusIcon } from "lucide-react";
+import { FAQ_KEYS } from "./faq";
 
 type Key = keyof typeof Dict;
 type TR = (k: Key) => string;
@@ -60,6 +61,7 @@ export function AcademyClient({ modules, challenge }: { modules: ModuleSummary[]
       )}
       <HowItWorks tr={tr} />
       <Parents tr={tr} modules={modules} sampleHref={sampleHref} />
+      <Faq tr={tr} />
       <Partners tr={tr} />
       <FinalCta tr={tr} primaryHref={primaryHref} primaryLabel={primaryLabel} />
     </div>
@@ -209,6 +211,34 @@ function Parents({ tr, modules, sampleHref }: { tr: TR; modules: ModuleSummary[]
               <p className="mt-1 text-muted-foreground">{tr("parents.cert.body")}</p>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────  FAQ  ───────────────────────────── */
+
+// Plain questions and answers: what parents ask, and what AI answer engines quote.
+// The same wording is published as FAQPage structured data (app/academy/page.tsx).
+function Faq({ tr }: { tr: TR }) {
+  return (
+    <section className="border-t border-border">
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:py-24 lg:grid-cols-[1fr_2fr]">
+        <div>
+          <SectionLabel n="05">{tr("label.faq")}</SectionLabel>
+          <h2 className="mt-4 text-3xl leading-tight font-semibold sm:text-5xl">{tr("faq.title")}</h2>
+        </div>
+        <div className="border-t border-border">
+          {FAQ_KEYS.map((k) => (
+            <details key={k} className="group border-b border-border">
+              <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-4 text-lg font-semibold [&::-webkit-details-marker]:hidden">
+                <h3>{tr(`faq.${k}.q` as Key)}</h3>
+                <PlusIcon aria-hidden className="size-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-45" />
+              </summary>
+              <p className="max-w-2xl pb-5 leading-relaxed text-muted-foreground">{tr(`faq.${k}.a` as Key)}</p>
+            </details>
+          ))}
         </div>
       </div>
     </section>

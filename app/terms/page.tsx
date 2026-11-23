@@ -3,7 +3,7 @@ import { BRAND, COMPANY } from "@/lib/brand";
 import { PLAN } from "@/lib/billing/plan";
 import { Contact, LegalPage } from "@/components/legal/LegalPage";
 
-export const metadata: Metadata = { title: `Terms of Service · ${BRAND}` };
+export const metadata: Metadata = { title: `Terms of Service · ${BRAND}`, alternates: { canonical: "/terms" } };
 
 export default function TermsPage() {
   return (

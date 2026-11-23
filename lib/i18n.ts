@@ -143,6 +143,22 @@ export const t: Dict = {
   "parents.cert.title": { en: "A certificate for every module" },
   "parents.cert.body": { en: "Earned by making the build work and explaining how, not by sitting an exam." },
 
+  // Academy FAQ (also published as FAQPage structured data)
+  "label.faq": { en: "Questions parents ask" },
+  "faq.title": { en: "Good to know." },
+  "faq.who.q": { en: "Who is the Academy for?" },
+  "faq.who.a": { en: "Teenagers aged 13 to 18 who want to know how things work. The theory each project needs is taught along the way." },
+  "faq.where.q": { en: "Where do sessions happen?" },
+  "faq.where.a": { en: "Hands-on sessions run at our partner schools, with a guide. Get in touch to find out about the next sessions." },
+  "faq.cost.q": { en: "What does it cost?" },
+  "faq.cost.a": { en: "It's free during the pilot, which runs to the end of 2027. We'll announce pricing before the pilot ends." },
+  "faq.length.q": { en: "How long is a module?" },
+  "faq.length.a": { en: "About 10 hours, split between hands-on sessions at the Academy and concept units at home." },
+  "faq.need.q": { en: "What do students need?" },
+  "faq.need.a": { en: "Nothing: the Academy provides all materials. A phone or computer is useful for the concept units at home." },
+  "faq.certificate.q": { en: "Do students get a certificate?" },
+  "faq.certificate.a": { en: "Yes. When the build works and the student can explain how, their guide signs them off and they get a certificate for that module." },
+
   // Partners
   "partners.eyebrow": { en: "Piloted with" },
   "partners.sb.tag": {
