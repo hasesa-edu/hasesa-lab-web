@@ -48,6 +48,7 @@ export function Nav() {
   const { user, refresh } = useUser();
   const router = useRouter();
   const pathname = usePathname();
+  const showSearch = pathname !== "/" && pathname !== "/academy";
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -128,10 +129,13 @@ export function Nav() {
           ))}
         </nav>
 
-        {/* Search from any page; "/" focuses it. */}
-        <div className="ml-2 hidden max-w-sm flex-1 md:block">
-          <HeaderSearch shortcut />
-        </div>
+        {/* Search from any page but the two landing pages ("/" focuses it): Hasesa's
+            home isn't about modules, and the Academy's hero has its own search box. */}
+        {showSearch && (
+          <div className="ml-2 hidden max-w-sm flex-1 md:block">
+            <HeaderSearch shortcut />
+          </div>
+        )}
 
         <div className="ml-auto hidden md:flex items-center gap-2">
           {/* TEMP: theme toggle hidden — light-only for now */}
@@ -194,20 +198,22 @@ export function Nav() {
         <div className="ml-auto flex md:hidden items-center gap-1.5">
           {/* TEMP: theme toggle hidden — light-only for now */}
           <ThemeToggle className="hidden" />
-          <Sheet open={searchOpen} onOpenChange={setSearchOpen}>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="icon-lg" aria-label="Search" className="rounded-lg bg-card hover:bg-muted">
-                <SearchIcon className="size-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="top" className="bg-background px-4 pt-14 pb-6 [&>[data-slot=sheet-close]]:top-3 [&>[data-slot=sheet-close]]:right-3">
-              <SheetHeader className="sr-only">
-                <SheetTitle>Search</SheetTitle>
-                <SheetDescription>Search modules and concept units</SheetDescription>
-              </SheetHeader>
-              <HeaderSearch autoFocus onNavigate={() => setSearchOpen(false)} />
-            </SheetContent>
-          </Sheet>
+          {showSearch && (
+            <Sheet open={searchOpen} onOpenChange={setSearchOpen}>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="icon-lg" aria-label="Search" className="rounded-lg bg-card hover:bg-muted">
+                  <SearchIcon className="size-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="top" className="bg-background px-4 pt-14 pb-6 [&>[data-slot=sheet-close]]:top-3 [&>[data-slot=sheet-close]]:right-3">
+                <SheetHeader className="sr-only">
+                  <SheetTitle>Search</SheetTitle>
+                  <SheetDescription>Search modules and concept units</SheetDescription>
+                </SheetHeader>
+                <HeaderSearch autoFocus onNavigate={() => setSearchOpen(false)} />
+              </SheetContent>
+            </Sheet>
+          )}
           {!user && (
             <>
               {/* Only room for one link next to Sign in on phones; the Academy page leads on to the modules. */}

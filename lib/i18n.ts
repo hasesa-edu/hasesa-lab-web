@@ -32,7 +32,7 @@ export const t: Dict = {
     en: "Learn by doing.",
   },
   "hero.sub": {
-    en: "Hands-on science for teenagers. Every module starts with a mystery and ends with something you built or solved.",
+    en: "Hands-on science for teenagers aged 13 to 18. Every module starts with a mystery and ends with something you built or solved.",
   },
   "hero.cta.lessons": { en: "See the modules" },
   "academy.eyebrow": { en: "Hasesa Academy · our first program" },
@@ -43,7 +43,6 @@ export const t: Dict = {
   // Mono section labels on the marketing pages ("01 — Why now")
   "label.why": { en: "Why now" },
   "label.exploring": { en: "What we're exploring" },
-  "label.how": { en: "How we work" },
   "label.program": { en: "Our first program" },
   "label.modules": { en: "The modules" },
   "label.method": { en: "How a module works" },
@@ -76,15 +75,8 @@ export const t: Dict = {
   "home.q.cost.title": { en: "Can any school afford it?" },
   "home.q.cost.body": { en: "Builds use cheap, locally available materials instead of lab equipment." },
   "home.q.evidence.title": { en: "How do we know it works?" },
-  "home.q.evidence.body": { en: "The Academy pilot runs to the end of 2027. We'll share what worked and what didn't." },
+  "home.q.evidence.body": { en: "The Academy pilot runs to the end of 2027. We'll share what worked and what didn't, and package what works so other schools can run it." },
 
-  "home.how.title": { en: "We explore by building." },
-  "home.how.1.title": { en: "Try it with real students" },
-  "home.how.1.body": { en: "New ways of learning start as programs that students actually attend, not as papers." },
-  "home.how.2.title": { en: "Keep what works" },
-  "home.how.2.body": { en: "We watch closely, measure what students learn and change what doesn't work." },
-  "home.how.3.title": { en: "Bring it to schools" },
-  "home.how.3.body": { en: "What works is packaged so other schools and teachers can run it, in Ethiopia and beyond." },
 
   "home.programs.eyebrow": { en: "Our first program" },
   "home.programs.academy.title": { en: "Hasesa Academy" },
@@ -134,15 +126,10 @@ export const t: Dict = {
   "showcase.allLevel": { en: "All {n} {level} modules" },
 
   // The Academy hero's finder
-    "finder.module": { en: "module" },
-  "finder.modules": { en: "modules" },
   "finder.browse": { en: "Browse" },
   "finder.popular": { en: "Popular:" },
   "rows.start": { en: "Start here" },
   "rows.start.sub": { en: "Beginner modules: kitchen-table materials and simple maths." },
-  "rows.featured": { en: "Featured" },
-  "rows.levels": { en: "Browse by level" },
-  "rows.subjects": { en: "Browse by subject" },
   "rows.continue": { en: "Continue learning" },
   "rows.continue.sub": { en: "Pick up where you stopped." },
   "hero.sample.link": { en: "Or try a free sample unit" },
@@ -150,7 +137,7 @@ export const t: Dict = {
 
   // For parents
   "parents.title": { en: "Fun, and it counts." },
-  "parents.sub": { en: "Every module is mapped to the national curriculum (a draft that subject teachers are checking), so what your child builds connects to what they study in class." },
+  "parents.sub": { en: "Every module is mapped to the national curriculum, so what your child builds connects to what they study in class." },
   "parents.curriculum.title": { en: "curriculum topics, used for real" },
   "parents.curriculum.body": { en: "Each concept unit is tagged with where it appears in the school curriculum." },
   "parents.guide.title": { en: "A guide who follows every student" },
@@ -161,16 +148,10 @@ export const t: Dict = {
   // Academy FAQ (also published as FAQPage structured data)
   "label.faq": { en: "Questions parents ask" },
   "faq.title": { en: "Good to know." },
-  "faq.who.q": { en: "Who is the Academy for?" },
-  "faq.who.a": { en: "Teenagers aged 13 to 18 who want to know how things work. The theory each project needs is taught along the way." },
   "faq.where.q": { en: "Where do sessions happen?" },
   "faq.where.a": { en: "Hands-on sessions run at our partner schools in Addis Ababa, with a guide. Get in touch to find out about the next sessions." },
   "faq.cost.q": { en: "What does it cost?" },
   "faq.cost.a": { en: "A place at the Academy costs 12,000 ETB a year. Online access to the modules and concept units is free during the pilot, which runs to the end of 2027. Get in touch to enrol." },
-  "faq.length.q": { en: "How long is a module?" },
-  "faq.length.a": { en: "Between 8 and 14 hours, depending on the module, split between hands-on sessions at the Academy and concept units at home." },
-  "faq.level.q": { en: "Which module should my child start with?" },
-  "faq.level.a": { en: "Any of them. Modules are marked beginner, intermediate or advanced by how much maths, tool work and independent work they ask for, not by age. Beginner modules such as Bottle Rocket or Clean Water are a good first step, but a keen student can start higher with their guide's help." },
   "faq.need.q": { en: "What do students need?" },
   "faq.need.a": { en: "Nothing: the Academy provides all materials. A phone or computer is useful for the concept units at home." },
   "faq.certificate.q": { en: "Do students get a certificate?" },
@@ -185,13 +166,6 @@ export const t: Dict = {
     en: "A school in Addis Ababa serving students at scale.",
   },
 
-  // Dewey quote (pull quote in the Academy's "How a module works")
-  "dewey.quote": {
-    en: "Give the pupils something to do, not something to learn; and the doing is of such a nature as to demand thinking; learning naturally results.",
-  },
-  "dewey.attribution": {
-    en: "John Dewey",
-  },
 
   // CTA strip
   "cta.title": { en: "Ready to build something?" },

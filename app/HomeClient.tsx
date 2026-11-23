@@ -23,7 +23,6 @@ export function HomeClient({ moduleCount }: { moduleCount: number }) {
       <Hero tr={tr} />
       <Why tr={tr} n="01" />
       <Exploring tr={tr} />
-      <HowWeWork tr={tr} />
       <Programs tr={tr} moduleCount={moduleCount} />
     </div>
   );
@@ -98,38 +97,13 @@ function Exploring({ tr }: { tr: TR }) {
   );
 }
 
-/* ───────────────────────────  HOW WE WORK  ─────────────────────────── */
-
-function HowWeWork({ tr }: { tr: TR }) {
-  const steps: { title: Key; body: Key }[] = [
-    { title: "home.how.1.title", body: "home.how.1.body" },
-    { title: "home.how.2.title", body: "home.how.2.body" },
-    { title: "home.how.3.title", body: "home.how.3.body" },
-  ];
-  return (
-    <section className="mx-auto max-w-6xl px-4 py-16 sm:py-24">
-      <SectionLabel n="03">{tr("label.how")}</SectionLabel>
-      <h2 className="mt-4 max-w-3xl text-3xl leading-tight font-semibold sm:text-5xl">{tr("home.how.title")}</h2>
-      <ol className="mt-10 grid gap-10 md:grid-cols-3">
-        {steps.map((s, i) => (
-          <li key={s.title} className="border-t border-input pt-5">
-            <span className="font-mono text-3xl text-primary tabular-nums">{String(i + 1).padStart(2, "0")}</span>
-            <h3 className="mt-3 text-xl font-semibold">{tr(s.title)}</h3>
-            <p className="mt-2 leading-relaxed text-muted-foreground">{tr(s.body)}</p>
-          </li>
-        ))}
-      </ol>
-    </section>
-  );
-}
-
 /* ───────────────────────────  PROGRAMS  ─────────────────────────── */
 
 function Programs({ tr, moduleCount }: { tr: TR; moduleCount: number }) {
   return (
     <section className="border-t border-border">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:py-24">
-        <SectionLabel n="04">{tr("label.program")}</SectionLabel>
+        <SectionLabel n="03">{tr("label.program")}</SectionLabel>
         <Link
           href="/academy"
           className="group mt-6 flex flex-wrap items-end justify-between gap-8 rounded-lg border border-border bg-card p-6 outline-none transition-colors hover:border-input focus-visible:ring-3 focus-visible:ring-ring/40 sm:p-9"
