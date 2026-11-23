@@ -54,7 +54,7 @@ export const t: Dict = {
   "home.eyebrow": { en: "Hasesa means exploration" },
   "home.title": { en: "Education for the world of tomorrow." },
   "home.sub": {
-    en: "AI is changing work, economies and society. We can't keep educating students for the world of yesterday. Hasesa is exploring an education system built for the AI era, and testing it with real students.",
+    en: "AI is changing work, economies and society, and perhaps what it means to be human. We can't keep educating students for the world of yesterday. Hasesa is exploring an education system built for the AI era, and testing it with real students.",
   },
   "home.cta.academy": { en: "Visit the Academy" },
   "home.cta.exploring": { en: "What we're exploring" },
