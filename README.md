@@ -1,6 +1,8 @@
 # Hasesa — Reimagining Education for the AI Era
 
-Hasesa Academy teaches science through hands-on **modules**. Each module starts with a mystery or something to build, and students learn the theory when the project needs it, not before. Builds happen at the Academy with a guide; at home, students read concept units and solve problems on their phone or computer.
+Hasesa (Amharic for "exploration") is building an education system for the AI era. AI is changing work, economies and society, and we can't keep educating students for the world of yesterday. Hasesa tries new ways of learning with real students, keeps what works and brings it to schools, in Ethiopia and beyond. The home page sets out this thesis and the open questions we're exploring.
+
+**Hasesa Academy is our first program**, and it is what this app runs. The Academy teaches science through hands-on **modules**. Each module starts with a mystery or something to build, and students learn the theory when the project needs it, not before. Builds happen at the Academy with a guide; at home, students read concept units and solve problems on their phone or computer.
 
 The first three modules (all AI drafts awaiting expert review):
 
@@ -32,7 +34,8 @@ Content lives in `content/` as Markdown with YAML frontmatter. See `content/READ
 
 | Route | What it does |
 |---|---|
-| `/` | Landing page |
+| `/` | Hasesa home: the thesis, what we're exploring, programs |
+| `/academy` | Academy landing page (tuning dial, modules, enrolment) |
 | `/login`, `/signup` | Google sign-in (the first sign-in creates the account) |
 | `/modules` | Module catalogue (public) |
 | `/modules/[id]` | Module preview, or the full module with progress when enrolled |

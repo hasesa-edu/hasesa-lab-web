@@ -39,7 +39,7 @@ const atkinson = Atkinson_Hyperlegible_Next({
 
 const TITLE = `${BRAND} · ${MOTTO}`;
 const DESCRIPTION =
-  "Hands-on modules at Hasesa Academy: build a radio, control a robot claw with your muscles, catch food fakers. Students start by doing and learn the science and maths when the project needs it.";
+  "Hasesa (Amharic for \"exploration\") is building an education system for the AI era, tested with real students before it goes to schools across Ethiopia and beyond. Hasesa Academy, hands-on science for teenagers, is our first program.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://hasesa.vercel.app"),

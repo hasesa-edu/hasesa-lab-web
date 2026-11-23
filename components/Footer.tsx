@@ -10,8 +10,8 @@ import { cn } from "@/lib/utils";
 export function Footer() {
   const { tr } = useLocale();
   const pathname = usePathname();
-  // Dewey quote belongs to the marketing story — keep it on the home page only.
-  const showQuote = pathname === "/";
+  // Dewey quote belongs to the marketing story — keep it on the home and Academy pages only.
+  const showQuote = pathname === "/" || pathname === "/academy";
   // Sign-in (student and admin) and payment-return pages fill the screen with their own background; let the footer sit flush under them.
   const flush =
     pathname === "/login" || pathname === "/admin/login" || pathname.startsWith("/billing");
