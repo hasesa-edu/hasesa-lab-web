@@ -4,17 +4,14 @@ import Link from "next/link";
 import { useLocale } from "@/components/LocaleProvider";
 import { useUser } from "@/components/UserProvider";
 import { googleSignInHref } from "@/components/GoogleButton";
-import { SUBJECT_STYLES, SubjectTile } from "@/components/Subject";
 import type { t as Dict } from "@/lib/i18n";
 import type { ModuleSummary } from "@/lib/content/types";
-import { DISCIPLINES, LEVELS, LEVEL_ORDER } from "@/lib/disciplines";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { ModuleCard } from "@/components/module/ModuleCard";
 import { CardRow } from "@/components/module/CardRow";
 import { HeaderSearch } from "@/components/HeaderSearch";
 import { type CardState, type CatalogueItem, type Viewer, catalogueItem, sortModules } from "@/lib/catalogue";
-import type { Discipline } from "@/lib/content/types";
 import { SolveIt, type Challenge } from "../landing/SolveIt";
 import { Partners } from "../landing/Partners";
 import { SectionLabel } from "../landing/SectionLabel";
@@ -26,7 +23,7 @@ type TR = (k: Key) => string;
 
 // The Academy's page (/academy), in the site's clean look. The hero leads with
 // search; the modules section is a short preview (what you're doing, where to
-// start, featured) plus tiles into the catalogue by level and by subject, so
+// start) and a link to the full catalogue, whose filters do the browsing, so
 // the page stays short however many modules there are. The rest uses the same
 // numbered mono labels and hairlines as the Hasesa home page.
 
@@ -94,7 +91,7 @@ function Hero({ tr, sampleHref }: { tr: TR; sampleHref: string }) {
       </h1>
       <p className="mt-5 max-w-2xl text-lg leading-relaxed text-foreground/75">{tr("hero.sub")}</p>
       <div className="mt-7 max-w-2xl">
-        <HeaderSearch size="lg" />
+        <HeaderSearch size="lg" shortcut />
         <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
           <span className="text-muted-foreground">{tr("finder.popular")}</span>
           {POPULAR.map((q) => (
@@ -114,7 +111,7 @@ function Hero({ tr, sampleHref }: { tr: TR; sampleHref: string }) {
 
 /* ───────────────────────────  MODULES  ─────────────────────────── */
 
-/** A short preview to browse (what you're doing, where to start, featured), then tiles into the catalogue. */
+/** A short preview (what you're doing, where to start); the catalogue's filters do the rest. */
 function Modules({ tr, items, states, viewer }: { tr: TR; items: CatalogueItem[]; states: Record<string, CardState>; viewer: Viewer }) {
   const card = (m: CatalogueItem) => (
     <li key={m.id}>
@@ -123,12 +120,6 @@ function Modules({ tr, items, states, viewer }: { tr: TR; items: CatalogueItem[]
   );
   const doing = viewer === "full" ? items.filter((m) => states[m.id]?.status === "active") : [];
   const beginners = sortModules(items.filter((m) => m.level === "beginner"), "suggested");
-  const featured = sortModules(items.filter((m) => m.featured), "suggested");
-  const count = (n: number) => `${n} ${n === 1 ? tr("finder.module") : tr("finder.modules")}`;
-  const subjects = (Object.keys(DISCIPLINES) as Discipline[])
-    .map((d) => ({ d, n: items.filter((m) => m.disciplines.includes(d)).length }))
-    .filter(({ n }) => n > 0)
-    .sort((a, b) => b.n - a.n);
 
   return (
     <section className="border-t border-border bg-card">
@@ -155,58 +146,8 @@ function Modules({ tr, items, states, viewer }: { tr: TR; items: CatalogueItem[]
             {beginners.slice(0, 10).map(card)}
           </CardRow>
         )}
-        {featured.length > 0 && (
-          <CardRow title={tr("rows.featured")} seeAll={{ href: "/modules" }}>
-            {featured.slice(0, 10).map(card)}
-          </CardRow>
-        )}
-
-        <div className="grid gap-12 lg:grid-cols-[3fr_2fr]">
-          <section>
-            <h2 className="text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">{tr("rows.levels")}</h2>
-            <ul className="mt-5 grid gap-3">
-              {LEVEL_ORDER.map((level) => (
-                <li key={level}>
-                  <BrowseTile href={`/modules?level=${level}`} title={LEVELS[level].label} meta={count(items.filter((m) => m.level === level).length)}>
-                    {LEVELS[level].blurb}
-                  </BrowseTile>
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section>
-            <h2 className="text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">{tr("rows.subjects")}</h2>
-            <ul className="mt-5 grid gap-3">
-              {subjects.map(({ d, n }) => (
-                <li key={d}>
-                  <BrowseTile href={`/modules?subject=${d}`} title={DISCIPLINES[d].label} meta={count(n)} icon={<SubjectTile subject={d} size="sm" />} />
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
       </div>
     </section>
-  );
-}
-
-/** A link into the catalogue, filtered: a level or a subject, with how many modules it holds. */
-function BrowseTile({ href, title, meta, icon, children }: { href: string; title: string; meta: string; icon?: React.ReactNode; children?: React.ReactNode }) {
-  return (
-    <Link
-      href={href}
-      className="group flex items-center gap-4 rounded-xl border border-border bg-background px-4 py-3.5 transition hover:border-foreground/25 hover:shadow-card"
-    >
-      {icon}
-      <span className="min-w-0 flex-1">
-        <span className="flex items-baseline justify-between gap-3">
-          <span className="font-display text-lg font-semibold">{title}</span>
-          <span className="font-mono text-xs text-muted-foreground tabular-nums">{meta}</span>
-        </span>
-        {children && <span className="mt-0.5 block text-sm text-muted-foreground">{children}</span>}
-      </span>
-      <ArrowRightIcon aria-hidden className="size-4 shrink-0 text-primary transition-transform group-hover:translate-x-0.5" />
-    </Link>
   );
 }
 
@@ -224,15 +165,6 @@ function HowItWorks({ tr }: { tr: TR }) {
       <div className="mx-auto max-w-6xl px-4 py-16 sm:py-24">
         <SectionLabel n="03">{tr("label.method")}</SectionLabel>
         <h2 className="mt-4 max-w-3xl text-3xl leading-tight font-semibold sm:text-5xl">{tr("how.title")}</h2>
-        {/* The idea the method rests on, a century old. */}
-        <figure className="mt-8 max-w-3xl border-l-2 border-primary pl-5 sm:pl-6">
-          <blockquote className="text-xl leading-snug font-medium tracking-[-0.015em] text-foreground/85 sm:text-2xl">
-            &ldquo;{tr("dewey.quote")}&rdquo;
-          </blockquote>
-          <figcaption className="mt-3 font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase">
-            — {tr("dewey.attribution")}
-          </figcaption>
-        </figure>
         <ol className="mt-10 grid gap-10 sm:grid-cols-2 md:grid-cols-4 md:gap-8">
           {steps.map((s, i) => (
             <li key={s.title} className="border-t border-input pt-5">
@@ -253,8 +185,6 @@ function Parents({ tr, modules, sampleHref }: { tr: TR; modules: ModuleSummary[]
   const seen = new Map<string, ModuleSummary["curriculum"][number]>();
   for (const m of modules) for (const c of m.curriculum) seen.set(`${c.subject}|${c.grade}|${c.unit}`, c);
   const topics = [...seen.values()];
-  // Two per science, so parents see topics from every subject.
-  const examples = (["physics", "chemistry", "biology"] as const).flatMap((sub) => topics.filter((c) => c.subject === sub).slice(0, 2));
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-16 sm:py-24">
@@ -272,16 +202,6 @@ function Parents({ tr, modules, sampleHref }: { tr: TR; modules: ModuleSummary[]
             <p className="font-mono text-5xl text-primary tabular-nums">{topics.length}</p>
             <p className="mt-2 font-semibold">{tr("parents.curriculum.title")}</p>
             <p className="mt-1 text-muted-foreground">{tr("parents.curriculum.body")}</p>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {examples.map((c) => (
-                <li key={`${c.subject}-${c.grade}-${c.unit}`} className="rounded-full border border-border bg-card px-3 py-1 text-sm">
-                  <span className={cn("font-medium", SUBJECT_STYLES[c.subject].text)}>
-                    {DISCIPLINES[c.subject].label} {c.grade}
-                  </span>{" "}
-                  <span className="text-muted-foreground">{c.unit}</span>
-                </li>
-              ))}
-            </ul>
           </div>
           <div className="grid gap-8 border-t border-border pt-8 sm:grid-cols-2">
             <div>
