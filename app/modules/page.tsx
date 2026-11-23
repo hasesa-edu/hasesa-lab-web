@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { getModules, summarize } from "@/lib/content";
-import { catalogueItem, filtersQuery, parseFilters } from "@/lib/catalogue";
+import { type Viewer, catalogueItem, catalogueQuery, parseFilters, parseSort } from "@/lib/catalogue";
 import { getViewer } from "@/lib/viewer";
-import { moduleProgress } from "@/lib/summary";
+import { cardStates } from "@/lib/summary";
 import { hasFullAccess } from "@/lib/access";
 import { pageMeta } from "@/lib/seo";
 import { PageHeader } from "@/components/PageHeader";
-import type { RowProgress } from "@/components/module/ModuleRows";
 import { Catalogue } from "@/components/module/Catalogue";
 import { EnrolCard } from "@/components/module/ui";
 
@@ -17,35 +16,28 @@ export const metadata: Metadata = pageMeta({
 });
 export const dynamic = "force-dynamic";
 
-const STATUS: Record<string, string> = { active: "In progress", completed: "Signed off", dropped: "Dropped" };
-
 export default async function ModulesPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const { access, state } = await getViewer();
   const modules = getModules();
   const items = modules.map((m) => catalogueItem(summarize(m)));
-  const initial = parseFilters(await searchParams);
-
-  // Where a signed-in student is in each module they've touched.
-  const progress: Record<string, RowProgress> = {};
-  if (state) {
-    for (const m of modules) {
-      const p = moduleProgress(m, state);
-      if (p.status === "not-started") continue;
-      progress[m.id] = {
-        label: `${STATUS[p.status]}: ${p.stepsDone} of ${p.stepsTotal} steps`,
-        pct: p.stepsTotal ? Math.round((p.stepsDone / p.stepsTotal) * 100) : 0,
-      };
-    }
-  }
+  const params = await searchParams;
+  const initial = parseFilters(params);
+  const sort = parseSort(params);
+  const viewer: Viewer = !access.userId ? "visitor" : hasFullAccess(access) ? "full" : "limited";
 
   return (
     <div>
       <PageHeader
-        title="Modules"
-        description="Each module is a mystery to solve or something to build. They run from beginner to advanced, and you can start anywhere, though a beginner module is a good first step. You learn the science and maths when the project needs it, and finish with something that works."
+        title={initial.q ? `Results for “${initial.q}”` : "Explore modules"}
+        description={
+          initial.q
+            ? undefined
+            : "Each module is a mystery to solve or something to build, from beginner to advanced. Start anywhere: a beginner module is a good first step. Search from the bar at the top of any page."
+        }
       />
-      <div className="mx-auto max-w-6xl px-4 pt-10 pb-16">
-        <Catalogue key={filtersQuery(initial)} items={items} progress={progress} initial={initial} />
+      <div className="mx-auto max-w-6xl px-4 pt-8 pb-16">
+        {/* Remount when the URL's filters change (e.g. a new search from the header). */}
+        <Catalogue key={catalogueQuery(initial, sort)} items={items} states={cardStates(modules, state)} viewer={viewer} initial={initial} initialSort={sort} />
         {!hasFullAccess(access) && <EnrolCard signedIn={!!access.userId} next="/modules" className="mt-14" />}
       </div>
     </div>
