@@ -48,12 +48,13 @@ describe("filters", () => {
       level: "beginner",
       subject: "physics",
       length: "short",
+      progress: null,
     });
     expect(parseFilters({ level: "expert", subject: ["chemistry", "physics"], length: "huge" })).toEqual({ ...NO_FILTERS, subject: "chemistry" });
   });
 
   it("round-trips through the query string", () => {
-    const f = { q: "wind power", level: "advanced", subject: null, length: "long" } as const;
+    const f = { q: "wind power", level: "advanced", subject: null, length: "long", progress: "active" } as const;
     expect(parseFilters(Object.fromEntries(new URLSearchParams(filtersQuery(f))))).toEqual(f);
     expect(filtersQuery(NO_FILTERS)).toBe("");
   });
@@ -67,6 +68,15 @@ describe("filters", () => {
     expect(ids(filterModules(items, { ...NO_FILTERS, q: "BIOLOGY", level: "advanced" }))).toEqual(["dna"]);
     expect(ids(filterModules(items, { ...NO_FILTERS, q: "physics radio" }))).toEqual(["radio"]);
     expect(filterModules(items, { ...NO_FILTERS, q: "volcano" })).toEqual([]);
+  });
+
+  it("filters by the student's progress, counting dropped as not started", () => {
+    const states = { rocket: { status: "active" as const }, water: { status: "completed" as const }, seeds: { status: "dropped" as const } };
+    expect(ids(filterModules(items, { ...NO_FILTERS, progress: "active" }, states))).toEqual(["rocket"]);
+    expect(ids(filterModules(items, { ...NO_FILTERS, progress: "completed" }, states))).toEqual(["water"]);
+    expect(ids(filterModules(items, { ...NO_FILTERS, progress: "not-started" }, states))).toEqual(["seeds", "injera", "radio", "dna", "wind"]);
+    expect(ids(filterModules(items, { ...NO_FILTERS, progress: "not-started" }))).toEqual(ids(items));
+    expect(parseFilters({ progress: "paused" }).progress).toBeNull();
   });
 });
 

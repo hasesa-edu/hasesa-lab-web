@@ -142,6 +142,10 @@ export const t: Dict = {
   "rows.start.sub": { en: "Beginner modules: kitchen-table materials and simple maths." },
   "rows.featured": { en: "Featured" },
   "rows.levels": { en: "Browse by level" },
+  "rows.subjects": { en: "Browse by subject" },
+  "rows.continue": { en: "Continue learning" },
+  "rows.continue.sub": { en: "Pick up where you stopped." },
+  "hero.sample.link": { en: "Or try a free sample unit" },
 
 
   // For parents
