@@ -6,11 +6,14 @@ import { getConcept, getModule, moduleUnits, summarize } from "@/lib/content";
 import type { Module } from "@/lib/content/types";
 import { getViewer } from "@/lib/viewer";
 import { hasFullAccess } from "@/lib/access";
-import { isUnitDone, moduleProgress } from "@/lib/summary";
-import { DISCIPLINES, LEVELS } from "@/lib/disciplines";
+import { cardStates, isUnitDone, moduleProgress } from "@/lib/summary";
+import { DISCIPLINES, LEVELS, STATUS_LABEL } from "@/lib/disciplines";
 import { BRAND } from "@/lib/brand";
 import { SITE_URL, pageMeta } from "@/lib/seo";
 import { JsonLd } from "@/components/JsonLd";
+import { type Viewer, catalogueItem } from "@/lib/catalogue";
+import { ModuleAction } from "@/components/module/ModuleCard";
+import { ModuleCover } from "@/components/module/ModuleCover";
 import { cn } from "@/lib/utils";
 import { Markdown } from "@/components/Markdown";
 import { SUBJECT_STYLES, SubjectLabel } from "@/components/Subject";
@@ -44,6 +47,8 @@ export default async function ModulePage({ params }: Props) {
   const full = hasFullAccess(access);
   const signedIn = !!access.userId;
   const summary = summarize(m);
+  const item = catalogueItem(summary);
+  const viewer: Viewer = !signedIn ? "visitor" : full ? "full" : "limited";
   const progress = state ? moduleProgress(m, state) : null;
   const unitIds = moduleUnits(m);
   const doneSteps = new Set(state?.steps.filter((s) => s.moduleId === m.id && s.done).map((s) => s.stepId));
@@ -87,18 +92,40 @@ export default async function ModulePage({ params }: Props) {
         }}
       />
       <header className="border-b border-border bg-card">
-        <div className="mx-auto max-w-6xl px-4 pt-6 pb-10 sm:pt-8 sm:pb-12">
-          <BackLink href="/modules">← All modules</BackLink>
-          <div className="mt-5 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-            <span className="font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase" title={LEVELS[m.level].blurb}>
-              {LEVELS[m.level].label}
-            </span>
-            {m.disciplines.map((d) => (
-              <SubjectLabel key={d} subject={d} />
-            ))}
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 pt-6 pb-10 sm:pt-8 sm:pb-12 lg:grid-cols-[minmax(0,1fr)_26rem] lg:items-center lg:gap-12">
+          <div className="min-w-0">
+            <BackLink href="/modules">← All modules</BackLink>
+            <div className="mt-5 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+              <span className="font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase" title={LEVELS[m.level].blurb}>
+                {LEVELS[m.level].label}
+              </span>
+              {m.disciplines.map((d) => (
+                <SubjectLabel key={d} subject={d} />
+              ))}
+            </div>
+            <h1 className="mt-3 text-5xl leading-[1.02] font-semibold tracking-[-0.04em] sm:text-6xl">{m.title}</h1>
+            <p className="mt-3 max-w-3xl text-xl font-medium text-foreground/80 sm:text-2xl">{m.tagline}</p>
+            <p className="mt-4 font-mono text-xs text-muted-foreground">
+              ~{m.hours} hours · {m.steps.length} steps · {unitIds.length} concept units · {STATUS_LABEL[m.status]}
+            </p>
+            <ModuleAction item={item} state={cardStates([m], state)[m.id]} viewer={viewer} size="lg" className="mt-6" />
           </div>
-          <h1 className="mt-3 text-5xl leading-[1.02] font-semibold tracking-[-0.04em] sm:text-7xl">{m.title}</h1>
-          <p className="mt-3 max-w-3xl text-xl font-medium text-foreground/80 sm:text-2xl">{m.tagline}</p>
+          <ModuleCover id={m.id} disciplines={m.disciplines} level={m.level} className="hidden rounded-xl border border-border sm:block" />
+        </div>
+        {/* What you'll learn: the concept units this module teaches. */}
+        <div className="border-t border-border">
+          <div className="mx-auto max-w-6xl px-4 py-6">
+            <h2 className="font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase">What you&apos;ll learn</h2>
+            <ul className="mt-3 grid gap-x-8 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
+              {unitIds.slice(0, 6).map((u) => (
+                <li key={u} className="flex items-start gap-2 text-sm">
+                  <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-primary" />
+                  {getConcept(u)?.title ?? u}
+                </li>
+              ))}
+              {unitIds.length > 6 && <li className="text-sm text-muted-foreground">and {unitIds.length - 6} more</li>}
+            </ul>
+          </div>
         </div>
       </header>
 

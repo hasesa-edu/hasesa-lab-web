@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ChevronRight, SearchIcon } from "lucide-react";
 import { type CatalogueItem, matchesQuery } from "@/lib/catalogue";
 import { DISCIPLINES, LEVEL_ORDER } from "@/lib/disciplines";
-import { LevelHeading } from "@/components/module/ModuleRows";
+import { LevelHeading } from "@/components/module/LevelHeading";
 
 export function GuideIndex({ items }: { items: CatalogueItem[] }) {
   const [q, setQ] = useState("");
