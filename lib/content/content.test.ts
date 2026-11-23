@@ -11,7 +11,7 @@ describe("content", () => {
 
   for (const m of content.modules) {
     describe(m.id, () => {
-      it("is about 10 hours of steps", () => {
+      it("has steps that add up to its hours", () => {
         const minutes = m.steps.reduce((n, s) => n + s.minutes, 0);
         expect(minutes).toBeGreaterThanOrEqual(m.hours * 60 * 0.75);
         expect(minutes).toBeLessThanOrEqual(m.hours * 60 * 1.25);
@@ -42,5 +42,13 @@ describe("content", () => {
 
   it("every concept has at least 3 problems", () => {
     for (const c of content.concepts.values()) expect(c.problems.length, c.id).toBeGreaterThanOrEqual(3);
+  });
+});
+
+describe("levels", () => {
+  it("lists modules easiest first", () => {
+    const order = ["beginner", "intermediate", "advanced"];
+    const ranks = content.modules.map((m) => order.indexOf(m.level));
+    expect(ranks).toEqual([...ranks].sort((a, b) => a - b));
   });
 });

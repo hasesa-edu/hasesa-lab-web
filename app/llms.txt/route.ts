@@ -1,12 +1,13 @@
 import { getConcepts, getModules } from "@/lib/content";
 import { ORG_DESCRIPTION, SITE_URL } from "@/lib/seo";
+import { LEVELS } from "@/lib/disciplines";
 
 // A plain-text guide to the site for AI tools (https://llmstxt.org). Built from content/ at build time.
 export const dynamic = "force-static";
 
 export function GET() {
   const modules = getModules()
-    .map((m) => `- [${m.title}](${SITE_URL}/modules/${m.id}): ${m.tagline}. About ${m.hours} hours.`)
+    .map((m) => `- [${m.title}](${SITE_URL}/modules/${m.id}): ${m.tagline}. ${LEVELS[m.level].label}, about ${m.hours} hours.`)
     .join("\n");
   const samples = getConcepts()
     .filter((c) => c.public)

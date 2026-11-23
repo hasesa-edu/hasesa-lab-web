@@ -26,7 +26,7 @@ function pickChallenge(): Challenge | null {
 
 const TITLE = "Hasesa Academy · Hands-on science for teenagers";
 const DESCRIPTION =
-  "Hands-on modules at Hasesa Academy: build a radio, control a robot claw with your muscles, catch food fakers. Students start by doing and learn the science and maths when the project needs it.";
+  "Hands-on modules at Hasesa Academy, from beginner to advanced: launch a water rocket, build a radio, control a robot claw with your muscles, extract DNA. Students start by doing and learn the science and maths when the project needs it.";
 
 export const metadata: Metadata = pageMeta({ title: TITLE, description: DESCRIPTION, path: "/academy" });
 
