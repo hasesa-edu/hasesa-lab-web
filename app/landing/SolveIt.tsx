@@ -57,14 +57,14 @@ export function SolveIt({ challenge, labels }: { challenge: Challenge; labels: R
       className={cn("relative grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14", wrongs > 0 && !solved && "shake")}
     >
       <div>
-        <h2 className="font-dial text-5xl leading-none font-bold text-ink sm:text-6xl">{labels.title}</h2>
-        <p className="mt-4 max-w-md text-lg leading-relaxed text-ink/75">
+        <h2 className="text-4xl leading-tight font-semibold sm:text-5xl">{labels.title}</h2>
+        <p className="mt-4 max-w-md text-lg leading-relaxed text-muted-foreground">
           {labels.eyebrow}{" "}
-          <Link href={`/modules/${challenge.moduleId}`} className="font-bold text-primary underline underline-offset-4">
+          <Link href={`/modules/${challenge.moduleId}`} className="font-medium text-primary underline underline-offset-4">
             {challenge.moduleTitle}
           </Link>
           , from the free unit{" "}
-          <Link href={`/concepts/${challenge.unitId}`} className="font-bold text-primary underline underline-offset-4">
+          <Link href={`/concepts/${challenge.unitId}`} className="font-medium text-primary underline underline-offset-4">
             {challenge.unitTitle}
           </Link>
           .
@@ -72,16 +72,16 @@ export function SolveIt({ challenge, labels }: { challenge: Challenge; labels: R
       </div>
 
       {/* The instrument: question on top, a big readout to type into. */}
-      <div className="relative rounded-2xl border-2 border-ink bg-white p-6 shadow-[6px_6px_0_0_var(--ink)] sm:p-8 dark:bg-card">
+      <div className="relative rounded-lg border border-border bg-card p-6 sm:p-8">
         {solved && (
           <span
             aria-hidden
-            className="absolute -top-5 right-6 rotate-[-6deg] rounded-md bg-sun px-3 py-1 font-dial text-2xl font-extrabold text-ink shadow-pop"
+            className="absolute top-6 right-6 rounded-full bg-accent px-2.5 py-0.5 font-mono text-[11px] tracking-[0.08em] text-accent-foreground uppercase"
           >
             {labels.solved}
           </span>
         )}
-        <p className="text-xl leading-snug font-bold text-ink">{problem.q}</p>
+        <p className="pr-20 font-legible text-xl leading-snug font-bold">{problem.q}</p>
 
         {problem.type === "mcq" ? (
           <div className="mt-5 grid gap-2">
@@ -96,7 +96,7 @@ export function SolveIt({ challenge, labels }: { challenge: Challenge; labels: R
                   void check(String(i));
                 }}
                 className={cn(
-                  "h-auto min-h-11 justify-start rounded-xl py-2 text-left font-normal whitespace-normal disabled:opacity-100",
+                  "h-auto min-h-11 justify-start rounded-lg py-2 text-left font-normal whitespace-normal disabled:opacity-100",
                   value === String(i) && result && (result.correct ? "border-emerald-500 bg-emerald-50" : "border-red-400 bg-red-50")
                 )}
               >
@@ -112,7 +112,7 @@ export function SolveIt({ challenge, labels }: { challenge: Challenge; labels: R
               void check(value);
             }}
           >
-            <label className="flex items-baseline gap-2 rounded-xl bg-enamel px-4 py-2 text-sun focus-within:ring-3 focus-within:ring-sun/50">
+            <label className="flex items-baseline gap-2 rounded-lg border border-input bg-background px-4 py-2 focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/30">
               <span className="sr-only">Your answer</span>
               <Input
                 inputMode="decimal"
@@ -125,12 +125,12 @@ export function SolveIt({ challenge, labels }: { challenge: Challenge; labels: R
                 placeholder="0.00"
                 aria-label="Your answer"
                 maxLength={40}
-                className="h-12 w-28 border-0 bg-transparent p-0 font-dial text-4xl font-bold text-sun shadow-none placeholder:text-sun/30 focus-visible:ring-0 dark:bg-transparent"
+                className="h-12 w-28 border-0 bg-transparent p-0 font-mono text-3xl text-foreground shadow-none placeholder:text-subtle-foreground focus-visible:ring-0 md:text-3xl dark:bg-transparent"
               />
-              {problem.unit && <span className="font-dial text-xl text-sun/80">{problem.unit}</span>}
+              {problem.unit && <span className="font-mono text-lg text-muted-foreground">{problem.unit}</span>}
             </label>
             {!solved && (
-              <Button type="submit" size="lg" disabled={busy || !value.trim()} className="h-auto min-h-14 bg-ink px-6 text-base font-bold text-white hover:bg-ink/90">
+              <Button type="submit" size="lg" variant="ink" disabled={busy || !value.trim()} className="h-auto min-h-14 px-6">
                 {busy ? "Checking" : labels.check}
               </Button>
             )}
@@ -145,10 +145,10 @@ export function SolveIt({ challenge, labels }: { challenge: Challenge; labels: R
             </p>
           )}
           {solved && (
-            <div className="mt-5 border-t-2 border-dashed border-ink/20 pt-5 text-ink/85">
-              <p className="leading-relaxed">{result!.explanation}</p>
+            <div className="mt-5 border-t border-border pt-5">
+              <p className="font-legible leading-relaxed">{result!.explanation}</p>
               <div className="mt-4 flex flex-wrap gap-2">
-                <Button asChild className="bg-ink font-bold text-white hover:bg-ink/90">
+                <Button asChild variant="ink">
                   <Link href={`/modules/${challenge.moduleId}`}>{labels.open}</Link>
                 </Button>
                 <Button asChild variant="outline">

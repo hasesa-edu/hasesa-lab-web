@@ -32,29 +32,40 @@ export const t: Dict = {
     en: "Learn by doing.",
   },
   "hero.sub": {
-    en: "Hasesa Academy, our first program, is hands-on science for teenagers. Every module starts with a mystery and ends with something you built. Turn the dial to hear one.",
+    en: "Hands-on science for teenagers. Every module starts with a mystery and ends with something you built. Turn the dial to hear one.",
   },
   "hero.cta.lessons": { en: "See the modules" },
+  "academy.eyebrow": { en: "Hasesa Academy · our first program" },
   "hero.cta.sample": { en: "Try a free unit" },
   "hero.cta.signup": { en: "Sign up with Google" },
   "hero.cta.dashboard": { en: "Go to my dashboard" },
 
+  // Mono section labels on the marketing pages ("01 — Why now")
+  "label.why": { en: "Why now" },
+  "label.exploring": { en: "What we're exploring" },
+  "label.how": { en: "How we work" },
+  "label.program": { en: "Our first program" },
+  "label.modules": { en: "On air now" },
+  "label.method": { en: "How a module works" },
+  "label.academy": { en: "At the Academy" },
+  "label.parents": { en: "For parents" },
+  "label.solve": { en: "Try one" },
+
   // Hasesa home page (/): the organisation, its thesis and what it is exploring
-  "home.eyebrow": { en: "ሐሰሳ · Hasesa means exploration" },
-  "home.title.a": { en: "Education for" },
-  "home.title.b": { en: "the world of tomorrow." },
+  "home.eyebrow": { en: "Hasesa means exploration" },
+  "home.title": { en: "Education for the world of tomorrow." },
   "home.sub": {
     en: "AI is changing work, economies and society, and perhaps what it means to be human. We can't keep educating students for the world of yesterday. Hasesa is exploring an education system built for the AI era, and testing it with real students.",
   },
   "home.cta.academy": { en: "Visit the Academy" },
   "home.cta.exploring": { en: "What we're exploring" },
 
-  "home.exploring.title": { en: "What we're exploring" },
+  "home.exploring.title": { en: "We don't have all the answers yet." },
   "home.exploring.sub": {
-    en: "We don't have all the answers yet. These are the questions we're working on, and what we're trying at the Academy to answer them.",
+    en: "These are the questions we're working on, and what we're trying at the Academy to answer them.",
   },
-  "home.status.testing": { en: "Testing at the Academy" },
-  "home.status.open": { en: "Open question" },
+  "home.status.testing": { en: "Testing" },
+  "home.status.open": { en: "Open" },
   "home.q.graduate.title": { en: "What should a graduate be able to do?" },
   "home.q.graduate.body": { en: "The abilities that matter when AI can recall any fact. This is the question every other answer depends on." },
   "home.q.learning.title": { en: "How should learning happen?" },
