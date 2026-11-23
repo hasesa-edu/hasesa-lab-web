@@ -3,6 +3,7 @@ title: Break it open
 kind: investigate
 minutes: 120
 units: [dna-and-genes, enzymes]
+summary: "Extract DNA from fruit, then test which steps of the method really matter."
 ---
 ## Do: extract DNA (40 minutes)
 

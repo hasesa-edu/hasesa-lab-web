@@ -3,6 +3,7 @@ title: Grind and extract
 kind: investigate
 minutes: 90
 units: [reaction-rates, solutions-and-concentration]
+summary: "Brew fine and coarse grinds side by side and measure how the strength builds over time."
 ---
 ## The question
 

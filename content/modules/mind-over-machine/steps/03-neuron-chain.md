@@ -4,6 +4,7 @@ kind: investigate
 minutes: 75
 video: { youtubeId: "HYLyhXRp298", credit: "Bozeman Science" }
 units: [neurons-and-signals, nervous-system]
+summary: "Become a chain of nerves with your class and model how a real neuron passes a signal on."
 ---
 ## Do: become a nerve
 

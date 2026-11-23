@@ -3,6 +3,7 @@ title: Starch to plastic
 kind: build
 minutes: 120
 units: [polymers, fair-tests]
+summary: "Make starch plastic films with different amounts of glycerol, as a fair test."
 ---
 ## The basic recipe
 

@@ -3,6 +3,7 @@ title: Plant your experiment
 kind: build
 minutes: 90
 units: [fair-tests]
+summary: "Build your growing station, plant your experiment, and make your day-zero record and care plan."
 ---
 ## Build your growing station (30 minutes)
 

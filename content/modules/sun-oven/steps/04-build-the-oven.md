@@ -3,6 +3,7 @@ title: Build the oven
 kind: build
 minutes: 120
 units: [heat-transfer]
+summary: "Build a double-box solar oven with insulation, a reflector and a window, then aim it and test it."
 ---
 ## The design
 

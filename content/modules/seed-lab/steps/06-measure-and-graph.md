@@ -3,6 +3,7 @@ title: Measure and graph
 kind: investigate
 minutes: 120
 units: [graphs-and-relationships, fair-tests]
+summary: "Take your final measurements, calculate averages, and graph what your plants did."
 ---
 ## Final measurements (25 minutes)
 

@@ -3,6 +3,7 @@ title: How high?
 kind: investigate
 minutes: 75
 units: [trigonometry-for-heights]
+summary: "Make a clinometer from a protractor and a straw, and use angles to measure a tree and then a launch."
 ---
 ## Do: guess, then measure (10 minutes)
 

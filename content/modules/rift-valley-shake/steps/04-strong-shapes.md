@@ -3,6 +3,7 @@ title: Strong shapes
 kind: investigate
 minutes: 75
 units: [structures-and-forces]
+summary: "Compare squares and triangles, feel tension and compression, and test frames on the shake table."
 ---
 ## Do: squares and triangles (25 minutes)
 

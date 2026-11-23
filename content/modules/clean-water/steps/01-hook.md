@@ -3,6 +3,7 @@ title: Two jars
 kind: hook
 minutes: 45
 units: [microbes]
+summary: "Look closely at two jars of river water, predict which is safe, and start thinking about what you can't see."
 ---
 ## Look, don't drink
 

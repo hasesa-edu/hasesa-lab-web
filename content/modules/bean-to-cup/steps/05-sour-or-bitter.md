@@ -3,6 +3,7 @@ title: Sour or bitter?
 kind: investigate
 minutes: 60
 units: [acids-bases-ph]
+summary: "Compare light and dark roasts for acidity, with an optional taste panel, and find out where sourness comes from."
 ---
 ## The question
 

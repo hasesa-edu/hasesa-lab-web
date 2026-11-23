@@ -4,6 +4,7 @@ kind: investigate
 minutes: 90
 video: { youtubeId: "E2dALNLa8_g", credit: "Backyard Brains" }
 units: [sensors-and-signals, charge-current-voltage, simple-circuits, muscle-contraction]
+summary: "After a safety check, wire up skin electrodes and see your own muscle's electrical signal."
 ---
 ## Safety check — before any electrode touches skin
 

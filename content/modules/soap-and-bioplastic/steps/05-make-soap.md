@@ -3,6 +3,7 @@ title: Make soap
 kind: build
 minutes: 150
 units: [fats-oils-and-soap, acids-bases-ph]
+summary: "With your guide, safely make a batch of cold-process soap from your own recipe and test its pH."
 ---
 ## Safety first (20 minutes)
 

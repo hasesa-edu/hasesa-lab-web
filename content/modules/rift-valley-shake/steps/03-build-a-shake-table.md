@@ -3,6 +3,7 @@ title: Build a shake table
 kind: build
 minutes: 90
 units: [frequency-and-period]
+summary: "Build a hand-powered shake table and calibrate how fast it shakes."
 ---
 ## The design
 

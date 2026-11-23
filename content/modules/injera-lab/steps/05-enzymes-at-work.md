@@ -3,6 +3,7 @@ title: Enzymes at work
 kind: investigate
 minutes: 90
 units: [enzymes, chemical-tests]
+summary: "Time how malt breaks down starch and find out whether temperature changes the speed."
 ---
 ## The puzzle
 

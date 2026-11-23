@@ -3,6 +3,7 @@ title: Alive or not?
 kind: investigate
 minutes: 75
 units: [fermentation-and-respiration]
+summary: "Use balloons to find out whether something in the batter is alive, then test the gas it makes."
 ---
 ## Do: the balloon test (40 minutes)
 

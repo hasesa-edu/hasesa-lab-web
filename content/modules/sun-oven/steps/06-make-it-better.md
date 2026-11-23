@@ -3,6 +3,7 @@ title: Make it better
 kind: investigate
 minutes: 60
 units: [fair-tests]
+summary: "Choose one change to your oven and fair-test whether it really makes it better."
 ---
 ## Choose one change (10 minutes)
 

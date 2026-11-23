@@ -3,6 +3,7 @@ title: Three cups
 kind: hook
 minutes: 45
 units: [solutions-and-concentration]
+summary: "Taste three cups brewed from the same beans, predict what made them differ, and pick up the first clue."
 ---
 ## Look and smell
 

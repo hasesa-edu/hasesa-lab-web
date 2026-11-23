@@ -3,6 +3,7 @@ title: Settle it
 kind: investigate
 minutes: 60
 units: [water-treatment]
+summary: "Build a clarity tube and use a jar test to find what makes mud settle faster."
 ---
 ## Build: a clarity tube (10 minutes)
 

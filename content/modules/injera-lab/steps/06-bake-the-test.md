@@ -3,6 +3,7 @@ title: Bake the test
 kind: build
 minutes: 120
 units: [fair-tests]
+summary: "Ferment two batches under different conditions and bake them with your guide to compare."
 ---
 ## Your experiment (planned in step 4)
 
