@@ -3,6 +3,7 @@ title: Rift Valley Shake
 tagline: Build a tower that survives an earthquake
 disciplines: [physics, technology, mathematics]
 level: intermediate
+featured: true
 hook: "Ethiopia sits on the Great Rift Valley, where Africa is slowly tearing in two, and the ground shakes many times a year. On the guide's shaking table stand two towers made of the same spaghetti and tape. The table shakes. One tower collapses; the other sways and survives. What makes the difference?"
 goal: "Understand why the Rift Valley has earthquakes and how their waves travel, build a shake table, discover how bracing, shape and resonance decide whether a structure survives, and design a tower that stands through the class earthquake test."
 whatYouBuild: "A hand-powered shake table, a set of test frames, and a tower at least 50 cm tall, built to a materials budget, that survives shaking at several frequencies with a 200 g load on top."

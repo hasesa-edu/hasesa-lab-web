@@ -32,7 +32,7 @@ export const t: Dict = {
     en: "Learn by doing.",
   },
   "hero.sub": {
-    en: "Hands-on science for teenagers. Every module starts with a mystery and ends with something you built or solved. Turn the dial to hear one.",
+    en: "Hands-on science for teenagers. Every module starts with a mystery and ends with something you built or solved.",
   },
   "hero.cta.lessons": { en: "See the modules" },
   "academy.eyebrow": { en: "Hasesa Academy · our first program" },
@@ -45,7 +45,7 @@ export const t: Dict = {
   "label.exploring": { en: "What we're exploring" },
   "label.how": { en: "How we work" },
   "label.program": { en: "Our first program" },
-  "label.modules": { en: "On air now" },
+  "label.modules": { en: "The modules" },
   "label.method": { en: "How a module works" },
   "label.parents": { en: "For parents" },
   "label.solve": { en: "Try one" },
@@ -126,11 +126,20 @@ export const t: Dict = {
   "how.3.body": { en: "At home, read the concept units the project needs and solve real problems, with a lab assistant that gives hints, not answers. Already know one? Test out." },
   "how.4.title": { en: "Finish and get signed off" },
   "how.4.body": { en: "Make it work, explain how, and your guide signs you off with a certificate." },
-  "showcase.title": { en: "Pick a station, solve a mystery" },
+  "showcase.title": { en: "Pick a mystery, build the answer" },
   "showcase.sub": { en: "From beginner to advanced, 8 to 14 hours each, mixing physics, chemistry, biology, maths and technology. Start anywhere: a beginner module is a good first step." },
   "showcase.hours": { en: "hours" },
   "showcase.steps": { en: "steps" },
-  "showcase.all": { en: "See every module" },
+  "showcase.all": { en: "See all {n} modules" },
+  "showcase.allLevel": { en: "All {n} {level} modules" },
+
+  // The Academy hero's finder
+  "finder.search": { en: "Search modules" },
+  "finder.placeholder": { en: "Try rocket, coffee, electricity, DNA…" },
+  "finder.go": { en: "Search" },
+  "finder.module": { en: "module" },
+  "finder.modules": { en: "modules" },
+  "finder.browse": { en: "Browse" },
 
 
   // For parents

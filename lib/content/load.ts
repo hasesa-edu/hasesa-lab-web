@@ -76,6 +76,7 @@ const moduleFm = z.object({
   safety: z.array(z.string().min(1)).min(1),
   signoff: z.array(z.object({ id: z.string().min(1), text: z.string().min(1) })).min(1),
   publicSample: z.string().min(1),
+  featured: z.boolean().default(false),
 });
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;

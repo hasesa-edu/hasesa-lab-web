@@ -67,6 +67,7 @@ export function summarize(m: Module): ModuleSummary {
     steps: m.steps.map((s) => ({ id: s.id, title: s.title, kind: s.kind, minutes: s.minutes })),
     curriculum: moduleCurriculum(m, content().concepts),
     publicSample: { id: sample.id, title: sample.title },
+    featured: m.featured,
   };
 }
 
