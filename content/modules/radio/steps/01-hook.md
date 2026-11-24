@@ -2,6 +2,7 @@
 title: The radio with no battery
 kind: hook
 minutes: 45
+video: { youtubeId: "0-PParSmwtE", credit: "RimstarOrg" }
 units: [waves-and-vibrations]
 summary: "Listen to a radio with no battery, look at its parts, and predict where its energy comes from."
 ---

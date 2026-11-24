@@ -7,6 +7,7 @@ hook: "Two chickpeas from the same bag, planted on the same day. One becomes a s
 goal: "Design and run your own fair-test growing experiment over two weeks, measure and graph growth carefully, and use your evidence to answer a real question about what plants need."
 whatYouBuild: "A growing station with labelled pots or germination bags for a fair test of one factor (light, water, salt, temperature, crowding or fertiliser), a two-week growth log, and a scientific poster with your graph and conclusion."
 hours: 10
+trailer: { youtubeId: "w77zPAtVTuI", credit: "GPhase" }
 status: ai-draft
 publicSample: fair-tests
 materials:

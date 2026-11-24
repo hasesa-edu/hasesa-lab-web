@@ -2,6 +2,7 @@
 title: Plant your experiment
 kind: build
 minutes: 90
+video: { youtubeId: "ZdOmVDRNXys", credit: "Hungry SciANNtist" }
 units: [fair-tests]
 summary: "Build your growing station, plant your experiment, and make your day-zero record and care plan."
 ---

@@ -2,6 +2,7 @@
 title: Enzymes at work
 kind: investigate
 minutes: 90
+video: { youtubeId: "1Fa2sSIt4_I", credit: "John Hindmarsh" }
 units: [enzymes, chemical-tests]
 summary: "Time how malt breaks down starch and find out whether temperature changes the speed."
 ---

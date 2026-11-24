@@ -8,6 +8,7 @@ hook: "A fizzy-drink bottle, a cup of water and a bicycle pump. The guide pumps,
 goal: "Build a water rocket, launch it safely, measure how high it flies, and use a fair test to find the best amount of water to put in it."
 whatYouBuild: "A water rocket from a 1.5–2 L fizzy-drink bottle with cardboard fins and a nose cone, and a clinometer made from a protractor and a straw to measure its height. The guide provides the launcher."
 hours: 8
+trailer: { youtubeId: "zrtNAKoDhec", credit: "MITx Videos" }
 status: ai-draft
 publicSample: forces-and-motion
 materials:

@@ -2,6 +2,7 @@
 title: Mind over machine
 kind: finish
 minutes: 90
+video: { youtubeId: "0eoGGj9SDeE", credit: "Backyard Brains" }
 units: [nervous-system, neurons-and-signals, muscle-contraction, sensors-and-signals, microcontroller-basics]
 summary: "Take the claw challenge, improve your build, and explain the whole chain from brain to motor."
 ---

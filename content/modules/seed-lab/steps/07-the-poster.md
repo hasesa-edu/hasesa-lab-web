@@ -2,6 +2,7 @@
 title: The poster
 kind: finish
 minutes: 75
+video: { youtubeId: "0qFIiKEamHo", credit: "NASAJPL Edu" }
 units: []
 summary: "Make a scientific poster, share it in a poster session, and answer the mystery."
 ---

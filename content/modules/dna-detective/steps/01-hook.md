@@ -2,6 +2,7 @@
 title: The invisible molecule
 kind: hook
 minutes: 45
+video: { youtubeId: "pdDP9OcqcbA", credit: "AskaBiologist" }
 units: [cells]
 summary: "Watch something invisible become something you can hold, predict how, and ask the first questions."
 ---

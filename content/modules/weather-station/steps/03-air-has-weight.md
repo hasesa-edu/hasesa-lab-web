@@ -2,6 +2,7 @@
 title: Air has weight
 kind: investigate
 minutes: 90
+video: { youtubeId: "EkDhlzA-lwI", credit: "TED-Ed" }
 units: [pressure, air-and-weather]
 summary: "Watch air pressure crush a can, then build and calibrate a jar barometer."
 ---

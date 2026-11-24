@@ -7,6 +7,7 @@ hook: "Old farmers can look at the sky, feel the wind and say rain is coming tom
 goal: "Build and calibrate a working weather station (rain gauge, barometer, anemometer, hygrometer and wind vane), collect at least a week of careful data, find patterns in it, and test whether your forecasts beat 'tomorrow will be like today'."
 whatYouBuild: "A school weather station with five home-made instruments on a stand, a shared data log of at least seven days, graphs of every measurement, and a scored forecast record."
 hours: 12
+trailer: { youtubeId: "WO7f1mXuWe4", credit: "The Parks Trust Milton Keynes" }
 status: ai-draft
 publicSample: air-and-weather
 materials:

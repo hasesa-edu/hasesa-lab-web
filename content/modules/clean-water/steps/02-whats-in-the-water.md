@@ -2,6 +2,7 @@
 title: What's in the water?
 kind: investigate
 minutes: 75
+video: { youtubeId: "5M1PslRrbwQ", credit: "Anj Classes" }
 units: [mixtures-and-separation, microbes]
 summary: "Separate muddy water by settling, filtering and looking closer, and sort out what's really in it."
 ---

@@ -2,6 +2,7 @@
 title: The bubbling bucket
 kind: hook
 minutes: 45
+video: { youtubeId: "VLDlO2CIMbQ", credit: "ZenDen" }
 units: [microbes]
 summary: "Look, smell and listen to a bucket of fermenting batter, and predict who is doing all the work."
 ---

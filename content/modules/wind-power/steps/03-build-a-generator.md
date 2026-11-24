@@ -2,6 +2,7 @@
 title: Build a generator
 kind: build
 minutes: 150
+video: { youtubeId: "z6_wlMWlp34", credit: "vt.physics" }
 units: [electromagnetic-induction, charge-current-voltage]
 summary: "Build a generator from magnets and coils, test it, and improve its output."
 ---

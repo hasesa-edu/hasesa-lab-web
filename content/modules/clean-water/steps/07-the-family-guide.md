@@ -2,6 +2,7 @@
 title: The family guide
 kind: finish
 minutes: 60
+video: { youtubeId: "Y5YITCTPlrU", credit: "DW News" }
 units: []
 summary: "Run your whole treatment chain, solve the mystery, and make a water guide a family could follow."
 ---

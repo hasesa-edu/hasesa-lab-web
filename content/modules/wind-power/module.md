@@ -8,6 +8,7 @@ hook: "Near Adama, rows of giant white turbines turn slowly in the wind and send
 goal: "Discover electromagnetic induction, build a generator from magnets and wire, design and test turbine blades, measure the power in the wind and how much of it your turbine captures, and turn its output into steady DC that lights LEDs and charges a battery pack."
 whatYouBuild: "A small horizontal-axis wind turbine with PVC blades and a salvaged stepper-motor generator, a rectifier circuit that turns its AC into DC, and a test log of voltage, current and power at different wind speeds. Along the way, a hand-spun coil-and-magnet generator that lights an LED."
 hours: 14
+trailer: { youtubeId: "wlMlEkR704U", credit: "Robert Murray-Smith" }
 status: ai-draft
 publicSample: electromagnetic-induction
 materials:

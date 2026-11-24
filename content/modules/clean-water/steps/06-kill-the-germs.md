@@ -2,6 +2,7 @@
 title: Kill the germs
 kind: investigate
 minutes: 75
+video: { youtubeId: "MhceDUheFY4", credit: "RCSI" }
 units: [water-treatment, em-spectrum, solutions-and-concentration]
 summary: "Try three ways to disinfect water (sunlight, boiling and chlorine) and calculate a safe chlorine dose."
 ---

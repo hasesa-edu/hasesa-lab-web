@@ -2,6 +2,7 @@
 title: Oil and water
 kind: investigate
 minutes: 75
+video: { youtubeId: "wTuRmwSkuzQ", credit: "NileBlue" }
 units: [fats-oils-and-soap]
 summary: "Mix oil and water, clean a greasy plate, and find out how soap brings them together."
 ---

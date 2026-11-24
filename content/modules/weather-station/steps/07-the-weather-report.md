@@ -2,6 +2,7 @@
 title: The weather report
 kind: finish
 minutes: 90
+video: { youtubeId: "lITCF3UPVu4", credit: "BBC" }
 units: []
 summary: "Present your weather report, solve the mystery, and explain your findings to your guide."
 ---

@@ -7,6 +7,7 @@ hook: "Three cups made from the same coffee beans and the same water. One tastes
 goal: "Follow coffee from green bean to brew: measure what roasting does to a bean, how grind size, time and temperature control how much dissolves, and how roast changes acidity, then design and justify your own brewing recipe with data."
 whatYouBuild: "A roast series (green to dark) with mass-loss and colour records, a coffee colour scale for measuring brew strength, extraction graphs for fine and coarse grinds, and a written brewing recipe backed by your measurements."
 hours: 8
+trailer: { youtubeId: "ml79faGQg_c", credit: "Reactions" }
 status: ai-draft
 publicSample: solutions-and-concentration
 materials:

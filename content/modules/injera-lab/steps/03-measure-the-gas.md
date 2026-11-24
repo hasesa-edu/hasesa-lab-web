@@ -2,6 +2,7 @@
 title: Measure the gas
 kind: investigate
 minutes: 90
+video: { youtubeId: "Cngt2HmJuSo", credit: "OpenLearn from The Open University" }
 units: [fermentation-and-respiration, graphs-and-relationships]
 summary: "Build a gas collector, measure how fast the batter makes gas, and graph it."
 ---

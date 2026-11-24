@@ -2,6 +2,7 @@
 title: Grind and extract
 kind: investigate
 minutes: 90
+video: { youtubeId: "er2voEn8ZDU", credit: "James Hoffmann" }
 units: [reaction-rates, solutions-and-concentration]
 summary: "Brew fine and coarse grinds side by side and measure how the strength builds over time."
 ---

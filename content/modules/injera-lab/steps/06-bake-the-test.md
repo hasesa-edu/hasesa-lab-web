@@ -2,6 +2,7 @@
 title: Bake the test
 kind: build
 minutes: 120
+video: { youtubeId: "URth2aDxRAM", credit: "While in Africa" }
 units: [fair-tests]
 summary: "Ferment two batches under different conditions and bake them with your guide to compare."
 ---

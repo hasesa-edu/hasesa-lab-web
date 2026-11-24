@@ -2,6 +2,7 @@
 title: What dissolves?
 kind: investigate
 minutes: 75
+video: { youtubeId: "JGkmGQ89_SE", credit: "The Science Basement" }
 units: [solutions-and-concentration]
 summary: "Race to dissolve things in water, then make a colour scale you'll use to measure how strong a brew is."
 ---

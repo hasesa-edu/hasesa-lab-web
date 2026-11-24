@@ -2,6 +2,7 @@
 title: Wind and wet air
 kind: build
 minutes: 120
+video: { youtubeId: "Af0LB3abBsk", credit: "Science Buddies" }
 units: [air-and-weather, frequency-and-period]
 summary: "Build an anemometer, a wind vane and a hygrometer, then teach another team how yours works."
 ---

@@ -2,6 +2,7 @@
 title: Roast it
 kind: investigate
 minutes: 90
+video: { youtubeId: "hX3Ok_zPW4s", credit: "Roaster Kat" }
 units: [heat-transfer, reaction-rates]
 summary: "Roast green beans from pale to dark with your guide, weighing and colour-matching each stage as it changes."
 ---

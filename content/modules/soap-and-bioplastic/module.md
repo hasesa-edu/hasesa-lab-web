@@ -7,6 +7,7 @@ hook: "Soap and plastic come from factories, don't they? Your guide holds up a b
 goal: "Make a bioplastic from starch and find how a plasticiser changes it, calculate the exact amount of lye for a soap recipe, make a cold-process soap safely with your guide, and test both products with measurements: strength, flexibility, pH, lather and how fast they break down."
 whatYouBuild: "A set of starch bioplastic films with different amounts of glycerol, tested for strength, flexibility and biodegradation, and a batch of cured bar soap made from your own calculated recipe, tested for pH, hardness and lather."
 hours: 12
+trailer: { youtubeId: "5M_eDLyfzp8", credit: "Green Plastics" }
 status: ai-draft
 publicSample: polymers
 materials:

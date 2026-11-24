@@ -2,6 +2,7 @@
 title: Squeezed air
 kind: investigate
 minutes: 60
+video: { youtubeId: "NzKAJWTmlwg", credit: "FuseSchool - Global Education" }
 units: [pressure]
 summary: "Squeeze air in syringes and a pumped bottle to feel pressure build, and work out the force on the nozzle."
 ---

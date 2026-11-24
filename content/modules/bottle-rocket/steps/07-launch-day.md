@@ -2,6 +2,7 @@
 title: Launch day
 kind: finish
 minutes: 60
+video: { youtubeId: "6yOWJ_rVjfA", credit: "National Physical Laboratory" }
 units: []
 summary: "Make your final launches, solve the mystery, and explain your rocket to your guide."
 ---

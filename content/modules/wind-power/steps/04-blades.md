@@ -2,6 +2,7 @@
 title: Blades
 kind: investigate
 minutes: 120
+video: { youtubeId: "pgqkti7yePk", credit: "minutephysics" }
 units: [forces-and-motion, energy-and-power]
 summary: "Make turbine blades and test how many work best."
 ---

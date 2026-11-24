@@ -2,6 +2,7 @@
 title: Calculate the lye
 kind: investigate
 minutes: 75
+video: { youtubeId: "Z9cwgbMnEdM", credit: "Sue & Soap" }
 units: [reacting-quantities, rearranging-formulas]
 summary: "Test your films, then calculate exactly how much lye your soap recipe needs."
 ---

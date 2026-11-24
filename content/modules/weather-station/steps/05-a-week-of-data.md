@@ -2,6 +2,7 @@
 title: A week of data
 kind: investigate
 minutes: 150
+video: { youtubeId: "J9Co6JtTb3Y", credit: "Khan Academy India - English" }
 units: [graphs-and-relationships, fair-tests]
 summary: "Take careful readings every day for a week, graph them, and look for patterns."
 ---

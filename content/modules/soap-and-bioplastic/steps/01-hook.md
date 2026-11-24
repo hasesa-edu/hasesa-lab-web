@@ -2,6 +2,7 @@
 title: From the market
 kind: hook
 minutes: 45
+video: { youtubeId: "-_eGOyAiNIQ", credit: "DW Planet A" }
 units: [polymers]
 summary: "Handle soap and plastic made from market ingredients, and predict how they were made."
 ---

@@ -2,6 +2,7 @@
 title: Test and compare
 kind: investigate
 minutes: 120
+video: { youtubeId: "s71o2XQHLho", credit: "Blog da Horta Biológica" }
 units: [polymers, acids-bases-ph, chemical-tests]
 summary: "Test your soap and your plastics for strength, flexibility, lather and how fast they break down."
 ---

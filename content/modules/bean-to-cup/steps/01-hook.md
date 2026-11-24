@@ -2,6 +2,7 @@
 title: Three cups
 kind: hook
 minutes: 45
+video: { youtubeId: "P5df1JcEMA4", credit: "Coffee Coach RYDE" }
 units: [solutions-and-concentration]
 summary: "Taste three cups brewed from the same beans, predict what made them differ, and pick up the first clue."
 ---

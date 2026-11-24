@@ -2,6 +2,7 @@
 title: Can we predict it?
 kind: hook
 minutes: 45
+video: { youtubeId: "fdErsR8_NaU", credit: "EUMETSAT" }
 units: [air-and-weather]
 summary: "Look at the sky, make your own forecast, and find out how people predict the weather."
 ---

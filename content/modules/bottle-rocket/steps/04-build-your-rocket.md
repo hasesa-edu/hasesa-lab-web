@@ -2,6 +2,7 @@
 title: Build your rocket
 kind: build
 minutes: 90
+video: { youtubeId: "G9N4A0QL2uU", credit: "Greg Hancock" }
 units: [forces-and-motion]
 summary: "Build your own rocket from a bottle with fins and a nose cone, balance it, and make its first flights."
 ---

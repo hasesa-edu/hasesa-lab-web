@@ -2,6 +2,7 @@
 title: The water question
 kind: investigate
 minutes: 90
+video: { youtubeId: "DrPt-AktIMs", credit: "Air Command Rockets" }
 units: [fair-tests, graphs-and-relationships]
 summary: "Plan and run a fair test to find the best amount of water, then turn your launches into a graph."
 ---

@@ -2,6 +2,7 @@
 title: The claw that obeys
 kind: hook
 minutes: 45
+video: { youtubeId: "rSQNi5sAwuc", credit: "TED" }
 units: [nervous-system]
 summary: "Watch a claw close when your guide clenches a fist, predict how it works, and try it on yourself."
 ---

@@ -2,6 +2,7 @@
 title: The rain gauge
 kind: build
 minutes: 75
+video: { youtubeId: "JVOxLrMaWA8", credit: "Met Office - UK Weather" }
 units: [air-and-weather, rearranging-formulas]
 summary: "Build and place a rain gauge, and work out why rain is measured by depth."
 ---
