@@ -2,6 +2,7 @@
 title: Light and leaves
 kind: investigate
 minutes: 90
+video: { youtubeId: "Uz7JnVUWCZQ", credit: "Tom Dare" }
 units: [photosynthesis-and-growth, chemical-tests]
 summary: "Check on your experiment, then use a covered leaf and seedlings in the dark to see what light does."
 ---

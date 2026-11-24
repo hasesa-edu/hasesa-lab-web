@@ -2,6 +2,7 @@
 title: Two jars
 kind: hook
 minutes: 45
+video: { youtubeId: "G244Q4AGJ7U", credit: "TED-Ed" }
 units: [microbes]
 summary: "Look closely at two jars of river water, predict which is safe, and start thinking about what you can't see."
 ---

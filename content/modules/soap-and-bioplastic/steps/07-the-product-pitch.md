@@ -2,6 +2,7 @@
 title: The product pitch
 kind: finish
 minutes: 90
+video: { youtubeId: "d_zUIuDm0K8", credit: "EF Hult Prize Foundation" }
 units: []
 summary: "Pitch your products, solve the mystery, and explain the chemistry to your guide."
 ---

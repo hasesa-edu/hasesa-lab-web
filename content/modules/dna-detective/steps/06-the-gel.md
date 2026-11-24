@@ -2,6 +2,7 @@
 title: The gel
 kind: investigate
 minutes: 150
+video: { youtubeId: "NYLgCq0HiH4", credit: "NIEHS" }
 units: [dna-and-genes, chromatography]
 summary: "Build a gel electrophoresis rig with your guide and run coloured dyes through it to crack the case."
 ---

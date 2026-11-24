@@ -7,6 +7,7 @@ hook: "Teff flour and water sit in a covered bucket for three days. Nobody stirs
 goal: "Find out which living things ferment injera batter, measure how temperature and food change their speed, track the acid they make, and use what you learn to run a controlled injera-baking experiment."
 whatYouBuild: "A fermentation lab: gas-collecting bottles for measuring yeast activity, a red-cabbage pH scale for tracking batter, an enzyme timing test, and two batches of injera fermented under different conditions, compared by eye count, pH and taste."
 hours: 10
+trailer: { youtubeId: "EidNswE0z-I", credit: "Eater" }
 status: ai-draft
 publicSample: fermentation-and-respiration
 materials:

@@ -2,6 +2,7 @@
 title: Cook!
 kind: finish
 minutes: 60
+video: { youtubeId: "d6bhS6FdOmI", credit: "Link TV" }
 units: []
 summary: "Cook in your oven, solve the mystery, and explain how it works to your guide."
 ---

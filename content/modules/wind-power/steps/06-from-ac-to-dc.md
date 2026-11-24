@@ -2,6 +2,7 @@
 title: From wobbly AC to useful DC
 kind: build
 minutes: 150
+video: { youtubeId: "46WSCihjoRI", credit: "GreatScott!" }
 units: [diodes-and-rectification, simple-circuits]
 summary: "Build a rectifier and smoothing circuit that turn wobbly AC into DC that charges a battery."
 ---

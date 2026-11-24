@@ -2,6 +2,7 @@
 title: Push and push back
 kind: investigate
 minutes: 75
+video: { youtubeId: "dCF--YOjiOw", credit: "NASA Johnson" }
 units: [forces-and-motion]
 summary: "Race balloon rockets along a string and find the rule that pushes every rocket forward."
 ---

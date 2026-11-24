@@ -2,6 +2,7 @@
 title: Case closed
 kind: finish
 minutes: 105
+video: { youtubeId: "7onjVBsQwQ8", credit: "FuseSchool - Global Education" }
 units: [dna-and-genes, inheritance]
 summary: "Write the case report, debate DNA testing in real life, and explain your findings to your guide."
 ---

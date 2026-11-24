@@ -2,6 +2,7 @@
 title: Settle it
 kind: investigate
 minutes: 60
+video: { youtubeId: "72uFoBjSqaI", credit: "American Water College" }
 units: [water-treatment]
 summary: "Build a clarity tube and use a jar test to find what makes mud settle faster."
 ---

@@ -2,6 +2,7 @@
 title: The forecast
 kind: investigate
 minutes: 90
+video: { youtubeId: "YKW9H2ckHGk", credit: "Met Office - UK Weather" }
 units: [graphs-and-relationships]
 summary: "Make a forecasting rule from your data and keep score of how well it does."
 ---

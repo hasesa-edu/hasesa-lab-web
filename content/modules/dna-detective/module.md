@@ -8,6 +8,7 @@ hook: "Every cell of a banana, a strawberry and your own cheek carries a full se
 goal: "Extract DNA from fruit and work out what each step of the method does, build a DNA model and use base pairing, predict inheritance with Punnett squares and test the predictions, and run a gel electrophoresis 'fingerprint' to solve a mock case."
 whatYouBuild: "A tube of your own extracted DNA, a working double-helix model with a coded message, a probability experiment on inheritance, and a home-made gel electrophoresis rig (agar gel, baking-soda buffer and batteries) that separates coloured dyes in a mock forensic case."
 hours: 12
+trailer: { youtubeId: "uLUhT_JvFHc", credit: "BioMan Biology" }
 status: ai-draft
 publicSample: dna-and-genes
 materials:

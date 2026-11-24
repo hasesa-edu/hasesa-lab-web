@@ -2,6 +2,7 @@
 title: Sour or bitter?
 kind: investigate
 minutes: 60
+video: { youtubeId: "cRSS0VBV99c", credit: "Adam Ragusea" }
 units: [acids-bases-ph]
 summary: "Compare light and dark roasts for acidity, with an optional taste panel, and find out where sourness comes from."
 ---

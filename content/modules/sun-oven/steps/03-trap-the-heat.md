@@ -2,6 +2,7 @@
 title: Trap the heat
 kind: investigate
 minutes: 75
+video: { youtubeId: "vwZ2u3qn5pM", credit: "Cognito" }
 units: [heat-transfer]
 summary: "Race cans as they cool and build a mini greenhouse to see how heat gets trapped."
 ---

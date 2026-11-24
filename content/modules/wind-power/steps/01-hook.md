@@ -2,6 +2,7 @@
 title: No fuel, no fire
 kind: hook
 minutes: 45
+video: { youtubeId: "xy9nj94xvKA", credit: "TED-Ed" }
 units: [electromagnetic-induction]
 summary: "Crank a hand-powered torch, look inside a dynamo, and predict how spinning makes electricity."
 ---

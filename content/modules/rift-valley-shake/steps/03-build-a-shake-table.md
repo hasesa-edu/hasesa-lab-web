@@ -2,6 +2,7 @@
 title: Build a shake table
 kind: build
 minutes: 90
+video: { youtubeId: "aHHFV6O0o-8", credit: "Kids Fun Science" }
 units: [frequency-and-period]
 summary: "Build a hand-powered shake table and calibrate how fast it shakes."
 ---

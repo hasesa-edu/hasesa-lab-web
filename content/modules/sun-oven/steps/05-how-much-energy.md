@@ -2,6 +2,7 @@
 title: How much energy?
 kind: investigate
 minutes: 75
+video: { youtubeId: "yhNHJ7WdT8A", credit: "Professor Dave Explains" }
 units: [energy-and-power, graphs-and-relationships]
 summary: "Run a heating test and calculate how much power your oven collects and how efficient it is."
 ---

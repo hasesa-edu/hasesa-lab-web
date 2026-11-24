@@ -2,6 +2,7 @@
 title: Plan a fair test
 kind: investigate
 minutes: 90
+video: { youtubeId: "J9kCgWAuB0Y", credit: "BioMan Biology" }
 units: [fair-tests]
 summary: "Choose one question about what seeds need and plan a fair test to answer it."
 ---

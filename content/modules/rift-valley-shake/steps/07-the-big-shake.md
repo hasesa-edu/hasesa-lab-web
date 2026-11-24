@@ -2,6 +2,7 @@
 title: The big shake
 kind: finish
 minutes: 60
+video: { youtubeId: "AsZnh-6nnwk", credit: "Michael Reynolds" }
 units: []
 summary: "Put your tower through the class earthquake test and explain why it stood or fell."
 ---

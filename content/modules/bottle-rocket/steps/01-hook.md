@@ -2,6 +2,7 @@
 title: The bottle that flies
 kind: hook
 minutes: 45
+video: { youtubeId: "ii6D1R6lXVA", credit: "The Sci Guys" }
 units: [forces-and-motion]
 summary: "Learn the launch rules, watch your guide launch a water rocket three ways, and predict what makes it fly."
 ---

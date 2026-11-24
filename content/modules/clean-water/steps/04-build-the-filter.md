@@ -2,6 +2,7 @@
 title: Build the filter
 kind: build
 minutes: 90
+video: { youtubeId: "pU3gAK3Xyhs", credit: "Aberdeen Science Centre" }
 units: [mixtures-and-separation]
 summary: "Plan, build and test a gravel, sand and charcoal filter in a cut bottle, then improve it."
 ---

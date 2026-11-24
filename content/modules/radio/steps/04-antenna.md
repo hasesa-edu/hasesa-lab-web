@@ -2,6 +2,7 @@
 title: Catch the wave
 kind: build
 minutes: 90
+video: { youtubeId: "ZaXm6wau-jc", credit: "Sabin Civil Engineering" }
 units: [em-spectrum, scientific-notation]
 summary: "String up a long antenna safely and find out why it can be much shorter than the wave it catches."
 ---

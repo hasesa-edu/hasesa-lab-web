@@ -2,6 +2,7 @@
 title: Inside a seed
 kind: investigate
 minutes: 60
+video: { youtubeId: "6_uRLqm8uTA", credit: "Biologybyme" }
 units: [photosynthesis-and-growth, cells, chemical-tests]
 summary: "Dissect a seed, test its food store, and see its cells under the microscope."
 ---

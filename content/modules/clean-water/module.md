@@ -8,6 +8,7 @@ hook: "Two jars of water from the same river. One is brown and cloudy, the other
 goal: "Design and build a treatment chain (settle, filter, disinfect) that turns muddy water clear and kills a harmless test microbe, and explain what each stage removes and what it can't."
 whatYouBuild: "A three-stage water treatment kit: a settling jar with a natural coagulant, a gravel-sand-charcoal filter in a cut plastic bottle, and a disinfection stage (sunlight, boiling or chlorine), tested with a clarity tube and a yeast 'stand-in' for germs."
 hours: 8
+trailer: { youtubeId: "0_ZcCqqpS2o", credit: "Concerning Reality" }
 status: ai-draft
 publicSample: microbes
 materials:

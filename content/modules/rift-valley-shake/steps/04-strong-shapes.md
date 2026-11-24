@@ -2,6 +2,7 @@
 title: Strong shapes
 kind: investigate
 minutes: 75
+video: { youtubeId: "mBHJtWbsiaA", credit: "Design Squad" }
 units: [structures-and-forces]
 summary: "Compare squares and triangles, feel tension and compression, and test frames on the shake table."
 ---

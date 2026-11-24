@@ -2,6 +2,7 @@
 title: The sour side
 kind: investigate
 minutes: 75
+video: { youtubeId: "y5xOpss4j5E", credit: "KQED" }
 units: [acids-bases-ph, microbes]
 summary: "Make a red-cabbage indicator, track how sour the batter gets, and plan your baking experiment."
 ---

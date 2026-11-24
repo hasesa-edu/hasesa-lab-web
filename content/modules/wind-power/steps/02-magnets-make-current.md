@@ -2,6 +2,7 @@
 title: Magnets make current
 kind: investigate
 minutes: 90
+video: { youtubeId: "Hh58afwzHfA", credit: "Physics Demos" }
 units: [electromagnetism, electromagnetic-induction]
 summary: "Repeat Faraday's experiment with magnets and wire, and see alternating current for yourself."
 ---

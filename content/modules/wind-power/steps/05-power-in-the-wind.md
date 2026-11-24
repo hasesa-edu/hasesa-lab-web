@@ -2,6 +2,7 @@
 title: Power in the wind
 kind: investigate
 minutes: 90
+video: { youtubeId: "DO5PjuU8dXw", credit: "Energy Education" }
 units: [energy-and-power, rearranging-formulas]
 summary: "Measure the wind and your turbine's electrical power, and calculate how much it captures."
 ---

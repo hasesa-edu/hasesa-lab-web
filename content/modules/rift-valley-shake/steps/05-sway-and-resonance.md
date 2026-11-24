@@ -2,6 +2,7 @@
 title: Sway and resonance
 kind: investigate
 minutes: 90
+video: { youtubeId: "uFlIbujTuIY", credit: "IRIS Earthquake Science" }
 units: [resonance, frequency-and-period]
 summary: "Find each tower's natural rhythm, measure it, and try ways to tame the sway."
 ---

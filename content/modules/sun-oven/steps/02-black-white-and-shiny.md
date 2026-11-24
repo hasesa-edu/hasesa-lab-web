@@ -2,6 +2,7 @@
 title: Black, white and shiny
 kind: investigate
 minutes: 60
+video: { youtubeId: "eE7OPL7pesA", credit: "Freesciencelessons" }
 units: [heat-transfer, graphs-and-relationships]
 summary: "Race cans of water in the sun to see how colour and shine change heating, and graph the results."
 ---

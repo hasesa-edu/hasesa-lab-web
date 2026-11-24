@@ -2,6 +2,7 @@
 title: Break it open
 kind: investigate
 minutes: 120
+video: { youtubeId: "RtTZNTil4Tw", credit: "FuseSchool - Global Education" }
 units: [dna-and-genes, enzymes]
 summary: "Extract DNA from fruit, then test which steps of the method really matter."
 ---

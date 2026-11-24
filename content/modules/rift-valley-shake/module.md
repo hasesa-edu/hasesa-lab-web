@@ -8,6 +8,7 @@ hook: "Ethiopia sits on the Great Rift Valley, where Africa is slowly tearing in
 goal: "Understand why the Rift Valley has earthquakes and how their waves travel, build a shake table, discover how bracing, shape and resonance decide whether a structure survives, and design a tower that stands through the class earthquake test."
 whatYouBuild: "A hand-powered shake table, a set of test frames, and a tower at least 50 cm tall, built to a materials budget, that survives shaking at several frequencies with a 200 g load on top."
 hours: 10
+trailer: { youtubeId: "RP8KcyCFrFQ", credit: "1101yasuhiro" }
 status: ai-draft
 publicSample: earthquakes-and-the-rift
 materials:

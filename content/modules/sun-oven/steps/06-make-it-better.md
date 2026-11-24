@@ -2,6 +2,7 @@
 title: Make it better
 kind: investigate
 minutes: 60
+video: { youtubeId: "R16p4q7Voi4", credit: "MooMooMath and Science" }
 units: [fair-tests]
 summary: "Choose one change to your oven and fair-test whether it really makes it better."
 ---

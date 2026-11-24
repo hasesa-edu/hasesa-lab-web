@@ -2,6 +2,7 @@
 title: Your recipe
 kind: finish
 minutes: 60
+video: { youtubeId: "xUoFhcQBiZY", credit: "SciShow" }
 units: [reaction-rates, solutions-and-concentration]
 summary: "Design your own brewing recipe, test it against your data, and explain it to your guide."
 ---

@@ -2,6 +2,7 @@
 title: Into the wind
 kind: finish
 minutes: 120
+video: { youtubeId: "oiB1Sm_f48w", credit: "GreatScott!" }
 units: []
 summary: "Assemble your turbine, test it outdoors, and explain the whole system to your guide."
 ---

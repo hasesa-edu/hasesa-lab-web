@@ -7,6 +7,7 @@ hook: "At ten in the morning, the guide puts an egg in a pot inside a cardboard 
 goal: "Build a box solar oven that heats water past 80 °C, measure how much power it collects and how efficient it is, and improve it with a fair test."
 whatYouBuild: "A double-box solar oven: a cardboard box inside a bigger one with insulation between, a foil reflector lid, a clear plastic window and a black pot, plus a temperature log of its best run."
 hours: 8
+trailer: { youtubeId: "Ofn7jqPDTeY", credit: "National Geographic" }
 status: ai-draft
 publicSample: heat-transfer
 materials:
