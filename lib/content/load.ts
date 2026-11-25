@@ -188,6 +188,17 @@ export function loadContent(root = CONTENT_DIR): Content {
   return { modules, concepts };
 }
 
+/**
+ * Content downloaded from hasesa-api at build time (scripts/fetch-content.mjs).
+ * The API has already validated it with the same rules as loadContent().
+ */
+export const BUNDLE_FILE = path.join(process.cwd(), ".generated", "content.json");
+
+export function loadBundle(file = BUNDLE_FILE): Content {
+  const data = JSON.parse(fs.readFileSync(file, "utf8")) as { modules: Module[]; concepts: Concept[] };
+  return { modules: data.modules, concepts: new Map(data.concepts.map((c) => [c.id, c])) };
+}
+
 /** Curriculum topics a module covers, de-duplicated across its concept units. */
 export function moduleCurriculum(m: Module, concepts: Map<string, Concept>): CurriculumRef[] {
   const seen = new Map<string, CurriculumRef>();
