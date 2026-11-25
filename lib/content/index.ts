@@ -1,17 +1,22 @@
 import "server-only";
-import { loadContent, moduleCurriculum, moduleUnits, type Content } from "./load";
+import fs from "node:fs";
+import { BUNDLE_FILE, loadBundle, loadContent, moduleCurriculum, moduleUnits, type Content } from "./load";
 import type { Concept, ConceptSummary, Module, ModuleSummary, Problem, Step } from "./types";
 
 export type * from "./types";
 export { moduleUnits };
 export { clientProblems } from "./grade";
 
-// Parsed once per server instance. In development it's re-read on every call
-// so edits to content/ show up without a restart.
+// Parsed once per server instance. Built with CONTENT_FROM_API=1, the content
+// comes from hasesa-api (downloaded at build time); otherwise from content/.
+// In development the Markdown is re-read on every call so edits show up
+// without a restart.
 let cache: Content | null = null;
 function content(): Content {
+  if (cache) return cache;
+  if (fs.existsSync(BUNDLE_FILE)) return (cache = loadBundle());
   if (process.env.NODE_ENV === "development") return loadContent();
-  return (cache ??= loadContent());
+  return (cache = loadContent());
 }
 
 export function getModules(): Module[] {

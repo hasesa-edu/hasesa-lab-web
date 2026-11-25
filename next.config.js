@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Course content is read from content/ at runtime; ship it with the server functions.
-  outputFileTracingIncludes: { "/**": ["./content/**/*"] },
+  // Course content is read at runtime (from the API's bundle, or from content/);
+  // ship both with the server functions.
+  outputFileTracingIncludes: { "/**": ["./content/**/*", "./.generated/**/*"] },
   images: {
     // Logos/screenshots — no need to generate 3840-wide variants.
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
