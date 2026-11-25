@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { db, schema } from "@/lib/db/client";
-import { getSession } from "@/lib/auth/session";
+import { getSession, signedInUserId } from "@/lib/auth/session";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { readJsonLimited, BODY_LIMIT } from "@/lib/http";
 
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
       city,
       referrer,
       userAgent,
-      userId: session.userId ?? null,
+      userId: signedInUserId(session),
     });
   } catch (err) {
     console.error("track-view insert failed:", err);

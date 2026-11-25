@@ -1,9 +1,13 @@
 import { cookies } from "next/headers";
 import { getIronSession, type SessionOptions } from "iron-session";
+import { authViaApi } from "./hasesa-api";
 
 export type SessionData = {
   userId?: string;
   isAdmin?: boolean;
+  /** Set when signed in through Hasesa Accounts (hasesa-api): the API session and its refresh token. */
+  sid?: string;
+  refreshToken?: string;
 };
 
 function getPassword(): string {
@@ -37,8 +41,18 @@ export async function getSession() {
   return getIronSession<SessionData>(cookieStore, options());
 }
 
-export async function requireSession(): Promise<{ userId: string } | null> {
-  const session = await getSession();
+/**
+ * The signed-in student, or null. With AUTH_VIA_API on, only sessions made
+ * through Hasesa Accounts count: older cookies (no API session) are treated as
+ * signed out, so everyone signs in once more after the switch.
+ */
+export function signedInUserId(session: SessionData): string | null {
   if (!session.userId) return null;
-  return { userId: session.userId };
+  if (authViaApi() && !session.sid) return null;
+  return session.userId;
+}
+
+export async function requireSession(): Promise<{ userId: string } | null> {
+  const userId = signedInUserId(await getSession());
+  return userId ? { userId } : null;
 }

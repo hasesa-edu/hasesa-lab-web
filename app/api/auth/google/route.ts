@@ -1,22 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateCodeVerifier, generateState } from "arctic";
 import { googleClient, safeNext, OAUTH_NEXT_COOKIE, OAUTH_STATE_COOKIE, OAUTH_VERIFIER_COOKIE } from "@/lib/auth/google";
+import { authViaApi, pkcePair, startUrl } from "@/lib/auth/hasesa-api";
 
 export const runtime = "nodejs";
 
 // Starts "Continue with Google": stores state + PKCE verifier in short-lived
-// cookies, then sends the browser to Google's consent screen.
+// cookies, then sends the browser to Google's consent screen (or, with
+// AUTH_VIA_API=1, to Hasesa Accounts, which handles Google for us).
 export async function GET(req: NextRequest) {
+  const origin = req.nextUrl.origin;
   const state = generateState();
-  const verifier = generateCodeVerifier();
   let url: URL;
-  try {
-    url = googleClient(req.nextUrl.origin).createAuthorizationURL(state, verifier, ["openid", "email", "profile"]);
-  } catch (e) {
-    console.error(e);
-    return NextResponse.redirect(new URL("/login?error=config", req.nextUrl.origin));
+  let verifier: string;
+  if (authViaApi()) {
+    const pkce = pkcePair();
+    verifier = pkce.verifier;
+    url = new URL(startUrl(origin, state, pkce.challenge));
+  } else {
+    verifier = generateCodeVerifier();
+    try {
+      url = googleClient(origin).createAuthorizationURL(state, verifier, ["openid", "email", "profile"]);
+    } catch (e) {
+      console.error(e);
+      return NextResponse.redirect(new URL("/login?error=config", origin));
+    }
+    url.searchParams.set("prompt", "select_account");
   }
-  url.searchParams.set("prompt", "select_account");
 
   const res = NextResponse.redirect(url);
   const cookie = {
