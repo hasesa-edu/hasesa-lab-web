@@ -3,6 +3,7 @@ import { decodeIdToken } from "arctic";
 import { googleClient, safeNext, OAUTH_NEXT_COOKIE, OAUTH_STATE_COOKIE, OAUTH_VERIFIER_COOKIE } from "@/lib/auth/google";
 import { EmailTakenError, upsertGoogleUser } from "@/lib/auth/users";
 import { getSession } from "@/lib/auth/session";
+import { authViaApi } from "@/lib/auth/hasesa-api";
 
 export const runtime = "nodejs";
 
@@ -21,6 +22,9 @@ export async function GET(req: NextRequest) {
     clearOAuthCookies(res);
     return res;
   };
+  // With AUTH_VIA_API=1, sign-in finishes at /api/auth/callback instead. A
+  // sign-in started before the switch lands here: ask the user to start again.
+  if (authViaApi()) return fail("state");
 
   const code = req.nextUrl.searchParams.get("code");
   const state = req.nextUrl.searchParams.get("state");
