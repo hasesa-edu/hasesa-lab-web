@@ -67,7 +67,7 @@ Retired routes redirect (see `next.config.js`): `/experiments`, `/lessons` → `
 ## Stack
 
 - Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, shadcn/Radix UI components
-- Postgres on Neon, via Drizzle ORM (`lib/db/schema.ts`)
+- Postgres on Neon, via Drizzle ORM (`lib/db/schema.ts`). The schema is owned by [hasesa-api](https://github.com/hasesa-edu/hasesa-api) (Alembic migrations); this app's backend is moving there step by step
 - Google sign-in (OAuth via `arctic`) with iron-session cookies; no passwords
 - Markdown content rendered with `react-markdown`, GFM tables and KaTeX maths
 - Any OpenAI-compatible LLM API for the lab assistant (Groq `openai/gpt-oss-120b` by default; set `AI_BASE_URL` / `AI_MODEL` to switch)
@@ -79,10 +79,11 @@ Retired routes redirect (see `next.config.js`): `/experiments`, `/lessons` → `
 ```bash
 npm install
 cp .env.example .env.local   # fill in DATABASE_URL, SESSION_SECRET, GOOGLE_CLIENT_ID/SECRET, AI_API_KEY, ADMIN_PASSWORD
-npm run db:push              # create/update tables
 npm run dev
 npm test                     # content validation + unit tests
 ```
+
+To create or update the tables, run `uv run alembic upgrade head` in hasesa-api against the same `DATABASE_URL` (use a Neon branch, not production).
 
 Open [http://localhost:3000](http://localhost:3000). For Google sign-in, register `http://localhost:3000/api/auth/google/callback` as a redirect URI on your OAuth client.
 
@@ -90,7 +91,7 @@ Open [http://localhost:3000](http://localhost:3000). For Google sign-in, registe
 
 1. Import the repo on [vercel.com/new](https://vercel.com/new).
 2. Set the env vars from `.env.example` (including `CRON_SECRET`, `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_CONTACT_EMAIL`), and add `<site>/api/auth/google/callback` to the Google OAuth client.
-3. Run `npm run db:push` against the production database whenever `lib/db/schema.ts` changes.
+3. Schema changes are made in hasesa-api as Alembic migrations, which its deploy runs against production. Don't run `drizzle-kit push` against production: it could drop the API's tables. When a migration changes a table this app uses, update `lib/db/schema.ts` to match.
 
 ## Not built yet
 
