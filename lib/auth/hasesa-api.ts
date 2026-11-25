@@ -6,9 +6,9 @@ import { createHash, randomBytes } from "node:crypto";
 
 export const CLIENT_ID = "hasesa-web";
 
-/** Sign-in goes through Hasesa Accounts when AUTH_VIA_API=1. Off by default. */
+/** Sign-in goes through Hasesa Accounts when AUTH_VIA_API is 1, true, yes or on. Off by default. */
 export function authViaApi(): boolean {
-  return process.env.AUTH_VIA_API === "1";
+  return ["1", "true", "yes", "on"].includes((process.env.AUTH_VIA_API ?? "").trim().toLowerCase());
 }
 
 export function apiBaseUrl(): string {

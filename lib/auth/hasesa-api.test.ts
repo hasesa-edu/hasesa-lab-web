@@ -8,12 +8,16 @@ afterEach(() => {
 });
 
 describe("hasesa-api client", () => {
-  it("is off unless AUTH_VIA_API=1", () => {
+  it("is off unless AUTH_VIA_API is switched on", () => {
     expect(authViaApi()).toBe(false);
-    process.env.AUTH_VIA_API = "true";
-    expect(authViaApi()).toBe(false);
-    process.env.AUTH_VIA_API = "1";
-    expect(authViaApi()).toBe(true);
+    for (const off of ["", "0", "false", "no"]) {
+      process.env.AUTH_VIA_API = off;
+      expect(authViaApi()).toBe(false);
+    }
+    for (const on of ["1", "true", " TRUE ", "yes", "on"]) {
+      process.env.AUTH_VIA_API = on;
+      expect(authViaApi()).toBe(true);
+    }
   });
 
   it("makes a valid S256 PKCE pair", () => {
