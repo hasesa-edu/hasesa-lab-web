@@ -1,9 +1,11 @@
 # Hasesa Academy — Hands-on Science Modules for Ethiopian Students — Requirements
 
-**Version:** 1.0 (Draft)
-**Date:** 2026-11-23
+**Version:** 1.1 (Draft)
+**Date:** 2026-11-25
 **Owner:** TBD
 
+> **v1.1 change:** Eight modules were added that need only materials found in Ethiopian markets, shops and homes, bringing the Academy to **twenty-two modules**: Catapult Range, Clay Pot Fridge, Earth & Straw and Krar Lab (beginner), and Better Stove, Biogas from Dung, Colour from Plants and Sun Clock (intermediate). Some earlier modules need equipment that is hard to find or costly in Ethiopia (FR-6); those stay as they are.
+>
 > **v1.0 change:** Browsing works like a course marketplace. Every page has **search in the header** with suggestions as you type (FR-2c). Modules appear as **cards** with a cover generated from their subjects, and a card's button lets a student **start in one click** (or continue, restart, see the certificate; visitors sign up). `/modules` has a filter sidebar (a sheet on phones), counts and sort (FR-2b). The Academy page leads with a large search and rows of cards (FR-34). The dashboard became **My learning**, with In progress / Completed / Dropped tabs and "Recommended for you" (FR-13). The module page opens with a banner: cover, facts, the main action and "What you'll learn" (FR-39).
 >
 > **v0.9 change:** The module pages were redesigned to work with a hundred modules or more. The radio tuning dial and the station (kHz) framing are gone: the dial could only hold six or seven modules per level. The Academy hero is now a finder (search, plus a tile for each level), and the Academy page shows a short preview of each level instead of every module (FR-34). `/modules` became a catalogue with search and filters for level, subject and length, kept in the URL (FR-2b). The dashboard suggests a few modules to start next (FR-13), and guides get one searchable list of guide's versions (FR-15a). Modules can be marked `featured` for the preview.
@@ -69,9 +71,9 @@ Students today rely on YouTube demos (generic, often needing lab equipment they 
 ## 4. Scope
 
 ### 4.1 In Scope (MVP)
-- Fourteen modules in three levels:
-  - **Beginner:** Bottle Rocket, Clean Water, Market Detective, Seed Lab, Sun Oven.
-  - **Intermediate:** Bean to Cup, Injera Lab, Radio, Rift Valley Shake, Weather Station.
+- Twenty-two modules in three levels:
+  - **Beginner:** Bottle Rocket, Catapult Range, Clay Pot Fridge, Clean Water, Earth & Straw, Krar Lab, Market Detective, Seed Lab, Sun Oven.
+  - **Intermediate:** Bean to Cup, Better Stove, Biogas from Dung, Colour from Plants, Injera Lab, Radio, Rift Valley Shake, Sun Clock, Weather Station.
   - **Advanced:** DNA Detective, Mind over Machine, Soap & Bioplastic, Wind Power.
 - For each module: a hook, a goal, what you build, materials, safety notes, an optional trailer, 8–14 hours of steps (depending on the module) and a sign-off checklist.
 - Shared concept units with theory, maths and server-graded practice problems, tagged to the national curriculum, with a test-out option.
@@ -259,7 +261,7 @@ Network baselines: **2G** = 400 Kbps / 400 ms RTT, **3G** = 1.6 Mbps / 300 ms RT
 |---|---|---|
 | Pilot (done, June 2026) | Strawberry DNA extraction with Grade 11 students, guided live | Showed demand for hands-on, low-cost science |
 | v0.3 experiment catalogue (retired, 2026-10/11) | Self-serve experiment guides, lab assistant, notebook | Replaced by the Academy model |
-| Academy pilot (current, to end of 2027) | Fourteen AI-drafted modules in three levels, shared units, guide tools, certificates, embedded assistant; English; free online access, Academy places at 12,000 ETB a year | Students earn certificates; ≥ 50% of starters finish a module; no P0 bugs |
+| Academy pilot (current, to end of 2027) | Twenty-two AI-drafted modules in three levels, shared units, guide tools, certificates, embedded assistant; English; free online access, Academy places at 12,000 ETB a year | Students earn certificates; ≥ 50% of starters finish a module; no P0 bugs |
 | Expert-reviewed release | All modules `expert-reviewed` (Soap & Bioplastic and Wind Power first, for safety), then `classroom-tested`; own videos | Assistant meets the §2 quality and safety targets |
 | Public launch | Amharic UI, offline steps and units, more modules, pricing decision | Privacy and legal sign-off; AI cost within budget at target scale |
 
