@@ -7,6 +7,8 @@ import { and, eq } from "drizzle-orm";
 import { checkAndIncrement, refundUsage } from "@/lib/usage";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { readJsonLimited, BODY_LIMIT } from "@/lib/http";
+import { chatViaApi } from "@/lib/auth/hasesa-api";
+import { chatViaApiResponse } from "@/lib/chat-proxy";
 
 const MAX_MESSAGE_CHARS = 8000;
 
@@ -78,6 +80,17 @@ LANGUAGE: Respond in ${langName}. Do not switch unless the student asks.`;
 }
 
 export async function POST(req: NextRequest) {
+  if (chatViaApi()) {
+    // The API checks access, caps and conversations; this keeps the per-IP throttle in front.
+    const limit = rateLimit(`chat:${clientIp(req)}`, 20, 5 * 60 * 1000);
+    if (!limit.ok) {
+      return Response.json({ error: "Too many requests. Please slow down." }, { status: 429, headers: { "retry-after": String(limit.retryAfter) } });
+    }
+    const parsed = await readJsonLimited(req, BODY_LIMIT.chat);
+    if (!parsed.ok) return Response.json({ error: parsed.error }, { status: parsed.status });
+    return chatViaApiResponse(parsed.data);
+  }
+
   const apiKey = process.env.AI_API_KEY || process.env.GROQ_API_KEY;
   if (!apiKey) {
     return new Response(JSON.stringify({ error: "AI_API_KEY not configured" }), {

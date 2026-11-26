@@ -35,9 +35,13 @@ export const adminViaApi = () => authViaApi() && envSwitch("ADMIN_VIA_API");
 /** Chapa checkouts start in the API (and its webhook), and the return page checks payments through it. */
 export const billingViaApi = () => authViaApi() && envSwitch("BILLING_VIA_API");
 
+// Phase 6 switch.
+/** The lab assistant (chat, threads, history) runs in the API. */
+export const chatViaApi = () => authViaApi() && envSwitch("CHAT_VIA_API");
+
 /** Whether the website's server needs API access tokens at all (see proxy.ts). */
 export function apiTokensNeeded(): boolean {
-  return answersViaApi() || progressViaApi() || dashboardViaApi() || guideViaApi() || adminViaApi() || billingViaApi();
+  return answersViaApi() || progressViaApi() || dashboardViaApi() || guideViaApi() || adminViaApi() || billingViaApi() || chatViaApi();
 }
 
 export function apiBaseUrl(): string {

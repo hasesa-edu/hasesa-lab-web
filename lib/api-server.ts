@@ -80,6 +80,16 @@ export async function forward(path: string, body: unknown): Promise<Response> {
   }
 }
 
+/** Answer a website GET route with the API's answer (or its error). */
+export async function forwardGet(path: string): Promise<Response> {
+  try {
+    return Response.json(await apiFetch<unknown>(path));
+  } catch (e) {
+    if (e instanceof ApiError) return Response.json({ error: e.message }, { status: e.status });
+    throw e;
+  }
+}
+
 /** Turn the API's ISO date strings back into Dates, for every field ending in "At". */
 export function withDates<T>(row: Record<string, unknown>): T {
   const out: Record<string, unknown> = { ...row };

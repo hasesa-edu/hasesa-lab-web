@@ -4,6 +4,8 @@ import { db, schema } from "@/lib/db/client";
 import { getAccess, hasFullAccess } from "@/lib/access";
 import { isValidContext } from "@/lib/chat-context";
 import { CAPS, getCurrentUsage } from "@/lib/usage";
+import { chatViaApi } from "@/lib/auth/hasesa-api";
+import { forwardGet } from "@/lib/api-server";
 
 export const runtime = "nodejs";
 
@@ -11,6 +13,7 @@ export const runtime = "nodejs";
 // The student's latest conversation on this page (one thread per page), plus
 // how many assistant messages they have left today.
 export async function GET(req: NextRequest) {
+  if (chatViaApi()) return forwardGet(`/v1/chat/thread?${new URLSearchParams({ context: req.nextUrl.searchParams.get("context") ?? "" })}`);
   const access = await getAccess();
   if (!access.userId) return Response.json({ error: "Please sign in." }, { status: 401 });
   if (!hasFullAccess(access)) return Response.json({ error: "The lab assistant is for students enrolled at the Academy." }, { status: 403 });

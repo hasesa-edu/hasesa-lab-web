@@ -2,6 +2,8 @@ import { NextRequest } from "next/server";
 import { requireSession } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
 import { and, asc, eq, gte } from "drizzle-orm";
+import { chatViaApi } from "@/lib/auth/hasesa-api";
+import { ApiError, apiFetch, forwardGet } from "@/lib/api-server";
 
 export const runtime = "nodejs";
 
@@ -9,6 +11,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   const sess = await requireSession();
   if (!sess) return Response.json({ error: "Unauthorized" }, { status: 401 });
   const { id } = await params;
+  if (chatViaApi()) return forwardGet(`/v1/chat/conversations/${encodeURIComponent(id)}`);
 
   const convo = (await db.select().from(schema.conversations).where(eq(schema.conversations.id, id)).limit(1))[0];
   if (!convo || convo.userId !== sess.userId) return Response.json({ error: "Not found" }, { status: 404 });
@@ -35,6 +38,15 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   const sess = await requireSession();
   if (!sess) return Response.json({ error: "Unauthorized" }, { status: 401 });
   const { id } = await params;
+  if (chatViaApi()) {
+    try {
+      await apiFetch(`/v1/chat/conversations/${encodeURIComponent(id)}`, { method: "DELETE" });
+      return Response.json({ ok: true });
+    } catch (e) {
+      if (e instanceof ApiError) return Response.json({ error: e.message }, { status: e.status });
+      throw e;
+    }
+  }
 
   const convo = (await db.select().from(schema.conversations).where(eq(schema.conversations.id, id)).limit(1))[0];
   if (!convo || convo.userId !== sess.userId) return Response.json({ error: "Not found" }, { status: 404 });

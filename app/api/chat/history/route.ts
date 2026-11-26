@@ -1,11 +1,14 @@
 import { requireSession } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
 import { and, desc, eq, gte } from "drizzle-orm";
+import { chatViaApi } from "@/lib/auth/hasesa-api";
+import { forwardGet } from "@/lib/api-server";
 
 export const runtime = "nodejs";
 
 // GET /api/chat/history → recent conversations (90-day window or 365 if extendedRetention)
 export async function GET() {
+  if (chatViaApi()) return forwardGet("/v1/chat/conversations");
   const sess = await requireSession();
   if (!sess) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
