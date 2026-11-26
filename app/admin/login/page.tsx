@@ -87,6 +87,12 @@ export default function AdminLoginPage() {
               {busy ? "…" : "Sign in"}
             </Button>
           </form>
+          <p className="mt-5 border-t border-border pt-4 text-sm text-muted-foreground">
+            Admin with a Google account?{" "}
+            <a href="/login?next=/admin" className="font-medium text-foreground underline underline-offset-4">
+              Sign in with Google
+            </a>
+          </p>
         </div>
       </div>
     </div>

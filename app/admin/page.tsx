@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { sql } from "drizzle-orm";
-import { getSession } from "@/lib/auth/session";
+import { isAdmin } from "@/lib/auth/admin";
 import { db, schema } from "@/lib/db/client";
 import { BarChart3, Boxes, Eye, ShieldCheck, Users } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
@@ -173,8 +173,7 @@ function TopList({ title, rows }: { title: string; rows: LabelCountRow[] }) {
 }
 
 export default async function AdminPage() {
-  const session = await getSession();
-  if (!session.isAdmin) redirect("/admin/login");
+  if (!(await isAdmin())) redirect("/admin/login");
 
   const s = await loadStats();
 
