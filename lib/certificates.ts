@@ -1,9 +1,22 @@
 import "server-only";
 import { eq } from "drizzle-orm";
 import { db, schema } from "@/lib/db/client";
+import { dashboardViaApi } from "@/lib/auth/hasesa-api";
+import { ApiError, apiFetch, withDates } from "@/lib/api-server";
 
-export async function getCertificate(code: string) {
+export type Certificate = { moduleId: string; signedAt: Date; note: string | null; code: string; student: string; guide: string };
+
+export async function getCertificate(code: string): Promise<Certificate | null> {
   if (!/^[A-Z0-9]{4}-[A-Z0-9]{6}$/.test(code)) return null;
+  if (dashboardViaApi()) {
+    try {
+      const c = await apiFetch<Record<string, unknown>>(`/v1/certificates/${code}`, { asStudent: false });
+      return withDates<Certificate>(c);
+    } catch (e) {
+      if (e instanceof ApiError && e.status === 404) return null;
+      console.error("certificate from hasesa-api failed, reading the database instead:", e);
+    }
+  }
   const rows = await db
     .select({
       moduleId: schema.signoffs.moduleId,

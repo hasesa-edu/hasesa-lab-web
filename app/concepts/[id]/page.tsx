@@ -6,7 +6,7 @@ import { ArrowRight, BookOpen, GraduationCap, MessageCircle, Puzzle } from "luci
 import { clientProblems, conceptUsage, getConcept, getModule } from "@/lib/content";
 import { getViewer } from "@/lib/viewer";
 import { hasFullAccess } from "@/lib/access";
-import { getAttempts } from "@/lib/progress";
+import { myAttempts } from "@/lib/my-progress";
 import { DISCIPLINES } from "@/lib/disciplines";
 import { BRAND } from "@/lib/brand";
 import { cn } from "@/lib/utils";
@@ -69,7 +69,7 @@ export default async function ConceptPage({ params, searchParams }: Props) {
     );
   }
 
-  const attempts = access.userId ? await getAttempts(access.userId, [c.id]) : [];
+  const attempts = access.userId ? await myAttempts(access.userId, [c.id]) : [];
   const solved = [...new Set(attempts.filter((a) => a.correct).map((a) => a.questionId))];
   const unit = state?.units.find((u) => u.unitId === c.id);
 
