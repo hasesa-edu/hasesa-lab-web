@@ -147,7 +147,9 @@ export async function refreshTokens(refreshToken: string): Promise<RefreshResult
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ grant_type: "refresh_token", client_id: CLIENT_ID, client_secret: clientSecret(), refresh_token: refreshToken }),
       cache: "no-store",
-      signal: AbortSignal.timeout(4_000),
+      // Long enough for the API and database to wake up. Giving up early is
+      // worse than waiting: the API may still rotate the token we then never see.
+      signal: AbortSignal.timeout(10_000),
     });
   } catch (e) {
     console.error("hasesa-api refresh failed:", e);

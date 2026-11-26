@@ -1,5 +1,5 @@
 import { db, schema } from "@/lib/db/client";
-import { and, desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, sql } from "drizzle-orm";
 import { PLAN } from "./plan";
 import { verifyTransaction } from "./chapa";
 
@@ -8,9 +8,11 @@ export function newTxRef(): string {
 }
 
 /**
- * Marks a pending payment paid and adds its days to the student's pass, in a
- * single statement. The `status = 'pending'` guard makes it idempotent, so
- * the return page, the callback and the webhook can all call it safely.
+ * Marks a payment paid and adds its days to the student's pass, in a single
+ * statement. The status guard makes it idempotent, so the return page, the
+ * callback and the webhook can all call it safely. A payment Chapa once
+ * reported as failed can still be claimed: if the student retried on the same
+ * checkout and Chapa's verify call now says success, they paid.
  * Returns the new paid-until date, or null if nothing was applied.
  */
 async function claimAndExtend(txRef: string, chapaRef: string | null): Promise<Date | null> {
@@ -18,7 +20,7 @@ async function claimAndExtend(txRef: string, chapaRef: string | null): Promise<D
     WITH claimed AS (
       UPDATE payments
       SET status = 'success', verified_at = now(), chapa_ref = ${chapaRef}
-      WHERE tx_ref = ${txRef} AND status = 'pending'
+      WHERE tx_ref = ${txRef} AND status IN ('pending', 'failed')
       RETURNING user_id, days
     )
     UPDATE users u
@@ -60,7 +62,7 @@ export async function verifyAndApply(txRef: string): Promise<ApplyResult> {
     await db
       .update(schema.payments)
       .set({ status: "review", verifiedAt: new Date(), chapaRef: tx.reference, note: `Chapa reported ${tx.amount} ${tx.currency}` })
-      .where(and(eq(schema.payments.txRef, txRef), eq(schema.payments.status, "pending")));
+      .where(and(eq(schema.payments.txRef, txRef), inArray(schema.payments.status, ["pending", "failed"])));
     return { state: "review" };
   }
   const paidUntil = await claimAndExtend(txRef, tx.reference);
