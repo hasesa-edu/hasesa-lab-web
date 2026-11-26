@@ -28,8 +28,6 @@ export const dashboardViaApi = () => authViaApi() && envSwitch("DASHBOARD_VIA_AP
 // Phase 4 switches.
 /** The guide's tracker, student pages and tools use the API. */
 export const guideViaApi = () => authViaApi() && envSwitch("GUIDE_VIA_API");
-/** Admins listed in the API's ADMIN_EMAILS can use /admin after signing in with Google; the admin tools use the API. */
-export const adminViaApi = () => authViaApi() && envSwitch("ADMIN_VIA_API");
 
 // Phase 5 switch.
 /** Chapa checkouts start in the API (and its webhook), and the return page checks payments through it. */
@@ -39,9 +37,12 @@ export const billingViaApi = () => authViaApi() && envSwitch("BILLING_VIA_API");
 /** The lab assistant (chat, threads, history) runs in the API. */
 export const chatViaApi = () => authViaApi() && envSwitch("CHAT_VIA_API");
 
-/** Whether the website's server needs API access tokens at all (see proxy.ts). */
+/**
+ * Whether the website's server needs API access tokens (see proxy.ts): always
+ * with Hasesa Accounts on, since admins (and every switch above) call the API.
+ */
 export function apiTokensNeeded(): boolean {
-  return answersViaApi() || progressViaApi() || dashboardViaApi() || guideViaApi() || adminViaApi() || billingViaApi() || chatViaApi();
+  return authViaApi();
 }
 
 export function apiBaseUrl(): string {

@@ -22,7 +22,7 @@ export function Footer() {
   const pathname = usePathname();
   const full = pathname === "/" || pathname === "/academy";
   // Sign-in (student and admin) and payment-return pages fill the screen with their own background; let the footer sit flush under them.
-  const flush = pathname === "/login" || pathname === "/admin/login" || pathname.startsWith("/billing");
+  const flush = pathname === "/login" || pathname.startsWith("/billing");
   const hasContact = !!CONTACT_EMAIL || SOCIAL_LINKS.length > 0;
   const year = new Date().getFullYear();
 

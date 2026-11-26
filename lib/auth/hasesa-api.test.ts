@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { afterEach, describe, expect, it } from "vitest";
-import { adminViaApi, answersViaApi, billingViaApi, chatViaApi, apiBaseUrl, apiTokensNeeded, authViaApi, callbackUrl, dashboardViaApi, guideViaApi, pkcePair, progressViaApi, startUrl } from "./hasesa-api";
+import { answersViaApi, billingViaApi, chatViaApi, apiBaseUrl, apiTokensNeeded, authViaApi, callbackUrl, dashboardViaApi, guideViaApi, pkcePair, progressViaApi, startUrl } from "./hasesa-api";
 
 afterEach(() => {
   delete process.env.AUTH_VIA_API;
@@ -8,7 +8,6 @@ afterEach(() => {
   delete process.env.PROGRESS_VIA_API;
   delete process.env.DASHBOARD_VIA_API;
   delete process.env.GUIDE_VIA_API;
-  delete process.env.ADMIN_VIA_API;
   delete process.env.BILLING_VIA_API;
   delete process.env.CHAT_VIA_API;
   delete process.env.HASESA_API_URL;
@@ -39,20 +38,18 @@ describe("hasesa-api client", () => {
     expect([answersViaApi(), progressViaApi(), dashboardViaApi(), apiTokensNeeded()]).toEqual([false, false, true, true]);
   });
 
-  it("needs API tokens for the guide and admin switches too", () => {
-    process.env.AUTH_VIA_API = "1";
-    expect(apiTokensNeeded()).toBe(false);
+  it("turns the guide, billing and chat switches on only together with AUTH_VIA_API", () => {
     process.env.GUIDE_VIA_API = "1";
-    expect([guideViaApi(), adminViaApi(), apiTokensNeeded()]).toEqual([true, false, true]);
-    process.env.GUIDE_VIA_API = "";
-    process.env.ADMIN_VIA_API = "on";
-    expect([guideViaApi(), adminViaApi(), apiTokensNeeded()]).toEqual([false, true, true]);
-    process.env.ADMIN_VIA_API = "";
     process.env.BILLING_VIA_API = "1";
-    expect([billingViaApi(), apiTokensNeeded()]).toEqual([true, true]);
-    process.env.BILLING_VIA_API = "";
     process.env.CHAT_VIA_API = "yes";
-    expect([chatViaApi(), apiTokensNeeded()]).toEqual([true, true]);
+    expect([guideViaApi(), billingViaApi(), chatViaApi(), apiTokensNeeded()]).toEqual([false, false, false, false]);
+    process.env.AUTH_VIA_API = "1";
+    expect([guideViaApi(), billingViaApi(), chatViaApi(), apiTokensNeeded()]).toEqual([true, true, true, true]);
+  });
+
+  it("needs API tokens whenever Hasesa Accounts is on (admins call the API)", () => {
+    process.env.AUTH_VIA_API = "1";
+    expect(apiTokensNeeded()).toBe(true);
   });
 
   it("makes a valid S256 PKCE pair", () => {
