@@ -25,9 +25,15 @@ export const progressViaApi = () => authViaApi() && envSwitch("PROGRESS_VIA_API"
 /** Progress on pages, the dashboard, guide-note read receipts and certificates come from the API. */
 export const dashboardViaApi = () => authViaApi() && envSwitch("DASHBOARD_VIA_API");
 
+// Phase 4 switches.
+/** The guide's tracker, student pages and tools use the API. */
+export const guideViaApi = () => authViaApi() && envSwitch("GUIDE_VIA_API");
+/** Admins listed in the API's ADMIN_EMAILS can use /admin after signing in with Google; the admin tools use the API. */
+export const adminViaApi = () => authViaApi() && envSwitch("ADMIN_VIA_API");
+
 /** Whether the website's server needs API access tokens at all (see proxy.ts). */
 export function apiTokensNeeded(): boolean {
-  return answersViaApi() || progressViaApi() || dashboardViaApi();
+  return answersViaApi() || progressViaApi() || dashboardViaApi() || guideViaApi() || adminViaApi();
 }
 
 export function apiBaseUrl(): string {

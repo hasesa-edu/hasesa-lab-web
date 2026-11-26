@@ -14,7 +14,7 @@ export class ApiError extends Error {
 const UNREACHABLE = "Couldn't reach the server. Try again.";
 
 type Options = {
-  method?: "GET" | "POST";
+  method?: "GET" | "POST" | "PUT" | "DELETE";
   body?: unknown;
   /**
    * Call as the signed-in student. When the visitor is signed in but has no

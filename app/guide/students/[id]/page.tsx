@@ -4,9 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import { Award, BookOpen, Check, CircleCheck, CircleX, ClipboardList, Flag, Hammer, MessageSquareQuote, NotebookPen, Trash2 } from "lucide-react";
 import { getAccess } from "@/lib/access";
 import { getConcept, getConcepts, getModules, moduleUnits } from "@/lib/content";
-import { getStudentState } from "@/lib/progress";
-import { loadStudentAttempts } from "@/lib/tracker";
-import { getUserDTO } from "@/lib/auth/users";
+import { loadStudent } from "@/lib/tracker";
 import { isUnitDone, moduleProgress } from "@/lib/summary";
 import { formatDate } from "@/lib/format";
 import { BRAND } from "@/lib/brand";
@@ -31,7 +29,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
   const access = await getAccess();
   if (!access.userId) redirect(`/login?next=/guide/students/${id}`);
   if (access.level !== "guide") redirect("/dashboard");
-  const [user, state, attempts] = await Promise.all([getUserDTO(id), getStudentState(id), loadStudentAttempts(id)]);
+  const { user, state, attempts } = await loadStudent(id);
   if (!user) notFound();
 
   const modules = getModules();

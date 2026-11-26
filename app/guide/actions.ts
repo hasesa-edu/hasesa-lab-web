@@ -5,6 +5,8 @@ import { and, eq } from "drizzle-orm";
 import { getAccess } from "@/lib/access";
 import { db, schema } from "@/lib/db/client";
 import { getConcept, getModule } from "@/lib/content";
+import { guideViaApi } from "@/lib/auth/hasesa-api";
+import { ApiError, apiFetch } from "@/lib/api-server";
 
 export type ActionState = { ok: boolean; message: string } | null;
 
@@ -20,6 +22,19 @@ async function studentExists(id: string): Promise<boolean> {
 
 const str = (form: FormData, k: string, max = 2000) => String(form.get(k) ?? "").trim().slice(0, max);
 
+/** With GUIDE_VIA_API on, each tool calls hasesa-api as the guide; the API checks the role. */
+async function viaApi(call: () => Promise<unknown>): Promise<ActionState | null> {
+  try {
+    await call();
+    return null;
+  } catch (e) {
+    if (e instanceof ApiError) return { ok: false, message: e.message };
+    throw e;
+  }
+}
+
+const studentPath = (studentId: string) => `/v1/guide/students/${encodeURIComponent(studentId)}`;
+
 function done(studentId: string, message: string): ActionState {
   revalidatePath(`/guide/students/${studentId}`);
   revalidatePath("/guide");
@@ -33,6 +48,12 @@ export async function giveFeedbackAction(_prev: ActionState, form: FormData): Pr
   const body = str(form, "body");
   const [moduleId, stepId] = str(form, "where", 200).split("/");
   if (!body) return { ok: false, message: "Write some feedback first." };
+  if (guideViaApi()) {
+    const err = await viaApi(() =>
+      apiFetch(`${studentPath(studentId)}/feedback`, { method: "POST", body: { body, moduleId: moduleId || null, stepId: stepId || null } })
+    );
+    return err ?? done(studentId, "Feedback sent. The student sees it on their dashboard.");
+  }
   if (!(await studentExists(studentId))) return { ok: false, message: "Student not found." };
   const m = moduleId ? getModule(moduleId) : undefined;
   const step = m && stepId ? m.steps.find((s) => s.id === stepId) : undefined;
@@ -54,6 +75,10 @@ export async function assignUnitAction(_prev: ActionState, form: FormData): Prom
   const unitId = str(form, "unitId", 100);
   const note = str(form, "note", 500);
   if (!getConcept(unitId)) return { ok: false, message: "Pick a concept unit." };
+  if (guideViaApi()) {
+    const err = await viaApi(() => apiFetch(`${studentPath(studentId)}/assignments`, { method: "POST", body: { unitId, note: note || null } }));
+    return err ?? done(studentId, `Assigned "${getConcept(unitId)!.title}".`);
+  }
   if (!(await studentExists(studentId))) return { ok: false, message: "Student not found." };
   await db.insert(schema.unitAssignments).values({ id: crypto.randomUUID(), studentId, unitId, note: note || null, guideId: guide });
   return done(studentId, `Assigned "${getConcept(unitId)!.title}".`);
@@ -64,6 +89,12 @@ export async function removeAssignmentAction(form: FormData): Promise<void> {
   if (!guide) return;
   const id = str(form, "id", 100);
   const studentId = str(form, "studentId", 100);
+  if (guideViaApi()) {
+    const err = await viaApi(() => apiFetch(`${studentPath(studentId)}/assignments/${encodeURIComponent(id)}`, { method: "DELETE" }));
+    if (err) console.error("remove assignment failed:", err.message);
+    done(studentId, "");
+    return;
+  }
   await db.delete(schema.unitAssignments).where(and(eq(schema.unitAssignments.id, id), eq(schema.unitAssignments.studentId, studentId)));
   done(studentId, "");
 }
@@ -76,6 +107,12 @@ export async function setFlagAction(_prev: ActionState, form: FormData): Promise
   const flagged = form.get("flagged") === "1";
   const note = str(form, "note", 300);
   if (!getModule(moduleId)) return { ok: false, message: "Unknown module." };
+  if (guideViaApi()) {
+    const err = await viaApi(() =>
+      apiFetch(`${studentPath(studentId)}/modules/${encodeURIComponent(moduleId)}/flag`, { method: "PUT", body: { flagged, note: note || null } })
+    );
+    return err ?? done(studentId, flagged ? "Flagged." : "Flag cleared.");
+  }
   const updated = await db
     .update(schema.moduleEnrollments)
     .set({ flagged, flagNote: flagged ? note || null : null })
@@ -99,8 +136,14 @@ export async function signOffAction(_prev: ActionState, form: FormData): Promise
   const studentId = str(form, "studentId", 100);
   const m = getModule(str(form, "moduleId", 100));
   if (!m) return { ok: false, message: "Unknown module." };
-  if (!(await studentExists(studentId))) return { ok: false, message: "Student not found." };
   const checks = form.getAll("check").map(String);
+  if (guideViaApi()) {
+    const err = await viaApi(() =>
+      apiFetch(`${studentPath(studentId)}/signoffs`, { method: "POST", body: { moduleId: m.id, checks, note: str(form, "note", 1000) || null } })
+    );
+    return err ?? done(studentId, `Signed off ${m.title}. The certificate is ready.`);
+  }
+  if (!(await studentExists(studentId))) return { ok: false, message: "Student not found." };
   const missing = m.signoff.filter((s) => !checks.includes(s.id));
   if (missing.length) return { ok: false, message: `Tick every item before signing off (${missing.length} left).` };
 
@@ -124,6 +167,12 @@ export async function undoSignOffAction(form: FormData): Promise<void> {
   if (!guide) return;
   const studentId = str(form, "studentId", 100);
   const moduleId = str(form, "moduleId", 100);
+  if (guideViaApi()) {
+    const err = await viaApi(() => apiFetch(`${studentPath(studentId)}/signoffs/${encodeURIComponent(moduleId)}`, { method: "DELETE" }));
+    if (err) console.error("undo sign-off failed:", err.message);
+    done(studentId, "");
+    return;
+  }
   await db.delete(schema.signoffs).where(and(eq(schema.signoffs.userId, studentId), eq(schema.signoffs.moduleId, moduleId)));
   await db
     .update(schema.moduleEnrollments)

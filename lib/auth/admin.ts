@@ -1,5 +1,7 @@
 import { timingSafeEqual } from "crypto";
-import { getSession } from "./session";
+import { apiFetch } from "@/lib/api-server";
+import { adminViaApi } from "./hasesa-api";
+import { getSession, signedInUserId } from "./session";
 
 const DEFAULT_ADMIN_USERNAME = "admin";
 
@@ -37,7 +39,23 @@ export function verifyAdmin(username: string, password: string): boolean {
   return userOk && passOk;
 }
 
+/**
+ * Signed in with Google and listed in the API's ADMIN_EMAILS (ADMIN_VIA_API on).
+ * Admin actions then go through the API as that person.
+ */
+export async function isApiAdmin(): Promise<boolean> {
+  if (!adminViaApi()) return false;
+  if (!signedInUserId(await getSession())) return false;
+  try {
+    return (await apiFetch<{ admin?: boolean }>("/v1/me")).admin === true;
+  } catch (e) {
+    console.error("admin check through hasesa-api failed:", e);
+    return false;
+  }
+}
+
+/** Signed in with the admin password (being retired) or as an API admin. */
 export async function isAdmin(): Promise<boolean> {
   const session = await getSession();
-  return Boolean(session.isAdmin);
+  return Boolean(session.isAdmin) || (await isApiAdmin());
 }

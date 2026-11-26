@@ -1,5 +1,7 @@
 import { sql } from "drizzle-orm";
 import { db } from "@/lib/db/client";
+import { isApiAdmin } from "@/lib/auth/admin";
+import { apiFetch } from "@/lib/api-server";
 import { Badge } from "@/components/ui/badge";
 import { GraduationCap, UserPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -23,7 +25,15 @@ function rows<T>(r: any): T[] {
   return Array.isArray(r) ? r : r?.rows ?? [];
 }
 
-export async function Subscribers() {
+async function load(): Promise<{ s: SubStats; list: PaymentRow[] }> {
+  if (await isApiAdmin()) {
+    try {
+      const r = await apiFetch<{ stats: SubStats; payments: PaymentRow[] }>("/v1/admin/subscribers");
+      return { s: r.stats, list: r.payments };
+    } catch (e) {
+      console.error("subscribers from hasesa-api failed, reading the database instead:", e);
+    }
+  }
   const [subs, recent] = await Promise.all([
     db.execute(sql`
       select
@@ -41,8 +51,11 @@ export async function Subscribers() {
       limit 20
     `),
   ]);
-  const s = rows<SubStats>(subs)[0] ?? { active: 0, endingSoon: 0, everPaid: 0, guides: 0 };
-  const list = rows<PaymentRow>(recent);
+  return { s: rows<SubStats>(subs)[0] ?? { active: 0, endingSoon: 0, everPaid: 0, guides: 0 }, list: rows<PaymentRow>(recent) };
+}
+
+export async function Subscribers() {
+  const { s, list } = await load();
 
   return (
     <section>
