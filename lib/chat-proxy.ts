@@ -13,10 +13,14 @@ async function* sseEvents(body: ReadableStream<Uint8Array>): AsyncGenerator<SseE
   const reader = body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
+  let finished = false;
   try {
     while (true) {
       const { done, value } = await reader.read();
-      if (done) break;
+      if (done) {
+        finished = true;
+        break;
+      }
       buffer += decoder.decode(value, { stream: true }).replace(/\r\n?/g, "\n");
       let end: number;
       while ((end = buffer.indexOf("\n\n")) >= 0) {
@@ -32,6 +36,9 @@ async function* sseEvents(body: ReadableStream<Uint8Array>): AsyncGenerator<SseE
       }
     }
   } finally {
+    // Stopped early (the student left): close the API's stream too, which
+    // still saves the part of the answer already written.
+    if (!finished) await reader.cancel().catch(() => {});
     reader.releaseLock();
   }
 }
@@ -48,9 +55,12 @@ export async function chatViaApiResponse(body: unknown): Promise<Response> {
   if (!signedInUserId(session)) return jsonError(401, "Please sign in to use the lab assistant.", "signin");
   if (!session.accessToken) return jsonError(503, "Couldn't reach the server. Try again.");
 
+  // Aborted if the student leaves, so the API stops streaming (and saves what it wrote).
+  const upstream = new AbortController();
   let res: Response;
   try {
     res = await fetch(`${apiBaseUrl()}/v1/chat`, {
+      signal: upstream.signal,
       method: "POST",
       headers: { "content-type": "application/json", accept: "text/event-stream", authorization: `Bearer ${session.accessToken}` },
       body: JSON.stringify(body),
@@ -70,15 +80,21 @@ export async function chatViaApiResponse(body: unknown): Promise<Response> {
   const events = sseEvents(res.body);
   const first = await events.next().catch(() => null);
   if (!first || first.done || first.value.event !== "meta") return jsonError(502, UNAVAILABLE);
-  const meta = JSON.parse(first.value.data) as { conversationId: string; remaining: number };
+  let meta: { conversationId: string; remaining: number };
+  try {
+    meta = JSON.parse(first.value.data);
+  } catch {
+    await events.return(undefined);
+    return jsonError(502, UNAVAILABLE);
+  }
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       try {
         for await (const ev of events) {
-          if (ev.event === "delta") controller.enqueue(encoder.encode((JSON.parse(ev.data) as { text: string }).text));
-          else if (ev.event === "error") throw new Error((JSON.parse(ev.data) as { error: string }).error);
+          if (ev.event === "delta") controller.enqueue(encoder.encode(String((JSON.parse(ev.data) as { text: string }).text ?? "")));
+          else if (ev.event === "error") throw new Error(String((JSON.parse(ev.data) as { error: string }).error ?? UNAVAILABLE));
           else if (ev.event === "done") break;
         }
         controller.close();
@@ -86,8 +102,8 @@ export async function chatViaApiResponse(body: unknown): Promise<Response> {
         controller.error(err);
       }
     },
-    async cancel() {
-      await events.return(undefined);
+    cancel() {
+      upstream.abort();
     },
   });
   return new Response(stream, {
