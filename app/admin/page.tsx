@@ -5,7 +5,6 @@ import { db, schema } from "@/lib/db/client";
 import { BarChart3, Boxes, Eye, ShieldCheck, Users } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { AdminSignOutButton } from "./signout-button";
 import { SectionTitle, StatCard, Subscribers, TABLE_HEAD, TH, TablePanel } from "./Subscribers";
 
 export const dynamic = "force-dynamic";
@@ -188,9 +187,7 @@ export default async function AdminPage() {
         }
         title="Admin analytics"
         description="User signups, traffic, and content engagement."
-      >
-        <AdminSignOutButton />
-      </PageHeader>
+      />
 
       <div className="mx-auto max-w-6xl space-y-10 px-4 py-10">
       <section>
