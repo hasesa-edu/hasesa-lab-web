@@ -6,6 +6,8 @@ import { initializeCheckout } from "@/lib/billing/chapa";
 import { createPendingPayment } from "@/lib/billing/payments";
 import { PLAN } from "@/lib/billing/plan";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { billingViaApi } from "@/lib/auth/hasesa-api";
+import { ApiError, apiFetch } from "@/lib/api-server";
 
 export const runtime = "nodejs";
 
@@ -16,6 +18,21 @@ export async function POST(req: NextRequest) {
 
   const limit = rateLimit(`checkout:${sess.userId}:${clientIp(req)}`, 10, 10 * 60 * 1000);
   if (!limit.ok) return Response.json({ error: "Too many attempts. Please wait a few minutes." }, { status: 429 });
+
+  if (billingViaApi()) {
+    // The API starts the checkout; Chapa then reports to the API's webhook.
+    try {
+      const r = await apiFetch<{ checkoutUrl: string }>("/v1/billing/checkout", {
+        method: "POST",
+        body: { returnUrl: `${req.nextUrl.origin}/billing/return` },
+      });
+      return Response.json({ checkoutUrl: r.checkoutUrl });
+    } catch (e) {
+      if (!(e instanceof ApiError)) throw e;
+      if (e.status === 401) return Response.json({ error: "Please sign in first.", code: "signin" }, { status: 401 });
+      return Response.json({ error: e.message }, { status: e.status >= 500 ? 502 : e.status });
+    }
+  }
 
   const rows = await db
     .select({ email: schema.users.email, displayName: schema.users.displayName })

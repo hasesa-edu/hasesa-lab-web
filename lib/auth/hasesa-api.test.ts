@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { afterEach, describe, expect, it } from "vitest";
-import { adminViaApi, answersViaApi, apiBaseUrl, apiTokensNeeded, authViaApi, callbackUrl, dashboardViaApi, guideViaApi, pkcePair, progressViaApi, startUrl } from "./hasesa-api";
+import { adminViaApi, answersViaApi, billingViaApi, apiBaseUrl, apiTokensNeeded, authViaApi, callbackUrl, dashboardViaApi, guideViaApi, pkcePair, progressViaApi, startUrl } from "./hasesa-api";
 
 afterEach(() => {
   delete process.env.AUTH_VIA_API;
@@ -9,6 +9,7 @@ afterEach(() => {
   delete process.env.DASHBOARD_VIA_API;
   delete process.env.GUIDE_VIA_API;
   delete process.env.ADMIN_VIA_API;
+  delete process.env.BILLING_VIA_API;
   delete process.env.HASESA_API_URL;
 });
 
@@ -45,6 +46,9 @@ describe("hasesa-api client", () => {
     process.env.GUIDE_VIA_API = "";
     process.env.ADMIN_VIA_API = "on";
     expect([guideViaApi(), adminViaApi(), apiTokensNeeded()]).toEqual([false, true, true]);
+    process.env.ADMIN_VIA_API = "";
+    process.env.BILLING_VIA_API = "1";
+    expect([billingViaApi(), apiTokensNeeded()]).toEqual([true, true]);
   });
 
   it("makes a valid S256 PKCE pair", () => {
