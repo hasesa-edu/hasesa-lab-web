@@ -37,6 +37,7 @@ export async function POST(req: NextRequest) {
   const referrer = truncate(body.referrer ?? h.get("referer"), 512);
   const userAgent = truncate(h.get("user-agent"), 512);
 
+  const session = await getSession();
   try {
     await db.insert(schema.pageViews).values({
       id: newId(),
