@@ -4,7 +4,9 @@ import { requireSession } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
 import { eq } from "drizzle-orm";
 import { verifyAndApply } from "@/lib/billing/payments";
-import { getEntitlement } from "@/lib/billing/entitlement";
+import { entitlementFrom, getEntitlement, type Entitlement } from "@/lib/billing/entitlement";
+import { billingViaApi } from "@/lib/auth/hasesa-api";
+import { apiFetch } from "@/lib/api-server";
 import { BRAND } from "@/lib/brand";
 import { formatDate } from "@/lib/format";
 import { Button } from "@/components/ui/button";
@@ -19,16 +21,32 @@ export default async function BillingReturn({ searchParams }: { searchParams: Pr
   const { tx_ref: txRef } = await searchParams;
   const sess = await requireSession();
 
-  let state: "paid" | "pending" | "failed" | "review" | "unknown" = "unknown";
-  if (txRef && sess) {
-    const owner = await db
-      .select({ userId: schema.payments.userId })
-      .from(schema.payments)
-      .where(eq(schema.payments.txRef, txRef))
-      .limit(1);
-    if (owner[0]?.userId === sess.userId) state = (await verifyAndApply(txRef)).state;
+  type State = "paid" | "pending" | "failed" | "review" | "unknown";
+  let state: State = "unknown";
+  let ent: Entitlement | null = null;
+  let checked = false;
+  if (txRef && sess && billingViaApi()) {
+    // Verifying is idempotent, so if the API fails the website's own check below is safe to run.
+    try {
+      const r = await apiFetch<{ state: State; paidUntil: string | null }>(`/v1/billing/payments/${encodeURIComponent(txRef)}`);
+      state = r.state;
+      ent = entitlementFrom(r.paidUntil ? new Date(r.paidUntil) : null);
+      checked = true;
+    } catch (e) {
+      console.error("payment check through hasesa-api failed, checking here instead:", e);
+    }
   }
-  const ent = sess ? await getEntitlement(sess.userId) : null;
+  if (!checked) {
+    if (txRef && sess) {
+      const owner = await db
+        .select({ userId: schema.payments.userId })
+        .from(schema.payments)
+        .where(eq(schema.payments.txRef, txRef))
+        .limit(1);
+      if (owner[0]?.userId === sess.userId) state = (await verifyAndApply(txRef)).state;
+    }
+    ent = sess ? await getEntitlement(sess.userId) : null;
+  }
 
   return (
     <div className="flex min-h-[calc(100svh-61px)] items-center bg-background px-4 py-14 sm:py-20">
