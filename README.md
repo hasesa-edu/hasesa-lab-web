@@ -78,7 +78,7 @@ Retired routes redirect (see `next.config.js`): `/experiments`, `/lessons` → `
 
 ```bash
 npm install
-cp .env.example .env.local   # fill in DATABASE_URL, SESSION_SECRET, GOOGLE_CLIENT_ID/SECRET, AI_API_KEY, ADMIN_PASSWORD
+cp .env.example .env.local   # fill in DATABASE_URL, SESSION_SECRET, GOOGLE_CLIENT_ID/SECRET, AI_API_KEY
 npm run dev
 npm test                     # content validation + unit tests
 ```

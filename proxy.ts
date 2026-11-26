@@ -42,7 +42,7 @@ export async function proxy(req: NextRequest) {
           accessExpiresAt: Date.now() + r.tokens.expires_in * 1000,
         }
       : // The API session ended (signed out elsewhere, expired or revoked): sign out here too.
-        { isAdmin: session.isAdmin };
+        {};
   const sealed = await sealData(next, { password });
 
   req.cookies.set(SESSION_COOKIE, sealed);

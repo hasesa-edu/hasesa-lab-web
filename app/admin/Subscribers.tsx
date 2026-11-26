@@ -1,6 +1,5 @@
 import { sql } from "drizzle-orm";
 import { db } from "@/lib/db/client";
-import { isApiAdmin } from "@/lib/auth/admin";
 import { apiFetch } from "@/lib/api-server";
 import { Badge } from "@/components/ui/badge";
 import { GraduationCap, UserPlus } from "lucide-react";
@@ -26,13 +25,12 @@ function rows<T>(r: any): T[] {
 }
 
 async function load(): Promise<{ s: SubStats; list: PaymentRow[] }> {
-  if (await isApiAdmin()) {
-    try {
-      const r = await apiFetch<{ stats: SubStats; payments: PaymentRow[] }>("/v1/admin/subscribers");
-      return { s: r.stats, list: r.payments };
-    } catch (e) {
-      console.error("subscribers from hasesa-api failed, reading the database instead:", e);
-    }
+  // Only rendered on /admin, after the admin check.
+  try {
+    const r = await apiFetch<{ stats: SubStats; payments: PaymentRow[] }>("/v1/admin/subscribers");
+    return { s: r.stats, list: r.payments };
+  } catch (e) {
+    console.error("subscribers from hasesa-api failed, reading the database instead:", e);
   }
   const [subs, recent] = await Promise.all([
     db.execute(sql`

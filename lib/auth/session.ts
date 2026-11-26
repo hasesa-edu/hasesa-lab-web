@@ -4,7 +4,6 @@ import { authViaApi } from "./hasesa-api";
 
 export type SessionData = {
   userId?: string;
-  isAdmin?: boolean;
   /** Set when signed in through Hasesa Accounts (hasesa-api): the API session and its refresh token. */
   sid?: string;
   refreshToken?: string;

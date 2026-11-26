@@ -173,7 +173,8 @@ function TopList({ title, rows }: { title: string; rows: LabelCountRow[] }) {
 }
 
 export default async function AdminPage() {
-  if (!(await isAdmin())) redirect("/admin/login");
+  // Signed in with Google and listed in the API's ADMIN_EMAILS.
+  if (!(await isAdmin())) redirect("/login?next=/admin");
 
   const s = await loadStats();
 

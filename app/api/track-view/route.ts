@@ -27,11 +27,7 @@ export async function POST(req: NextRequest) {
   const path = truncate(body.path, 512);
   if (!path) return Response.json({ ok: false }, { status: 400 });
 
-  // Don't record admin's own pageviews so the analytics aren't polluted.
-  const session = await getSession();
-  if (session.isAdmin) return Response.json({ ok: true, skipped: "admin" });
-
-  // Skip admin pages even if the visitor somehow lands there without a session.
+  // Don't record the admin pages themselves.
   if (path.startsWith("/admin")) return Response.json({ ok: true, skipped: "admin-path" });
 
   const h = req.headers;
@@ -41,6 +37,7 @@ export async function POST(req: NextRequest) {
   const referrer = truncate(body.referrer ?? h.get("referer"), 512);
   const userAgent = truncate(h.get("user-agent"), 512);
 
+  const session = await getSession();
   try {
     await db.insert(schema.pageViews).values({
       id: newId(),
