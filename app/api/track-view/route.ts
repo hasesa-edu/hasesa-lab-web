@@ -3,6 +3,7 @@ import { db, schema } from "@/lib/db/client";
 import { getSession, signedInUserId } from "@/lib/auth/session";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { readJsonLimited, BODY_LIMIT } from "@/lib/http";
+import { analyticsViaApi, apiBaseUrl, clientBasicAuth } from "@/lib/auth/hasesa-api";
 
 export const runtime = "nodejs";
 
@@ -38,6 +39,22 @@ export async function POST(req: NextRequest) {
   const userAgent = truncate(h.get("user-agent"), 512);
 
   const session = await getSession();
+  if (analyticsViaApi()) {
+    try {
+      const res = await fetch(`${apiBaseUrl()}/v1/analytics/views`, {
+        method: "POST",
+        headers: { "content-type": "application/json", authorization: clientBasicAuth() },
+        body: JSON.stringify({ path, referrer, userAgent, country, region, city, userId: signedInUserId(session) }),
+        cache: "no-store",
+      });
+      if (!res.ok) throw new Error(`status ${res.status}`);
+    } catch (err) {
+      console.error("track-view through hasesa-api failed:", err);
+      return Response.json({ ok: false }, { status: 502 });
+    }
+    return Response.json({ ok: true });
+  }
+
   try {
     await db.insert(schema.pageViews).values({
       id: newId(),

@@ -1,6 +1,9 @@
 import { redirect } from "next/navigation";
 import { sql } from "drizzle-orm";
+import Link from "next/link";
 import { isAdmin } from "@/lib/auth/admin";
+import { analyticsViaApi } from "@/lib/auth/hasesa-api";
+import { apiFetch, withDates } from "@/lib/api-server";
 import { db, schema } from "@/lib/db/client";
 import { BarChart3, Boxes, Eye, ShieldCheck, Users } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
@@ -41,6 +44,22 @@ async function withRetry<T>(fn: () => Promise<T>): Promise<T> {
   } catch (err) {
     return await fn();
   }
+}
+
+type Stats = Awaited<ReturnType<typeof loadStats>>;
+
+/** The stats from the API: admins' own signed-in visits are left out unless asked for. */
+async function statsFromApi(includeAdmins: boolean): Promise<Stats> {
+  const r = await apiFetch<Omit<Stats, "convosTotal" | "messagesTotal"> & { includeAdmins: boolean }>(
+    `/v1/analytics/stats?includeAdmins=${includeAdmins}`,
+  );
+  return {
+    ...r,
+    recentViews: r.recentViews.map((v) => withDates<RecentViewRow>(v)),
+    users: r.users.map((u) => withDates<UserRow>(u)),
+    convosTotal: r.engagement.convos,
+    messagesTotal: r.engagement.messages,
+  };
 }
 
 async function loadStats() {
@@ -171,11 +190,22 @@ function TopList({ title, rows }: { title: string; rows: LabelCountRow[] }) {
   );
 }
 
-export default async function AdminPage() {
+export default async function AdminPage({ searchParams }: { searchParams: Promise<{ admins?: string }> }) {
   // Signed in with Google and listed in the API's ADMIN_EMAILS.
   if (!(await isAdmin())) redirect("/login?next=/admin");
 
-  const s = await loadStats();
+  const includeAdmins = (await searchParams).admins === "1";
+  let s: Stats | null = null;
+  let filtered = false;
+  if (analyticsViaApi()) {
+    try {
+      s = await statsFromApi(includeAdmins);
+      filtered = true;
+    } catch (e) {
+      console.error("stats from hasesa-api failed, reading the database instead:", e);
+    }
+  }
+  s ??= await loadStats();
 
   return (
     <div>
@@ -249,7 +279,17 @@ export default async function AdminPage() {
       <Subscribers />
 
       <section>
-        <SectionTitle icon={<BarChart3 className="size-4" />}>Traffic</SectionTitle>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <SectionTitle icon={<BarChart3 className="size-4" />}>Traffic</SectionTitle>
+          {filtered && (
+            <p className="text-sm text-muted-foreground">
+              {includeAdmins ? "Including admin visits. " : "Admin visits (signed in) left out. "}
+              <Link href={includeAdmins ? "/admin" : "/admin?admins=1"} className="font-semibold text-primary-strong underline-offset-2 hover:underline">
+                {includeAdmins ? "Leave them out" : "Include them"}
+              </Link>
+            </p>
+          )}
+        </div>
         <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-5">
           <StatCard label="Page views (all-time)" value={s.pvTotal} tone="teal" />
           <StatCard label="Views in 24h" value={s.pv1d} tone="sun" />

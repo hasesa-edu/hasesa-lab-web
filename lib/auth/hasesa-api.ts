@@ -37,6 +37,10 @@ export const billingViaApi = () => authViaApi() && envSwitch("BILLING_VIA_API");
 /** The lab assistant (chat, threads, history) runs in the API. */
 export const chatViaApi = () => authViaApi() && envSwitch("CHAT_VIA_API");
 
+// Phase 7 switch.
+/** Page views are recorded by the API, and /admin reads its stats from it. */
+export const analyticsViaApi = () => authViaApi() && envSwitch("ANALYTICS_VIA_API");
+
 /**
  * Whether the website's server needs API access tokens (see proxy.ts): always
  * with Hasesa Accounts on, since admins (and every switch above) call the API.
@@ -85,6 +89,11 @@ function clientSecret(): string {
   const secret = process.env.HASESA_CLIENT_SECRET;
   if (!secret) throw new Error("HASESA_CLIENT_SECRET must be set when AUTH_VIA_API=1");
   return secret;
+}
+
+/** HTTP Basic credentials of this site's server (its client ID and secret), for server-only API endpoints. */
+export function clientBasicAuth(): string {
+  return `Basic ${Buffer.from(`${CLIENT_ID}:${clientSecret()}`).toString("base64")}`;
 }
 
 function readTokens(body: Partial<ApiTokens>): ApiTokens {

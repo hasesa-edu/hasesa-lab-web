@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { afterEach, describe, expect, it } from "vitest";
-import { answersViaApi, billingViaApi, chatViaApi, apiBaseUrl, apiTokensNeeded, authViaApi, callbackUrl, dashboardViaApi, guideViaApi, pkcePair, progressViaApi, startUrl } from "./hasesa-api";
+import { analyticsViaApi, answersViaApi, billingViaApi, chatViaApi, apiBaseUrl, apiTokensNeeded, authViaApi, callbackUrl, dashboardViaApi, guideViaApi, pkcePair, progressViaApi, startUrl } from "./hasesa-api";
 
 afterEach(() => {
   delete process.env.AUTH_VIA_API;
@@ -10,6 +10,7 @@ afterEach(() => {
   delete process.env.GUIDE_VIA_API;
   delete process.env.BILLING_VIA_API;
   delete process.env.CHAT_VIA_API;
+  delete process.env.ANALYTICS_VIA_API;
   delete process.env.HASESA_API_URL;
 });
 
@@ -42,9 +43,10 @@ describe("hasesa-api client", () => {
     process.env.GUIDE_VIA_API = "1";
     process.env.BILLING_VIA_API = "1";
     process.env.CHAT_VIA_API = "yes";
-    expect([guideViaApi(), billingViaApi(), chatViaApi(), apiTokensNeeded()]).toEqual([false, false, false, false]);
+    process.env.ANALYTICS_VIA_API = "1";
+    expect([guideViaApi(), billingViaApi(), chatViaApi(), analyticsViaApi(), apiTokensNeeded()]).toEqual([false, false, false, false, false]);
     process.env.AUTH_VIA_API = "1";
-    expect([guideViaApi(), billingViaApi(), chatViaApi(), apiTokensNeeded()]).toEqual([true, true, true, true]);
+    expect([guideViaApi(), billingViaApi(), chatViaApi(), analyticsViaApi(), apiTokensNeeded()]).toEqual([true, true, true, true, true]);
   });
 
   it("needs API tokens whenever Hasesa Accounts is on (admins call the API)", () => {
