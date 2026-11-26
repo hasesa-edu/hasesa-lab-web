@@ -41,6 +41,8 @@ export async function GET(req: NextRequest) {
   session.userId = tokens.user_id;
   session.sid = tokens.session_id;
   session.refreshToken = tokens.refresh_token;
+  session.accessToken = tokens.access_token;
+  session.accessExpiresAt = Date.now() + tokens.expires_in * 1000;
   await session.save();
 
   const next = safeNext(req.cookies.get(OAUTH_NEXT_COOKIE)?.value);

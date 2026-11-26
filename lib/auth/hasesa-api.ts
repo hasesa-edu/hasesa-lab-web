@@ -6,9 +6,28 @@ import { createHash, randomBytes } from "node:crypto";
 
 export const CLIENT_ID = "hasesa-web";
 
-/** Sign-in goes through Hasesa Accounts when AUTH_VIA_API is 1, true, yes or on. Off by default. */
+/** An on/off env switch: on when set to 1, true, yes or on. Off by default. */
+export function envSwitch(name: string): boolean {
+  return ["1", "true", "yes", "on"].includes((process.env[name] ?? "").trim().toLowerCase());
+}
+
+/** Sign-in goes through Hasesa Accounts when AUTH_VIA_API is on. */
 export function authViaApi(): boolean {
-  return ["1", "true", "yes", "on"].includes((process.env.AUTH_VIA_API ?? "").trim().toLowerCase());
+  return envSwitch("AUTH_VIA_API");
+}
+
+// Phase 3 switches. Each one moves one part of learning to the API; turning it
+// off goes back to the website's own code at once.
+/** Practice answers and test-outs are checked by the API. */
+export const answersViaApi = () => authViaApi() && envSwitch("ANSWERS_VIA_API");
+/** Step ticks, notebook notes and module start/drop are saved by the API. */
+export const progressViaApi = () => authViaApi() && envSwitch("PROGRESS_VIA_API");
+/** Progress on pages, the dashboard, guide-note read receipts and certificates come from the API. */
+export const dashboardViaApi = () => authViaApi() && envSwitch("DASHBOARD_VIA_API");
+
+/** Whether the website's server needs API access tokens at all (see proxy.ts). */
+export function apiTokensNeeded(): boolean {
+  return answersViaApi() || progressViaApi() || dashboardViaApi();
 }
 
 export function apiBaseUrl(): string {
@@ -41,20 +60,39 @@ export type ApiTokens = {
   user_id: string;
   session_id: string;
   refresh_token: string;
+  access_token: string;
+  /** Seconds until access_token expires. */
+  expires_in: number;
   is_new_user: boolean;
 };
 
-/** Redeem the one-time code from the API's redirect. Throws on any failure. */
-export async function redeemCode(origin: string, code: string, verifier: string): Promise<ApiTokens> {
+function clientSecret(): string {
   const secret = process.env.HASESA_CLIENT_SECRET;
   if (!secret) throw new Error("HASESA_CLIENT_SECRET must be set when AUTH_VIA_API=1");
+  return secret;
+}
+
+function readTokens(body: Partial<ApiTokens>): ApiTokens {
+  if (!body.user_id || !body.session_id || !body.refresh_token || !body.access_token) throw new Error("token response is incomplete");
+  return {
+    user_id: body.user_id,
+    session_id: body.session_id,
+    refresh_token: body.refresh_token,
+    access_token: body.access_token,
+    expires_in: typeof body.expires_in === "number" ? body.expires_in : 900,
+    is_new_user: !!body.is_new_user,
+  };
+}
+
+/** Redeem the one-time code from the API's redirect. Throws on any failure. */
+export async function redeemCode(origin: string, code: string, verifier: string): Promise<ApiTokens> {
   const res = await fetch(`${apiBaseUrl()}/v1/auth/token`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
       grant_type: "authorization_code",
       client_id: CLIENT_ID,
-      client_secret: secret,
+      client_secret: clientSecret(),
       code,
       redirect_uri: callbackUrl(origin),
       code_verifier: verifier,
@@ -63,9 +101,46 @@ export async function redeemCode(origin: string, code: string, verifier: string)
     signal: AbortSignal.timeout(10_000),
   });
   if (!res.ok) throw new Error(`token exchange failed (${res.status}): ${await res.text().catch(() => "")}`);
-  const body = (await res.json()) as Partial<ApiTokens>;
-  if (!body.user_id || !body.session_id || !body.refresh_token) throw new Error("token response is incomplete");
-  return { user_id: body.user_id, session_id: body.session_id, refresh_token: body.refresh_token, is_new_user: !!body.is_new_user };
+  return readTokens((await res.json()) as Partial<ApiTokens>);
+}
+
+export type RefreshResult =
+  | { kind: "ok"; tokens: ApiTokens }
+  /** The API session is over (signed out, expired or revoked): the student must sign in again. */
+  | { kind: "ended" }
+  /** The API couldn't be reached or failed. Try again on the next request. */
+  | { kind: "unavailable" };
+
+/**
+ * Swap a refresh token for new tokens. The refresh token rotates: always keep
+ * the new one. Parallel refreshes with the same token get the same answer.
+ */
+export async function refreshTokens(refreshToken: string): Promise<RefreshResult> {
+  let res: Response;
+  try {
+    res = await fetch(`${apiBaseUrl()}/v1/auth/token`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ grant_type: "refresh_token", client_id: CLIENT_ID, client_secret: clientSecret(), refresh_token: refreshToken }),
+      cache: "no-store",
+      signal: AbortSignal.timeout(4_000),
+    });
+  } catch (e) {
+    console.error("hasesa-api refresh failed:", e);
+    return { kind: "unavailable" };
+  }
+  // 400 invalid_grant: the session ended. 401 is a wrong client secret, which is our mistake, not the student's.
+  if (res.status === 400) return { kind: "ended" };
+  if (!res.ok) {
+    console.error(`hasesa-api refresh failed (${res.status}): ${await res.text().catch(() => "")}`);
+    return { kind: "unavailable" };
+  }
+  try {
+    return { kind: "ok", tokens: readTokens((await res.json()) as Partial<ApiTokens>) };
+  } catch (e) {
+    console.error("hasesa-api refresh failed:", e);
+    return { kind: "unavailable" };
+  }
 }
 
 /** End the API session. Best effort: signing out of the site never waits long on the API. */

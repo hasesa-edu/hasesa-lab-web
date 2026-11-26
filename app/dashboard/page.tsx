@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { BookOpen, ClipboardList, GraduationCap, MessageSquareQuote } from "lucide-react";
 import { getConcept, getModule, getModules, summarize } from "@/lib/content";
 import { getAccess, hasFullAccess } from "@/lib/access";
-import { getStudentState } from "@/lib/progress";
+import { myStudentState } from "@/lib/my-progress";
 import { getUserDTO } from "@/lib/auth/users";
 import { cardStates, isUnitDone, moduleProgress } from "@/lib/summary";
 import { formatDate } from "@/lib/format";
@@ -30,7 +30,7 @@ const EMPTY: Record<Tab, string> = {
 export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
   const access = await getAccess();
   if (!access.userId) redirect("/login?next=/dashboard");
-  const [user, state] = await Promise.all([getUserDTO(access.userId), getStudentState(access.userId)]);
+  const [user, state] = await Promise.all([getUserDTO(access.userId), myStudentState(access.userId)]);
   if (!user) redirect("/login?next=/dashboard");
 
   const modules = getModules();

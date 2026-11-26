@@ -1,9 +1,12 @@
 import { createHash } from "node:crypto";
 import { afterEach, describe, expect, it } from "vitest";
-import { apiBaseUrl, authViaApi, callbackUrl, pkcePair, startUrl } from "./hasesa-api";
+import { answersViaApi, apiBaseUrl, apiTokensNeeded, authViaApi, callbackUrl, dashboardViaApi, pkcePair, progressViaApi, startUrl } from "./hasesa-api";
 
 afterEach(() => {
   delete process.env.AUTH_VIA_API;
+  delete process.env.ANSWERS_VIA_API;
+  delete process.env.PROGRESS_VIA_API;
+  delete process.env.DASHBOARD_VIA_API;
   delete process.env.HASESA_API_URL;
 });
 
@@ -18,6 +21,18 @@ describe("hasesa-api client", () => {
       process.env.AUTH_VIA_API = on;
       expect(authViaApi()).toBe(true);
     }
+  });
+
+  it("turns each learning switch on only together with AUTH_VIA_API", () => {
+    process.env.ANSWERS_VIA_API = "1";
+    process.env.PROGRESS_VIA_API = "1";
+    process.env.DASHBOARD_VIA_API = "1";
+    expect([answersViaApi(), progressViaApi(), dashboardViaApi(), apiTokensNeeded()]).toEqual([false, false, false, false]);
+    process.env.AUTH_VIA_API = "1";
+    expect([answersViaApi(), progressViaApi(), dashboardViaApi(), apiTokensNeeded()]).toEqual([true, true, true, true]);
+    process.env.ANSWERS_VIA_API = "0";
+    process.env.PROGRESS_VIA_API = "";
+    expect([answersViaApi(), progressViaApi(), dashboardViaApi(), apiTokensNeeded()]).toEqual([false, false, true, true]);
   });
 
   it("makes a valid S256 PKCE pair", () => {

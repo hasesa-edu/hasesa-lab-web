@@ -4,6 +4,8 @@ import { answerText, isCorrect } from "@/lib/content/grade";
 import { hasFullAccess } from "@/lib/access";
 import { recordAttempt } from "@/lib/progress";
 import { bad, guard } from "@/lib/api-guard";
+import { answersViaApi } from "@/lib/auth/hasesa-api";
+import { forward } from "@/lib/api-server";
 
 export const runtime = "nodejs";
 
@@ -14,6 +16,7 @@ export async function POST(req: NextRequest) {
   const g = await guard(req, "attempts", "any", 120);
   if (!g.ok) return g.res;
   const { unitId, questionId, answer } = g.body;
+  if (answersViaApi()) return forward("/v1/attempts", { unitId, questionId, answer });
   const concept = typeof unitId === "string" ? getConcept(unitId) : undefined;
   if (!concept) return bad("Unknown unit");
   if (!concept.public && !hasFullAccess(g.access)) return bad("Enrol at the Academy to unlock this.", 403);
