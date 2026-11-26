@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { sql } from "drizzle-orm";
-import { isAdmin } from "@/lib/auth/admin";
+import { isApiAdmin } from "@/lib/auth/admin";
+import { getSession } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
 import { BarChart3, Boxes, Eye, ShieldCheck, Users } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
@@ -173,7 +174,9 @@ function TopList({ title, rows }: { title: string; rows: LabelCountRow[] }) {
 }
 
 export default async function AdminPage() {
-  if (!(await isAdmin())) redirect("/admin/login");
+  // Signed in with Google and listed in ADMIN_EMAILS, or with the admin password.
+  const viaGoogle = await isApiAdmin();
+  if (!viaGoogle && !(await getSession()).isAdmin) redirect("/admin/login");
 
   const s = await loadStats();
 
@@ -188,7 +191,7 @@ export default async function AdminPage() {
         title="Admin analytics"
         description="User signups, traffic, and content engagement."
       >
-        <AdminSignOutButton />
+        <AdminSignOutButton viaGoogle={viaGoogle} />
       </PageHeader>
 
       <div className="mx-auto max-w-6xl space-y-10 px-4 py-10">
